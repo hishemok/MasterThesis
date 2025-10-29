@@ -272,6 +272,7 @@ def four_dot_sweetspot():
 
     return eigvals_np, parities
 
-two_dot_sweetspot()
-three_dot_sweetspot()
-four_dot_sweetspot()
+if __name__ == "__main__":
+    two_dot_sweetspot()
+    three_dot_sweetspot()
+    four_dot_sweetspot()
