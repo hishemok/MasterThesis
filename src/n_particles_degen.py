@@ -132,8 +132,8 @@ def two_dot_sweetspot():
     y_even = [E for E, _ in even_states]
     y_odd  = [E for E, _ in odd_states]
 
-    plt.hlines(y_even, xmin=-0.2, xmax=0.2, colors='tab:blue', label='Even parity')
-    plt.hlines(y_odd,  xmin=0.8, xmax=1.2, colors='tab:red',  label='Odd parity')
+    plt.hlines(y_even, xmin=-0.2, xmax=0.2, color='blue', label='Even parity')
+    plt.hlines(y_odd,  xmin=0.8, xmax=1.2, color='red',  label='Odd parity')
 
     plt.xlim(-0.5, 1.5)
     plt.xticks([0, 1], ['Even', 'Odd'])
@@ -163,7 +163,7 @@ def three_dot_sweetspot():
     t_val = 1
     Δ_val = t_val + U0_val/2
     ϵ0_val = -U0_val/2
-    ϵ1_val = -U0_val/2
+    ϵ1_val = -U0_val
     ϵ2_val = -U0_val/2
 
     # Substitute parameters into symbolic matrix
@@ -183,20 +183,22 @@ def three_dot_sweetspot():
 
     print("Three-dot system eigenvalues and their parity sectors:")
     for i, (E,p) in enumerate(zip(eigvals_np, parities)):
-        sector = "even" if np.isclose(p, 1) else "odd"
-        print(f"Eigenvalue {E:.4f} belongs to {sector} parity sector")
+        if abs(p) < .9:
+            print(f"Warning: Eigenvalue {E:.4f} has ambiguous parity {p:.4f}")
+        sector = "even" if p > .9 else "odd"
+        print(f"Eigenvalue {E:.4f} belongs to {sector} parity sector, with parity {p:.4f}")
     print("")
 
-    even_states = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if np.isclose(p, 1)]
-    odd_states  = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if np.isclose(p, -1)]
+    even_states = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if p > .9]
+    odd_states  = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if p < -.9]
 
     # Plot energy levels by parity
     plt.figure(figsize=(6,4))
     y_even = [E for E, _ in even_states]
     y_odd  = [E for E, _ in odd_states]
 
-    plt.hlines(y_even, xmin=-0.2, xmax=0.2, colors='tab:blue', label='Even parity')
-    plt.hlines(y_odd,  xmin=0.8, xmax=1.2, colors='tab:red',  label='Odd parity')
+    plt.hlines(y_even, xmin=-0.2, xmax=0.2, color='blue', label='Even parity')
+    plt.hlines(y_odd,  xmin=0.8, xmax=1.2, color='red',  label='Odd parity')
 
     plt.xlim(-0.5, 1.5)
     plt.xticks([0, 1], ['Even', 'Odd'])
@@ -225,8 +227,8 @@ def four_dot_sweetspot():
     t_val = 1
     Δ_val = t_val + U0_val/2
     ϵ0_val = -U0_val/2
-    ϵ1_val = -U0_val/2
-    ϵ2_val = -U0_val/2
+    ϵ1_val = -U0_val
+    ϵ2_val = -U0_val
     ϵ3_val = -U0_val/2
 
     # Substitute parameters into symbolic matrix
@@ -246,20 +248,22 @@ def four_dot_sweetspot():
 
     print("Four-dot system eigenvalues and their parity sectors:")
     for i, (E,p) in enumerate(zip(eigvals_np, parities)):
-        sector = "even" if np.isclose(p, 1) else "odd"
-        print(f"Eigenvalue {E:.4f} belongs to {sector} parity sector")
+        if abs(p) < .9:
+            print(f"Warning: Eigenvalue {E:.4f} has ambiguous parity {p:.4f}")
+        sector = "even" if p > .9 else "odd"
+        print(f"Eigenvalue {E:.4f} belongs to {sector} parity sector, with parity {p:.4f}")
     print("")
 
-    even_states = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if np.isclose(p, 1)]
-    odd_states  = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if np.isclose(p, -1)]
+    even_states = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if p > .9]
+    odd_states  = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if p < -.9]
 
     # Plot energy levels by parity
     plt.figure(figsize=(6,4))
     y_even = [E for E, _ in even_states]
     y_odd  = [E for E, _ in odd_states]
 
-    plt.hlines(y_even, xmin=-0.2, xmax=0.2, colors='tab:blue', label='Even parity')
-    plt.hlines(y_odd,  xmin=0.8, xmax=1.2, colors='tab:red',  label='Odd parity')
+    plt.hlines(y_even, xmin=-0.2, xmax=0.2, color='blue', label='Even parity')
+    plt.hlines(y_odd,  xmin=0.8, xmax=1.2, color='red',  label='Odd parity')
 
     plt.xlim(-0.5, 1.5)
     plt.xticks([0, 1], ['Even', 'Odd'])
