@@ -2,10 +2,6 @@ import numpy as np
 import sympy as sp
 import matplotlib.pyplot as plt
 
-# μ = sp.symbols('μ')
-# t = sp.symbols('t', real=True)
-# Δ = sp.symbols('Δ', real=True)
-# U = sp.symbols('U', real=True)
 
 ## Pauli spin matrices
 σ_x = np.array([[0, 1], 
@@ -89,99 +85,232 @@ def parity_operator(N):
         
 
 
-def two_dot_sweetspot():
-    H2 = n_dot_Hamiltonian(n=2)  
+# def two_dot_sweetspot():
+#     H2 = n_dot_Hamiltonian(n=2)  
 
-    # Symbols
-    ϵs = sp.symbols('ϵ0 ϵ1')
-    Us = sp.symbols('U0')
-    Δ, t = sp.symbols('Δ t', real=True)
+#     # Symbols
+#     ϵs = sp.symbols('ϵ0 ϵ1')
+#     Us = sp.symbols('U0')
+#     Δ, t = sp.symbols('Δ t', real=True)
 
-    # Sweet spot parameters
-    U0_val = 1
-    t_val = 1
-    Δ_val = t_val + U0_val/2
-    ϵ0_val = -U0_val/2
-    ϵ1_val = -U0_val/2
+#     # Sweet spot parameters
+#     U0_val = 1
+#     t_val = 1
+#     Δ_val = t_val + U0_val/2
+#     ϵ0_val = -U0_val/2
+#     ϵ1_val = -U0_val/2
 
-    # Substitute parameters into symbolic matrix
-    H2_num = H2.subs({Δ: Δ_val, t: t_val, ϵs[0]: ϵ0_val, ϵs[1]: ϵ1_val, Us: U0_val})
+#     # Substitute parameters into symbolic matrix
+#     H2_num = H2.subs({Δ: Δ_val, t: t_val, ϵs[0]: ϵ0_val, ϵs[1]: ϵ1_val, Us: U0_val})
 
-    # Convert sympy.Matrix to numpy array (float complex)
-    H2_np = np.array(H2_num).astype(np.complex128)
+#     # Convert sympy.Matrix to numpy array (float complex)
+#     H2_np = np.array(H2_num).astype(np.complex128)
 
-    # Eigen decomposition
-    eigvals_np, eigvecs_np = np.linalg.eigh(H2_np)
+#     # Eigen decomposition
+#     eigvals_np, eigvecs_np = np.linalg.eigh(H2_np)
 
-    P = parity_operator(2)
-    parities = []
-    for vec in eigvecs_np.T:
-        parity = np.vdot(vec, P @ vec)
-        parities.append(np.real_if_close(parity))
-    print("Two-dot system eigenvalues and their parity sectors:")
-    for i, (E,p) in enumerate(zip(eigvals_np, parities)):
-        sector = "even" if np.isclose(p, 1) else "odd"
-        print(f"Eigenvalue {E:.4f} belongs to {sector} parity sector")
-    print("")
+#     P = parity_operator(2)
+#     parities = []
+#     for vec in eigvecs_np.T:
+#         parity = np.vdot(vec, P @ vec)
+#         parities.append(np.real_if_close(parity))
+#     print("Two-dot system eigenvalues and their parity sectors:")
+#     for i, (E,p) in enumerate(zip(eigvals_np, parities)):
+#         sector = "even" if np.isclose(p, 1) else "odd"
+#         print(f"Eigenvalue {E:.4f} belongs to {sector} parity sector")
+#     print("")
 
-    even_states = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if np.isclose(p, 1)]
-    odd_states  = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if np.isclose(p, -1)]
+#     even_states = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if np.isclose(p, 1)]
+#     odd_states  = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if np.isclose(p, -1)]
 
-    # Plot energy levels by parity
-    plt.figure(figsize=(6,4))
-    y_even = [E for E, _ in even_states]
-    y_odd  = [E for E, _ in odd_states]
+#     # Plot energy levels by parity
+#     plt.figure(figsize=(6,4))
+#     y_even = [E for E, _ in even_states]
+#     y_odd  = [E for E, _ in odd_states]
 
-    plt.hlines(y_even, xmin=-0.2, xmax=0.2, color='blue', label='Even parity')
-    plt.hlines(y_odd,  xmin=0.8, xmax=1.2, color='red',  label='Odd parity')
+#     plt.hlines(y_even, xmin=-0.2, xmax=0.2, color='blue', label='Even parity')
+#     plt.hlines(y_odd,  xmin=0.8, xmax=1.2, color='red',  label='Odd parity')
 
-    plt.xlim(-0.5, 1.5)
-    plt.xticks([0, 1], ['Even', 'Odd'])
-    plt.ylabel("Energy eigenvalues")
-    plt.title("Parity-resolved energy spectrum for 2-dot system")
-    plt.legend()
-    plt.grid(True, axis='y', linestyle='--', alpha=0.4)
-    plt.tight_layout()
-    plt.show()
+#     plt.xlim(-0.5, 1.5)
+#     plt.xticks([0, 1], ['Even', 'Odd'])
+#     plt.ylabel("Energy eigenvalues")
+#     plt.title("Parity-resolved energy spectrum for 2-dot system")
+#     plt.legend()
+#     plt.grid(True, axis='y', linestyle='--', alpha=0.4)
+#     plt.tight_layout()
+#     plt.show()
 
-    return eigvals_np, parities
+#     return eigvals_np, parities
     
 
+# def three_dot_sweetspot():
+#     H3 = n_dot_Hamiltonian(n=3)
+
+#     # Symbols
+#     ϵs = sp.symbols('ϵ0 ϵ1 ϵ2')
+#     Us = sp.symbols('U0 U1')
+#     Δ, t = sp.symbols('Δ t', real=True)
+
+#     # Sweet spot parameters
+#     U0_val = 1
+#     U1_val = 1
+#     t_val = 1
+#     Δ_val = t_val + U0_val/2
+#     ϵ0_val = -U0_val/2
+#     ϵ1_val = -U0_val
+#     ϵ2_val = -U0_val/2
+
+#     # Substitute parameters into symbolic matrix
+#     H3_num = H3.subs({Δ: Δ_val, t: t_val, ϵs[0]: ϵ0_val, ϵs[1]: ϵ1_val, ϵs[2]: ϵ2_val, Us[0]: U0_val, Us[1]: U1_val})
+
+#     # Convert sympy.Matrix to numpy array (float complex)
+#     H3_np = np.array(H3_num).astype(np.complex128)
+
+#     # Eigen decomposition
+#     eigvals_np, eigvecs_np = np.linalg.eigh(H3_np)
+
+#     P = parity_operator(3)
+#     parities = []
+#     for vec in eigvecs_np.T:
+#         parity = np.vdot(vec, P @ vec)
+#         parities.append(np.real_if_close(parity))
+
+#     print("Three-dot system eigenvalues and their parity sectors:")
+#     for i, (E,p) in enumerate(zip(eigvals_np, parities)):
+#         if abs(p) < .9:
+#             print(f"Warning: Eigenvalue {E:.4f} has ambiguous parity {p:.4f}")
+#         sector = "even" if p > .9 else "odd"
+#         print(f"Eigenvalue {E:.4f} belongs to {sector} parity sector, with parity {p:.4f}")
+#     print("")
+
+#     even_states = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if p > .9]
+#     odd_states  = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if p < -.9]
+
+#     # Plot energy levels by parity
+#     plt.figure(figsize=(6,4))
+#     y_even = [E for E, _ in even_states]
+#     y_odd  = [E for E, _ in odd_states]
+
+#     plt.hlines(y_even, xmin=-0.2, xmax=0.2, color='blue', label='Even parity')
+#     plt.hlines(y_odd,  xmin=0.8, xmax=1.2, color='red',  label='Odd parity')
+
+#     plt.xlim(-0.5, 1.5)
+#     plt.xticks([0, 1], ['Even', 'Odd'])
+#     plt.ylabel("Energy eigenvalues")
+#     plt.title("Parity-resolved energy spectrum for 3-dot system")
+#     plt.legend()
+#     plt.grid(True, axis='y', linestyle='--', alpha=0.4)
+#     plt.tight_layout()
+#     plt.show()
+
+#     return eigvals_np, parities
+    
+
+# def four_dot_sweetspot():
+#     H4 = n_dot_Hamiltonian(n=4)
+
+#     # Symbols
+#     ϵs = sp.symbols('ϵ0 ϵ1 ϵ2 ϵ3')
+#     Us = sp.symbols('U0 U1 U2')
+#     Δ, t = sp.symbols('Δ t', real=True)
+
+#     # Sweet spot parameters
+#     U0_val = 1
+#     U1_val = 1
+#     U2_val = 1
+#     t_val = 1
+#     Δ_val = t_val + U0_val/2
+#     ϵ0_val = -U0_val/2
+#     ϵ1_val = -U0_val
+#     ϵ2_val = -U0_val
+#     ϵ3_val = -U0_val/2
+
+#     # Substitute parameters into symbolic matrix
+#     H4_num = H4.subs({Δ: Δ_val, t: t_val, ϵs[0]: ϵ0_val, ϵs[1]: ϵ1_val, ϵs[2]: ϵ2_val, ϵs[3]: ϵ3_val, Us[0]: U0_val, Us[1]: U1_val, Us[2]: U2_val})
+
+#     # Convert sympy.Matrix to numpy array (float complex)
+#     H4_np = np.array(H4_num).astype(np.complex128)
+
+#     # Eigen decomposition
+#     eigvals_np, eigvecs_np = np.linalg.eigh(H4_np)
+
+#     P = parity_operator(4)
+#     parities = []
+#     for vec in eigvecs_np.T:
+#         parity = np.vdot(vec, P @ vec)
+#         parities.append(np.real_if_close(parity))
+
+#     print("Four-dot system eigenvalues and their parity sectors:")
+#     for i, (E,p) in enumerate(zip(eigvals_np, parities)):
+#         if abs(p) < .9:
+#             print(f"Warning: Eigenvalue {E:.4f} has ambiguous parity {p:.4f}")
+#         sector = "even" if p > .9 else "odd"
+#         print(f"Eigenvalue {E:.4f} belongs to {sector} parity sector, with parity {p:.4f}")
+#     print("")
+
+#     even_states = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if p > .9]
+#     odd_states  = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if p < -.9]
+
+#     # Plot energy levels by parity
+#     plt.figure(figsize=(6,4))
+#     y_even = [E for E, _ in even_states]
+#     y_odd  = [E for E, _ in odd_states]
+
+#     plt.hlines(y_even, xmin=-0.2, xmax=0.2, color='blue', label='Even parity')
+#     plt.hlines(y_odd,  xmin=0.8, xmax=1.2, color='red',  label='Odd parity')
+
+#     plt.xlim(-0.5, 1.5)
+#     plt.xticks([0, 1], ['Even', 'Odd'])
+#     plt.ylabel("Energy eigenvalues")
+#     plt.title("Parity-resolved energy spectrum for 4-dot system")
+#     plt.legend()
+#     plt.grid(True, axis='y', linestyle='--', alpha=0.4)
+#     plt.tight_layout()
+#     plt.show()
+
+#     return eigvals_np, parities
 
 
-def three_dot_sweetspot():
-    H3 = n_dot_Hamiltonian(n=3)
+def n_dot_sweetspot(n, params):
+    """
+    Generalized n-dot sweet spot analysis.
+    n: number of dots
+    params: dictionary with keys 'U', 't', 'Δ', 'ϵ' containing lists of values
+    ϵ should be a list of length n
+    U should be a list of length n-1
+    t and Δ are scalars
+    """ 
+    Hn = n_dot_Hamiltonian(n=n)
 
     # Symbols
-    ϵs = sp.symbols('ϵ0 ϵ1 ϵ2')
-    Us = sp.symbols('U0 U1')
+    ϵs = sp.symbols(f'ϵ0:{n}')
+    Us = sp.symbols(f'U0:{n-1}')
     Δ, t = sp.symbols('Δ t', real=True)
 
-    # Sweet spot parameters
-    U0_val = 1
-    U1_val = 1
-    t_val = 1
-    Δ_val = t_val + U0_val/2
-    ϵ0_val = -U0_val/2
-    ϵ1_val = -U0_val
-    ϵ2_val = -U0_val/2
+    subs_dict = {Δ: params['Δ'], t: params['t']}
 
-    # Substitute parameters into symbolic matrix
-    H3_num = H3.subs({Δ: Δ_val, t: t_val, ϵs[0]: ϵ0_val, ϵs[1]: ϵ1_val, ϵs[2]: ϵ2_val, Us[0]: U0_val, Us[1]: U1_val})
+    # Add epsilon substitutions
+    subs_dict.update({ϵs[i]: params['ϵ'][i] for i in range(n)})
+
+    # Add U substitutions
+    subs_dict.update({Us[i]: params['U'][i] for i in range(n - 1)})
+
+    # Substitute into the Hamiltonian
+    Hn_num = Hn.subs(subs_dict)
 
     # Convert sympy.Matrix to numpy array (float complex)
-    H3_np = np.array(H3_num).astype(np.complex128)
+    Hn_np = np.array(Hn_num).astype(np.complex128)
 
     # Eigen decomposition
-    eigvals_np, eigvecs_np = np.linalg.eigh(H3_np)
+    eigvals_np, eigvecs_np = np.linalg.eigh(Hn_np)
 
-    P = parity_operator(3)
+    P = parity_operator(n)
     parities = []
     for vec in eigvecs_np.T:
         parity = np.vdot(vec, P @ vec)
         parities.append(np.real_if_close(parity))
 
-    print("Three-dot system eigenvalues and their parity sectors:")
+    print(f"{n}-dot system eigenvalues and their parity sectors:")
     for i, (E,p) in enumerate(zip(eigvals_np, parities)):
         if abs(p) < .9:
             print(f"Warning: Eigenvalue {E:.4f} has ambiguous parity {p:.4f}")
@@ -197,86 +326,87 @@ def three_dot_sweetspot():
     y_even = [E for E, _ in even_states]
     y_odd  = [E for E, _ in odd_states]
 
+    degeneracy_lines = []
+    for i, Ee in enumerate(y_even):
+        Eo = y_odd[i]
+        if abs(Ee - Eo) < 1e-5:
+            degeneracy_lines.append(Ee)
+
+
     plt.hlines(y_even, xmin=-0.2, xmax=0.2, color='blue', label='Even parity')
     plt.hlines(y_odd,  xmin=0.8, xmax=1.2, color='red',  label='Odd parity')
+    plt.hlines(degeneracy_lines, xmin=-0.2, xmax=0.8, color='gray', linestyles='dashed', label='Degenerate levels')
 
     plt.xlim(-0.5, 1.5)
     plt.xticks([0, 1], ['Even', 'Odd'])
     plt.ylabel("Energy eigenvalues")
-    plt.title("Parity-resolved energy spectrum for 3-dot system")
+    plt.title(f"Parity-resolved energy spectrum for {n}-dot system")
     plt.legend()
     plt.grid(True, axis='y', linestyle='--', alpha=0.4)
     plt.tight_layout()
     plt.show()
 
     return eigvals_np, parities
-    
 
-def four_dot_sweetspot():
-    H4 = n_dot_Hamiltonian(n=4)
 
-    # Symbols
-    ϵs = sp.symbols('ϵ0 ϵ1 ϵ2 ϵ3')
-    Us = sp.symbols('U0 U1 U2')
-    Δ, t = sp.symbols('Δ t', real=True)
 
-    # Sweet spot parameters
-    U0_val = 1
-    U1_val = 1
-    U2_val = 1
-    t_val = 1
-    Δ_val = t_val + U0_val/2
-    ϵ0_val = -U0_val/2
-    ϵ1_val = -U0_val
-    ϵ2_val = -U0_val
-    ϵ3_val = -U0_val/2
 
-    # Substitute parameters into symbolic matrix
-    H4_num = H4.subs({Δ: Δ_val, t: t_val, ϵs[0]: ϵ0_val, ϵs[1]: ϵ1_val, ϵs[2]: ϵ2_val, ϵs[3]: ϵ3_val, Us[0]: U0_val, Us[1]: U1_val, Us[2]: U2_val})
-
-    # Convert sympy.Matrix to numpy array (float complex)
-    H4_np = np.array(H4_num).astype(np.complex128)
-
-    # Eigen decomposition
-    eigvals_np, eigvecs_np = np.linalg.eigh(H4_np)
-
-    P = parity_operator(4)
-    parities = []
-    for vec in eigvecs_np.T:
-        parity = np.vdot(vec, P @ vec)
-        parities.append(np.real_if_close(parity))
-
-    print("Four-dot system eigenvalues and their parity sectors:")
-    for i, (E,p) in enumerate(zip(eigvals_np, parities)):
-        if abs(p) < .9:
-            print(f"Warning: Eigenvalue {E:.4f} has ambiguous parity {p:.4f}")
-        sector = "even" if p > .9 else "odd"
-        print(f"Eigenvalue {E:.4f} belongs to {sector} parity sector, with parity {p:.4f}")
-    print("")
-
-    even_states = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if p > .9]
-    odd_states  = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if p < -.9]
-
-    # Plot energy levels by parity
-    plt.figure(figsize=(6,4))
-    y_even = [E for E, _ in even_states]
-    y_odd  = [E for E, _ in odd_states]
-
-    plt.hlines(y_even, xmin=-0.2, xmax=0.2, color='blue', label='Even parity')
-    plt.hlines(y_odd,  xmin=0.8, xmax=1.2, color='red',  label='Odd parity')
-
-    plt.xlim(-0.5, 1.5)
-    plt.xticks([0, 1], ['Even', 'Odd'])
-    plt.ylabel("Energy eigenvalues")
-    plt.title("Parity-resolved energy spectrum for 4-dot system")
-    plt.legend()
-    plt.grid(True, axis='y', linestyle='--', alpha=0.4)
-    plt.tight_layout()
-    plt.show()
-
-    return eigvals_np, parities
 
 if __name__ == "__main__":
-    two_dot_sweetspot()
-    three_dot_sweetspot()
-    four_dot_sweetspot()
+    # two_dot_sweetspot()
+
+    U0_val = 1
+    t_val = 1
+    Δ_val = t_val + U0_val/2
+    ϵ0_val = -U0_val/2
+    ϵ1_val = -U0_val
+
+
+
+    params = {
+        'U': [U0_val],
+        't': t_val,
+        'Δ': Δ_val,
+        'ϵ': [ϵ0_val, ϵ0_val]
+    }
+    n_dot_sweetspot(2, params)
+
+    # three_dot_sweetspot()
+
+    # U0_val = 1
+    # t_val = 1
+    # Δ_val = t_val + U0_val/2
+    # ϵ0_val = -U0_val/2
+    # ϵ1_val = -U0_val/2
+    params = {
+        'U': [U0_val, U0_val],
+        't': t_val,
+        'Δ': Δ_val,
+        'ϵ': [ϵ0_val, ϵ1_val, ϵ0_val]
+    }
+    n_dot_sweetspot(3, params)
+
+
+    # four_dot_sweetspot()
+
+    # U0_val = 1
+    # t_val = 1
+    # Δ_val = t_val + U0_val/2
+    # ϵ0_val = -U0_val/2
+    # ϵ1_val = -U0_val/2
+    params = {
+        'U': [U0_val, U0_val, U0_val],
+        't': t_val,
+        'Δ': Δ_val,
+        'ϵ': [ϵ0_val, ϵ1_val, ϵ1_val, ϵ0_val]
+    }
+    n_dot_sweetspot(4, params)
+
+
+    # params = {
+    #     'U': [U0_val, U0_val , U0_val, U0_val],
+    #     't': t_val,
+    #     'Δ': Δ_val,
+    #     'ϵ': [ϵ0_val, ϵ1_val, ϵ1_val, ϵ1_val, ϵ0_val]
+    # }
+    # n_dot_sweetspot(5, params)

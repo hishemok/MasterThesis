@@ -1,0 +1,196 @@
+import numpy as np
+import sympy as sp
+import matplotlib.pyplot as plt
+import torch
+import torch.nn as nn
+from functools import reduce
+
+from n_particles_degen import n_dot_Hamiltonian, n_dot_sweetspot, σ_x, σ_y, σ_z, I, tensor_product, sigma_site, creation_annihilation
+
+def to_torch(mat_np, device='cpu'):
+    return torch.from_numpy(mat_np).to(device=device, dtype=torch.complex128)
+
+
+def build_H_torch(n, params, cre_t, ann_t, num_t):
+    # params: torch tensor (length 1 + (n-1) + n + 1)
+    # mapping:
+    # t = params[0]
+    # U_i = params[1:1+(n-1)]
+    # eps_i = params[1+(n-1):1+(n-1)+n]
+    # Delta = params[-1]
+    t = params[0]
+    U = params[1:1+(n-1)]
+    eps = params[1+(n-1):1+(n-1)+n]
+    Delta = params[-1]
+    dim = 2**n
+    H = torch.zeros((dim,dim), dtype=torch.complex128, device=params.device)
+
+    for i in range(n):
+        # onsite 
+        H += eps[i] * num_t[i]
+        if i < n - 1:
+            # hopping
+            H += t * (cre_t[i] @ ann_t[i+1] + cre_t[i+1] @ ann_t[i])
+            # pairing
+            H += Delta * (cre_t[i] @ cre_t[i+1] + ann_t[i+1] @ ann_t[i])
+            # Coulomb term
+            H += U[i] * (num_t[i] @ num_t[i+1])
+    return H
+
+
+def parity_operator_torch(n):
+    P = torch.eye(2**n, dtype=torch.complex128)
+    for j in range(n):
+        cd, c = creation_annihilation(j, n)
+        cd_t = to_torch(cd, device=P.device)
+        c_t = to_torch(c, device=P.device)
+        n_i = cd_t @ c_t
+        P = P @ (torch.eye(2**n, dtype=torch.complex128, device=P.device) - 2 * n_i)
+    return P
+
+
+def precompute_ops(n):
+    # returns lists of creation, annihilation, number (numpy)
+    cre = []
+    ann = []
+    num = []
+    for j in range(n):
+        cd, c = creation_annihilation(j, n)
+        cre.append(cd)
+        ann.append(c)
+        num.append(cd @ c)
+    return cre, ann, num
+
+def calculate_parities(evals, evecs, P):
+    # evecs: columns are eigenvectors
+    parities = torch.real(torch.sum(torch.conj(evecs) * (P @ evecs), dim=0))
+    even_mask = parities >= 0
+    odd_mask  = parities < 0
+
+    E_even = evals[even_mask]
+    E_odd  = evals[odd_mask]
+
+    return E_even, E_odd
+
+
+def degeneracy_and_gap_loss(H, P, n, weight_vec=None, gap_target=0.5, gap_weights=None):
+    # H: Hermitian torch matrix
+    evals, evecs = torch.linalg.eigh(H)  # evals sorted ascending
+
+    even_states, odd_states = calculate_parities(evals, evecs, P)
+
+    # Just in case
+    E_even, _ = torch.sort(even_states)
+    E_odd,  _ = torch.sort(odd_states)
+
+    m = min(E_even.numel(), E_odd.numel())
+    if m == 0:
+        return torch.tensor(1e6, device=H.device)  # bad configuration
+
+    # default weights
+    if weight_vec is None:
+        # print(n)
+        # strong weighting for low levels
+        weight_array = np.arange(1, 1000, 2**(n))[::-1].copy()
+        weight_vec = torch.tensor(weight_array, device=H.device)
+
+
+    deg_terms = torch.abs(E_even[:m] - E_odd[:m])
+    w = weight_vec.to(H.device)
+    print(len(deg_terms), len(w))
+    Ldeg = torch.sum(w * deg_terms) / torch.sum(w)
+
+    # gap penalty: enforce minimal gaps in the full spectrum for the first p gaps
+    p = min(6, evals.numel()-1)
+    gaps = evals[1:] - evals[:-1]
+    if gap_weights is None:
+        gap_weights = torch.linspace(10.0, 1.0, steps=p, device=H.device)
+    gap_pen = torch.sum(gap_weights * torch.nn.functional.softplus(gap_target - gaps[:p]))
+
+    return Ldeg + 0.1 * gap_pen  # adjust prefactor as you like
+
+# ----------------------------
+# Optimization wrapper
+# ----------------------------
+def optimize_params(n, device='cpu', restarts=8, iters=600):
+    # precompute ops
+    cre_np, ann_np, num_np = precompute_ops(n)
+    cre_t = [to_torch(m, device=device) for m in cre_np]
+    ann_t = [to_torch(m, device=device) for m in ann_np]
+    num_t = [to_torch(m, device=device) for m in num_np]
+
+    best_loss = 1e9
+    best_theta = None
+
+    for r in range(restarts):
+        # initialize torch parameter vector (t, U0..U_{n-2}, eps0..eps_{n-1}, Delta)
+        # choose sensible ranges: t ~ [0.2,2], U~[0.2,2], eps ~ [-1,1], Delta ~ [0,2]
+        rng = np.random.RandomState(seed=r)
+        t0 = 0.5 + rng.rand()*1.5
+        U0 = 0.5 + rng.rand(n-1)*1.5
+        eps0 = -0.5 + rng.rand(n)*1.0
+        D0 = 0.5 + rng.rand()*1.5
+        theta0 = np.concatenate([[t0], U0, eps0, [D0]]).astype(np.float64)
+        theta = torch.tensor(theta0, dtype=torch.float64, device=device, requires_grad=True)
+
+        optimizer = torch.optim.Adam([theta], lr=0.05)
+        for it in range(iters):
+            optimizer.zero_grad()
+            # build complex params from real tensors
+            # map to torch.complex128 where needed
+            # but here parameters are real; we pass them into build_H_torch which expects complex params
+            params_complex = torch.view_as_complex(torch.stack([theta, torch.zeros_like(theta)], dim=-1))
+            # simpler: build params as real (and cast inside build_H_torch)
+            H = build_H_torch(n, theta, cre_t, ann_t, num_t)  # accepts real theta
+            P = parity_operator_torch(n)
+            loss = degeneracy_and_gap_loss(H, P, n)
+            loss.backward()
+            optimizer.step()
+
+        with torch.no_grad():
+            final_loss = float(loss.cpu().item())
+            if final_loss < best_loss:
+                best_loss = final_loss
+                best_theta = theta.detach().cpu().numpy().copy()
+        print(f"Restart {r}, final loss {final_loss:.6e}")
+
+    print("Best loss", best_loss)
+    print("Best params", best_theta)
+    return best_theta, best_loss
+
+# ----------------------------
+# Plotting utility (numpy)
+# ----------------------------
+def plot_parity_spectrum(n, theta):
+    cre_np, ann_np, num_np = precompute_ops(n)
+    # build H numeric numpy
+    t = theta[0]; U = theta[1:1+(n-1)]; eps = theta[1+(n-1):1+(n-1)+n]; Delta = theta[-1]
+    # build H
+    H = np.zeros((2**n,2**n), dtype=complex)
+    for i in range(n):
+        H += eps[i] * num_np[i]
+    for i in range(n-1):
+        H += t * (cre_np[i] @ ann_np[i+1] + cre_np[i+1] @ ann_np[i])
+        H += Delta * (cre_np[i] @ cre_np[i+1] + ann_np[i+1] @ ann_np[i])
+        H += U[i] * (num_np[i] @ num_np[i+1])
+    evals, evecs = np.linalg.eigh(H)
+    P = parity_operator_torch(n).cpu().numpy()
+    parities = [np.real(np.vdot(ev, P @ ev)) for ev in evecs.T]
+    evens = [(E, v) for E, v, p in zip(evals, evecs.T, parities) if p >= 0]
+    odds  = [(E, v) for E, v, p in zip(evals, evecs.T, parities) if p <  0]
+    y_even = [E for E,_ in evens]
+    y_odd = [E for E,_ in odds]
+    plt.figure(figsize=(5,4))
+    plt.hlines(y_even, -0.2, 0.2, color='tab:blue')
+    plt.hlines(y_odd,  0.8, 1.2, color='tab:red')
+    plt.xticks([0,1], ['Even','Odd'])
+    plt.ylabel("Energy")
+    plt.show()
+
+
+
+if __name__ == "__main__":
+    for n in range(2,5):
+        print("Optimizing for n =", n)
+        best_theta, best_loss = optimize_params(n=n, device='cpu', restarts=5, iters=300)
+        plot_parity_spectrum(n, best_theta)
