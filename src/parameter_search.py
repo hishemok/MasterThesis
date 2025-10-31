@@ -83,21 +83,21 @@ def degeneracy_and_gap_loss(H, P, n, weight_vec=None, gap_target=0.5, gap_weight
     E_even, _ = torch.sort(even_states)
     E_odd,  _ = torch.sort(odd_states)
 
-    m = min(E_even.numel(), E_odd.numel())
+    m = min(len(E_even), len(E_odd)) # Minimum number of elements
     if m == 0:
-        return torch.tensor(1e6, device=H.device)  # bad configuration
+        return torch.tensor(1e6, device=H.device)  # bad configuration Penalty
+
+    if len(E_even) != len(E_odd):
+        print("Warning: unequal number of even and odd states:", len(E_even), len(E_odd))
 
     # default weights
     if weight_vec is None:
-        # print(n)
-        # strong weighting for low levels
-        weight_array = np.arange(1, 1000, 2**(n))[::-1].copy()
+        weight_array = np.linspace(1, 1000, m)[::-1].copy()
         weight_vec = torch.tensor(weight_array, device=H.device)
 
 
-    deg_terms = torch.abs(E_even[:m] - E_odd[:m])
+    deg_terms = torch.abs(E_even[:m] - E_odd[:m]) # Cut out unequal lengths
     w = weight_vec.to(H.device)
-    print(len(deg_terms), len(w))
     Ldeg = torch.sum(w * deg_terms) / torch.sum(w)
 
     # gap penalty: enforce minimal gaps in the full spectrum for the first p gaps
@@ -107,11 +107,19 @@ def degeneracy_and_gap_loss(H, P, n, weight_vec=None, gap_target=0.5, gap_weight
         gap_weights = torch.linspace(10.0, 1.0, steps=p, device=H.device)
     gap_pen = torch.sum(gap_weights * torch.nn.functional.softplus(gap_target - gaps[:p]))
 
-    return Ldeg + 0.1 * gap_pen  # adjust prefactor as you like
+    return 10 * Ldeg + 0.1 * gap_pen
 
-# ----------------------------
-# Optimization wrapper
-# ----------------------------
+def print_params(theta, n):
+    t = theta[0]
+    U = theta[1:1+(n-1)]
+    eps = theta[1+(n-1):1+(n-1)+n]
+    Delta = theta[-1]
+    print(f"t = {t:.4f}")
+    print(f"U = {U}")
+    print(f"ε = {eps}")
+    print(f"Δ = {Delta:.4f}")
+
+
 def optimize_params(n, device='cpu', restarts=8, iters=600):
     # precompute ops
     cre_np, ann_np, num_np = precompute_ops(n)
@@ -127,23 +135,35 @@ def optimize_params(n, device='cpu', restarts=8, iters=600):
         # choose sensible ranges: t ~ [0.2,2], U~[0.2,2], eps ~ [-1,1], Delta ~ [0,2]
         rng = np.random.RandomState(seed=r)
         t0 = 0.5 + rng.rand()*1.5
-        U0 = 0.5 + rng.rand(n-1)*1.5
+        U0 = 0.5 + abs(rng.rand(n-1)*1.5)
         eps0 = -0.5 + rng.rand(n)*1.0
         D0 = 0.5 + rng.rand()*1.5
+        
         theta0 = np.concatenate([[t0], U0, eps0, [D0]]).astype(np.float64)
         theta = torch.tensor(theta0, dtype=torch.float64, device=device, requires_grad=True)
 
         optimizer = torch.optim.Adam([theta], lr=0.05)
         for it in range(iters):
             optimizer.zero_grad()
-            # build complex params from real tensors
-            # map to torch.complex128 where needed
-            # but here parameters are real; we pass them into build_H_torch which expects complex params
-            params_complex = torch.view_as_complex(torch.stack([theta, torch.zeros_like(theta)], dim=-1))
-            # simpler: build params as real (and cast inside build_H_torch)
             H = build_H_torch(n, theta, cre_t, ann_t, num_t)  # accepts real theta
             P = parity_operator_torch(n)
             loss = degeneracy_and_gap_loss(H, P, n)
+
+            # --- Enforce known sweet-spot relations ---
+            t = theta[0]
+            U = theta[1:1+(n-1)]
+            eps = theta[1+(n-1):1+(n-1)+n]
+            Delta = theta[-1]
+
+            eps_penalty = torch.mean((eps[0] + U[0]/2)**2 + (eps[-1] + U[-1]/2)**2)
+            if n > 2:
+                eps_penalty += torch.mean((eps[1:-1] + U[:-1])**2)
+            Delta_penalty = torch.mean((Delta - (t + U[0]/2))**2)
+
+            # Scale the penalty term
+            loss += 0.1 *  (eps_penalty + Delta_penalty)
+            # ------------------------------------------
+
             loss.backward()
             optimizer.step()
 
@@ -155,12 +175,11 @@ def optimize_params(n, device='cpu', restarts=8, iters=600):
         print(f"Restart {r}, final loss {final_loss:.6e}")
 
     print("Best loss", best_loss)
-    print("Best params", best_theta)
+    print_params(best_theta, n)
     return best_theta, best_loss
 
-# ----------------------------
-# Plotting utility (numpy)
-# ----------------------------
+
+
 def plot_parity_spectrum(n, theta):
     cre_np, ann_np, num_np = precompute_ops(n)
     # build H numeric numpy
@@ -173,17 +192,37 @@ def plot_parity_spectrum(n, theta):
         H += t * (cre_np[i] @ ann_np[i+1] + cre_np[i+1] @ ann_np[i])
         H += Delta * (cre_np[i] @ cre_np[i+1] + ann_np[i+1] @ ann_np[i])
         H += U[i] * (num_np[i] @ num_np[i+1])
+
+
     evals, evecs = np.linalg.eigh(H)
     P = parity_operator_torch(n).cpu().numpy()
     parities = [np.real(np.vdot(ev, P @ ev)) for ev in evecs.T]
+
+    print(f"{n}-dot system eigenvalues and their parity sectors:")
+    for i, (E,p) in enumerate(zip(evals, parities)):
+        if abs(p) < .9:
+            print(f"Warning: Eigenvalue {E:.4f} has ambiguous parity {p:.4f}")
+        sector = "even" if p > .9 else "odd"
+        print(f"Eigenvalue {E:.4f} belongs to {sector} parity sector, with parity {p:.4f}")
+    print("")
+
     evens = [(E, v) for E, v, p in zip(evals, evecs.T, parities) if p >= 0]
     odds  = [(E, v) for E, v, p in zip(evals, evecs.T, parities) if p <  0]
     y_even = [E for E,_ in evens]
     y_odd = [E for E,_ in odds]
+
+    degeneracy_lines = []
+    for i, Ee in enumerate(y_even):
+        Eo = y_odd[i]
+        if abs(Ee - Eo) < 1e-3:
+            degeneracy_lines.append(Ee)
+
     plt.figure(figsize=(5,4))
     plt.hlines(y_even, -0.2, 0.2, color='tab:blue')
     plt.hlines(y_odd,  0.8, 1.2, color='tab:red')
+    plt.hlines(degeneracy_lines, 0.2, 0.8, color='tab:gray', linestyles='dashed', label='Degeneracies')
     plt.xticks([0,1], ['Even','Odd'])
+    plt.title(f"Parity-resolved energy spectrum for {n}-dot system")
     plt.ylabel("Energy")
     plt.show()
 
@@ -192,5 +231,5 @@ def plot_parity_spectrum(n, theta):
 if __name__ == "__main__":
     for n in range(2,5):
         print("Optimizing for n =", n)
-        best_theta, best_loss = optimize_params(n=n, device='cpu', restarts=5, iters=300)
+        best_theta, best_loss = optimize_params(n=n, device='cpu', restarts=5, iters=600)
         plot_parity_spectrum(n, best_theta)
