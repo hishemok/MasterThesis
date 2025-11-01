@@ -19,7 +19,10 @@ def build_H_torch(n, params, cre_t, ann_t, num_t):
     # eps_i = params[1+(n-1):1+(n-1)+n]
     # Delta = params[-1]
     t = params[0]
-    U = params[1:1+(n-1)]
+    U = params[1].item()
+    #params[1:1+(n-1)]
+    # print(U)
+    U = torch.full((n-1,), U, dtype=params.dtype, device=params.device)
     eps = params[1+(n-1):1+(n-1)+n]
     Delta = params[-1]
     dim = 2**n
@@ -178,6 +181,76 @@ def optimize_params(n, device='cpu', restarts=8, iters=600):
     print_params(best_theta, n)
     return best_theta, best_loss
 
+def optimize_params2(n, device='cpu', restarts=8, iters=600):
+    # precompute ops
+    cre_np, ann_np, num_np = precompute_ops(n)
+    cre_t = [to_torch(m, device=device) for m in cre_np]
+    ann_t = [to_torch(m, device=device) for m in ann_np]
+    num_t = [to_torch(m, device=device) for m in num_np]
+
+    best_loss = 1e9
+    best_theta = None
+
+    for r in range(restarts):
+        # initialize torch parameter vector (t, U0..U_{n-2}, eps0..eps_{n-1}, Delta)
+        # choose sensible ranges: t ~ [0.2,2], U~[0.2,2], eps ~ [-1,1], Delta ~ [0,2]
+        rng = np.random.RandomState(seed=r)
+        t0 = 0.5 + rng.rand()*1.5
+        # U0 = 0.5 + abs(rng.rand(n-1)*1.5)
+        # eps0 = -0.5 + rng.rand(n)*1.0
+        # D0 = 0.5 + rng.rand()*1.5
+        U0 =  0.5 + abs(rng.rand()*1.5)
+        U = [U0 for _ in range(n-1)]
+
+        rnd1 = rng.rand()
+        rnd2 = rng.rand()
+        rnd3 = rng.rand()
+        eps_ends = [-U0/2 * rnd1, -U0/2 * rnd1]
+        if n > 2:
+            eps_mids = [-U0 * rnd2] * (n-2)
+            eps0 = np.array([eps_ends[0] , *eps_mids , eps_ends[1]])
+        else:   
+            eps0 = eps_ends
+        D0 = t0 + U0/2 + rnd3
+
+        theta0 = np.concatenate([[t0], U, eps0, [D0]]).astype(np.float64)
+        theta = torch.tensor(theta0, dtype=torch.float64, device=device, requires_grad=True)
+
+        optimizer = torch.optim.Adam([theta], lr=0.05)
+        for it in range(iters):
+            optimizer.zero_grad()
+            H = build_H_torch(n, theta, cre_t, ann_t, num_t)  # accepts real theta
+            P = parity_operator_torch(n)
+            loss = degeneracy_and_gap_loss(H, P, n)
+
+            # # --- Enforce known sweet-spot relations ---
+            # t = theta[0]
+            # U = theta[1:1+(n-1)]
+            # eps = theta[1+(n-1):1+(n-1)+n]
+            # Delta = theta[-1]
+
+            # eps_penalty = torch.mean((eps[0] + U[0]/2)**2 + (eps[-1] + U[-1]/2)**2)
+            # if n > 2:
+            #     eps_penalty += torch.mean((eps[1:-1] + U[:-1])**2)
+            # Delta_penalty = torch.mean((Delta - (t + U[0]/2))**2)
+
+            # # Scale the penalty term
+            # loss += 0.1 *  (eps_penalty + Delta_penalty)
+            # # ------------------------------------------
+
+            loss.backward()
+            optimizer.step()
+
+        with torch.no_grad():
+            final_loss = float(loss.cpu().item())
+            if final_loss < best_loss:
+                best_loss = final_loss
+                best_theta = theta.detach().cpu().numpy().copy()
+        print(f"Restart {r}, final loss {final_loss:.6e}")
+
+    print("Best loss", best_loss)
+    print_params(best_theta, n)
+    return best_theta, best_loss
 
 
 def plot_parity_spectrum(n, theta):
@@ -217,19 +290,74 @@ def plot_parity_spectrum(n, theta):
         if abs(Ee - Eo) < 1e-3:
             degeneracy_lines.append(Ee)
 
-    plt.figure(figsize=(5,4))
-    plt.hlines(y_even, -0.2, 0.2, color='tab:blue')
-    plt.hlines(y_odd,  0.8, 1.2, color='tab:red')
-    plt.hlines(degeneracy_lines, 0.2, 0.8, color='tab:gray', linestyles='dashed', label='Degeneracies')
-    plt.xticks([0,1], ['Even','Odd'])
-    plt.title(f"Parity-resolved energy spectrum for {n}-dot system")
-    plt.ylabel("Energy")
+    # plt.figure(figsize=(5,4))
+    # plt.hlines(y_even, -0.2, 0.2, color='tab:blue')
+    # plt.hlines(y_odd,  0.8, 1.2, color='tab:red')
+    # plt.hlines(degeneracy_lines, 0.2, 0.8, color='tab:gray', linestyles='dashed', label='Degeneracies')
+    # plt.xticks([0,1], ['Even','Odd'])
+    # plt.title(f"Parity-resolved energy spectrum for {n}-dot system")
+    # plt.ylabel("Energy")
+    # plt.show()
+    t = theta[0]
+    U = theta[1:1+(n-1)]
+    eps = theta[1+(n-1):1+(n-1)+n]
+    Delta = theta[-1]
+
+    fig, axs = plt.subplots(2, 1, figsize=(10,4), gridspec_kw={'height_ratios':[2,1]})
+    ax1, ax2 = axs
+
+    # -----------------------------
+    # Left panel: parity-resolved energy spectrum
+    # -----------------------------
+    ax1.hlines(y_even, -0.2, 0.2, color='tab:blue', label='Even')
+    ax1.hlines(y_odd,  0.8, 1.2, color='tab:red', label='Odd')
+    ax1.hlines(degeneracy_lines, 0.2, 0.8, color='tab:gray', linestyles='dashed', label='Degeneracies')
+    ax1.set_xticks([0,1])
+    ax1.set_xticklabels(['Even','Odd'])
+    ax1.set_title(f"Parity-resolved spectrum ({n}-dot)")
+    ax1.set_ylabel("Energy")
+    ax1.legend(frameon=False)
+
+    # -----------------------------
+    # Right panel: schematic of QD–SC–QD chain
+    # -----------------------------
+    ax2.set_xlim(-0.5, n-0.5)
+    ax2.set_ylim(-1.5, 1.5)
+    ax2.axis('off')
+
+    dot_y = 0
+    sc_height = 0.5
+    sc_width = 0.8
+
+    # Draw dots (quantum dots)
+    for i in range(n):
+        ax2.scatter(i, dot_y, s=800, color='tab:blue', edgecolor='black', zorder=3)
+        ax2.text(i, dot_y-0.5, f"$\\epsilon_{i}$={eps[i]:.2f}", ha='center', fontsize=9)
+
+    # Draw superconductors (rectangles between dots)
+    for i in range(n-1):
+        x = (i + (i+1))/2
+        rect = plt.Rectangle((x - sc_width/2, dot_y - sc_height/2), sc_width, sc_height,
+                             color='lightgray', ec='black', lw=1.2, zorder=2)
+        ax2.add_patch(rect)
+
+        # Coupling t and Δ inside SC
+        ax2.text(x, dot_y, f"t={t:.2f}\nΔ={Delta:.2f}", ha='center', va='center', fontsize=8)
+
+        # U label above connection
+        ax2.text(x, dot_y+0.6, f"$U_{i}$={U[i]:.2f}", ha='center', fontsize=9, color='tab:purple')
+
+    ax2.set_title("Optimized QD–SC–QD setup")
+
+    plt.tight_layout()
     plt.show()
 
 
-
 if __name__ == "__main__":
-    for n in range(2,5):
+    n = 2
+    best_theta, best_loss = optimize_params(n=n, device='cpu', restarts=5, iters=600)
+    plot_parity_spectrum(n, best_theta)
+    for n in range(3,5):
         print("Optimizing for n =", n)
-        best_theta, best_loss = optimize_params(n=n, device='cpu', restarts=5, iters=600)
+        best_theta, best_loss = optimize_params2(n=n, device='cpu', restarts=5, iters=600)
         plot_parity_spectrum(n, best_theta)
