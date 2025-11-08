@@ -5,28 +5,30 @@ import torch
 import torch.nn as nn
 from functools import reduce
 
-from n_particles_degen import n_dot_Hamiltonian, n_dot_sweetspot, σ_x, σ_y, σ_z, I, tensor_product, sigma_site, creation_annihilation
+from n_particles_degen import creation_annihilation, charge_difference, Majorana_polarization
 
-def to_torch(mat_np, device='cpu'):
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print("Using device:", device)
+
+def to_torch(mat_np, device=device):
     return torch.from_numpy(mat_np).to(device=device, dtype=torch.complex128)
 
 
 def build_H_torch(n, params, cre_t, ann_t, num_t):
-    # params: torch tensor (length 1 + (n-1) + n + 1)
-    # mapping:
-    # t = params[0]
-    # U_i = params[1:1+(n-1)]
-    # eps_i = params[1+(n-1):1+(n-1)+n]
-    # Delta = params[-1]
+
     t = params[0]
-    U = params[1].item()
-    #params[1:1+(n-1)]
-    # print(U)
-    U = torch.full((n-1,), U, dtype=params.dtype, device=params.device)
+    U = params[1:1+(n-1)]
     eps = params[1+(n-1):1+(n-1)+n]
     Delta = params[-1]
+    # t = params[0]
+    # U = params[1].item()
+    # #params[1:1+(n-1)]
+    # # print(U)
+    # U = torch.full((n-1,), U, dtype=params.dtype, device=params.device)
+    # eps = params[1+(n-1):1+(n-1)+n]
+    # Delta = params[-1]
     dim = 2**n
-    H = torch.zeros((dim,dim), dtype=torch.complex128, device=params.device)
+    H = torch.zeros((dim,dim), dtype=torch.complex128, device=device)
 
     for i in range(n):
         # onsite 
@@ -40,15 +42,34 @@ def build_H_torch(n, params, cre_t, ann_t, num_t):
             H += U[i] * (num_t[i] @ num_t[i+1])
     return H
 
+def map_params_to_physical(theta, n):
+    """
+    Map raw parameters (any real numbers) to physical ranges.
+    """
+    Umin, Umax = 0.1, 10.0
+    epsmin, epsmax = -5.0, 5.0
+    tmin, tmax = 0.1, 5.0
+    Dmin, Dmax = 0.0, 5.0
+
+    # Apply sigmoid mapping to stay in bounds
+    s = torch.sigmoid(theta)
+
+    t     = tmin     + (tmax - tmin) * s[0]
+    U     = Umin     + (Umax - Umin) * s[1:1+(n-1)]
+    eps   = epsmin   + (epsmax - epsmin) * s[1+(n-1):1+(n-1)+n]
+    Delta = Dmin     + (Dmax - Dmin) * s[-1]
+
+    return t, U, eps, Delta
+
 
 def parity_operator_torch(n):
     P = torch.eye(2**n, dtype=torch.complex128)
     for j in range(n):
         cd, c = creation_annihilation(j, n)
-        cd_t = to_torch(cd, device=P.device)
-        c_t = to_torch(c, device=P.device)
+        cd_t = to_torch(cd, device=device)
+        c_t = to_torch(c, device=device)
         n_i = cd_t @ c_t
-        P = P @ (torch.eye(2**n, dtype=torch.complex128, device=P.device) - 2 * n_i)
+        P = P @ (torch.eye(2**n, dtype=torch.complex128, device=device) - 2 * n_i)
     return P
 
 
@@ -73,34 +94,76 @@ def calculate_parities(evals, evecs, P):
     E_even = evals[even_mask]
     E_odd  = evals[odd_mask]
 
-    return E_even, E_odd
+    # Return also eigenvectors if needed
+    even_vecs = evecs[:, even_mask]
+    odd_vecs  = evecs[:, odd_mask]
 
-def Majorana_purity_metric(n, eigenvecs, create_t, ann_t):
-    """Used to calculate the Majorana purity metric for a set of eigenvectors
-        M_n = ( ⟨c_n†⟩ - ⟨c_n⟩  ) / ( ⟨c_n†c_n⟩ + ⟨c_nc_n†⟩ )
-        M -> 0 for pure Majorana state localized on site n
-        M -> 1 for delocalized fermionic state
-        M = ∑_n M_n
-    ."""
-    M = torch.zeros(n, dtype=torch.complex128, device=eigenvecs.device)
+    return E_even, E_odd, even_vecs, odd_vecs
+
+
+
+def charge_difference_torch(even_state, odd_state, n):
+    """Compute the charge difference between even and odd states.
+    ∑_n |⟨e_k|n_n|e_k⟩ - ⟨o_k|n_n|o_k⟩|
+    """
+    charge_diff = 0
+    n_states = even_state.shape[1]
     for i in range(n):
-        cd_t = create_t[i]
-        c_t = ann_t[i]
-        exp_cd = torch.sum(torch.conj(eigenvecs) * (cd_t @ eigenvecs), dim=0)
-        exp_c  = torch.sum(torch.conj(eigenvecs) * (c_t @ eigenvecs), dim=0)
-        exp_n  = torch.sum(torch.conj(eigenvecs) * (cd_t @ c_t @ eigenvecs), dim=0)
-        exp_nbar = torch.sum(torch.conj(eigenvecs) * (c_t @ cd_t @ eigenvecs), dim=0)
+        f_dag_i, f_i = creation_annihilation(i, n)
+        f_dag_i_t = to_torch(f_dag_i, device=device)
+        f_i_t = to_torch(f_i, device=device)
+        n_i = f_dag_i_t @ f_i_t
+        exp_even = 0
+        exp_odd = 0
+        for i in range(n_states):
+            even_vec = even_state[:, i]
+            odd_vec = odd_state[:, i]
+            exp_even += torch.vdot(even_vec, n_i @ even_vec)
+            exp_odd  += torch.vdot(odd_vec,  n_i @ odd_vec)
+        # exp_even = torch.vdot(even_state, n_i @ even_state)
+        # exp_odd  = torch.vdot(odd_state,  n_i @ odd_state)
+        charge_diff += torch.abs(exp_even - exp_odd)
+    return charge_diff.real
 
-        M[i] = torch.mean(torch.abs((exp_cd - exp_c) / (exp_n + exp_nbar + 1e-12)))
 
-    M_total = torch.sum(torch.abs(M))
-    return M_total.real
+def construct_Gamma_operators_torch(j,n, device=device):
+    """Construct the Majorana operators Γ^s_j for site j in a chain of n sites."""
+    f_dag_j, f_j = creation_annihilation(j, n)
+    f_dag_j_t = to_torch(f_dag_j, device=device)
+    f_j_t = to_torch(f_j, device=device)
+    Gamma_1 = f_dag_j_t + f_j_t
+    Gamma_2 = 1j * (f_dag_j_t - f_j_t)
+    return Gamma_1, Gamma_2
+
+def Majorana_polarization_torch(even_vecs, odd_vecs, n):
+    """
+    Compute local Majorana polarization M_j for each site j.
+    M_j = sum_s (<o|Γ^s_j|e>)^2 / sum_s |<o|Γ^s_j|e>|^2
+    """
+    M = torch.zeros(n, dtype=torch.complex128, device=device)
+
+    for j in range(n):
+        Gamma_1, Gamma_2 = construct_Gamma_operators_torch(j, n, device=device)
+        numerator = 0.0 + 0.0j
+        denominator = 0.0
+        for i in range(even_vecs.shape[1]):
+            e_k = even_vecs[:, i]
+            o_k = odd_vecs[:, i]
+            term1 = torch.vdot(o_k, Gamma_1 @ e_k)
+            term2 = torch.vdot(o_k, Gamma_2 @ e_k)
+            numerator   += term1**2 + term2**2
+            denominator += torch.abs(term1)**2 + torch.abs(term2)**2
+        M[j] = numerator / denominator if denominator != 0 else 0.0
+    return M
+
+
+
 
 def degeneracy_and_gap_loss(H, P, n, weight_vec=None, gap_target=0.5, gap_weights=None):
     # H: Hermitian torch matrix
     evals, evecs = torch.linalg.eigh(H)  # evals sorted ascending
 
-    even_states, odd_states = calculate_parities(evals, evecs, P)
+    even_states, odd_states, even_vecs, odd_vecs = calculate_parities(evals, evecs, P)
 
     # Just in case
     E_even, _ = torch.sort(even_states)
@@ -130,6 +193,9 @@ def degeneracy_and_gap_loss(H, P, n, weight_vec=None, gap_target=0.5, gap_weight
         gap_weights = torch.linspace(10.0, 1.0, steps=p, device=H.device)
     gap_pen = torch.sum(gap_weights * torch.nn.functional.softplus(gap_target - gaps[:p]))
 
+
+
+
     return 10 * Ldeg + 0.1 * gap_pen
 
 
@@ -141,7 +207,7 @@ def degeneracy_and_gap_loss2(H, P, n, weight_vec=None, gap_target=0.5, gap_weigh
 
     evals, evecs = torch.linalg.eigh(H)  # evals sorted ascending
 
-    even_states, odd_states = calculate_parities(evals, evecs, P)
+    even_states, odd_states, even_vecs, odd_vecs = calculate_parities(evals, evecs, P)
 
     # Just in case
     E_even, _ = torch.sort(even_states)
@@ -159,12 +225,12 @@ def degeneracy_and_gap_loss2(H, P, n, weight_vec=None, gap_target=0.5, gap_weigh
     # # default weights
     if weight_vec is None:
         weight_array = np.linspace(1, 0.1, 2*m-1)**2# First half for Degeneracy, second half for gaps
-        weight_vec = torch.tensor(weight_array, device=H.device)
+        weight_vec = torch.tensor(weight_array, device=device)
 
-    penalty_array = torch.zeros(2*m-1, device=H.device) # First half for Degeneracy, second half for gaps
+    penalty_array = torch.zeros(2*m-1, device=device) # First half for Degeneracy, second half for gaps
 
     deg_terms = torch.abs(E_even - E_odd) # Cut out unequal lengths
-    w = weight_vec.to(H.device)
+    w = weight_vec.to(device)
     degeneracy_terms = w[:m] * deg_terms
     penalty_array[:m] = degeneracy_terms
 
@@ -178,14 +244,24 @@ def degeneracy_and_gap_loss2(H, P, n, weight_vec=None, gap_target=0.5, gap_weigh
     gap_terms = w[m:] * gap_penalties
     penalty_array[m:] = gap_terms
 
-    cre_t, ann_t, _ = precompute_ops(n)
-    cre_t = [to_torch(m, device=H.device) for m in cre_t]
-    ann_t = [to_torch(m, device=H.device) for m in ann_t]   
-    # Calculate Majorana purity metric for the eigenvectors
-    Majorana_metric = Majorana_purity_metric(n, evecs, cre_t, ann_t)
-    # Optimal is 0, so we can add it directly to the penalty
-    total_penalty = torch.sum(penalty_array) + Majorana_metric
-    return total_penalty
+
+    Majorana_metric = Majorana_polarization_torch(even_vecs, odd_vecs, n)
+    charge_diff = charge_difference_torch(even_vecs, odd_vecs, n)
+
+    Majorana_metric_penalty = torch.sum(torch.nn.functional.softplus(torch.abs(Majorana_metric) - 1e-5))
+
+    charge_diff_penalty = charge_diff
+
+    total_penalty = torch.sum(penalty_array) + charge_diff_penalty #+ Majorana_metric_penalty #+ charge_diff_penalty
+    # return total_penalty
+    mean_energy = evals.abs().mean().detach() + 1e-8
+    normalized_loss = total_penalty / mean_energy
+
+    # Optional: add a small weight decay on θ if desired (keeps optimizer stable)
+    if theta is not None:
+        normalized_loss = normalized_loss + 1e-3 * (theta.norm() ** 2)
+
+    return normalized_loss
 
 
 def print_params(theta, n):
@@ -201,7 +277,7 @@ def print_params(theta, n):
 
 
 
-def optimize_params(n, device='cpu', restarts=8, iters=600):
+def optimize_params(n, device=device, restarts=8, iters=600):
     # precompute ops
     cre_np, ann_np, num_np = precompute_ops(n)
     cre_t = [to_torch(m, device=device) for m in cre_np]
@@ -259,7 +335,7 @@ def optimize_params(n, device='cpu', restarts=8, iters=600):
     print_params(best_theta, n)
     return best_theta, best_loss
 
-def optimize_params2(n, device='cpu', restarts=8, iters=600):
+def optimize_params2(n, device=device, restarts=8, iters=600):
     # precompute ops
     cre_np, ann_np, num_np = precompute_ops(n)
     cre_t = [to_torch(m, device=device) for m in cre_np]
@@ -273,52 +349,41 @@ def optimize_params2(n, device='cpu', restarts=8, iters=600):
         # initialize torch parameter vector (t, U0..U_{n-2}, eps0..eps_{n-1}, Delta)
         # choose sensible ranges: t ~ [0.2,2], U~[0.2,2], eps ~ [-1,1], Delta ~ [0,2]
         rng = np.random.RandomState(seed=r)
-        t0 = 0.5 + rng.rand()*.5
-        # U0 = 0.5 + abs(rng.rand(n-1)*1.5)
-        # eps0 = -0.5 + rng.rand(n)*1.0
-        # D0 = 0.5 + rng.rand()*1.5
-        U0 =  0.5 + abs(rng.rand()*5)
-        U = [U0 for _ in range(n-1)]
-
         rnd1 = rng.rand()
         rnd2 = rng.rand()
         rnd3 = rng.rand()
-        eps_ends = [-U0/2 * rnd1, -U0/2 * rnd1]
+        rnd4 = rng.rand()
+        rnd5 = rng.rand()
+
+        U0 = 1 + rnd1
+        U = [U0 for _ in range(n-1)]
+
+        eps_ends = [-U0/2 * rnd2 , -U0/2  * rnd2]
         if n > 2:
-            eps_mids = [-U0 * rnd2] * (n-2)
+            eps_mids = [-U0 * rnd3] * (n-2)
             eps0 = np.array([eps_ends[0] , *eps_mids , eps_ends[1]])
         else:   
             eps0 = eps_ends
-        D0 = t0 + U0/2 + rnd3
+
+        t0 = 0.5 + rnd4 * 0.5
+        D0 = t0 + U0/2 + rnd5
 
         theta0 = np.concatenate([[t0], U, eps0, [D0]]).astype(np.float64)
         theta = torch.tensor(theta0, dtype=torch.float64, device=device, requires_grad=True)
 
         optimizer = torch.optim.Adam([theta], lr=0.05)
-        # optimizer = torch.optim.LBFGS([theta], lr=0.5, max_iter=100)
-        # def closure():
-        #     optimizer.zero_grad()
-        #     with torch.no_grad():
-        #         theta.data.clamp_(-10, 10)
-        #     H = build_H_torch(n, theta, cre_t, ann_t, num_t)
-        #     P = parity_operator_torch(n)
-        #     loss = degeneracy_and_gap_loss2(H, P, n, theta=theta)
-        #     loss.backward()
-        #     return loss
+        # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=iters, eta_min=1e-3)
 
-        # # Outer loop for restarts / convergence monitoring
-        # for it in range(iters):
-        #     loss = optimizer.step(closure)  # LBFGS needs the closure here
-    
         for it in range(iters):
             optimizer.zero_grad()
+            theta = map_params_to_physical(theta, n)
             H = build_H_torch(n, theta, cre_t, ann_t, num_t)  # accepts real theta
             P = parity_operator_torch(n)
-            loss = degeneracy_and_gap_loss2(H, P, n)
+            loss = degeneracy_and_gap_loss2(H, P, n, theta=theta)
 
             loss.backward()
             optimizer.step()
-
+  
         with torch.no_grad():
             final_loss = float(loss.cpu().item())
             if final_loss < best_loss:
@@ -358,22 +423,34 @@ def plot_parity_spectrum(n, theta):
     print("")
 
     cre_t, ann_t, _ = precompute_ops(n)
-    cre_t = [to_torch(m, device=H.device) for m in cre_t]
-    ann_t = [to_torch(m, device=H.device) for m in ann_t]   
+    cre_t = [to_torch(m, device=device) for m in cre_t]
+    ann_t = [to_torch(m, device=device) for m in ann_t]   
     # Calculate Majorana purity metric for the eigenvectors
-    Majorana_metric = Majorana_purity_metric(n, to_torch(evecs) , cre_t, ann_t)
-    print(f"Majorana purity metric: {Majorana_metric:.6f}\n")
-
+    Majorana_metric = Majorana_polarization_torch(
+        to_torch(evecs[:, [i for i,p in enumerate(parities) if p > .1]], device=device),
+        to_torch(evecs[:, [i for i,p in enumerate(parities) if p < -.1]], device=device),
+        n
+    )
+    # print(f"Majorana purity metric: {Majorana_metric:.6f}\n")
+    plt.plot(range(n), Majorana_metric, 'o-', label='|M̃₀|')
+    plt.xlabel('Site index')
+    plt.ylabel('Majorana localization')
+    plt.title(f'Majorana localization profile for {n}-dot system')
+    plt.axhline(0, color='k', linestyle='--')
+    plt.legend()
+    plt.show()
 
     evens = [(E, v) for E, v, p in zip(evals, evecs.T, parities) if p >= 0]
     odds  = [(E, v) for E, v, p in zip(evals, evecs.T, parities) if p <  0]
     y_even = [E for E,_ in evens]
     y_odd = [E for E,_ in odds]
 
+    Total_energy_difference = sum([abs(Ee - Eo) for Ee, Eo in zip(y_even, y_odd)])
+    print(f"Total energy difference between even and odd states: {Total_energy_difference:.6e}\n")
     degeneracy_lines = []
     for i, Ee in enumerate(y_even):
         Eo = y_odd[i]
-        if abs(Ee - Eo) < 1e-3:
+        if abs(Ee - Eo) < 1e-2:
             degeneracy_lines.append(Ee)
 
 
@@ -438,5 +515,5 @@ if __name__ == "__main__":
     # plot_parity_spectrum(n, best_theta)
     for n in range(2,5):
         print("Optimizing for n =", n)
-        best_theta, best_loss = optimize_params2(n=n, device='cpu', restarts=5, iters=600)
+        best_theta, best_loss = optimize_params2(n=n, device=device, restarts=5, iters=600)
         plot_parity_spectrum(n, best_theta)

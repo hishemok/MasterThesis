@@ -3,6 +3,14 @@ import sympy as sp
 import matplotlib.pyplot as plt
 
 
+"""
+TODO: 
+Next majorana check functions:
+Charge diff: ∑_n |⟨e_k|n_n|e_k⟩ - ⟨o_k|n_n|o_k⟩|
+M tilde: \tilde{M_k^n} = ∑_s ⟨o_k|Γ^n_s|e_k⟩; should go between 1 and -1 and also 0 where the majorana is not well localized. Plot for k energy levels where x-axis is site n.
+Check non-interacting against interacting.
+"""
+
 ## Pauli spin matrices
 σ_x = np.array([[0, 1], 
                 [1, 0]])
@@ -82,194 +90,49 @@ def parity_operator(N):
         n_i = f_dag_i * f_i
         P = P @ (np.eye(2**N) - 2 * n_i)
     return P
-        
+
+def charge_difference(even_state, odd_state, n):
+    """Compute the charge difference between even and odd states.
+    ∑_n |⟨e_k|n_n|e_k⟩ - ⟨o_k|n_n|o_k⟩|
+    """
+    charge_diff = 0
+    for i in range(n):
+        f_dag_i, f_i = creation_annihilation(i, n)
+        n_i = f_dag_i @ f_i
+        exp_even = np.vdot(even_state, n_i @ even_state)
+        exp_odd  = np.vdot(odd_state,  n_i @ odd_state)
+        charge_diff += np.abs(exp_even - exp_odd)
+    return charge_diff.real
 
 
-# def two_dot_sweetspot():
-#     H2 = n_dot_Hamiltonian(n=2)  
 
-#     # Symbols
-#     ϵs = sp.symbols('ϵ0 ϵ1')
-#     Us = sp.symbols('U0')
-#     Δ, t = sp.symbols('Δ t', real=True)
+def construct_Gamma_operators(j,n):
+    """Construct the Majorana operators Γ^s_j for site j in a chain of n sites."""
+    f_dag_j, f_j = creation_annihilation(j, n)
+    Gamma_1 = f_dag_j + f_j
+    Gamma_2 = 1j * (f_dag_j - f_j)
+    return Gamma_1, Gamma_2
 
-#     # Sweet spot parameters
-#     U0_val = 1
-#     t_val = 1
-#     Δ_val = t_val + U0_val/2
-#     ϵ0_val = -U0_val/2
-#     ϵ1_val = -U0_val/2
+def Majorana_polarization(even_vecs, odd_vecs, n):
+    """
+    Compute local Majorana polarization M_j for each site j.
+    M_j = sum_s (<o|Γ^s_j|e>)^2 / sum_s |<o|Γ^s_j|e>|^2
+    """
+    M = np.zeros(n, dtype=complex)
 
-#     # Substitute parameters into symbolic matrix
-#     H2_num = H2.subs({Δ: Δ_val, t: t_val, ϵs[0]: ϵ0_val, ϵs[1]: ϵ1_val, Us: U0_val})
-
-#     # Convert sympy.Matrix to numpy array (float complex)
-#     H2_np = np.array(H2_num).astype(np.complex128)
-
-#     # Eigen decomposition
-#     eigvals_np, eigvecs_np = np.linalg.eigh(H2_np)
-
-#     P = parity_operator(2)
-#     parities = []
-#     for vec in eigvecs_np.T:
-#         parity = np.vdot(vec, P @ vec)
-#         parities.append(np.real_if_close(parity))
-#     print("Two-dot system eigenvalues and their parity sectors:")
-#     for i, (E,p) in enumerate(zip(eigvals_np, parities)):
-#         sector = "even" if np.isclose(p, 1) else "odd"
-#         print(f"Eigenvalue {E:.4f} belongs to {sector} parity sector")
-#     print("")
-
-#     even_states = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if np.isclose(p, 1)]
-#     odd_states  = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if np.isclose(p, -1)]
-
-#     # Plot energy levels by parity
-#     plt.figure(figsize=(6,4))
-#     y_even = [E for E, _ in even_states]
-#     y_odd  = [E for E, _ in odd_states]
-
-#     plt.hlines(y_even, xmin=-0.2, xmax=0.2, color='blue', label='Even parity')
-#     plt.hlines(y_odd,  xmin=0.8, xmax=1.2, color='red',  label='Odd parity')
-
-#     plt.xlim(-0.5, 1.5)
-#     plt.xticks([0, 1], ['Even', 'Odd'])
-#     plt.ylabel("Energy eigenvalues")
-#     plt.title("Parity-resolved energy spectrum for 2-dot system")
-#     plt.legend()
-#     plt.grid(True, axis='y', linestyle='--', alpha=0.4)
-#     plt.tight_layout()
-#     plt.show()
-
-#     return eigvals_np, parities
-    
-
-# def three_dot_sweetspot():
-#     H3 = n_dot_Hamiltonian(n=3)
-
-#     # Symbols
-#     ϵs = sp.symbols('ϵ0 ϵ1 ϵ2')
-#     Us = sp.symbols('U0 U1')
-#     Δ, t = sp.symbols('Δ t', real=True)
-
-#     # Sweet spot parameters
-#     U0_val = 1
-#     U1_val = 1
-#     t_val = 1
-#     Δ_val = t_val + U0_val/2
-#     ϵ0_val = -U0_val/2
-#     ϵ1_val = -U0_val
-#     ϵ2_val = -U0_val/2
-
-#     # Substitute parameters into symbolic matrix
-#     H3_num = H3.subs({Δ: Δ_val, t: t_val, ϵs[0]: ϵ0_val, ϵs[1]: ϵ1_val, ϵs[2]: ϵ2_val, Us[0]: U0_val, Us[1]: U1_val})
-
-#     # Convert sympy.Matrix to numpy array (float complex)
-#     H3_np = np.array(H3_num).astype(np.complex128)
-
-#     # Eigen decomposition
-#     eigvals_np, eigvecs_np = np.linalg.eigh(H3_np)
-
-#     P = parity_operator(3)
-#     parities = []
-#     for vec in eigvecs_np.T:
-#         parity = np.vdot(vec, P @ vec)
-#         parities.append(np.real_if_close(parity))
-
-#     print("Three-dot system eigenvalues and their parity sectors:")
-#     for i, (E,p) in enumerate(zip(eigvals_np, parities)):
-#         if abs(p) < .9:
-#             print(f"Warning: Eigenvalue {E:.4f} has ambiguous parity {p:.4f}")
-#         sector = "even" if p > .9 else "odd"
-#         print(f"Eigenvalue {E:.4f} belongs to {sector} parity sector, with parity {p:.4f}")
-#     print("")
-
-#     even_states = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if p > .9]
-#     odd_states  = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if p < -.9]
-
-#     # Plot energy levels by parity
-#     plt.figure(figsize=(6,4))
-#     y_even = [E for E, _ in even_states]
-#     y_odd  = [E for E, _ in odd_states]
-
-#     plt.hlines(y_even, xmin=-0.2, xmax=0.2, color='blue', label='Even parity')
-#     plt.hlines(y_odd,  xmin=0.8, xmax=1.2, color='red',  label='Odd parity')
-
-#     plt.xlim(-0.5, 1.5)
-#     plt.xticks([0, 1], ['Even', 'Odd'])
-#     plt.ylabel("Energy eigenvalues")
-#     plt.title("Parity-resolved energy spectrum for 3-dot system")
-#     plt.legend()
-#     plt.grid(True, axis='y', linestyle='--', alpha=0.4)
-#     plt.tight_layout()
-#     plt.show()
-
-#     return eigvals_np, parities
-    
-
-# def four_dot_sweetspot():
-#     H4 = n_dot_Hamiltonian(n=4)
-
-#     # Symbols
-#     ϵs = sp.symbols('ϵ0 ϵ1 ϵ2 ϵ3')
-#     Us = sp.symbols('U0 U1 U2')
-#     Δ, t = sp.symbols('Δ t', real=True)
-
-#     # Sweet spot parameters
-#     U0_val = 1
-#     U1_val = 1
-#     U2_val = 1
-#     t_val = 1
-#     Δ_val = t_val + U0_val/2
-#     ϵ0_val = -U0_val/2
-#     ϵ1_val = -U0_val
-#     ϵ2_val = -U0_val
-#     ϵ3_val = -U0_val/2
-
-#     # Substitute parameters into symbolic matrix
-#     H4_num = H4.subs({Δ: Δ_val, t: t_val, ϵs[0]: ϵ0_val, ϵs[1]: ϵ1_val, ϵs[2]: ϵ2_val, ϵs[3]: ϵ3_val, Us[0]: U0_val, Us[1]: U1_val, Us[2]: U2_val})
-
-#     # Convert sympy.Matrix to numpy array (float complex)
-#     H4_np = np.array(H4_num).astype(np.complex128)
-
-#     # Eigen decomposition
-#     eigvals_np, eigvecs_np = np.linalg.eigh(H4_np)
-
-#     P = parity_operator(4)
-#     parities = []
-#     for vec in eigvecs_np.T:
-#         parity = np.vdot(vec, P @ vec)
-#         parities.append(np.real_if_close(parity))
-
-#     print("Four-dot system eigenvalues and their parity sectors:")
-#     for i, (E,p) in enumerate(zip(eigvals_np, parities)):
-#         if abs(p) < .9:
-#             print(f"Warning: Eigenvalue {E:.4f} has ambiguous parity {p:.4f}")
-#         sector = "even" if p > .9 else "odd"
-#         print(f"Eigenvalue {E:.4f} belongs to {sector} parity sector, with parity {p:.4f}")
-#     print("")
-
-#     even_states = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if p > .9]
-#     odd_states  = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if p < -.9]
-
-#     # Plot energy levels by parity
-#     plt.figure(figsize=(6,4))
-#     y_even = [E for E, _ in even_states]
-#     y_odd  = [E for E, _ in odd_states]
-
-#     plt.hlines(y_even, xmin=-0.2, xmax=0.2, color='blue', label='Even parity')
-#     plt.hlines(y_odd,  xmin=0.8, xmax=1.2, color='red',  label='Odd parity')
-
-#     plt.xlim(-0.5, 1.5)
-#     plt.xticks([0, 1], ['Even', 'Odd'])
-#     plt.ylabel("Energy eigenvalues")
-#     plt.title("Parity-resolved energy spectrum for 4-dot system")
-#     plt.legend()
-#     plt.grid(True, axis='y', linestyle='--', alpha=0.4)
-#     plt.tight_layout()
-#     plt.show()
-
-#     return eigvals_np, parities
-
+    for j in range(n):
+        Gamma_1, Gamma_2 = construct_Gamma_operators(j, n)
+        numerator = 0.0 + 0.0j
+        denominator = 0.0
+        for i in range(even_vecs.shape[1]):
+            e_k = even_vecs[:, i]
+            o_k = odd_vecs[:, i]
+            term1 = np.vdot(o_k, Gamma_1 @ e_k)
+            term2 = np.vdot(o_k, Gamma_2 @ e_k)
+            numerator   += term1**2 + term2**2
+            denominator += abs(term1)**2 + abs(term2)**2
+        M[j] = numerator / denominator if denominator != 0 else 0.0
+    return M 
 
 def n_dot_sweetspot(n, params):
     """
@@ -314,12 +177,29 @@ def n_dot_sweetspot(n, params):
     for i, (E,p) in enumerate(zip(eigvals_np, parities)):
         if abs(p) < .9:
             print(f"Warning: Eigenvalue {E:.4f} has ambiguous parity {p:.4f}")
-        sector = "even" if p > .9 else "odd"
+        sector = "even" if p > 0.9 else "odd"
         print(f"Eigenvalue {E:.4f} belongs to {sector} parity sector, with parity {p:.4f}")
     print("")
 
-    even_states = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if p > .9]
-    odd_states  = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if p < -.9]
+    even_states = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if p > .1]
+    odd_states  = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if p < -.1]
+
+    # Compute Majorana localization
+    even_vecs = np.array([v for _, v in even_states]).T
+    odd_vecs  =  np.array([v for _, v in odd_states]).T
+
+    charge_diff = charge_difference(even_vecs, odd_vecs, n)
+    print(f"Charge difference between lowest even and odd states: {charge_diff:.4f}")
+
+
+    M = Majorana_polarization(even_vecs, odd_vecs, n)
+    plt.plot(range(n), M, 'o-', label='|M̃₀|')
+    plt.xlabel('Site index')
+    plt.ylabel('Majorana localization')
+    plt.title(f'Majorana localization profile for {n}-dot system')
+    plt.axhline(0, color='k', linestyle='--')
+    plt.legend()
+    plt.show()
 
     # Plot energy levels by parity
     plt.figure(figsize=(6,4))
@@ -348,6 +228,50 @@ def n_dot_sweetspot(n, params):
 
     return eigvals_np, parities
 
+def two_dot_sweetspot(n,params):
+    Hn = n_dot_Hamiltonian(n=n)
+
+    # Symbols
+    ϵs = sp.symbols(f'ϵ0:{n}')
+    Us = sp.symbols(f'U0:{n-1}')
+    Δ, t = sp.symbols('Δ t', real=True)
+
+    subs_dict = {Δ: params['Δ'], t: params['t']}
+
+    # Add epsilon substitutions
+    subs_dict.update({ϵs[i]: params['ϵ'][i] for i in range(n)})
+
+    # Add U substitutions
+    subs_dict.update({Us[i]: params['U'][i] for i in range(n - 1)})
+
+    # Substitute into the Hamiltonian
+    Hn_num = Hn.subs(subs_dict)
+
+    # Convert sympy.Matrix to numpy array (float complex)
+    Hn_np = np.array(Hn_num).astype(np.complex128)
+
+    # Eigen decomposition
+    eigvals_np, eigvecs_np = np.linalg.eigh(Hn_np)
+    P = parity_operator(n)
+    parities = []
+    for vec in eigvecs_np.T:
+        parity = np.vdot(vec, P @ vec)
+        parities.append(np.real_if_close(parity))
+
+    
+    even_states = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if p > .9]
+    odd_states  = [(E, v) for E, v, p in zip(eigvals_np, eigvecs_np.T, parities) if p < -.9]
+
+    degeneracies = []
+    for i, (Ee, ve) in enumerate(even_states):
+        for j, (Eo, vo) in enumerate(odd_states):
+            degeneracies.append((abs(Ee - Eo), Ee, Eo))
+    
+    degeneracy_sum = sum([d[0] for d in degeneracies])
+    return degeneracy_sum
+
+
+
 
 
 
@@ -355,13 +279,11 @@ def n_dot_sweetspot(n, params):
 if __name__ == "__main__":
     # two_dot_sweetspot()
 
-    U0_val = 1
-    t_val = 1
+    U0_val = 10
+    t_val = 0.1
     Δ_val = t_val + U0_val/2
     ϵ0_val = -U0_val/2
     ϵ1_val = -U0_val
-
-
 
     params = {
         'U': [U0_val],
