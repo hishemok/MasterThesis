@@ -4,33 +4,28 @@ from analysis import plot_parity_spectrum
 import torch
 import numpy as np
 
-def move_free():
-    n = 3
+def move_free(n=3):
     model = HamiltonianModel(n=n)
 
-    # Initialize full θ = [t, U1, U2, eps0, eps1, eps2, Delta]
-    theta0 = torch.tensor([1.0, 2.0, 2.0, -1.0, -1.0, -1.0, 1.5], dtype=torch.float64)
+    optimized_theta, _ = optimize_with_restarts(model, custom_loss, random_theta_init, iters=500, lr=0.01)
 
-    optimized_theta = optimize(model, custom_loss, theta0, iters=500, lr=0.01)
-
-    print("Optimized parameters:", optimized_theta.numpy())
+    print("Optimized parameters:", optimized_theta)
        # Reconstruct full theta for plotting
     optimized_params = model.map_theta(optimized_theta)
     
     full_theta = []
     full_theta.append(optimized_params['t'].item())
-    full_theta.extend(optimized_params['U'].numpy().tolist())
-    full_theta.extend(optimized_params['eps'].numpy().tolist())
+    full_theta.extend(optimized_params['U'].tolist())
+    full_theta.extend(optimized_params['eps'].tolist())
     full_theta.append(optimized_params['Delta'].item()) 
 
-    model = HamiltonianModel(n=n, fixed_params=full_theta)
     plot_parity_spectrum(n, full_theta, model)
 
 def somefixed(n = 3):
     U = [1.0] * (n - 1)
     fixed = {
-        "U": torch.tensor(U)  # fixed interaction strengths
-        # "t": torch.tensor(1.0)
+        "U": torch.tensor(U),  # fixed interaction strengths
+        "t": torch.tensor(1.0)
     }
 
 
@@ -53,7 +48,11 @@ def somefixed(n = 3):
 
 if __name__ == "__main__":
     # move_free()
-    somefixed(n=2)
-    somefixed(n=3) 
-    somefixed(n=4)
+    # somefixed(n=2)
+    # somefixed(n=3) 
+    # somefixed(n=4)
 
+
+    move_free(n=2)
+    move_free(n=3)
+    move_free(n=4)
