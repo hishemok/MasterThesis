@@ -86,8 +86,8 @@ def parity_operator(N):
     """Construct the parity operator for N dots."""
     P = np.eye(2**N, dtype=complex)
     for i in range(N):
-        f_dag_i, f_i = creation_annihilation_sympy(i, N)
-        n_i = f_dag_i * f_i
+        f_dag_i, f_i = creation_annihilation(i, N)
+        n_i = f_dag_i @ f_i
         P = P @ (np.eye(2**N) - 2 * n_i)
     return P
 
@@ -118,20 +118,16 @@ def Majorana_polarization(even_vecs, odd_vecs, n):
     Compute local Majorana polarization M_j for each site j.
     M_j = sum_s (<o|Γ^s_j|e>)^2 / sum_s |<o|Γ^s_j|e>|^2
     """
-    M = np.zeros(n, dtype=complex)
+    M = np.zeros((even_vecs.shape[1], n), dtype=complex)
 
     for j in range(n):
         Gamma_1, Gamma_2 = construct_Gamma_operators(j, n)
-        numerator = 0.0 + 0.0j
-        denominator = 0.0
         for i in range(even_vecs.shape[1]):
             e_k = even_vecs[:, i]
             o_k = odd_vecs[:, i]
             term1 = np.vdot(o_k, Gamma_1 @ e_k)
             term2 = np.vdot(o_k, Gamma_2 @ e_k)
-            numerator   += term1**2 + term2**2
-            denominator += abs(term1)**2 + abs(term2)**2
-        M[j] = numerator / denominator if denominator != 0 else 0.0
+            M[i, j] = term1**2 + term2**2
     return M 
 
 def n_dot_sweetspot(n, params):

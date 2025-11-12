@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 from functools import reduce
 
-from n_particles_degen import creation_annihilation, charge_difference, Majorana_polarization
+from n_particles_degen import creation_annihilation, charge_difference, Majorana_polarization, parity_operator
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print("Using device:", device)
@@ -20,13 +20,6 @@ def build_H_torch(n, params, cre_t, ann_t, num_t):
     U = params[1:1+(n-1)]
     eps = params[1+(n-1):1+(n-1)+n]
     Delta = params[-1]
-    # t = params[0]
-    # U = params[1].item()
-    # #params[1:1+(n-1)]
-    # # print(U)
-    # U = torch.full((n-1,), U, dtype=params.dtype, device=params.device)
-    # eps = params[1+(n-1):1+(n-1)+n]
-    # Delta = params[-1]
     dim = 2**n
     H = torch.zeros((dim,dim), dtype=torch.complex128, device=device)
 
@@ -42,6 +35,8 @@ def build_H_torch(n, params, cre_t, ann_t, num_t):
             H += U[i] * (num_t[i] @ num_t[i+1])
     return H
 
+def softclip(x, minval, maxval):
+    return minval + 0.5*(torch.tanh(x) + 1.0)*(maxval - minval)
 def map_params_to_physical(theta, n):
     """
     Map raw parameters (any real numbers) to physical ranges.
@@ -51,15 +46,18 @@ def map_params_to_physical(theta, n):
     tmin, tmax = 0.1, 5.0
     Dmin, Dmax = 0.0, 5.0
 
-    # Apply sigmoid mapping to stay in bounds
-    s = torch.sigmoid(theta)
+    t     = softclip(theta[0], tmin, tmax)
+    U     = softclip(theta[1:1+(n-1)], Umin, Umax)
+    eps   = softclip(theta[1+(n-1):1+(n-1)+n], epsmin, epsmax)
+    Delta = softclip(theta[-1], Dmin, Dmax)
+    
+    
+    t = t.unsqueeze(0)       # make scalar tensor shape (1,)
+    Delta = Delta.unsqueeze(0)
+    thetamapped = torch.cat((t, U, eps, Delta))
 
-    t     = tmin     + (tmax - tmin) * s[0]
-    U     = Umin     + (Umax - Umin) * s[1:1+(n-1)]
-    eps   = epsmin   + (epsmax - epsmin) * s[1+(n-1):1+(n-1)+n]
-    Delta = Dmin     + (Dmax - Dmin) * s[-1]
+    return thetamapped
 
-    return t, U, eps, Delta
 
 
 def parity_operator_torch(n):
@@ -106,24 +104,23 @@ def charge_difference_torch(even_state, odd_state, n):
     """Compute the charge difference between even and odd states.
     ∑_n |⟨e_k|n_n|e_k⟩ - ⟨o_k|n_n|o_k⟩|
     """
-    charge_diff = 0
+    # accumulate a real scalar (sum of magnitudes), keep as float tensor
+    charge_diff = torch.tensor(0.0, dtype=torch.float64, device=device)
     n_states = even_state.shape[1]
-    for i in range(n):
-        f_dag_i, f_i = creation_annihilation(i, n)
+    for site in range(n):
+        f_dag_i, f_i = creation_annihilation(site, n)
         f_dag_i_t = to_torch(f_dag_i, device=device)
         f_i_t = to_torch(f_i, device=device)
         n_i = f_dag_i_t @ f_i_t
-        exp_even = 0
-        exp_odd = 0
-        for i in range(n_states):
-            even_vec = even_state[:, i]
-            odd_vec = odd_state[:, i]
+        exp_even = torch.zeros((), dtype=torch.complex128, device=device)
+        exp_odd = torch.zeros((), dtype=torch.complex128, device=device)
+        for k in range(n_states):
+            even_vec = even_state[:, k]
+            odd_vec = odd_state[:, k]
             exp_even += torch.vdot(even_vec, n_i @ even_vec)
             exp_odd  += torch.vdot(odd_vec,  n_i @ odd_vec)
-        # exp_even = torch.vdot(even_state, n_i @ even_state)
-        # exp_odd  = torch.vdot(odd_state,  n_i @ odd_state)
-        charge_diff += torch.abs(exp_even - exp_odd)
-    return charge_diff.real
+        charge_diff += torch.abs(exp_even - exp_odd).to(dtype=torch.float64)
+    return charge_diff
 
 
 def construct_Gamma_operators_torch(j,n, device=device):
@@ -140,68 +137,20 @@ def Majorana_polarization_torch(even_vecs, odd_vecs, n):
     Compute local Majorana polarization M_j for each site j.
     M_j = sum_s (<o|Γ^s_j|e>)^2 / sum_s |<o|Γ^s_j|e>|^2
     """
-    M = torch.zeros(n, dtype=torch.complex128, device=device)
+    M = torch.zeros((even_vecs.shape[1], n), dtype=torch.complex128, device=device)
 
     for j in range(n):
         Gamma_1, Gamma_2 = construct_Gamma_operators_torch(j, n, device=device)
-        numerator = 0.0 + 0.0j
-        denominator = 0.0
         for i in range(even_vecs.shape[1]):
             e_k = even_vecs[:, i]
             o_k = odd_vecs[:, i]
             term1 = torch.vdot(o_k, Gamma_1 @ e_k)
             term2 = torch.vdot(o_k, Gamma_2 @ e_k)
-            numerator   += term1**2 + term2**2
-            denominator += torch.abs(term1)**2 + torch.abs(term2)**2
-        M[j] = numerator / denominator if denominator != 0 else 0.0
+            M[i, j] = term1**2 + term2**2 #/ denominator if denominator != 0 else 0.0
     return M
 
 
-
-
-def degeneracy_and_gap_loss(H, P, n, weight_vec=None, gap_target=0.5, gap_weights=None):
-    # H: Hermitian torch matrix
-    evals, evecs = torch.linalg.eigh(H)  # evals sorted ascending
-
-    even_states, odd_states, even_vecs, odd_vecs = calculate_parities(evals, evecs, P)
-
-    # Just in case
-    E_even, _ = torch.sort(even_states)
-    E_odd,  _ = torch.sort(odd_states)
-
-    m = min(len(E_even), len(E_odd)) # Minimum number of elements
-    if m == 0:
-        return torch.tensor(1e6, device=H.device)  # bad configuration Penalty
-
-    if len(E_even) != len(E_odd):
-        print("Warning: unequal number of even and odd states:", len(E_even), len(E_odd))
-
-    # default weights
-    if weight_vec is None:
-        weight_array = np.linspace(1, 1000, m)[::-1].copy()
-        weight_vec = torch.tensor(weight_array, device=H.device)
-
-
-    deg_terms = torch.abs(E_even[:m] - E_odd[:m]) # Cut out unequal lengths
-    w = weight_vec.to(H.device)
-    Ldeg = torch.sum(w * deg_terms) / torch.sum(w)
-
-    # gap penalty: enforce minimal gaps in the full spectrum for the first p gaps
-    p = min(6, evals.numel()-1)
-    gaps = evals[1:] - evals[:-1]
-    if gap_weights is None:
-        gap_weights = torch.linspace(10.0, 1.0, steps=p, device=H.device)
-    gap_pen = torch.sum(gap_weights * torch.nn.functional.softplus(gap_target - gaps[:p]))
-
-
-
-
-    return 10 * Ldeg + 0.1 * gap_pen
-
-
-
-
-def degeneracy_and_gap_loss2(H, P, n, weight_vec=None, gap_target=0.5, gap_weights=None, theta=None):
+def degeneracy_and_gap_loss(H, P, n, weight_vec=None, gap_target=0.5, gap_weights=None, theta=None):
     # H: Hermitian torch matrix
     H = 0.5 * (H + H.conj().T) ## Just because the optimizer can introduce small non-Hermiticities
 
@@ -275,67 +224,7 @@ def print_params(theta, n):
     print(f"Δ = {Delta:.4f}")
 
 
-
-
 def optimize_params(n, device=device, restarts=8, iters=600):
-    # precompute ops
-    cre_np, ann_np, num_np = precompute_ops(n)
-    cre_t = [to_torch(m, device=device) for m in cre_np]
-    ann_t = [to_torch(m, device=device) for m in ann_np]
-    num_t = [to_torch(m, device=device) for m in num_np]
-
-    best_loss = 1e9
-    best_theta = None
-
-    for r in range(restarts):
-        # initialize torch parameter vector (t, U0..U_{n-2}, eps0..eps_{n-1}, Delta)
-        # choose sensible ranges: t ~ [0.2,2], U~[0.2,2], eps ~ [-1,1], Delta ~ [0,2]
-        rng = np.random.RandomState(seed=r)
-        t0 = 0.5 + rng.rand()*1.5
-        U0 = 0.5 + abs(rng.rand(n-1)*1.5)
-        eps0 = -0.5 + rng.rand(n)*1.0
-        D0 = 0.5 + rng.rand()*1.5
-        
-        theta0 = np.concatenate([[t0], U0, eps0, [D0]]).astype(np.float64)
-        theta = torch.tensor(theta0, dtype=torch.float64, device=device, requires_grad=True)
-
-        optimizer = torch.optim.Adam([theta], lr=0.05)
-        for it in range(iters):
-            optimizer.zero_grad()
-            H = build_H_torch(n, theta, cre_t, ann_t, num_t)  # accepts real theta
-            P = parity_operator_torch(n)
-            loss = degeneracy_and_gap_loss(H, P, n)
-
-            # --- Enforce known sweet-spot relations ---
-            t = theta[0]
-            U = theta[1:1+(n-1)]
-            eps = theta[1+(n-1):1+(n-1)+n]
-            Delta = theta[-1]
-
-            eps_penalty = torch.mean((eps[0] + U[0]/2)**2 + (eps[-1] + U[-1]/2)**2)
-            if n > 2:
-                eps_penalty += torch.mean((eps[1:-1] + U[:-1])**2)
-            Delta_penalty = torch.mean((Delta - (t + U[0]/2))**2)
-
-            # Scale the penalty term
-            loss += 0.1 *  (eps_penalty + Delta_penalty)
-            # ------------------------------------------
-
-            loss.backward()
-            optimizer.step()
-
-        with torch.no_grad():
-            final_loss = float(loss.cpu().item())
-            if final_loss < best_loss:
-                best_loss = final_loss
-                best_theta = theta.detach().cpu().numpy().copy()
-        print(f"Restart {r}, final loss {final_loss:.6e}")
-
-    print("Best loss", best_loss)
-    print_params(best_theta, n)
-    return best_theta, best_loss
-
-def optimize_params2(n, device=device, restarts=8, iters=600):
     # precompute ops
     cre_np, ann_np, num_np = precompute_ops(n)
     cre_t = [to_torch(m, device=device) for m in cre_np]
@@ -371,15 +260,16 @@ def optimize_params2(n, device=device, restarts=8, iters=600):
         theta0 = np.concatenate([[t0], U, eps0, [D0]]).astype(np.float64)
         theta = torch.tensor(theta0, dtype=torch.float64, device=device, requires_grad=True)
 
+        loss = torch.tensor(0.0, dtype=torch.float64, device=device)
         optimizer = torch.optim.Adam([theta], lr=0.05)
         # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=iters, eta_min=1e-3)
 
         for it in range(iters):
             optimizer.zero_grad()
-            theta = map_params_to_physical(theta, n)
+            # theta_phys = map_params_to_physical(theta, n)
             H = build_H_torch(n, theta, cre_t, ann_t, num_t)  # accepts real theta
             P = parity_operator_torch(n)
-            loss = degeneracy_and_gap_loss2(H, P, n, theta=theta)
+            loss = degeneracy_and_gap_loss(H, P, n, theta=theta)
 
             loss.backward()
             optimizer.step()
@@ -411,28 +301,31 @@ def plot_parity_spectrum(n, theta):
 
 
     evals, evecs = np.linalg.eigh(H)
-    P = parity_operator_torch(n).cpu().numpy()
-    parities = [np.real(np.vdot(ev, P @ ev)) for ev in evecs.T]
 
+    P_np = parity_operator(n)
+    parities = [np.real(np.vdot(ev, P_np @ ev)) for ev in evecs.T]
+    even_vecs = []
+    odd_vecs = []
     print(f"{n}-dot system eigenvalues and their parity sectors:")
     for i, (E,p) in enumerate(zip(evals, parities)):
         if abs(p) < .9:
             print(f"Warning: Eigenvalue {E:.4f} has ambiguous parity {p:.4f}")
         sector = "even" if p > .9 else "odd"
+        if sector == "even":
+            even_vecs.append(evecs[:, i])
+        else:
+            odd_vecs.append(evecs[:, i])
         print(f"Eigenvalue {E:.4f} belongs to {sector} parity sector, with parity {p:.4f}")
     print("")
+    odd_vecs = np.array(odd_vecs).T
+    even_vecs = np.array(even_vecs).T
 
-    cre_t, ann_t, _ = precompute_ops(n)
-    cre_t = [to_torch(m, device=device) for m in cre_t]
-    ann_t = [to_torch(m, device=device) for m in ann_t]   
-    # Calculate Majorana purity metric for the eigenvectors
-    Majorana_metric = Majorana_polarization_torch(
-        to_torch(evecs[:, [i for i,p in enumerate(parities) if p > .1]], device=device),
-        to_torch(evecs[:, [i for i,p in enumerate(parities) if p < -.1]], device=device),
-        n
-    )
-    # print(f"Majorana purity metric: {Majorana_metric:.6f}\n")
-    plt.plot(range(n), Majorana_metric, 'o-', label='|M̃₀|')
+    MP_np = Majorana_polarization(even_vecs, odd_vecs, n)
+    Majorana_metric = MP_np
+
+
+    for i in range(Majorana_metric.shape[0]):
+        plt.plot(range(n), Majorana_metric[i], 'o-', label=f'|M̃|_{i}')
     plt.xlabel('Site index')
     plt.ylabel('Majorana localization')
     plt.title(f'Majorana localization profile for {n}-dot system')
@@ -452,6 +345,12 @@ def plot_parity_spectrum(n, theta):
         Eo = y_odd[i]
         if abs(Ee - Eo) < 1e-2:
             degeneracy_lines.append(Ee)
+
+
+    charge_diff = charge_difference(even_vecs, odd_vecs, n)
+
+
+    print(f"Charge difference between even and odd states: {charge_diff:.6e}\n")
 
 
     t = theta[0]
@@ -515,5 +414,5 @@ if __name__ == "__main__":
     # plot_parity_spectrum(n, best_theta)
     for n in range(2,5):
         print("Optimizing for n =", n)
-        best_theta, best_loss = optimize_params2(n=n, device=device, restarts=5, iters=600)
+        best_theta, best_loss = optimize_params(n=n, device=device, restarts=5, iters=600)
         plot_parity_spectrum(n, best_theta)
