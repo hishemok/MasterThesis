@@ -152,3 +152,59 @@ def plot_parity_spectrum(n, theta, model):
 
     plt.tight_layout()
     plt.show()
+    m_profile = plot_majorana_wavefunction(n, evecs, evals, model)
+
+    # Optionally overlay on schematic:
+    for i, amp in enumerate(m_profile):
+        ax2.scatter(i, dot_y, s=800*(0.2 + amp), color='tab:red', alpha=0.6, zorder=4)
+    plt.show()
+
+
+def plot_majorana_wavefunction(n, evecs, evals, model):
+    """
+    Visualize Majorana-like wavefunction amplitudes between lowest even/odd states.
+
+    Parameters
+    ----------
+    n : int
+        Number of quantum dots.
+    evecs : ndarray
+        Eigenvectors (columns are eigenstates).
+    evals : ndarray
+        Corresponding eigenvalues.
+    model : HamiltonianModel
+        Your Hamiltonian model class (to access operator structure).
+    """
+
+    from operators import precompute_ops, from_torch
+
+    # Precompute c_i operators for each site
+    cre, ann, num = precompute_ops(n)
+    c_ops = [from_torch(ann[i]) for i in range(n)]
+
+    # Identify lowest even/odd eigenstates
+    P_np = parity_operator(n)
+    parities = [np.real(np.vdot(ev, P_np @ ev)) for ev in evecs.T]
+
+    even_idx = np.argmax([p for p in parities])  # first even
+    odd_idx  = np.argmin([p for p in parities])  # first odd
+
+    psi_even = evecs[:, even_idx]
+    psi_odd  = evecs[:, odd_idx]
+
+    # Majorana amplitude per site: <even| c_i |odd>
+    m = np.zeros(n, dtype=complex)
+    for i in range(n):
+        m[i] = np.vdot(psi_even, c_ops[i] @ psi_odd)
+
+    m_abs = np.abs(m)
+    m_abs /= np.max(m_abs)  # normalize for visibility
+
+    plt.figure(figsize=(6,4))
+    plt.bar(range(n), m_abs, color='tab:red', alpha=0.7)
+    plt.xlabel('Site index')
+    plt.ylabel('|⟨even| c_i |odd⟩| (normalized)')
+    plt.title(f'Majorana amplitude distribution ({n}-dot)')
+    plt.show()
+
+    return m_abs

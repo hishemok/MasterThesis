@@ -69,7 +69,7 @@ def custom_loss(H, P, n, theta=None, weight_vec=None, gap_target=0.5, gap_weight
         raise ValueError("Unequal number of even and odd states \n Bad configuration, proceed to next restart")
     
     if weight_vec is None:
-        weight_array = np.linspace(1, 0.1, 2*n_elements-1)**2# First half for Degeneracy, second half for gaps
+        weight_array = np.linspace(3, 0.1, 2*n_elements-1)**2# First half for Degeneracy, second half for gaps
         weight_vec = torch.tensor(weight_array, device=device)
 
     penalty_array = torch.zeros(2*n_elements-1, device=device) # First half for Degeneracy, second half for gaps
@@ -88,8 +88,11 @@ def custom_loss(H, P, n, theta=None, weight_vec=None, gap_target=0.5, gap_weight
 
     charge_diff = charge_difference_torch(even_vecs, odd_vecs, n)
 
-    MP = Majorana_polarization_torch(even_vecs, odd_vecs, n)
-    MP_penalty = torch.abs(torch.sum(MP)) # should be zero ideally
+    MP_penalty = MP_Penalty(even_vecs, odd_vecs, n)
+    # MP = Majorana_polarization_torch(even_vecs, odd_vecs, n)
+    # print(MP.shape)
+    # exit()
+    # MP_penalty = torch.abs(torch.sum(MP)) # should be zero ideally
     total_penalty = torch.sum(penalty_array) + charge_diff + MP_penalty
 
     mean_energy = evals.abs().mean().detach() + 1e-8
@@ -113,3 +116,25 @@ def random_theta_init(n):
 
     theta0 = np.concatenate([[t0], U, eps, [D0]]).astype(np.float64)
     return theta0
+
+
+def MP_Penalty(even_vecs, odd_vecs, n):
+    """
+    Majorana Polarization penalty:
+    ideally +1 on first site, -1 on last site, 0 elsewhere.
+    even_vecs, odd_vecs: (dim, num_states)
+    n: number of sites
+    MP shape: (num_states, 2n)
+    """
+    MP = Majorana_polarization_torch(even_vecs, odd_vecs, n)
+
+    target_MP = torch.zeros_like(MP)
+    target_MP[:, 0] = 1.0
+    target_MP[:, -1] = -1.0
+
+    # both signs
+    penalty_pos = torch.abs(torch.sum((MP - target_MP)**2))
+    penalty_neg = torch.abs(torch.sum((MP + target_MP)**2))
+
+    penalty = torch.min(penalty_pos, penalty_neg)
+    return penalty

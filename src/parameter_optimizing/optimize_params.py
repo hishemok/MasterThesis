@@ -21,12 +21,14 @@ def move_free(n=3):
 
     plot_parity_spectrum(n, full_theta, model)
 
-def somefixed(n = 3):
-    U = [1.0] * (n - 1)
-    fixed = {
-        "U": torch.tensor(U),  # fixed interaction strengths
-        "t": torch.tensor(1.0)
-    }
+def somefixed(n = 3, fixed = None):
+
+    if fixed is None:
+        U = [1.0] * (n - 1)
+        fixed = {
+            "U": torch.tensor(U),  # fixed interaction strengths
+            "t": torch.tensor(1.0)
+        }
 
 
     model = HamiltonianModel(n=n, fixed_params=fixed)
@@ -52,7 +54,29 @@ if __name__ == "__main__":
     # somefixed(n=3) 
     # somefixed(n=4)
 
+    # U_vals = [0.0, 1.0, 5.0, 10.0]
+    # for U in U_vals:
+    #     print(f"\nOptimizing with U fixed to {U} for n=2,3,4")
+    #     U = [U] * (2 - 1)  # max n=4
+    #     fixed_params = {
+    #         "U": torch.tensor(U),
+    #         "t": torch.tensor(1.0)
+    #     }
+    #     somefixed(n=2, fixed=fixed_params)
 
-    move_free(n=2)
+    #     U = [U[0]] * (3 - 1)
+    #     fixed_params = {
+    #         "U": torch.tensor(U),
+    #         "t": torch.tensor(1.0)
+    #     }
+    #     somefixed(n=3, fixed=fixed_params)
+    #     U = [U[0]] * (4 - 1)
+    #     fixed_params = {
+    #         "U": torch.tensor(U),
+    #         "t": torch.tensor(1.0)
+    #     }
+    #     somefixed(n=4, fixed=fixed_params)
+
+    # # move_free(n=2)
     move_free(n=3)
     move_free(n=4)
