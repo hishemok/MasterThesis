@@ -89,10 +89,7 @@ def custom_loss(H, P, n, theta=None, weight_vec=None, gap_target=0.5, gap_weight
     charge_diff = charge_difference_torch(even_vecs, odd_vecs, n)
 
     MP_penalty = MP_Penalty(even_vecs, odd_vecs, n)
-    # MP = Majorana_polarization_torch(even_vecs, odd_vecs, n)
-    # print(MP.shape)
-    # exit()
-    # MP_penalty = torch.abs(torch.sum(MP)) # should be zero ideally
+
     total_penalty = torch.sum(penalty_array) + charge_diff + MP_penalty
 
     mean_energy = evals.abs().mean().detach() + 1e-8
@@ -138,3 +135,86 @@ def MP_Penalty(even_vecs, odd_vecs, n):
 
     penalty = torch.min(penalty_pos, penalty_neg)
     return penalty
+
+
+def basin_hopping_optimize(model, loss_fn, theta_init_fn,
+    steps=30,           # number of basin hops
+    local_iters=300,    # Adam steps for each local opt
+    hop_size=0.3,       # how far to jump
+    T=1.0,              # temperature for Metropolis acceptance
+    lr=0.05,
+    verbose=True
+):
+    """
+    Basin-hopping optimizer:
+    - Random hop in parameter space
+    - Local minimization using Adam
+    - Accept/reject based on Metropolis criterion
+    """
+
+    # --- initialize ---
+    theta = theta_init_fn(model.n).astype(float)
+    theta = torch.tensor(theta, dtype=torch.float64)
+    P = parity_operator_torch(model.n)
+
+    # Evaluate initial loss
+    theta_t = theta.clone().requires_grad_(True)
+    params = model.map_theta(theta_t)
+    H = model.build(params)
+    best_loss = float(loss_fn(H, P, model.n, theta=theta_t).detach())
+    best_theta = theta.clone().detach()
+    loss = torch.tensor(0.0)
+
+    if verbose:
+        print(f"Initial loss: {best_loss:.6e}")
+
+    # --- basin hopping loop ---
+    for s in range(steps):
+
+        # ----- 1) Random hop -----
+        hop = hop_size * torch.randn_like(theta)
+        trial_theta = theta + hop
+
+        # ----- 2) Local optimization from trial_theta -----
+        trial_theta_t = trial_theta.clone().detach().requires_grad_(True)
+        optimizer = torch.optim.Adam([trial_theta_t], lr=lr)
+
+        for _ in range(local_iters):
+            optimizer.zero_grad()
+            params = model.map_theta(trial_theta_t)
+            H = model.build(params)
+            loss = loss_fn(H, P, model.n, theta=trial_theta_t)
+            loss.backward()
+            optimizer.step()
+
+        trial_loss = float(loss.detach())
+
+        # ----- 3) Metropolis acceptance rule -----
+        loss_diff = trial_loss - best_loss
+
+        accept = False
+        if loss_diff < 0:
+            accept = True
+        else:
+            prob = torch.exp(torch.tensor(-loss_diff / T)).item()
+            if torch.rand(1).item() < prob:
+                accept = True
+
+        # ----- 4) Accept or reject -----
+        if accept:
+            theta = trial_theta_t.detach().clone()
+            best_loss = trial_loss
+            best_theta = theta.clone()
+
+            if verbose:
+                print(f"[Step {s}] Accepted new minimum: {best_loss:.6e}")
+        else:
+            if verbose:
+                print(f"[Step {s}] Rejected: {trial_loss:.6e}")
+
+    # --- Final results ---
+    print("\nBest solution:")
+    print(f"Loss = {best_loss:.6e}")
+    print_params(best_theta.numpy(), model.n, model.fixed_params)
+
+    return best_theta.numpy(), best_loss
