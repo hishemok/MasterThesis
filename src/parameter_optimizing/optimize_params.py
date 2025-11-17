@@ -1,13 +1,17 @@
 from hamiltonian import HamiltonianModel
-from optimizer import optimize, custom_loss, optimize_with_restarts, random_theta_init, basin_hopping_optimize
+from optimizer import  custom_loss, optimize_with_restarts, random_theta_init, basin_hopping_optimize
 from analysis import plot_parity_spectrum
 import torch
 import numpy as np
 
-def move_free(n=3):
+def move_free(n=3, optimize_method="basin_hopping", with_restarts=False):
     model = HamiltonianModel(n=n)
 
-    optimized_theta, _ = optimize_with_restarts(model, custom_loss, random_theta_init, iters=500, lr=0.01)
+    if optimize_method == "basin_hopping":
+        optimized_theta, _ = basin_hopping_optimize(
+            model, custom_loss, random_theta_init, optim_w_restarts=with_restarts)
+    else:
+        optimized_theta, _ = optimize_with_restarts(model, custom_loss, random_theta_init, iters=500, lr=0.01)
 
     print("Optimized parameters:", optimized_theta)
        # Reconstruct full theta for plotting
@@ -21,21 +25,24 @@ def move_free(n=3):
 
     plot_parity_spectrum(n, full_theta, model)
 
-def somefixed(n = 3, fixed = None):
+def somefixed(n = 3, fixed = None, optimize_method="basin_hopping", with_restarts=False):
 
     if fixed is None:
         U = [1.0] * (n - 1)
+        t = [1.0] * (n - 1)
         fixed = {
             "U": torch.tensor(U),  # fixed interaction strengths
-            "t": torch.tensor(1.0)
+            "t": torch.tensor(t)
         }
 
 
     model = HamiltonianModel(n=n, fixed_params=fixed)
 
-    optimized_theta, _ = basin_hopping_optimize(
-        model, custom_loss, random_theta_init)
-    # optimized_theta, _ = optimize_with_restarts(model, custom_loss, random_theta_init, iters=600, lr=0.01, restarts=5)
+    if optimize_method == "basin_hopping":
+        optimized_theta, loss = basin_hopping_optimize(
+            model, custom_loss, random_theta_init, optim_w_restarts=with_restarts, steps=30)
+    else:
+        optimized_theta, loss = optimize_with_restarts(model, custom_loss, random_theta_init, iters=600, lr=0.01, restarts=5)
 
     print("Optimized parameters with some fixed:", optimized_theta)
 
@@ -81,24 +88,24 @@ if __name__ == "__main__":
     for U in U_vals:
         print(f"\nOptimizing with U fixed to {U} for n=2,3,4")
         U = [U] * (2 - 1)  # max n=4
-        fixed_params = {
-            "U": torch.tensor(U)
-            # "t": torch.tensor(1.0)
-        }
-        somefixed(n=2, fixed=fixed_params)
+        # fixed_params = {
+        #     "U": torch.tensor(U)
+        #     # "t": torch.tensor(1.0)
+        # }
+        # somefixed(n=2, fixed=fixed_params, optimize_method="basin_hopping", with_restarts=False)
 
-        U = [U[0]] * (3 - 1)
-        fixed_params = {
-            "U": torch.tensor(U)
-            # "t": torch.tensor(1.0)
-        }
-        somefixed(n=3, fixed=fixed_params)
+        # U = [U[0]] * (3 - 1)
+        # fixed_params = {
+        #     "U": torch.tensor(U)
+        #     # "t": torch.tensor(1.0)
+        # }
+        # somefixed(n=3, fixed=fixed_params, optimize_method="basin_hopping", with_restarts=False)
         U = [U[0]] * (4 - 1)
         fixed_params = {
             "U": torch.tensor(U)
             # "t": torch.tensor(1.0)
         }
-        somefixed(n=4, fixed=fixed_params)
+        somefixed(n=4, fixed=fixed_params, optimize_method="basin_hopping", with_restarts=True)
 
     # move_free(n=2)
     # move_free(n=3)
@@ -110,3 +117,10 @@ if __name__ == "__main__":
     #     "Delta": torch.tensor(1.8170338617393165)
     # }
     # all_fixed(n=3, params=params)
+    # params = {
+    #     "t": torch.tensor(1.0),
+    #     "U": torch.tensor([1.0]),
+    #     "eps": torch.tensor([0.0, 0.0]),
+    #     "Delta": torch.tensor(1.0)
+    # }
+    # all_fixed(n=2, params=params)

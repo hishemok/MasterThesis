@@ -15,36 +15,61 @@ class HamiltonianModel:
     def map_theta(self, theta):
         """
         Map the optimization vector θ into model parameters.
-        Handles both fixed and trainable parameters dynamically.
+        t, U, Delta  -> arrays of length n-1
+        eps          -> array of length n
         """
-        # parameter counter for theta
         idx = 0
+        n = self.n
 
-        # hopping
+        # t : array length n-1
         if 't' in self.fixed_params:
             t = self.fixed_params['t']
         else:
-            t = theta[idx]; idx += 1
+            t = theta[idx: idx + (n - 1)]
+            idx += (n - 1)
 
-        # Coulomb interaction (U_i between sites)
+        # U : array length n-1
         if 'U' in self.fixed_params:
             U = self.fixed_params['U']
         else:
-            U = theta[idx: idx + self.n - 1]; idx += self.n - 1
+            U = theta[idx: idx + (n - 1)]
+            idx += (n - 1)
 
-        # onsite energies
+        # eps : array length n
         if 'eps' in self.fixed_params:
             eps = self.fixed_params['eps']
         else:
-            eps = theta[idx: idx + self.n]; idx += self.n
+            eps = theta[idx: idx + n]
+            idx += n
 
-        # pairing potential
+        # Delta : array length n-1
         if 'Delta' in self.fixed_params:
             Delta = self.fixed_params['Delta']
         else:
-            Delta = theta[idx]; idx += 1
+            Delta = theta[idx: idx + (n - 1)]
+            idx += (n - 1)
 
         return {"t": t, "U": U, "eps": eps, "Delta": Delta}
+        
+    def dict_paras_to_theta(self, params):
+        """
+        Convert parameter dictionary to optimization vector θ.
+        """
+        theta_list = []
+
+        if 't' not in self.fixed_params:
+            theta_list.extend(params['t'].tolist())
+
+        if 'U' not in self.fixed_params:
+            theta_list.extend(params['U'].tolist())
+
+        if 'eps' not in self.fixed_params:
+            theta_list.extend(params['eps'].tolist())
+
+        if 'Delta' not in self.fixed_params:
+            theta_list.extend(params['Delta'].tolist())
+
+        return to_torch(np.array(theta_list), device=self.device)
 
     def build(self, params):
         t = params.get('t', self.fixed_params.get('t'))
@@ -61,9 +86,9 @@ class HamiltonianModel:
             H += eps[i] * self.num_t[i]
             if i < self.n - 1:
                 # hopping
-                H += t * (self.cre_t[i] @ self.ann_t[i+1] + self.cre_t[i+1] @ self.ann_t[i])
+                H += t[i] * (self.cre_t[i] @ self.ann_t[i+1] + self.cre_t[i+1] @ self.ann_t[i])
                 # pairing
-                H += Delta * (self.cre_t[i] @ self.cre_t[i+1] + self.ann_t[i+1] @ self.ann_t[i])
+                H += Delta[i] * (self.cre_t[i] @ self.cre_t[i+1] + self.ann_t[i+1] @ self.ann_t[i])
                 # Coulomb term
                 H += U[i] * (self.num_t[i] @ self.num_t[i+1])
 
