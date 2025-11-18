@@ -8,39 +8,46 @@ from measurements import calculate_parities, charge_difference, Majorana_polariz
 def print_params(theta, n, fixed_params=None):
     fixed_params = fixed_params or {}
     idx = 0
-
     if 't' not in fixed_params:
-        t = theta[idx]; idx += 1
+        t = theta[idx : idx + (n-1)]
+        idx += (n-1)
     else:
         t = fixed_params['t']
-
     if 'U' not in fixed_params:
-        U = theta[idx:idx+n-1]; idx += n-1
+        U = theta[idx : idx + (n-1)]
+        idx += (n-1)
     else:
         U = fixed_params['U']
-
     if 'eps' not in fixed_params:
-        eps = theta[idx:idx+n]; idx += n
+        eps = theta[idx : idx + n]
+        idx += n
     else:
         eps = fixed_params['eps']
-
     if 'Delta' not in fixed_params:
-        Delta = theta[idx]
+        Delta = theta[idx : idx + (n-1)]
     else:
         Delta = fixed_params['Delta']
 
-    print(f"t = {t}")
-    print(f"U = {U}")
-    print(f"ε = {eps}")
-    print(f"Δ = {Delta}")
+    print(f"t = {np.array(t)}")
+    print(f"U = {np.array(U)}")
+    print(f"ε = {np.array(eps)}")
+    print(f"Δ = {np.array(Delta)}")
 
 
 def plot_parity_spectrum(n, theta, model):
     parameters = {}
-    parameters['t'] = theta[0]
-    parameters['U'] = torch.tensor(theta[1:1+(n-1)], dtype=torch.float64)
-    parameters['eps'] = torch.tensor(theta[1+(n-1):1+(n-1)+n], dtype=torch.float64)
-    parameters['Delta'] = theta[-1] 
+    idx = 0
+    
+    parameters['t'] = torch.tensor(theta[idx : idx + (n-1)], dtype=torch.float64)
+    idx += (n-1)
+
+    parameters['U'] = torch.tensor(theta[idx : idx + (n-1)], dtype=torch.float64)
+    idx += (n-1)
+
+    parameters['eps'] = torch.tensor(theta[idx : idx + n], dtype=torch.float64)
+    idx += n
+
+    parameters['Delta'] = torch.tensor(theta[idx : idx + (n-1)], dtype=torch.float64)
 
     H_torch = model.build(parameters)
     H = from_torch(H_torch)
@@ -99,10 +106,13 @@ def plot_parity_spectrum(n, theta, model):
     print(f"Charge difference between even and odd states: {charge_diff:.6e}\n")
 
 
-    t = theta[0]
-    U = theta[1:1+(n-1)]
-    eps = theta[1+(n-1):1+(n-1)+n]
-    Delta = theta[-1]
+    t = theta[0: (n-1)]
+    U = theta[(n-1):2*(n-1)]
+    eps = theta[2*(n-1):2*(n-1)+n]
+    Delta = theta[-(n-1):]
+    # U = theta[1:1+(n-1)]
+    # eps = theta[1+(n-1):1+(n-1)+n]
+    # Delta = theta[-1]
 
     fig, axs = plt.subplots(2, 1, figsize=(10,4), gridspec_kw={'height_ratios':[2,1]})
     ax1, ax2 = axs
@@ -134,19 +144,23 @@ def plot_parity_spectrum(n, theta, model):
     for i in range(n):
         ax2.scatter(i, dot_y, s=800, color='tab:blue', edgecolor='black', zorder=3)
         ax2.text(i, dot_y-0.5, f"$\\epsilon_{i}$={eps[i]:.2f}", ha='center', fontsize=9)
-
     # Draw superconductors (rectangles between dots)
     for i in range(n-1):
         x = (i + (i+1))/2
-        rect = plt.Rectangle((x - sc_width/2, dot_y - sc_height/2), sc_width, sc_height, # type: ignore
-                             color='lightgray', ec='black', lw=1.2, zorder=2)
+        rect = plt.Rectangle((x - sc_width/2, dot_y - sc_height/2), 
+                             sc_width, sc_height,
+                             color='lightgray', ec='black', lw=1.2, zorder=2) #Type: ignore
         ax2.add_patch(rect)
 
-        # Coupling t and Δ inside SC
-        ax2.text(x, dot_y, f"t={t:.2f}\nΔ={Delta:.2f}", ha='center', va='center', fontsize=8)
+        # show the coupling for this SC segment
+        ax2.text(x, dot_y, 
+                 f"t={float(t[i]):.2f}\nΔ={float(Delta[i]):.2f}", 
+                 ha='center', va='center', fontsize=8)
 
         # U label above connection
-        ax2.text(x, dot_y+0.6, f"$U_{i}$={U[i]:.2f}", ha='center', fontsize=9, color='tab:purple')
+        ax2.text(x, dot_y + 0.6, 
+                 f"$U_{i}$={float(U[i]):.2f}", 
+                 ha='center', fontsize=9, color='tab:purple')
 
     ax2.set_title("Optimized QD–SC–QD setup")
 

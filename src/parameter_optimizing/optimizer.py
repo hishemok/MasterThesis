@@ -11,7 +11,7 @@ import numpy as np
 # ---------------------------
 # local Adam optimizer (single run)
 # ---------------------------
-def optimize_local(model, loss_fn, theta_init, iters=400, lr=0.05, verbose=False):
+def optimize_local(model, loss_fn, theta_init, iters=400, lr=0.05, verbose=False, keep_equal=None):
     """
     Local Adam optimization starting exactly at theta_init.
     theta_init: 1D numpy array OR torch tensor (will be converted to torch tensor).
@@ -29,11 +29,39 @@ def optimize_local(model, loss_fn, theta_init, iters=400, lr=0.05, verbose=False
 
     for it in range(iters):
         optimizer.zero_grad()
-        params = model.map_theta(theta_t)
+        theta_t_mod = theta_t.clone()  # keep original tensor for autograd
+
+        idx = 0
+        n = model.n
+
+        if 't' not in model.fixed_params:
+            if "t" in keep_equal:
+                t_val = torch.mean(theta_t[idx:idx+(n-1)])
+                theta_t_mod[idx:idx+(n-1)] = t_val
+            idx += n-1
+        if 'U' not in model.fixed_params:
+            if "U" in keep_equal:
+                U_val = torch.mean(theta_t[idx:idx+(n-1)])
+                theta_t_mod[idx:idx+(n-1)] = U_val
+            idx += n-1
+        if 'eps' not in model.fixed_params:
+            if "eps" in keep_equal:
+                eps_val = torch.mean(theta_t[idx:idx+n])
+                theta_t_mod[idx:idx+n] = eps_val
+            idx += n
+        if 'Delta' not in model.fixed_params:
+            if "Delta" in keep_equal:
+                D_val = torch.mean(theta_t[idx:idx+(n-1)])
+                theta_t_mod[idx:idx+(n-1)] = D_val
+            idx += n-1
+
+        # now map the modified theta to parameters
+        params = model.map_theta(theta_t_mod)
         H = model.build(params)
-        loss = loss_fn(H, P, model.n, theta=theta_t)
+        loss = loss_fn(H, P, model.n, theta=theta_t_mod)
         loss.backward()
         optimizer.step()
+
 
     final_loss = float(loss.detach().cpu().item())
     return theta_t.detach().cpu().numpy().copy(), final_loss
@@ -50,7 +78,7 @@ def optimize_with_restarts(model,
                            lr=0.05,
                            verbose=False,
                            basin_theta=None,
-                           restart_perturb_scale=0.08):
+                           restart_perturb_scale=0.08, keep_equal=None):
     """
     Adam with restarts that PRESERVES the basin_theta and perturbs around it.
 
@@ -79,7 +107,7 @@ def optimize_with_restarts(model,
             perturb = (np.random.rand(basin_theta_np.size) - 0.5) * 2.0 * restart_perturb_scale
             theta0 = basin_theta_np + perturb
 
-        theta_res, loss_res = optimize_local(model, loss_fn, theta0, iters=iters, lr=lr, verbose=False)
+        theta_res, loss_res = optimize_local(model, loss_fn, theta0, iters=iters, lr=lr, verbose=False, keep_equal=keep_equal)
 
         if loss_res < best_loss:
             best_loss = loss_res
@@ -108,7 +136,8 @@ def basin_hopping_optimize(model,
                            verbose=True,
                            optim_w_restarts=True,
                            restarts=5,
-                           restart_perturb_scale=0.08):
+                           restart_perturb_scale=0.08,
+                           keep_equal=None):
     """
     Basin-hopping + Adam-with-restarts (Option 2).
     - theta_init_fn: function(n) -> numpy initial theta (used to seed the very first theta).
@@ -123,7 +152,7 @@ def basin_hopping_optimize(model,
 
     # compute initial loss
     theta_t = theta.clone().requires_grad_(True)
-    params = model.map_theta(theta_t)
+    params = model.map_theta(theta_t, keep_equal=keep_equal)
     H = model.build(params)
     best_loss = float(loss_fn(H, P, model.n, theta=theta_t).detach())
     best_theta = theta.detach().cpu().numpy().copy()
@@ -147,7 +176,8 @@ def basin_hopping_optimize(model,
                 lr=lr,
                 verbose=False,
                 basin_theta=trial_theta,
-                restart_perturb_scale=restart_perturb_scale
+                restart_perturb_scale=restart_perturb_scale,
+                keep_equal=keep_equal
             )
         else:
             # single local run starting exactly at trial_theta
@@ -157,7 +187,8 @@ def basin_hopping_optimize(model,
                 trial_theta,
                 iters=local_iters,
                 lr=lr,
-                verbose=False
+                verbose=False,
+                keep_equal=keep_equal
             )
 
         #Metropolis/accept-reject
@@ -192,62 +223,6 @@ def basin_hopping_optimize(model,
             pass
 
     return best_theta.copy(), best_loss
-
-# def optimize(model, loss_fn, theta_init, iters=500, lr=0.05):
-#     loss = torch.tensor(0.0)  # Initialize loss to avoid reference before assignment
-#     theta = torch.tensor(theta_init, dtype=torch.float64, requires_grad=True)
-#     optimizer = torch.optim.Adam([theta], lr=lr)
-#     for i in range(iters):
-#         optimizer.zero_grad()
-#         H = model.build(model.map_theta(theta))
-#         P = parity_operator_torch(model.n)
-#         loss = loss_fn(H, P, model.n, theta=theta)
-#         loss.backward()
-#         optimizer.step()
-#     return theta.detach(), float(loss.detach().cpu())
-
-
-# def optimize_with_restarts(model, loss_fn, theta_init_fn, restarts=8, iters=600, lr=0.05, verbose=True, basin_theta=None):
-#     """
-#     Optimizes model parameters with multiple restarts.
-    
-#     model: HamiltonianModel instance
-#     loss_fn: callable (H, P, n, theta) -> loss
-#     theta_init_fn: function that returns a new random θ_init (torch tensor)
-#     """
-#     best_loss = float("inf")
-#     best_theta = None
-#     loss = torch.tensor(0.0)  # Initialize loss to avoid reference before assignment
-
-#     for r in range(restarts):
-
-#         if basin_theta is None:
-#             theta_init = theta_init_fn(model.n)
-#         else: 
-#             theta_init = theta_init_fn(model.n, basin_theta)
-            
-#         theta = torch.tensor(theta_init, dtype=torch.float64, requires_grad=True)
-#         optimizer = torch.optim.Adam([theta], lr=lr)
-#         for it in range(iters):
-#             optimizer.zero_grad()
-#             params = model.map_theta(theta)
-#             H = model.build(params)
-#             P = parity_operator_torch(model.n)
-#             loss = loss_fn(H, P, model.n, theta=theta)
-#             loss.backward()
-#             optimizer.step()
-
-#         final_loss = float(loss.detach().cpu())
-#         if final_loss < best_loss:
-#             best_loss = final_loss
-#             best_theta = theta.detach()#.cpu().numpy().copy()
-
-#         if verbose:
-#             print(f"Restart {r}, final loss {final_loss:.6e}")
-
-#     print(f"\nBest loss: {best_loss:.6e}")
-#     print_params(best_theta, model.n, model.fixed_params)
-#     return best_theta, best_loss
 
 
 def custom_loss(H, P, n, theta=None, weight_vec=None, gap_target=0.5, gap_weights=None):
@@ -340,96 +315,3 @@ def MP_Penalty(even_vecs, odd_vecs, n):
     return penalty
 
 
-# def basin_hopping_rnd_init(n, theta):
-#     rng = np.random.default_rng()
-#     rnd = rng.random(5)
-#     trial_theta = theta.copy()
-#     trial_theta[0] += (rnd[0] - 0.5) * 0.5  # t
-#     U0 = trial_theta[1]
-#     U0 += (rnd[1] - 0.5) * 0.5
-#     U = [U0] * (n - 1)
-#     trial_theta[1:1 + n - 1] = U
-#     eps_ends = [-U0/2 * rnd[2], -U0/2 * rnd[2]]
-#     eps_mids = [-U0 * rnd[3]] * (n - 2) if n > 2 else []
-#     eps = np.array([eps_ends[0], *eps_mids, eps_ends[1]])
-#     trial_theta[1 + n - 1:1 + n - 1 + n] = eps
-#     D0 = trial_theta[-1]
-#     D0 += (rnd[4] - 0.5) * 0.5
-#     trial_theta[-1] = D0
-#     return trial_theta
-
-
-
-# def basin_hopping_optimize(model, loss_fn, theta_init_fn,
-#     steps=30,           # number of basin hops
-#     local_iters=500,    # Adam steps for each local opt
-#     hop_size=0.6,       # how far to jump
-#     T=1.0,              # temperature for acceptance
-#     lr=0.05,
-#     verbose=True,
-#     optim_w_restarts=False
-# ):
-#     """
-#     Basin-hopping optimizer:
-#     - Random hop in parameter space
-#     - Local minimization using Adam
-#     - Accept/reject based on Metropolis criterion
-#     """
-
-#     # --- initialize ---
-#     theta = theta_init_fn(model.n).astype(float)
-#     theta = torch.tensor(theta, dtype=torch.float64)
-#     P = parity_operator_torch(model.n)
-
-#     # Evaluate initial loss
-#     theta_t = theta.clone().requires_grad_(True)
-#     params = model.map_theta(theta_t)
-#     H = model.build(params)
-#     best_loss = float(loss_fn(H, P, model.n, theta=theta_t).detach())
-#     best_theta = theta.clone().detach()
-#     loss = torch.tensor(0.0)
-
-#     if verbose:
-#         print(f"Initial loss: {best_loss:.6e}")
-
-#     # hopping loop
-#     for s in range(steps):
-#         hop = hop_size * torch.randn_like(theta)
-#         trial_theta = theta + hop
-
-
-#         # Local optimization
-#         trial_theta_t = trial_theta.clone().detach().requires_grad_(True)
-#         if optim_w_restarts:
-#             trial_theta_t, trial_loss = optimize_with_restarts(model, loss_fn, basin_hopping_rnd_init, restarts=5, iters=local_iters, lr=lr, verbose=False, basin_theta=trial_theta.detach().cpu().numpy())
-#         else:
-#             trial_theta_t, trial_loss = optimize(model, loss_fn, trial_theta_t.detach().cpu().numpy(), iters=local_iters, lr=lr)
-
-
-#         loss_diff = trial_loss - best_loss
-
-#         accept = False
-#         if loss_diff < 0:
-#             accept = True
-#         else:
-#             prob = torch.exp(torch.tensor(-loss_diff / T)).item()
-#             if torch.rand(1).item() < prob:
-#                 accept = True
-
-#         if accept:
-#             theta = trial_theta_t.detach().clone()
-#             best_loss = trial_loss
-#             best_theta = theta.clone()
-
-#             if verbose:
-#                 print(f"[Step {s}] Accepted new minimum: {best_loss:.6e}")
-#         else:
-#             if verbose:
-#                 print(f"[Step {s}] Rejected: {trial_loss:.6e}")
-
-#     # --- Final results ---
-#     print("\nBest solution:")
-#     print(f"Loss = {best_loss:.6e}")
-#     print_params(best_theta.numpy(), model.n, model.fixed_params)
-
-#     return best_theta.numpy(), best_loss
