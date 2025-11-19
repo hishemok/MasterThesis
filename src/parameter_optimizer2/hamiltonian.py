@@ -62,7 +62,7 @@ class HamiltonianModel:
             elif key == 'U':
                 return torch.tensor([1.0] * (n - 1), dtype=torch.float64)
             elif key == 'eps':
-                return torch.tensor([0.0] * n, dtype=torch.float64)
+                return torch.tensor([-0.5] * n, dtype=torch.float64)
             elif key == 'Delta':
                 return torch.tensor([1.0] * (n - 1), dtype=torch.float64)
             else:
@@ -75,6 +75,7 @@ class HamiltonianModel:
         """
         n = self.n
         H = torch.zeros((2**n, 2**n), dtype=torch.complex128, device=self.device)
+        
 
         t = parameters['t']
         U = parameters['U']
@@ -115,6 +116,14 @@ class HamiltonianModel:
 
         return  to_torch(np.array(theta_list), device=self.device, dtype=torch.float64)
     
+    def set_tensor(self, theta):
+        """
+        Set the model parameters from the optimization tensor.
+        """
+        params_dict = self.tensor_to_dict(theta)
+        self.parameters = params_dict
+
+
     def tensor_to_dict(self, theta):
         """
         Convert optimization tensor into a dictionary with keys 't', 'U', 'eps', 'Delta'.
@@ -157,38 +166,36 @@ class HamiltonianModel:
         - Homogeneous parameters remain single value lists until build() needs expansion
         """
         phys_dict = {}
-        n = self.n
-
         for key in ['t','U','eps','Delta']:
             cfg = self.param_configs[key]
             fixed = cfg['fixed']
-            mode = cfg['mode']
             vals = params_dict[key]
 
-            # Convert to float tensor
-            vals = torch.tensor(vals, dtype=torch.float64, device=self.device)
+            # Keep the tensor and move to device/dtype safely
+            vals = vals.to(dtype=torch.float64, device=self.device)
 
             if fixed is None:
-                # Only apply transformations if not fixed
                 if key in ["t", "U", "Delta"]:
-                    vals = torch.nn.functional.softplus(vals)
+                    vals = vals.abs()#torch.nn.functional.softplus(vals)
 
             phys_dict[key] = vals
 
         return phys_dict
-
+    
     def adjust_tensor(self, theta):
         """
-        Inputs a tensor, returns a tensor within the physical parameter space.
+        Inputs a tensor, returns a tensor within the physical parameter space,
+        while preserving autograd.
         """
-        tensor = self.tensor_to_dict(theta)
-        phys_params = self.get_physical_parameters(tensor)
-        _, fixed_keys = self.get_params() 
-        adjusted_theta_list = []
-        for key in ['t', 'U', 'eps', 'Delta']:
+        tensor_dict = self.tensor_to_dict(theta)
+        phys_params = self.get_physical_parameters(tensor_dict)
+        _, fixed_keys = self.get_params()
+        
+        adjusted_list = []
+        for key in ['t','U','eps','Delta']:
             if key not in fixed_keys:
-                adjusted_theta_list.extend(phys_params[key].tolist())
-        return to_torch(np.array(adjusted_theta_list), device=self.device)
+                adjusted_list.append(phys_params[key])  # keep as tensor
+        return torch.cat(adjusted_list) 
 
     def pretty_print_params(self, theta):
         """
@@ -199,8 +206,58 @@ class HamiltonianModel:
 
         for key in ['t', 'U', 'eps', 'Delta']:
             print(f"{key} = {phys_params[key].cpu().numpy()}")
-                            
-            
+    
+    def loss(self, H, P, weight_max=3, weight_min=0.1, gap_threshold=0.5):
+        """
+        Loss function
+        """
+        from measurements import calculate_parities, charge_difference_torch, MP_Penalty
+        evals, evecs = torch.linalg.eigh(H)
+        even_states, odd_states, even_vecs, odd_vecs = calculate_parities(evals, evecs, P)
+
+        
+        n_elements = min(len(even_states), len(odd_states))
+        if n_elements == 0:
+            raise ValueError("No states in one of the parity sectors \n Proceed to next restart")  # bad configuration Penalty
+        if len(even_states) != len(odd_states):
+            raise ValueError("Unequal number of even and odd states \n Bad configuration, proceed to next restart")
+        
+        weight_array = np.linspace(weight_max, weight_min, 2*n_elements-1)**2# First half for Degeneracy, second half for gaps
+        weight_vec = torch.tensor(weight_array, device=self.device)
+
+        penalty_array = torch.zeros(2*n_elements-1, device=self.device) # First half for Degeneracy, second half for gaps
+        deg_terms = torch.abs(even_states[:n_elements] - odd_states[:n_elements]) # Cut out unequal lengths
+        w = weight_vec.to(self.device)
+        degeneracy_terms = w[:n_elements] * deg_terms
+        penalty_array[:n_elements] = degeneracy_terms
+
+        even_gaps = even_states[1:n_elements] - even_states[:n_elements-1]
+        odd_gaps = odd_states[1:n_elements] - odd_states[:n_elements-1]
+        worst_gaps = torch.min(torch.stack([even_gaps, odd_gaps]), dim=0).values
+
+        gap_penalties = torch.nn.functional.softplus(gap_threshold - worst_gaps)
+        penalty_array[n_elements:] = w[n_elements:] * gap_penalties
+
+        charge_diff = charge_difference_torch(even_vecs, odd_vecs, self.n)
+
+        MP_penalty = MP_Penalty(even_vecs, odd_vecs, self.n)
+
+        total_loss = torch.sum(penalty_array) + charge_diff + MP_penalty
+
+        mean_energy = evals.abs().mean().detach() + 1e-8
+        normalized_loss = total_loss / mean_energy
+
+        return normalized_loss.real
+
+    def build_full_theta(self, theta):
+        d = self.tensor_to_dict(theta)
+        return (
+            d["t"].tolist()
+            + d["U"].tolist()
+            + d["eps"].tolist()
+            + d["Delta"].tolist()
+        )
+
 
 if __name__ == "__main__":
     # Example usage

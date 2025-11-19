@@ -90,3 +90,27 @@ def Majorana_polarization(even_vecs, odd_vecs, n, model):
             term2 = np.vdot(o_k, Gamma_2 @ e_k)
             M[i, j] = term1**2 + term2**2
     return M 
+
+
+
+def MP_Penalty(even_vecs, odd_vecs, n):
+    """
+    Majorana Polarization penalty:
+    ideally +1 on first site, -1 on last site, 0 elsewhere.
+    even_vecs, odd_vecs: (dim, num_states)
+    n: number of sites
+    MP shape: (num_states, 2n)
+    """
+    MP = Majorana_polarization_torch(even_vecs, odd_vecs, n)
+
+    target_MP = torch.zeros_like(MP)
+    target_MP[:, 0] = 1.0
+    target_MP[:, -1] = -1.0
+
+    # both signs
+    penalty_pos = torch.abs(torch.sum((MP - target_MP)**2))
+    penalty_neg = torch.abs(torch.sum((MP + target_MP)**2))
+
+    penalty = torch.min(penalty_pos, penalty_neg)
+    return penalty
+
