@@ -156,8 +156,113 @@ class HamiltonianModel:
             idx += length
 
         return params_dict
+  
+    def dict_to_tensor(self, theta_dict):
+        """
+        Convert a dictionary {'t': [...], 'U': [...], 'eps': [...], 'Delta': [...]}
+        into a single contiguous tensor that matches get_tensor().
 
-    
+        IMPORTANT: This function *omits* keys that are fixed in self.param_configs,
+        so the returned tensor matches the same layout as model.get_tensor().
+        """
+        pieces = []
+        n = self.n
+
+        # require param_configs available
+        if not hasattr(self, "param_configs") or self.param_configs is None:
+            raise RuntimeError("HamiltonianModel.param_configs must be set to use dict_to_tensor")
+
+        for key in ['t', 'U', 'eps', 'Delta']:
+            cfg = self.param_configs.get(key, {"mode": "inhomogeneous", "fixed": None})
+            fixed = cfg.get("fixed", None)
+
+            # If this parameter is fixed, DO NOT include it in the optimization vector.
+            # (This matches how get_tensor() builds the optimization tensor.)
+            if fixed is not None:
+                # warn if the user provided a value different from the fixed one
+                if key in theta_dict:
+                    provided = theta_dict[key]
+                    # compare loosely
+                    try:
+                        provided_val = float(torch.tensor(provided).reshape(-1)[0])
+                        fixed_val = float(fixed) if isinstance(fixed, (int, float)) else float(torch.tensor(fixed).reshape(-1)[0])
+                        if abs(provided_val - fixed_val) > 1e-8:
+                            print(f"Warning: provided value for fixed parameter '{key}' ({provided_val}) will be ignored in favor of fixed={fixed_val}.")
+                    except Exception:
+                        # ignore conversion errors, just warn
+                        print(f"Warning: provided value for fixed parameter '{key}' will be ignored in favor of fixed={fixed}.")
+                continue
+
+            # not fixed -> include from the provided dict
+            if key not in theta_dict:
+                raise KeyError(f"dict_to_tensor: missing key '{key}' in provided theta_dict (required because '{key}' is not fixed).")
+
+            vals = theta_dict[key]
+            if not torch.is_tensor(vals):
+                vals = torch.tensor(vals, dtype=torch.float64, device=self.device)
+
+            # Homogeneous parameters should be length-1 tensors
+            if cfg.get('mode', 'inhomogeneous') == "homogeneous":
+                if vals.numel() != 1:
+                    raise ValueError(f"Key '{key}' should have 1 value (homogeneous). Got {vals}.")
+                pieces.append(vals.reshape(-1))
+                continue
+
+            # Inhomogeneous parameters
+            expected_len = n if key == "eps" else (n - 1)
+            if vals.numel() != expected_len:
+                # auto-expand single scalar to expected length
+                if vals.numel() == 1:
+                    vals = vals.repeat(expected_len)
+                else:
+                    raise ValueError(f"Key '{key}' expected length {expected_len}, got {vals.numel()}.")
+
+            pieces.append(vals.reshape(-1))
+
+        if len(pieces) == 0:
+            # nothing to optimize (all fixed)
+            return torch.tensor([], dtype=torch.float64, device=self.device)
+
+        return torch.cat(pieces)
+
+    # def dict_to_tensor(self, theta_dict):
+    #     """
+    #     Convert a dictionary {'t': [...], 'U': [...], 'eps': [...], 'Delta': [...]}
+    #     into a single contiguous tensor that matches get_tensor().
+    #     """
+    #     pieces = []
+    #     n = self.n
+
+    #     for key in ['t', 'U', 'eps', 'Delta']:
+    #         vals = theta_dict[key]
+
+    #         if not torch.is_tensor(vals):
+    #             vals = torch.tensor(vals, dtype=torch.float64, device=self.device)
+
+    #         # Homogeneous parameters should be length-1 tensors
+    #         if self.param_configs and self.param_configs[key]['mode'] == "homogeneous":
+    #             if vals.numel() != 1:
+    #                 raise ValueError(f"Key '{key}' should have 1 value (homogeneous). Got {vals}.")
+    #             pieces.append(vals.reshape(-1))
+    #             continue
+
+    #         # Inhomogeneous parameters
+    #         expected_len = n if key == "eps" else (n - 1)
+    #         if vals.numel() != expected_len:
+    #             print(f"Key '{key}' expected length {expected_len}, got {vals.numel()}.")
+    #             print("Adjusting to expected length.")
+    #             if vals.numel() == 1:
+    #                 vals = vals.repeat(expected_len)
+    #             else:
+    #                 raise ValueError(f"Key '{key}' has incorrect length and cannot be adjusted automatically.")
+
+    #         pieces.append(vals.reshape(-1))
+
+    #     return torch.cat(pieces)
+
+
+
+        
     def get_physical_parameters(self, params_dict):
         """
         Returns physical parameters ready to build the Hamiltonian:

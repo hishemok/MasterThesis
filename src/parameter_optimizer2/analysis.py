@@ -134,6 +134,73 @@ def parity_spectrum_plot(n, evals, even_states, odd_states):
     plt.tight_layout()
     plt.show()
 
+import matplotlib.pyplot as plt
+
+def combined_analysis_plot(n, evals, even_states, odd_states, even_vecs, odd_vecs, phys):
+    """
+    Plot parity-resolved spectrum on top and schematic below in one figure.
+    """
+
+    # Split physical params
+    t = phys["t"]
+    U = phys["U"]
+    eps = phys["eps"]
+    Delta = phys["Delta"]
+
+    # Compute degeneracy lines (optional)
+    degeneracy_lines = []
+    for Ee, Eo in zip(even_states, odd_states):
+        if abs(Ee - Eo) < 1e-2:
+            degeneracy_lines.append(Ee)
+
+    # Figure with two rows
+    fig, axs = plt.subplots(2, 1, figsize=(10,5), gridspec_kw={'height_ratios':[2,1]})
+    ax1, ax2 = axs
+
+    # -----------------------------
+    # Top: Parity-resolved spectrum
+    # -----------------------------
+    ax1.hlines(even_states, -0.2, 0.2, color='tab:blue', label='Even')
+    ax1.hlines(odd_states, 0.8, 1.2, color='tab:red', label='Odd')
+    if degeneracy_lines:
+        ax1.hlines(degeneracy_lines, 0.2, 0.8, color='tab:gray', linestyles='dashed', label='Degeneracies')
+    ax1.set_xticks([0,1])
+    ax1.set_xticklabels(['Even', 'Odd'])
+    ax1.set_ylabel("Energy")
+    ax1.set_title(f"Parity-resolved spectrum ({n}-dot)")
+    ax1.legend(frameon=False)
+
+    # -----------------------------
+    # Bottom: QD–SC–QD schematic
+    # -----------------------------
+    ax2.set_xlim(-0.5, n-0.5)
+    ax2.set_ylim(-1.5, 1.5)
+    ax2.axis('off')
+
+    dot_y = 0
+    sc_height = 0.5
+    sc_width = 0.8
+
+    for i in range(n):
+        ax2.scatter(i, dot_y, s=800, color='tab:blue', edgecolor='black', zorder=3)
+        ax2.text(i, dot_y-0.5, f"$\\epsilon_{i}$={eps[i]:.2f}", ha='center', fontsize=9)
+
+    for i in range(n-1):
+        x = (i + (i+1))/2
+        rect = plt.Rectangle((x - sc_width/2, dot_y - sc_height/2), #type: ignore
+                             sc_width, sc_height,
+                             color='lightgray', ec='black', lw=1.2, zorder=2)
+        ax2.add_patch(rect)
+        ax2.text(x, dot_y, f"t={float(t[i]):.2f}\nΔ={float(Delta[i]):.2f}", 
+                 ha='center', va='center', fontsize=8)
+        ax2.text(x, dot_y + 0.6, f"$U_{i}$={float(U[i]):.2f}", ha='center', fontsize=9, color='tab:purple')
+
+    ax2.set_title("Optimized QD–SC–QD setup")
+
+    plt.tight_layout()
+    plt.show()
+
+
 
 def analyze(model, θ):
     """
@@ -160,6 +227,76 @@ def analyze(model, θ):
     print(f"Charge difference (even - odd) = {charge_diff:.6e}")
 
     # Plots
-    parity_spectrum_plot(n, evals, even_states, odd_states)
     plot_majorana_polarization(even_vecs, odd_vecs, n)
-    plot_setup_schematic(phys,n)
+    combined_analysis_plot(n, evals, even_states, odd_states, even_vecs, odd_vecs, phys)
+    # parity_spectrum_plot(n, evals, even_states, odd_states)
+    # plot_setup_schematic(phys,n)
+
+
+def write_configs_to_file(theta_dict, n, parameter_configs=None, filename="configuration.json", loss=None):
+    """
+    Append a new configuration block to the file.
+    The file becomes a chronological log of configurations:
+    
+    ## configuration N- site system | Loss: ...
+    { ... JSON ... }
+
+    ## configuration N- site system | Loss: ...
+    { ... JSON ... }
+    """
+    from hamiltonian import HamiltonianModel
+    import os
+    import json
+
+    model = HamiltonianModel(n=n, param_configs=parameter_configs)
+
+    # Convert dict → tensor
+    theta_tensor = model.dict_to_tensor(theta_dict)
+
+    # Get adjusted → physical parameters
+    adjusted = model.adjust_tensor(theta_tensor)
+    param_dict = model.tensor_to_dict(adjusted)
+    physical_params = model.get_physical_parameters(param_dict)
+
+    # Compute loss
+    if loss is None:
+        H = model.build(physical_params)
+        P = parity_operator_torch(n)
+        loss = model.loss(H, P).item()
+
+    # Build output block
+    entry = {
+        "header": f"configuration {n}- site system | Loss: {loss:.6e}",
+        "parameter_configs": parameter_configs,
+        "raw_parameter_values": theta_dict,
+        "physical_parameters": {
+            key: [float(v) for v in value] for key, value in physical_params.items()
+        }
+    }
+
+    # Load existing list or create new
+    if os.path.exists(filename) and os.path.getsize(filename) > 0:
+        with open(filename, "r") as f:
+            data = json.load(f)
+            if not isinstance(data, list):
+                raise ValueError("The JSON file must contain a list.")
+    else:
+        data = []
+
+    # Check for duplicates
+    duplicate_found = any(
+        d.get("raw_parameter_values") == entry["raw_parameter_values"] and
+        d.get("parameter_configs") == entry["parameter_configs"]
+        for d in data
+    )
+
+    if duplicate_found:
+        print("⚠ Configuration already exists — skipping save.")
+        return
+
+    # Append new entry and save
+    data.append(entry)
+    with open(filename, "w") as f:
+        json.dump(data, f, indent=4)
+
+    print(f"✔ Configuration appended to valid JSON file: {filename}")
