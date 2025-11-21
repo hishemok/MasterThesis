@@ -282,7 +282,7 @@ def analyze_H(H_np, n_sites, n_low=8, tol=1e-8, verbose=True):
         "n_odd": n_odd,
         "spec_weights": spec_weights,
         "mid_idx": mid_idx,
-        "H_eff": H_eff if mid_idx is not None else None,
+        "H_eff": H_eff if mid_idx is not None else None, #type:ignore
         "best_site_vector": best_site_vector,
         "singular_vals": singular_vals
     }
