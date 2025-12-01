@@ -86,25 +86,15 @@ def plot_known_parameters(n, theta_dict):
 if __name__ == "__main__":
     config = {
             "t": {"mode": "homogeneous", "fixed": 1.0},
-            "U": {"mode": "homogeneous", "fixed": 1.0},
+            "U": {"mode": "homogeneous", "fixed": 0.1},
             "eps": {"mode": "inhomogeneous", "fixed": None},
             "Delta": {"mode": "inhomogeneous", "fixed": None}
         }
-    n = 4
+    n = 3
     U_vals = [0.1, 0.5, 1.0, 2.0, 5.0]
-
-    for U in U_vals:
-        print(f"\n=== Running for U = {U} ===")
-        config["U"]["fixed"] = U
-        full_theta, physical_params, loss = run_model(n=n, configs=config, method="basin_hopping", with_restarts=True, steps=30, plot=False, write_to_file=True)
-
-    ### Known parameters plotting example
-    # n = 4
-    # theta = {
-    #     "t": [18.21433337],
-    #     "U": [1.0],
-    #    "eps": [ -0.08477057,  14.25886144, -11.22044506,  -0.09756527],
-    #     "Delta": [18.10311758, 37.38277857, 18.32873379]
-    # }
-    # # plot_known_parameters(n, theta)
-    # write_configs_to_file(theta, n, parameter_configs=config)
+    for n in [2,3,4]:
+        print(f"\n=== Running for n = {n} ===")
+        for U in U_vals:
+            print(f"\n=== Running for U = {U} ===")
+            config["U"]["fixed"] = U
+            full_theta, physical_params, loss = run_model(n=n, configs=config, method="basin_hopping", with_restarts=True, steps=30, plot=False, write_to_file=True)

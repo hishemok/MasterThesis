@@ -3,6 +3,7 @@ from tools import *
 import sympy as sp
 from sympy import symbols
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 def symbolic_hamiltonian(n_sites):
@@ -100,41 +101,55 @@ def classify_states(eigenvalues, eigenvectors, n_sites):
         eigenvalues, eigenvectors, n_sites
     )
 
-    GS_even = even_states[0]
-    GS_odd  = odd_states[0]
-
-    gamma, gamma_tilde, igammagamma_tilde = operator_basis(GS_even, GS_odd)
-
     results = {}
 
-    # Electron like?
-    occupancies = np.zeros((dim, n_sites))
-    for s in range(dim):
-        v = eigenvectors[:, s]
-        for i in range(n_sites):
-            occupancies[s,i] = np.real(v.conj().T @ n_ops[i] @ v)
-    results["electron_occupancy"] = occupancies
-
-    # Majorana expectations
-    maj_strength_1 = np.zeros(n_sites)
-    maj_strength_2 = np.zeros(n_sites)
+    ## electron like?
+    even_electron_weight = np.zeros((n_sites,len(even_states)))
+    odd_electron_weight = np.zeros((n_sites,len(odd_states)))
+    #Dim: [n_sites, len(even_states)] = [i,s]
+    #Holds: ⟨v_s| n_i |v_s⟩
     for i in range(n_sites):
-        maj_strength_1[i] = np.abs(GS_even.conj().T @ gamma1_ops[i] @ GS_odd)
-        maj_strength_2[i] = np.abs(GS_even.conj().T @ gamma2_ops[i] @ GS_odd)
+        n_i = n_ops[i]
+        for s in range(len(even_states)):
+            v = even_states[s]
+            even_electron_weight[i,s] = np.real(v.conj().T @ n_i @ v)
+            v = odd_states[s]
+            odd_electron_weight[i,s] = np.real(v.conj().T @ n_i @ v)
+    results["even_electron_occupancy"] = even_electron_weight 
+    results["odd_electron_occupancy"] = odd_electron_weight
+
+    ### Majorana matrix elements
+    maj_strength_1 = np.zeros((n_sites,len(odd_states)))  # ⟨ o_s | γ₁_i | e_s ⟩
+    maj_strength_2 = np.zeros((n_sites,len(odd_states)))  # ⟨ o_s | γ₂_i | e_s ⟩
+    for i in range(n_sites):
+        gamma_1 = gamma1_ops[i]
+        gamma_2 = gamma2_ops[i]
+        for s in range(len(odd_states)):
+            even_v = even_states[s]
+            odd_v  = odd_states[s]
+            maj_strength_1[i,s] = np.abs(even_v.conj().T @ gamma_1 @ odd_v)
+            maj_strength_2[i,s] = np.abs(even_v.conj().T @ gamma_2 @ odd_v)
     results["majorana_transition_gamma1"] = maj_strength_1
     results["majorana_transition_gamma2"] = maj_strength_2
 
-    # Andreev pairing
-    pairings = np.zeros((dim, n_sites-1))
-    for s in range(dim):
-        v = eigenvectors[:, s]
-        for i in range(n_sites-1):
-            pairings[s,i] = np.abs(v.conj().T @ c_ops[i] @ c_ops[i+1] @ v)
-    results["andreev_pairings"] = pairings
+    ### Andreev pairing
+    even_pairings = np.zeros((n_sites-1, len(even_states)))  # ⟨ v_s | c_i c_{i+1} | v_s ⟩
+    odd_pairings  = np.zeros((n_sites-1, len(odd_states)))   # ⟨ v_s | c_i c_{i+1} | v_s ⟩
+    for i in range(n_sites - 1):
+        c_i = c_ops[i]
+        c_j = c_ops[i + 1]
+        for s in range(len(even_states)):
+            v = even_states[s]
+            even_pairings[i,s] = np.abs(v.conj().T @ c_i @ c_j @ v)
+            v = odd_states[s]
+            odd_pairings[i,s] = np.abs(v.conj().T @ c_i @ c_j @ v)
+    results["andreev_pairings_even"] = even_pairings
+    results["andreev_pairings_odd"] = odd_pairings
+
 
     return results
 
-
+  
 
 def operator_basis(even,odd):
     gamma = np.outer(even, odd.conj()) + np.outer(odd, even.conj())
@@ -162,20 +177,83 @@ if __name__ == "__main__":
     eigvals, eigvecs = np.linalg.eigh(Hnum)
 
     results = classify_states(eigvals, eigvecs, n_sites)
-    electron_occupancies = results["electron_occupancy"]
-    majorana_overlaps_gamma1 = results["majorana_transition_gamma1"]
-    majorana_overlaps_gamma2 = results["majorana_transition_gamma2"]
-    Andreev_pairings = results["andreev_pairings"]
-    parity_labels, _, _, _, _ = classify_parities(eigvals, eigvecs, n_sites)
+    even_electron_occupancy = results["even_electron_occupancy"].T # [n_sites, len(even_states)].T ⟨v_s| n_i |v_s⟩
+    odd_electron_occupancy = results["odd_electron_occupancy"].T # [n_sites, len(odd_states)].T ⟨v_s| n_i |v_s⟩
+    maj1 = results["majorana_transition_gamma1"].T # [n_sites, len(odd_states)].T ⟨ o_s | γ₁_i | e_s ⟩
+    maj2 = results["majorana_transition_gamma2"].T # [n_sites, len(odd_states)].T ⟨ o_s | γ₂_i | e_s ⟩
+    pairings_even = results["andreev_pairings_even"].T # [n_sites-1, len(even_states))].T ⟨ v_s | c_i c_{i+1} | v_s ⟩
+    pairings_odd  = results["andreev_pairings_odd"].T  # [n_sites-1, len(odd_states))].T ⟨ v_s | c_i c_{i+1} | v_s ⟩
+   
+    majorana_ticks_sites = np.arange(n_sites)
+    majorana_ticks_labels1 = [f"⟨o|γ1,{i}|e⟩ " for i in range(n_sites)]
+    majorana_ticks_labels2 = [f"⟨o|γ2,{i}|e⟩ " for i in range(n_sites)]
 
-    # global info
-    print("Majorana γ1 localization:", majorana_overlaps_gamma1)
-    print("Majorana γ2 localization:", majorana_overlaps_gamma2)
+    electron_ticks_sites = np.arange(n_sites)
+    electron_ticks_label_even = [f"⟨e|n_{i}|e⟩" for i in range(n_sites)]
+    electron_ticks_label_odd  = [f"⟨o|n_{i}|o⟩" for i in range(n_sites)]
 
-    dim = eigvecs.shape[0]
-    # per-state info
-    for s in range(dim):
-        print(f"--- State {s} ---")
-        print(f"Energy = {eigvals[s]:.6f}, Parity = {parity_labels[s]}")
-        print(f"  Occupancies      : {electron_occupancies[s]}")
-        print(f"  Andreev pairing  : {Andreev_pairings[s]}")
+    andreev_n_bonds = n_sites - 1
+    xticks_sites = np.arange(andreev_n_bonds)
+    andreev_even = [f"⟨e|c_{i} c_{i+1}|e⟩" for i in range(andreev_n_bonds)]
+    andreev_odd  = [f"⟨o|c_{i} c_{i+1}|o⟩" for i in range(andreev_n_bonds)]
+
+
+    y_ticks_sites = np.arange(len(even_electron_occupancy))
+    y_ticks_labels = [f"E_{i}" for i in range(len(even_electron_occupancy))]
+
+    plt.subplot(3,2,1)
+    plt.imshow(maj1, aspect='auto', origin='lower')
+    plt.colorbar()
+    plt.title("Majorana Transition Amplitudes γ₁")
+    # plt.xlabel("Odd Eigenstate Index")
+    plt.yticks(ticks=y_ticks_sites, labels=y_ticks_labels)
+    plt.xticks(ticks=majorana_ticks_sites, labels=majorana_ticks_labels1)
+    plt.ylabel("Energy level Index")
+
+    plt.subplot(3,2,2)
+    plt.imshow(maj2, aspect='auto', origin='lower')
+    plt.colorbar()
+    plt.title("Majorana Transition Amplitudes γ₂")
+    # plt.xlabel("Odd Eigenstate Index")
+    plt.yticks(ticks=y_ticks_sites, labels=y_ticks_labels)
+    plt.xticks(ticks=majorana_ticks_sites, labels=majorana_ticks_labels2)
+    plt.ylabel("Energy level Index")
+
+    plt.subplot(3,2,3)
+    plt.imshow(even_electron_occupancy, aspect='auto', origin='lower')
+    plt.colorbar()
+    plt.title("Even Parity Electron Occupancy")
+    # plt.xlabel("Even Eigenstate Index")
+    plt.xticks(ticks=electron_ticks_sites, labels=electron_ticks_label_even)
+    plt.yticks(ticks=y_ticks_sites, labels=y_ticks_labels)
+    plt.ylabel("Energy level Index")
+
+    plt.subplot(3,2,4)
+    plt.imshow(odd_electron_occupancy, aspect='auto', origin='lower')
+    plt.colorbar()
+    plt.title("Odd Parity Electron Occupancy")
+    # plt.xlabel("Odd Eigenstate Index")
+    plt.xticks(ticks=electron_ticks_sites, labels=electron_ticks_label_odd)
+    plt.yticks(ticks=y_ticks_sites, labels=y_ticks_labels)
+    plt.ylabel("Energy level Index")
+
+    plt.subplot(3,2,5)
+    plt.imshow(pairings_even, aspect='auto', origin='lower')
+    plt.colorbar()
+    plt.title("Andreev Pairings Even")       
+    # plt.xlabel("Eigenstate Index")
+    plt.xticks(ticks=xticks_sites, labels=andreev_even)
+    plt.yticks(ticks=y_ticks_sites, labels=y_ticks_labels)
+    plt.ylabel("Bond Index")
+
+    plt.subplot(3,2,6)
+    plt.imshow(pairings_odd, aspect='auto', origin='lower')
+    plt.colorbar()
+    plt.title("Andreev Pairings Odd")         
+    # plt.xlabel("Eigenstate Index")
+    plt.xticks(ticks=xticks_sites, labels=andreev_odd)
+    plt.yticks(ticks=y_ticks_sites, labels=y_ticks_labels)
+    plt.ylabel("Bond Index")
+
+    plt.tight_layout()
+    plt.show()

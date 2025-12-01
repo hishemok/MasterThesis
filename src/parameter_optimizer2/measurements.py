@@ -36,9 +36,9 @@ def charge_difference_torch(even_state, odd_state, n):
         for k in range(n_states):
             even_vec = even_state[:, k]
             odd_vec = odd_state[:, k]
-            exp_even += torch.vdot(even_vec, n_i @ even_vec)
-            exp_odd  += torch.vdot(odd_vec,  n_i @ odd_vec)
-        charge_diff += torch.abs(exp_even - exp_odd).to(dtype=torch.float64)
+            exp_even = torch.vdot(even_vec, n_i @ even_vec)
+            exp_odd  = torch.vdot(odd_vec,  n_i @ odd_vec)
+            charge_diff += torch.abs(exp_even - exp_odd).to(dtype=torch.float64)
     return charge_diff
 
 
