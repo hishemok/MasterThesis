@@ -49,7 +49,6 @@ def symbolic_hamiltonian_to_np(n_sites, param_dict):
     if len(t_vals) != n - 1:
         if len(t_vals) == 1:
             t_vals = np.repeat(t_vals, n - 1)
-            print(f"Expanded t_vals to: {t_vals}")
         else:
             raise ValueError(f"Length of t_vals {len(t_vals)} does not match n_sites-1={n_sites-1}")
     if len(U_vals) != n:
