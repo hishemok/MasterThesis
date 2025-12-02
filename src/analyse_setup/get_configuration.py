@@ -1,7 +1,7 @@
 ### this file reads configuration.json and extracts physical parameters for a given n_sites
 import json
 
-def get_configuration(filename="configuration.json"):
+def get_configuration(filename="configuration.json") -> dict:
     """
     Reads configurations from a JSON file and returns them as a list of dictionaries.
     Each dictionary contains the header and physical parameter values.
@@ -25,14 +25,14 @@ def get_configuration(filename="configuration.json"):
         data = {"n2": n2, "n3": n3, "n4": n4}
     return data
 
-def get_best_config(n, filename="configuration.json"):
+def get_best_config(n, filename="configuration.json") -> dict:
     """
     Given n and the configurations dictionary, returns the configuration with the lowest loss.
     """
     configs = get_configuration(filename=filename)
     key = f"n{n}"
     if key not in configs:
-        return None
+        return {}
     best_config = min(configs[key], key=lambda x: float(x["loss"]))
     return best_config
 

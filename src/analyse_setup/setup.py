@@ -111,10 +111,10 @@ def classify_states(eigenvalues, eigenvectors, n_sites):
     for i in range(n_sites):
         n_i = n_ops[i]
         for s in range(len(even_states)):
-            v = even_states[s]
-            even_electron_weight[i,s] = np.real(v.conj().T @ n_i @ v)
-            v = odd_states[s]
-            odd_electron_weight[i,s] = np.real(v.conj().T @ n_i @ v)
+            e = even_states[s]
+            even_electron_weight[i,s] = np.real(e.conj().T @ n_i @ e)
+            o = odd_states[s]
+            odd_electron_weight[i,s] = np.real(o.conj().T @ n_i @ o)
     results["even_electron_occupancy"] = even_electron_weight 
     results["odd_electron_occupancy"] = odd_electron_weight
 
@@ -146,6 +146,33 @@ def classify_states(eigenvalues, eigenvectors, n_sites):
     results["andreev_pairings_even"] = even_pairings
     results["andreev_pairings_odd"] = odd_pairings
 
+    ## Hoppings
+    even_hoppings = np.zeros((n_sites - 1, len(even_states)))  # ⟨ v_s | c_i† c_{i+1} | v_s ⟩
+    odd_hoppings  = np.zeros((n_sites - 1, len(odd_states)))   # ⟨ v_s | c_i† c_{i+1} | v_s ⟩
+    for i in range(n_sites - 1):    
+        cdag_i = cdag_ops[i]
+        c_j    = c_ops[i + 1]
+        for s in range(len(even_states)):
+            v = even_states[s]
+            even_hoppings[i,s] = np.abs(v.conj().T @ cdag_i @ c_j @ v)
+            v = odd_states[s]
+            odd_hoppings[i,s] = np.abs(v.conj().T @ cdag_i @ c_j @ v)
+    results["hoppings_even"] = even_hoppings
+    results["hoppings_odd"] = odd_hoppings
+
+    ### Charge difference between even and odd states
+    charge_differences = np.zeros((len(even_states),))
+    for s in range(len(even_states)):
+        even_v = even_states[s]
+        odd_v  = odd_states[s]
+        charge_even = 0.0
+        charge_odd = 0.0
+        for i in range(n_sites):
+            n_i = n_ops[i]
+            charge_even += np.real(even_v.conj().T @ n_i @ even_v)
+            charge_odd  += np.real(odd_v.conj().T @ n_i @ odd_v)
+            charge_differences[s] += np.abs(charge_even - charge_odd)
+    results["charge_differences"] = charge_differences
 
     return results
 
@@ -167,13 +194,22 @@ def operator_basis(even,odd):
     return gamma, gamma_tilde, igammagamma_tilde
 
 if __name__ == "__main__":
-    n_sites = 3
+    n_sites = 4
     H = symbolic_hamiltonian(n_sites)
     # sp.pprint(H)
   
-    best_config3 = get_best_config(3)
+    configurations = get_configuration()
+    print(f"Available configurations for n={n_sites}:")
+    # print(configurations["n3"][2])
+    for config in configurations[f"n{n_sites}"]:
+        print(f"Loss: {config['loss']}, Theta: {config['theta']}")
 
-    Hnum = symbolic_hamiltonian_to_np(n_sites, best_config3)
+    # best_config3 = get_best_config(2)
+    # print("Best configuration for n=3:")
+    # print(best_config3["theta"])
+
+
+    Hnum = symbolic_hamiltonian_to_np(n_sites, configurations[f"n{n_sites}"][0])
     eigvals, eigvecs = np.linalg.eigh(Hnum)
 
     results = classify_states(eigvals, eigvecs, n_sites)
@@ -183,7 +219,15 @@ if __name__ == "__main__":
     maj2 = results["majorana_transition_gamma2"].T # [n_sites, len(odd_states)].T ⟨ o_s | γ₂_i | e_s ⟩
     pairings_even = results["andreev_pairings_even"].T # [n_sites-1, len(even_states))].T ⟨ v_s | c_i c_{i+1} | v_s ⟩
     pairings_odd  = results["andreev_pairings_odd"].T  # [n_sites-1, len(odd_states))].T ⟨ v_s | c_i c_{i+1} | v_s ⟩
+    hoppings_even = results["hoppings_even"].T       # [n_sites-1, len(even_states))].T ⟨ v_s | c_i† c_{i+1} | v_s ⟩
+    hoppings_odd  = results["hoppings_odd"].T        # [n_sites-1, len(odd_states))].T ⟨ v_s | c_i† c_{i+1} | v_s ⟩
+    charge_differences = results["charge_differences"]  # [len(even_states)]  |⟨v_s| Q |v_s⟩ - ⟨u_s| Q |u_s⟩|
    
+    print("Charge differences between even and odd states:")
+    print(charge_differences)
+
+
+
     majorana_ticks_sites = np.arange(n_sites)
     majorana_ticks_labels1 = [f"⟨o|γ1,{i}|e⟩ " for i in range(n_sites)]
     majorana_ticks_labels2 = [f"⟨o|γ2,{i}|e⟩ " for i in range(n_sites)]
@@ -197,11 +241,14 @@ if __name__ == "__main__":
     andreev_even = [f"⟨e|c_{i} c_{i+1}|e⟩" for i in range(andreev_n_bonds)]
     andreev_odd  = [f"⟨o|c_{i} c_{i+1}|o⟩" for i in range(andreev_n_bonds)]
 
+    hoppings_even_tics = [f"⟨e|c†_{i} c_{i+1}|e⟩" for i in range(andreev_n_bonds)]
+    hoppings_odd_tics  = [f"⟨o|c†_{i} c_{i+1}|o⟩" for i in range(andreev_n_bonds)]
+
 
     y_ticks_sites = np.arange(len(even_electron_occupancy))
     y_ticks_labels = [f"E_{i}" for i in range(len(even_electron_occupancy))]
 
-    plt.subplot(3,2,1)
+    plt.subplot(4,2,1)
     plt.imshow(maj1, aspect='auto', origin='lower')
     plt.colorbar()
     plt.title("Majorana Transition Amplitudes γ₁")
@@ -210,7 +257,7 @@ if __name__ == "__main__":
     plt.xticks(ticks=majorana_ticks_sites, labels=majorana_ticks_labels1)
     plt.ylabel("Energy level Index")
 
-    plt.subplot(3,2,2)
+    plt.subplot(4,2,2)
     plt.imshow(maj2, aspect='auto', origin='lower')
     plt.colorbar()
     plt.title("Majorana Transition Amplitudes γ₂")
@@ -219,7 +266,7 @@ if __name__ == "__main__":
     plt.xticks(ticks=majorana_ticks_sites, labels=majorana_ticks_labels2)
     plt.ylabel("Energy level Index")
 
-    plt.subplot(3,2,3)
+    plt.subplot(4,2,3)
     plt.imshow(even_electron_occupancy, aspect='auto', origin='lower')
     plt.colorbar()
     plt.title("Even Parity Electron Occupancy")
@@ -228,7 +275,7 @@ if __name__ == "__main__":
     plt.yticks(ticks=y_ticks_sites, labels=y_ticks_labels)
     plt.ylabel("Energy level Index")
 
-    plt.subplot(3,2,4)
+    plt.subplot(4,2,4)
     plt.imshow(odd_electron_occupancy, aspect='auto', origin='lower')
     plt.colorbar()
     plt.title("Odd Parity Electron Occupancy")
@@ -237,7 +284,7 @@ if __name__ == "__main__":
     plt.yticks(ticks=y_ticks_sites, labels=y_ticks_labels)
     plt.ylabel("Energy level Index")
 
-    plt.subplot(3,2,5)
+    plt.subplot(4,2,5)
     plt.imshow(pairings_even, aspect='auto', origin='lower')
     plt.colorbar()
     plt.title("Andreev Pairings Even")       
@@ -246,12 +293,30 @@ if __name__ == "__main__":
     plt.yticks(ticks=y_ticks_sites, labels=y_ticks_labels)
     plt.ylabel("Bond Index")
 
-    plt.subplot(3,2,6)
+    plt.subplot(4,2,6)
     plt.imshow(pairings_odd, aspect='auto', origin='lower')
     plt.colorbar()
     plt.title("Andreev Pairings Odd")         
     # plt.xlabel("Eigenstate Index")
     plt.xticks(ticks=xticks_sites, labels=andreev_odd)
+    plt.yticks(ticks=y_ticks_sites, labels=y_ticks_labels)
+    plt.ylabel("Bond Index")
+
+    plt.subplot(4,2,7)
+    plt.imshow(hoppings_even, aspect='auto', origin='lower')
+    plt.colorbar()
+    plt.title("Hoppings Even")           
+    # plt.xlabel("Eigenstate Index")
+    plt.xticks(ticks=xticks_sites, labels=hoppings_even_tics)
+    plt.yticks(ticks=y_ticks_sites, labels=y_ticks_labels)
+    plt.ylabel("Bond Index")
+
+    plt.subplot(4,2,8)
+    plt.imshow(hoppings_odd, aspect='auto', origin='lower')
+    plt.colorbar()
+    plt.title("Hoppings Odd")             
+    # plt.xlabel("Eigenstate Index")
+    plt.xticks(ticks=xticks_sites, labels=hoppings_odd_tics)
     plt.yticks(ticks=y_ticks_sites, labels=y_ticks_labels)
     plt.ylabel("Bond Index")
 

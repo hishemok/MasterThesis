@@ -88,10 +88,10 @@ if __name__ == "__main__":
             "t": {"mode": "homogeneous", "fixed": 1.0},
             "U": {"mode": "homogeneous", "fixed": 0.1},
             "eps": {"mode": "inhomogeneous", "fixed": None},
-            "Delta": {"mode": "inhomogeneous", "fixed": None}
+            "Delta": {"mode": "homogeneous", "fixed": None}
         }
     n = 3
-    U_vals = [0.1, 0.5, 1.0, 2.0, 5.0]
+    U_vals = [0.0, 0.5, 1.0, 2.0]
     for n in [2,3,4]:
         print(f"\n=== Running for n = {n} ===")
         for U in U_vals:

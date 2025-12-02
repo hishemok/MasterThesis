@@ -823,5 +823,806 @@
                 3.336194138508068
             ]
         }
+    },
+    {
+        "header": "configuration 2- site system | Loss: 1.225545e-02",
+        "parameter_configs": {
+            "t": {
+                "mode": "homogeneous",
+                "fixed": 1.0
+            },
+            "U": {
+                "mode": "homogeneous",
+                "fixed": 0.0
+            },
+            "eps": {
+                "mode": "inhomogeneous",
+                "fixed": null
+            },
+            "Delta": {
+                "mode": "inhomogeneous",
+                "fixed": null
+            }
+        },
+        "raw_parameter_values": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                0.0
+            ],
+            "eps": [
+                0.0009200886597445224,
+                -0.00868245579148024
+            ],
+            "Delta": [
+                1.000060070536963
+            ]
+        },
+        "physical_parameters": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                0.0
+            ],
+            "eps": [
+                0.0009200886597445224,
+                -0.00868245579148024
+            ],
+            "Delta": [
+                1.000060070536963
+            ]
+        }
+    },
+    {
+        "header": "configuration 3- site system | Loss: 3.441790e-01",
+        "parameter_configs": {
+            "t": {
+                "mode": "homogeneous",
+                "fixed": 1.0
+            },
+            "U": {
+                "mode": "homogeneous",
+                "fixed": 0.0
+            },
+            "eps": {
+                "mode": "inhomogeneous",
+                "fixed": null
+            },
+            "Delta": {
+                "mode": "inhomogeneous",
+                "fixed": null
+            }
+        },
+        "raw_parameter_values": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                0.0
+            ],
+            "eps": [
+                0.018937275742502552,
+                1.7735264535514197,
+                -0.46585836473851744
+            ],
+            "Delta": [
+                1.0102096218687466,
+                1.3475356999559487
+            ]
+        },
+        "physical_parameters": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                0.0
+            ],
+            "eps": [
+                0.018937275742502552,
+                1.7735264535514197,
+                -0.46585836473851744
+            ],
+            "Delta": [
+                1.0102096218687466,
+                1.3475356999559487
+            ]
+        }
+    },
+    {
+        "header": "configuration 4- site system | Loss: 3.161246e-01",
+        "parameter_configs": {
+            "t": {
+                "mode": "homogeneous",
+                "fixed": 1.0
+            },
+            "U": {
+                "mode": "homogeneous",
+                "fixed": 0.0
+            },
+            "eps": {
+                "mode": "inhomogeneous",
+                "fixed": null
+            },
+            "Delta": {
+                "mode": "inhomogeneous",
+                "fixed": null
+            }
+        },
+        "raw_parameter_values": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                0.0
+            ],
+            "eps": [
+                -0.058890387671231406,
+                -4.252471808934164,
+                0.23623281784921926,
+                -0.002999402146825935
+            ],
+            "Delta": [
+                2.6979504229966103,
+                5.332029226993316,
+                1.0038771332229344
+            ]
+        },
+        "physical_parameters": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                0.0
+            ],
+            "eps": [
+                -0.058890387671231406,
+                -4.252471808934164,
+                0.23623281784921926,
+                -0.002999402146825935
+            ],
+            "Delta": [
+                2.6979504229966103,
+                5.332029226993316,
+                1.0038771332229344
+            ]
+        }
+    },
+    {
+        "header": "configuration 2- site system | Loss: 5.656768e-03",
+        "parameter_configs": {
+            "t": {
+                "mode": "homogeneous",
+                "fixed": 1.0
+            },
+            "U": {
+                "mode": "homogeneous",
+                "fixed": 0.0
+            },
+            "eps": {
+                "mode": "inhomogeneous",
+                "fixed": null
+            },
+            "Delta": {
+                "mode": "homogeneous",
+                "fixed": null
+            }
+        },
+        "raw_parameter_values": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                0.0
+            ],
+            "eps": [
+                -0.0005528360764942796,
+                0.0022176600969095127
+            ],
+            "Delta": [
+                0.99992416872687
+            ]
+        },
+        "physical_parameters": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                0.0
+            ],
+            "eps": [
+                -0.0005528360764942796,
+                0.0022176600969095127
+            ],
+            "Delta": [
+                0.99992416872687
+            ]
+        }
+    },
+    {
+        "header": "configuration 2- site system | Loss: 1.110657e+00",
+        "parameter_configs": {
+            "t": {
+                "mode": "homogeneous",
+                "fixed": 1.0
+            },
+            "U": {
+                "mode": "homogeneous",
+                "fixed": 0.5
+            },
+            "eps": {
+                "mode": "inhomogeneous",
+                "fixed": null
+            },
+            "Delta": {
+                "mode": "homogeneous",
+                "fixed": null
+            }
+        },
+        "raw_parameter_values": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                0.5
+            ],
+            "eps": [
+                -0.2523042544192102,
+                -0.26284591803728846
+            ],
+            "Delta": [
+                1.2452271026824488
+            ]
+        },
+        "physical_parameters": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                0.5
+            ],
+            "eps": [
+                -0.2523042544192102,
+                -0.26284591803728846
+            ],
+            "Delta": [
+                1.2452271026824488
+            ]
+        }
+    },
+    {
+        "header": "configuration 2- site system | Loss: 1.941417e+00",
+        "parameter_configs": {
+            "t": {
+                "mode": "homogeneous",
+                "fixed": 1.0
+            },
+            "U": {
+                "mode": "homogeneous",
+                "fixed": 1.0
+            },
+            "eps": {
+                "mode": "inhomogeneous",
+                "fixed": null
+            },
+            "Delta": {
+                "mode": "homogeneous",
+                "fixed": null
+            }
+        },
+        "raw_parameter_values": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                1.0
+            ],
+            "eps": [
+                -0.49109412251722573,
+                -0.49664967960828704
+            ],
+            "Delta": [
+                1.5013431069519367
+            ]
+        },
+        "physical_parameters": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                1.0
+            ],
+            "eps": [
+                -0.49109412251722573,
+                -0.49664967960828704
+            ],
+            "Delta": [
+                1.5013431069519367
+            ]
+        }
+    },
+    {
+        "header": "configuration 2- site system | Loss: 3.202983e+00",
+        "parameter_configs": {
+            "t": {
+                "mode": "homogeneous",
+                "fixed": 1.0
+            },
+            "U": {
+                "mode": "homogeneous",
+                "fixed": 2.0
+            },
+            "eps": {
+                "mode": "inhomogeneous",
+                "fixed": null
+            },
+            "Delta": {
+                "mode": "homogeneous",
+                "fixed": null
+            }
+        },
+        "raw_parameter_values": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                2.0
+            ],
+            "eps": [
+                -1.005754911345306,
+                -1.0039660864840485
+            ],
+            "Delta": [
+                1.9999475867909298
+            ]
+        },
+        "physical_parameters": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                2.0
+            ],
+            "eps": [
+                -1.005754911345306,
+                -1.0039660864840485
+            ],
+            "Delta": [
+                1.9999475867909298
+            ]
+        }
+    },
+    {
+        "header": "configuration 3- site system | Loss: 3.958838e-01",
+        "parameter_configs": {
+            "t": {
+                "mode": "homogeneous",
+                "fixed": 1.0
+            },
+            "U": {
+                "mode": "homogeneous",
+                "fixed": 0.0
+            },
+            "eps": {
+                "mode": "inhomogeneous",
+                "fixed": null
+            },
+            "Delta": {
+                "mode": "homogeneous",
+                "fixed": null
+            }
+        },
+        "raw_parameter_values": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                0.0
+            ],
+            "eps": [
+                -0.0010574044181715042,
+                1.0497033388450359,
+                -0.012375288960907168
+            ],
+            "Delta": [
+                1.000554206774685
+            ]
+        },
+        "physical_parameters": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                0.0
+            ],
+            "eps": [
+                -0.0010574044181715042,
+                1.0497033388450359,
+                -0.012375288960907168
+            ],
+            "Delta": [
+                1.000554206774685
+            ]
+        }
+    },
+    {
+        "header": "configuration 3- site system | Loss: 9.371432e-01",
+        "parameter_configs": {
+            "t": {
+                "mode": "homogeneous",
+                "fixed": 1.0
+            },
+            "U": {
+                "mode": "homogeneous",
+                "fixed": 0.5
+            },
+            "eps": {
+                "mode": "inhomogeneous",
+                "fixed": null
+            },
+            "Delta": {
+                "mode": "homogeneous",
+                "fixed": null
+            }
+        },
+        "raw_parameter_values": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                0.5
+            ],
+            "eps": [
+                -0.007550517071529016,
+                -0.7675670709824691,
+                -0.49254775826044117
+            ],
+            "Delta": [
+                1.000196659411063
+            ]
+        },
+        "physical_parameters": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                0.5
+            ],
+            "eps": [
+                -0.007550517071529016,
+                -0.7675670709824691,
+                -0.49254775826044117
+            ],
+            "Delta": [
+                1.000196659411063
+            ]
+        }
+    },
+    {
+        "header": "configuration 3- site system | Loss: 1.498381e+00",
+        "parameter_configs": {
+            "t": {
+                "mode": "homogeneous",
+                "fixed": 1.0
+            },
+            "U": {
+                "mode": "homogeneous",
+                "fixed": 1.0
+            },
+            "eps": {
+                "mode": "inhomogeneous",
+                "fixed": null
+            },
+            "Delta": {
+                "mode": "homogeneous",
+                "fixed": null
+            }
+        },
+        "raw_parameter_values": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                1.0
+            ],
+            "eps": [
+                -0.7808021260557443,
+                -1.431972309771046,
+                -0.30019252912037747
+            ],
+            "Delta": [
+                1.0424896980906164
+            ]
+        },
+        "physical_parameters": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                1.0
+            ],
+            "eps": [
+                -0.7808021260557443,
+                -1.431972309771046,
+                -0.30019252912037747
+            ],
+            "Delta": [
+                1.0424896980906164
+            ]
+        }
+    },
+    {
+        "header": "configuration 3- site system | Loss: 2.432333e+00",
+        "parameter_configs": {
+            "t": {
+                "mode": "homogeneous",
+                "fixed": 1.0
+            },
+            "U": {
+                "mode": "homogeneous",
+                "fixed": 2.0
+            },
+            "eps": {
+                "mode": "inhomogeneous",
+                "fixed": null
+            },
+            "Delta": {
+                "mode": "homogeneous",
+                "fixed": null
+            }
+        },
+        "raw_parameter_values": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                2.0
+            ],
+            "eps": [
+                -1.0225089794573923,
+                -2.084411637423879,
+                -1.0226941521172948
+            ],
+            "Delta": [
+                1.0212169083643552
+            ]
+        },
+        "physical_parameters": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                2.0
+            ],
+            "eps": [
+                -1.0225089794573923,
+                -2.084411637423879,
+                -1.0226941521172948
+            ],
+            "Delta": [
+                1.0212169083643552
+            ]
+        }
+    },
+    {
+        "header": "configuration 4- site system | Loss: 7.599290e-01",
+        "parameter_configs": {
+            "t": {
+                "mode": "homogeneous",
+                "fixed": 1.0
+            },
+            "U": {
+                "mode": "homogeneous",
+                "fixed": 0.0
+            },
+            "eps": {
+                "mode": "inhomogeneous",
+                "fixed": null
+            },
+            "Delta": {
+                "mode": "homogeneous",
+                "fixed": null
+            }
+        },
+        "raw_parameter_values": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                0.0
+            ],
+            "eps": [
+                0.07376356899228068,
+                -3.8249349273825612,
+                -0.9939045436583761,
+                0.3032391969159238
+            ],
+            "Delta": [
+                1.1476628630283194
+            ]
+        },
+        "physical_parameters": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                0.0
+            ],
+            "eps": [
+                0.07376356899228068,
+                -3.8249349273825612,
+                -0.9939045436583761,
+                0.3032391969159238
+            ],
+            "Delta": [
+                1.1476628630283194
+            ]
+        }
+    },
+    {
+        "header": "configuration 4- site system | Loss: 1.824826e+00",
+        "parameter_configs": {
+            "t": {
+                "mode": "homogeneous",
+                "fixed": 1.0
+            },
+            "U": {
+                "mode": "homogeneous",
+                "fixed": 0.5
+            },
+            "eps": {
+                "mode": "inhomogeneous",
+                "fixed": null
+            },
+            "Delta": {
+                "mode": "homogeneous",
+                "fixed": null
+            }
+        },
+        "raw_parameter_values": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                0.5
+            ],
+            "eps": [
+                -0.25314345976718433,
+                -0.2873348612767946,
+                -3.0591251591389663,
+                -0.26934970281163495
+            ],
+            "Delta": [
+                1.240667566848328
+            ]
+        },
+        "physical_parameters": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                0.5
+            ],
+            "eps": [
+                -0.25314345976718433,
+                -0.2873348612767946,
+                -3.0591251591389663,
+                -0.26934970281163495
+            ],
+            "Delta": [
+                1.240667566848328
+            ]
+        }
+    },
+    {
+        "header": "configuration 4- site system | Loss: 2.952300e+00",
+        "parameter_configs": {
+            "t": {
+                "mode": "homogeneous",
+                "fixed": 1.0
+            },
+            "U": {
+                "mode": "homogeneous",
+                "fixed": 1.0
+            },
+            "eps": {
+                "mode": "inhomogeneous",
+                "fixed": null
+            },
+            "Delta": {
+                "mode": "homogeneous",
+                "fixed": null
+            }
+        },
+        "raw_parameter_values": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                1.0
+            ],
+            "eps": [
+                -0.5479954135405063,
+                -1.5329023007284268,
+                -0.4725408069817272,
+                -0.4543706118928524
+            ],
+            "Delta": [
+                1.398862163162244
+            ]
+        },
+        "physical_parameters": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                1.0
+            ],
+            "eps": [
+                -0.5479954135405063,
+                -1.5329023007284268,
+                -0.4725408069817272,
+                -0.4543706118928524
+            ],
+            "Delta": [
+                1.398862163162244
+            ]
+        }
+    },
+    {
+        "header": "configuration 4- site system | Loss: 4.342552e+00",
+        "parameter_configs": {
+            "t": {
+                "mode": "homogeneous",
+                "fixed": 1.0
+            },
+            "U": {
+                "mode": "homogeneous",
+                "fixed": 2.0
+            },
+            "eps": {
+                "mode": "inhomogeneous",
+                "fixed": null
+            },
+            "Delta": {
+                "mode": "homogeneous",
+                "fixed": null
+            }
+        },
+        "raw_parameter_values": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                2.0
+            ],
+            "eps": [
+                -0.8237365732755596,
+                -3.4373968994876147,
+                -1.5268634273913992,
+                -1.0724722139067298
+            ],
+            "Delta": [
+                1.8761977554153122
+            ]
+        },
+        "physical_parameters": {
+            "t": [
+                1.0
+            ],
+            "U": [
+                2.0
+            ],
+            "eps": [
+                -0.8237365732755596,
+                -3.4373968994876147,
+                -1.5268634273913992,
+                -1.0724722139067298
+            ],
+            "Delta": [
+                1.8761977554153122
+            ]
+        }
     }
 ]
