@@ -173,8 +173,45 @@ def classify_states(eigenvalues, eigenvectors, n_sites):
             charge_differences[s] += np.abs(charge_even - charge_odd)
     results["charge_differences"] = charge_differences
 
-    return results
+    transitions = {}
 
+    for i in range(n_sites):
+
+        # 1) Local charge noise
+        n_i = n_ops[i]
+        transitions[f"n_{i}"] = transition_matrix(eigenvectors, n_i)
+
+        # 2) Local Majorana probes
+        transitions[f"gamma1_{i}"] = transition_matrix(eigenvectors, gamma1_ops[i])
+        transitions[f"gamma2_{i}"] = transition_matrix(eigenvectors, gamma2_ops[i])
+
+        # 3) Nearest-neighbor interactions
+        if i < n_sites - 1:
+
+            # Hopping
+            hop_op = cdag_ops[i] @ c_ops[i+1]
+            transitions[f"hopping_{i}_{i+1}"] = transition_matrix(eigenvectors, hop_op)
+
+            # Pair annihilation
+            pair_op = c_ops[i] @ c_ops[i+1]
+            transitions[f"pairing_{i}_{i+1}"] = transition_matrix(eigenvectors, pair_op)
+
+            # Pair creation (optional)
+            pair_dag = cdag_ops[i] @ cdag_ops[i+1]
+            transitions[f"pairing_dag_{i}_{i+1}"] = transition_matrix(eigenvectors, pair_dag)
+
+
+    return results, transitions
+
+def transition_matrix(eigenvectors, operator):
+    dim = eigenvectors.shape[1]
+    T = np.zeros((dim, dim), dtype=np.complex128)
+    for s in range(dim):
+        v_s = eigenvectors[:, s]
+        for sp in range(dim):
+            v_sp = eigenvectors[:, sp]
+            T[s, sp] = v_s.conj().T @ operator @ v_sp
+    return T
   
 
 def operator_basis(even,odd):
@@ -192,39 +229,26 @@ def operator_basis(even,odd):
 
     return gamma, gamma_tilde, igammagamma_tilde
 
-if __name__ == "__main__":
-    n_sites = 4
-    H = symbolic_hamiltonian(n_sites)
-    # sp.pprint(H)
-  
-    configurations = get_configuration()
-    print(f"Available configurations for n={n_sites}:")
-    # print(configurations["n3"][2])
-    for config in configurations[f"n{n_sites}"]:
-        print(f"Loss: {config['loss']}, Theta: {config['theta']}")
 
-    # best_config3 = get_best_config(2)
-    # print("Best configuration for n=3:")
-    # print(best_config3["theta"])
+def state_classification_plot_section(input, title, x_ticks, x_labels, y_ticks, y_labels, rotation=0, y_label="Energy level Index", xlabel=""):
+    plt.imshow(input, aspect='auto', origin='lower')
+    plt.colorbar()
+    plt.title(title)
+    plt.xticks(ticks=x_ticks, labels=x_labels, rotation=rotation)
+    plt.yticks(ticks=y_ticks, labels=y_labels)
+    plt.ylabel("Energy level Index")
 
 
-    Hnum = symbolic_hamiltonian_to_np(n_sites, configurations[f"n{n_sites}"][0])
-    eigvals, eigvecs = np.linalg.eigh(Hnum)
+def plot_state_classification(results, n_sites):
 
-    results = classify_states(eigvals, eigvecs, n_sites)
-    even_electron_occupancy = results["even_electron_occupancy"].T # [n_sites, len(even_states)].T ⟨v_s| n_i |v_s⟩
-    odd_electron_occupancy = results["odd_electron_occupancy"].T # [n_sites, len(odd_states)].T ⟨v_s| n_i |v_s⟩
     maj1 = results["majorana_transition_gamma1"].T # [n_sites, len(odd_states)].T ⟨ o_s | γ₁_i | e_s ⟩
     maj2 = results["majorana_transition_gamma2"].T # [n_sites, len(odd_states)].T ⟨ o_s | γ₂_i | e_s ⟩
+    even_electron_occupancy = results["even_electron_occupancy"].T # [n_sites, len(even_states)].T ⟨v_s| n_i |v_s⟩
+    odd_electron_occupancy = results["odd_electron_occupancy"].T # [n_sites, len(odd_states)].T ⟨v_s| n_i |v_s⟩
     pairings_even = results["andreev_pairings_even"].T # [n_sites-1, len(even_states))].T ⟨ v_s | c_i c_{i+1} | v_s ⟩
     pairings_odd  = results["andreev_pairings_odd"].T  # [n_sites-1, len(odd_states))].T ⟨ v_s | c_i c_{i+1} | v_s ⟩
     hoppings_even = results["hoppings_even"].T       # [n_sites-1, len(even_states))].T ⟨ v_s | c_i† c_{i+1} | v_s ⟩
     hoppings_odd  = results["hoppings_odd"].T        # [n_sites-1, len(odd_states))].T ⟨ v_s | c_i† c_{i+1} | v_s ⟩
-    charge_differences = results["charge_differences"]  # [len(even_states)]  |⟨v_s| Q |v_s⟩ - ⟨u_s| Q |u_s⟩|
-   
-    print("Charge differences between even and odd states:")
-    print(charge_differences)
-
 
 
     majorana_ticks_sites = np.arange(n_sites)
@@ -247,77 +271,119 @@ if __name__ == "__main__":
     y_ticks_sites = np.arange(len(even_electron_occupancy))
     y_ticks_labels = [f"E_{i}" for i in range(len(even_electron_occupancy))]
 
+    plt.figure(figsize=(12,16))
     plt.subplot(4,2,1)
-    plt.imshow(maj1, aspect='auto', origin='lower')
-    plt.colorbar()
-    plt.title("Majorana Transition Amplitudes γ₁")
-    # plt.xlabel("Odd Eigenstate Index")
-    plt.yticks(ticks=y_ticks_sites, labels=y_ticks_labels)
-    plt.xticks(ticks=majorana_ticks_sites, labels=majorana_ticks_labels1)
-    plt.ylabel("Energy level Index")
+    state_classification_plot_section(maj1, "Majorana Transition Amplitudes γ₁", majorana_ticks_sites, majorana_ticks_labels1, y_ticks_sites, y_ticks_labels)
 
     plt.subplot(4,2,2)
-    plt.imshow(maj2, aspect='auto', origin='lower')
-    plt.colorbar()
-    plt.title("Majorana Transition Amplitudes γ₂")
-    # plt.xlabel("Odd Eigenstate Index")
-    plt.yticks(ticks=y_ticks_sites, labels=y_ticks_labels)
-    plt.xticks(ticks=majorana_ticks_sites, labels=majorana_ticks_labels2)
-    plt.ylabel("Energy level Index")
-
+    state_classification_plot_section(maj2, "Majorana Transition Amplitudes γ₂", majorana_ticks_sites, majorana_ticks_labels2, y_ticks_sites, y_ticks_labels)
+    
     plt.subplot(4,2,3)
-    plt.imshow(even_electron_occupancy, aspect='auto', origin='lower')
-    plt.colorbar()
-    plt.title("Even Parity Electron Occupancy")
-    # plt.xlabel("Even Eigenstate Index")
-    plt.xticks(ticks=electron_ticks_sites, labels=electron_ticks_label_even)
-    plt.yticks(ticks=y_ticks_sites, labels=y_ticks_labels)
-    plt.ylabel("Energy level Index")
+    state_classification_plot_section(even_electron_occupancy, "Even Parity Electron Occupancy", electron_ticks_sites, electron_ticks_label_even, y_ticks_sites, y_ticks_labels)
 
     plt.subplot(4,2,4)
-    plt.imshow(odd_electron_occupancy, aspect='auto', origin='lower')
-    plt.colorbar()
-    plt.title("Odd Parity Electron Occupancy")
-    # plt.xlabel("Odd Eigenstate Index")
-    plt.xticks(ticks=electron_ticks_sites, labels=electron_ticks_label_odd)
-    plt.yticks(ticks=y_ticks_sites, labels=y_ticks_labels)
-    plt.ylabel("Energy level Index")
-
+    state_classification_plot_section(odd_electron_occupancy, "Odd Parity Electron Occupancy", electron_ticks_sites, electron_ticks_label_odd, y_ticks_sites, y_ticks_labels)
+    
     plt.subplot(4,2,5)
-    plt.imshow(pairings_even, aspect='auto', origin='lower')
-    plt.colorbar()
-    plt.title("Andreev Pairings Even")       
-    # plt.xlabel("Eigenstate Index")
-    plt.xticks(ticks=xticks_sites, labels=andreev_even)
-    plt.yticks(ticks=y_ticks_sites, labels=y_ticks_labels)
-    plt.ylabel("Bond Index")
+    state_classification_plot_section(pairings_even, "Andreev Pairings Even", xticks_sites, andreev_even, y_ticks_sites, y_ticks_labels, y_label="Bond Index")
 
     plt.subplot(4,2,6)
-    plt.imshow(pairings_odd, aspect='auto', origin='lower')
-    plt.colorbar()
-    plt.title("Andreev Pairings Odd")         
-    # plt.xlabel("Eigenstate Index")
-    plt.xticks(ticks=xticks_sites, labels=andreev_odd)
-    plt.yticks(ticks=y_ticks_sites, labels=y_ticks_labels)
-    plt.ylabel("Bond Index")
+    state_classification_plot_section(pairings_odd, "Andreev Pairings Odd", xticks_sites, andreev_odd, y_ticks_sites, y_ticks_labels, y_label="Bond Index")
 
     plt.subplot(4,2,7)
-    plt.imshow(hoppings_even, aspect='auto', origin='lower')
-    plt.colorbar()
-    plt.title("Hoppings Even")           
-    # plt.xlabel("Eigenstate Index")
-    plt.xticks(ticks=xticks_sites, labels=hoppings_even_tics)
-    plt.yticks(ticks=y_ticks_sites, labels=y_ticks_labels)
-    plt.ylabel("Bond Index")
+    state_classification_plot_section(hoppings_even, "Hoppings Even", xticks_sites, hoppings_even_tics, y_ticks_sites, y_ticks_labels, y_label="Bond Index")
 
     plt.subplot(4,2,8)
-    plt.imshow(hoppings_odd, aspect='auto', origin='lower')
+    state_classification_plot_section(hoppings_odd, "Hoppings Odd", xticks_sites, hoppings_odd_tics, y_ticks_sites, y_ticks_labels, y_label="Bond Index")
+    # plt.savefig("state_classification_n2.pdf", dpi=300)
+    plt.tight_layout()
+    plt.show()
+
+
+def plot_transition_matrix(matrix, title, x_ticks, x_labels, y_ticks, y_labels, rotation=60):
+    plt.imshow(np.abs(matrix), aspect='auto', origin='lower', vmin=0, vmax=1)
     plt.colorbar()
-    plt.title("Hoppings Odd")             
-    # plt.xlabel("Eigenstate Index")
-    plt.xticks(ticks=xticks_sites, labels=hoppings_odd_tics)
-    plt.yticks(ticks=y_ticks_sites, labels=y_ticks_labels)
-    plt.ylabel("Bond Index")
+    plt.title(title)
+    plt.xticks(ticks=x_ticks, labels=x_labels, rotation=rotation)
+    plt.yticks(ticks=y_ticks, labels=y_labels)
+
+
+def plot_states_transitions(transitions, n_sites):
+
+    # extract all groups
+    charge_trans = [transitions[f"n_{i}"] for i in range(n_sites)]
+    gamma1_trans = [transitions[f"gamma1_{i}"] for i in range(n_sites)]
+    gamma2_trans = [transitions[f"gamma2_{i}"] for i in range(n_sites)]
+    hop_trans    = [transitions[f"hopping_{i}_{i+1}"] for i in range(n_sites - 1)]
+    pair_trans   = [transitions[f"pairing_{i}_{i+1}"] for i in range(n_sites - 1)]
+
+    # shared axis ticks
+    dim = charge_trans[0].shape[0]
+    x_ticks = np.arange(dim)
+    y_ticks = x_ticks
+
+    x_labels = [f"|{i}⟩" for i in x_ticks]
+    y_labels = [f"⟨{i}|" for i in y_ticks]
+
+    plt.figure(figsize=(16,16))
+    plt.suptitle("State Transition Matrices")
+    idx = 1
+
+    def add_block(matrices, title_prefix):
+        nonlocal idx
+        for i, M in enumerate(matrices):
+            plt.subplot(5, n_sites, idx)
+            plot_transition_matrix(
+                M,
+                f"{title_prefix}{i}",
+                x_ticks, x_labels,
+                y_ticks if i == 0 else [],   # y-label only first column
+                y_labels if i == 0 else []
+            )
+            idx += 1
+
+    # Charge
+    add_block(charge_trans, "n_")
+
+    # Majorana 1
+    add_block(gamma1_trans, "γ₁_")
+
+    # Majorana 2
+    add_block(gamma2_trans, "γ₂_")
+
+    # hopping
+    add_block(hop_trans, "hop_")
+
+    # skip one spot to match layout
+    idx += 1
+    # Pairing
+    add_block(pair_trans, "pair_")
 
     plt.tight_layout()
     plt.show()
+
+
+
+if __name__ == "__main__":
+    n_sites = 2
+    H = symbolic_hamiltonian(n_sites)
+    sp.pprint(H)
+  
+    configurations = get_configuration()
+    print(f"Available configurations for n={n_sites}:")
+    # print(configurations["n3"][2])
+    for config in configurations[f"n{n_sites}"]:
+        print(f"Loss: {config['loss']}, Theta: {config['theta']}")
+
+    # best_config3 = get_best_config(2)
+    # print("Best configuration for n=3:")
+    # print(best_config3["theta"])
+
+
+    Hnum = symbolic_hamiltonian_to_np(n_sites, configurations[f"n{n_sites}"][0])
+    eigvals, eigvecs = np.linalg.eigh(Hnum)
+
+    results, transitions = classify_states(eigvals, eigvecs, n_sites)
+   
+    plot_state_classification(results, n_sites)
+    plot_states_transitions(transitions, n_sites)
