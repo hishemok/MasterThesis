@@ -225,44 +225,7 @@ class HamiltonianModel:
 
         return torch.cat(pieces)
 
-    # def dict_to_tensor(self, theta_dict):
-    #     """
-    #     Convert a dictionary {'t': [...], 'U': [...], 'eps': [...], 'Delta': [...]}
-    #     into a single contiguous tensor that matches get_tensor().
-    #     """
-    #     pieces = []
-    #     n = self.n
 
-    #     for key in ['t', 'U', 'eps', 'Delta']:
-    #         vals = theta_dict[key]
-
-    #         if not torch.is_tensor(vals):
-    #             vals = torch.tensor(vals, dtype=torch.float64, device=self.device)
-
-    #         # Homogeneous parameters should be length-1 tensors
-    #         if self.param_configs and self.param_configs[key]['mode'] == "homogeneous":
-    #             if vals.numel() != 1:
-    #                 raise ValueError(f"Key '{key}' should have 1 value (homogeneous). Got {vals}.")
-    #             pieces.append(vals.reshape(-1))
-    #             continue
-
-    #         # Inhomogeneous parameters
-    #         expected_len = n if key == "eps" else (n - 1)
-    #         if vals.numel() != expected_len:
-    #             print(f"Key '{key}' expected length {expected_len}, got {vals.numel()}.")
-    #             print("Adjusting to expected length.")
-    #             if vals.numel() == 1:
-    #                 vals = vals.repeat(expected_len)
-    #             else:
-    #                 raise ValueError(f"Key '{key}' has incorrect length and cannot be adjusted automatically.")
-
-    #         pieces.append(vals.reshape(-1))
-
-    #     return torch.cat(pieces)
-
-
-
-        
     def get_physical_parameters(self, params_dict):
         """
         Returns physical parameters ready to build the Hamiltonian:
