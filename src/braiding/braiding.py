@@ -13,7 +13,7 @@ def majorana_operators(n):
         gamma_1 = f + f_dag
         gamma_2 = -1j * (f - f_dag)
         majorana_ops.append((gamma_1, gamma_2))
-    return majorana_ops
+    return np.array(majorana_ops)
 
 def majorana_polarization(even_vecs, odd_vecs, n):
     """
@@ -115,61 +115,6 @@ def get_gs_pairs(n, H):
     return (even_eigval_gs, even_eigvec_gs), (odd_eigval_gs, odd_eigvec_gs)
 
 
-def single_Hamiltonian(n_sites, t, U, eps, Delta):
-    """Construct the Hamiltonian for a single n_sites system."""
-    cre, ann, num = precompute_ops(n_sites)
-    H = np.zeros((2**n_sites, 2**n_sites), dtype=complex)
-
-    # Hopping terms
-    for i in range(n_sites - 1):
-        H += -t[i] * (cre[i] @ ann[i + 1] + ann[i] @ cre[i + 1])
-        H += Delta[i] * (cre[i] @ cre[i + 1] + ann[i + 1] @ ann[i])
-
-    # On-site interaction terms
-    for i in range(n_sites-1):
-        H += U[i] * num[i] @ num[i + 1]
-
-    # On-site energy terms
-    for i in range(n_sites):
-        H += eps[i] * num[i]
-
-    return H
-
-def delta_pulse(t, T_peak, width, s, Δ_max, Δ_min):
-    """
-    Improved smooth delta pulse with controllable width and steepness
-    """
-    # Calculate rise and fall times
-    T_start = T_peak - width/2
-    T_end = T_peak + width/2
-    
-    # Smooth step functions
-    rise = 1/(1 + np.exp(-s*(t - T_start)))
-    fall = 1/(1 + np.exp(s*(t - T_end)))
-    
-    return Δ_min + (Δ_max - Δ_min) * rise * fall
-
-
-def build_hamiltonian(t, T_total, Δ_max, Δ_min, s, width, γ0, γ1, γ2, γ3):
-
-    """
-    Constructs the time-dependent Hamiltonian H(t) = Σ Δ_j(t) iγ₀γ_j
-    """
-    
-    # Time-dependent couplings
-    Δ1 = delta_pulse(t, 0, width, s, Δ_max, Δ_min) + delta_pulse(t, T_total, width, s, Δ_max, Δ_min) - Δ_min
-    Δ2 = delta_pulse(t, T_total/3, width, s, Δ_max, Δ_min)
-    Δ3 =  delta_pulse(t, 2*T_total/3, width, s, Δ_max, Δ_min)
-
-
-    # Construct Hamiltonian terms
-    H = (Δ1 * 1j * γ0 @ γ1 + 
-         Δ2 * 1j * γ0 @ γ2 + 
-         Δ3 * 1j * γ0 @ γ3)
-
-    
-    return H, (Δ1, Δ2, Δ3)
-
 
 if __name__ == "__main__":
     n_sites = 3
@@ -182,12 +127,30 @@ if __name__ == "__main__":
 
     t, U, eps, Delta = pars
 #    H = big_H(n_sites, dupes,  t, U, eps, Delta)
-    set1 = single_Hamiltonian(n_sites, t, U, eps, Delta)
 
-    set2 = single_Hamiltonian(n_sites, t, U, eps, Delta)
-     
-    set3 = single_Hamiltonian(n_sites, t, U, eps, Delta)
+
+    # fullH = big_H(n_sites, dupes, t, U, eps, Delta,
+    #               couple_A=(0,2),   # PMM 0, site 2
+    #               couple_B=(1,0),   # PMM 1, site 0
+    #               t_couple=0.1,
+    #               delta_couple=100)
+
+    fullH = big_H(n_sites, dupes, t, U, eps, Delta,
+                    eps_detune={1: 1.0})  # Detune PMM
+
+    set1 = extract_effective_H(fullH, n_sites, dupes, target=0)
+    set2 = extract_effective_H(fullH, n_sites, dupes, target=1)
+    set3 = extract_effective_H(fullH, n_sites, dupes, target=2)
     sets = [set1, set2, set3]
+
+
+
+    # set1 = single_Hamiltonian(n_sites, t, U, eps, Delta)
+
+    # set2 = single_Hamiltonian(n_sites, t, U, eps, Delta)
+     
+    # set3 = single_Hamiltonian(n_sites, t, U, eps, Delta)
+    # sets = [set1, set2, set3]
     plt.figure(figsize=(12, 6))
     plt.suptitle(f'Spectra for {dupes} Identical {n_sites}-Site Systems', fontsize=16)
     
@@ -197,7 +160,7 @@ if __name__ == "__main__":
     print(all_eps)
     for i in range(dupes):
         # eps = all_eps[i]
-        H = single_Hamiltonian(n_sites, t, U, eps, Delta)
+        H = sets[i]
         evals, evecs = np.linalg.eigh(H)    
         even_states, odd_states, even_vecs, odd_vecs = divide_to_even_odd(evals, evecs, n_sites)
 
@@ -221,25 +184,22 @@ if __name__ == "__main__":
     plt.show()
 
 
-    set1 = single_Hamiltonian(n_sites, t, U, eps, Delta)
-    set2 = single_Hamiltonian(n_sites, t, U, eps, Delta)
-    set3 = single_Hamiltonian(n_sites, t, U, eps, Delta)
 
-    set1_even, set1_odd = get_gs_pairs(n_sites, set1)
-    set2_even, set2_odd = get_gs_pairs(n_sites, set2)
-    set3_even, set3_odd = get_gs_pairs(n_sites, set3)
+    # H_uncoupled = big_H(n_sites, dupes, t, U, eps, Delta, t_couple=0, delta_couple=0)
+    # H_coupled   = big_H(n_sites, dupes, t, U, eps, Delta,
+    #                 couple_A=(0,2), couple_B=(1,0),
+    #                 t_couple=0.1, delta_couple=100)
 
-    majoranas = majorana_operators(n_sites * dupes)
-    
-    # Rightmost Majorana operator of site 0
-    γ1 = majoranas[0][2]  
-    #leftmost majorana operator of site 1
-    γ0 = majoranas[1][0]
-    #rightmost majorana operator of site 1
-    γ2 = majoranas[1][2]
-    #leftmost majorana operator of site 2
-    γ3 = majoranas[2][0]
+    # evals_u = np.linalg.eigvalsh(H_uncoupled)
+    # evals_c = np.linalg.eigvalsh(H_coupled)
+    # plt.plot(evals_u[:40], 'o-', label='uncoupled')
+    # plt.plot(evals_c[:40], 'x-', label='coupled')
+    # plt.legend()
+    # plt.xlabel('level index')
+    # plt.ylabel('energy')
+    # plt.show()
 
 
+  
 
 

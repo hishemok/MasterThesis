@@ -61,29 +61,93 @@ def precompute_ops(n):
     return cre, ann, num
 
 
-def big_H(n, duplicate, t_vals, U_vals, eps_vals, delta_vals):
+def big_H(n, dup, t_vals, U_vals, eps_vals, delta_vals, t_couple=0.0, delta_couple=0.0, eps_detune=None,
+          couple_A=None, couple_B=None):
+    """
+    n: sites per PMM
+    dup: number of PMMs
+    couple_A, couple_B: (PMM_index, local_site_index)
+    t_couple: hopping strength between couple_A and couple_B
+    delta_couple: pairing strength between couple_A and couple_B
+    eps_detune: dictionary {PMM_index: detune_value}
+    """
 
-    big_N = duplicate * n  # total number of sites in the super Hamiltonian
-    H = np.zeros((2**(big_N), 2**(big_N)), dtype=complex)
- 
-    cre_t, ann_t, num_t = precompute_ops(big_N)
+    big_N = dup * n
+    H = np.zeros((2**big_N, 2**big_N), dtype=complex)
 
-    for j in range(n - 1):
-        for d in range(duplicate):
-            H += -t_vals[j] * (ann_t[j + d*n] @ cre_t[j + 1 + d*n] + cre_t[j + d*n] @ ann_t[j + 1 + d*n])
-            H += delta_vals[j] * (cre_t[j + d*n] @ cre_t[j + 1 + d*n] + ann_t[j + 1 + d*n] @ ann_t[j + d*n])
-    for j in range(n):
-        for d in range(duplicate):
-            H += eps_vals[j] * num_t[j + d*n]
-    for j in range(n - 1):
-        for d in range(duplicate):
-            H += U_vals[j] * num_t[j + d*n] @ num_t[j + 1 + d*n]
+    cre, ann, num = precompute_ops(big_N)
 
-    
+    eps_full = [eps_vals.copy() for _ in range(dup)]
+
+    # Apply detuning to specific PMMs
+    if eps_detune is not None:
+        for pm_idx, value in eps_detune.items():
+            for j in range(n):
+                eps_full[pm_idx][j] = value
+
+    # Add intra-PMM terms
+    for d in range(dup):
+        off = d * n
+        for j in range(n - 1):
+            H += -t_vals[j] * (cre[off+j] @ ann[off+j+1] +
+                               ann[off+j] @ cre[off+j+1])
+
+            H += delta_vals[j] * (cre[off+j] @ cre[off+j+1] +
+                                  ann[off+j+1] @ ann[off+j])
+
+            H += U_vals[j] * num[off+j] @ num[off+j+1]
+
+        for j in range(n):
+            H += eps_full[d][j] * num[off+j]
+
+    # Add inter-PMM coupling
+    if couple_A is not None and couple_B is not None:
+        pmA, siteA = couple_A
+        pmB, siteB = couple_B
+
+        iA = pmA*n + siteA
+        iB = pmB*n + siteB
+
+        if t_couple != 0:
+            H += -t_couple * (cre[iA] @ ann[iB] + ann[iA] @ cre[iB])
+        if delta_couple != 0:
+            H += delta_couple * (cre[iA] @ cre[iB] +
+                                 ann[iA] @ ann[iB])
+
     return H
 
 
+def extract_effective_H(big_H, n, dup, target):
+    dim = 2**n
+    dims = [dim] * dup
 
+    H_tensor = big_H.reshape(dims + dims)
+
+    # Keep indices for target subsystem
+    # Left index:  target
+    # Right index: target + dup
+    left = target
+    right = target + dup
+
+    # Build index string for einsum
+    # example for dup=3:   H[i0,i1,i2, j0,j1,j2]
+    indices = ''.join(chr(ord('a') + i) for i in range(2*dup))
+
+    # Output uses only target-left and target-right
+    out = indices[left] + indices[right]
+
+    # Trace all other pairs by equating indices
+    for d in range(dup):
+        if d != target:
+            iL = indices[d]
+            iR = indices[d + dup]
+            out += ''   # no output
+            indices = indices.replace(iR, iL)  # equate right to left
+
+    # Build output tensor:
+    H_eff = np.einsum(f"{indices}->{out}", H_tensor)
+
+    return H_eff
 
 
 if __name__ == "__main__":
@@ -92,8 +156,21 @@ if __name__ == "__main__":
     pars, extras = params_for_n_site_Hamiltonian(n_sites, configs=None, specified_vals={"U": [0.1]}, path="configuration.json")
   
     t, U, eps, Delta = pars
+    # H = big_H(n_sites, 3,  t, U, eps, Delta, t_couple=1, delta_couple=1, from_site=1, to_site=2)
 
-    H = big_H(n_sites, 3,  t, U, eps, Delta)
+    # H = big_H(n_sites, 3, t, U, eps, Delta,
+    #       couple_A=(0,2),   # PMM 0, site 2
+    #       couple_B=(1,0),   # PMM 1, site 0
+    #       t_couple=1,
+    #       delta_couple=1)
+
+    H = big_H(n_sites, 3, t, U, eps, Delta,
+              eps_detune={1: 1.0})  # Detune PMM 1 by +1.0
+    
+    set1 = extract_effective_H(H, n_sites, 3, target=0)
+    set2 = extract_effective_H(H, n_sites, 3, target=1)
+    set3 = extract_effective_H(H, n_sites, 3, target=2)
+    sets = [set1, set2, set3]
 
     evals, evecs = np.linalg.eigh(H)
 
