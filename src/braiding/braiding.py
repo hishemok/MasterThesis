@@ -115,6 +115,71 @@ def get_gs_pairs(n, H):
     return (even_eigval_gs, even_eigvec_gs), (odd_eigval_gs, odd_eigvec_gs)
 
 
+def delta_pulse(T_total, t, rise_time, min_val, max_val):
+    """
+    Sigmoid delta pulse function for smooth parameter tuning."""
+    if t < rise_time:
+        # Rising edge
+        x = t / rise_time
+        return min_val + (max_val - min_val) / (1 + np.exp(-10 * (x - 0.5)))
+    elif t > T_total - rise_time:
+        # Falling edge
+        x = (T_total - t) / rise_time
+        return min_val + (max_val - min_val) / (1 + np.exp(-10 * (x - 0.5)))
+    else:
+        # Constant region
+        return max_val
+
+
+
+def parameter_tuning(current_time,n_sites, dupes, T_total, t, U, eps, Delta, t_couple, delta_couple, eps_detune):
+    """
+    Tunes parameters in the Hamiltonian by the order A to B, then B by itself, then B to C.
+    Function couples A to B through rising t_couple and delta_couple, then decouples B from A while coupling B to itself, then decouples B from itself while coupling B to C.
+    The couplings happen through a smooth delta pulse (sigmoid + reverse sigmoid) over total time T_total.
+    This function passes into the time evolution function to evolve the system under the time-dependent Hamiltonian.
+    Args:
+        current_time (float): Current time in the tuning process.
+        n_sites (int): Number of sites in each system.
+        dupes (int): Number of identical systems.
+        T_total (float): Total time for the tuning process.
+        t, U, eps, Delta: Hamiltonian parameters.
+        t_couple (float): Coupling strength between systems.
+        delta_couple (float): Coupling detuning parameter.
+        eps_detune (dict): Detuning values for specific systems.    
+    """
+    if current_time < T_total / 3:
+        # Coupling A to B
+        t_c = delta_pulse(T_total / 3, current_time, rise_time=T_total / 9, min_val=0, max_val=t_couple)
+        delta_c = delta_pulse(T_total / 3, current_time, rise_time=T_total / 9, min_val=0, max_val=delta_couple)
+        H_t = big_H(n_sites, dupes, t, U, eps, Delta,
+                    couple_A=(0,2),
+                    couple_B=(1,0),
+                    t_couple=t_c,
+                    delta_couple=delta_c,
+                    eps_detune=eps_detune)
+    elif current_time < 2 * T_total / 3:
+        # Couple B to itself by tuning epsilons
+        eps_puls = delta_pulse(T_total / 3, current_time - T_total / 3, rise_time=T_total / 9, min_val=0, max_val=eps_detune.get(1, 1))
+        H_t = big_H(n_sites, dupes, t, U, eps, Delta,
+                    eps_detune={1: eps_puls})
+    else:
+        # Decoupling B from C
+        t_c = delta_pulse(T_total / 3, current_time - 2 * T_total / 3, rise_time=T_total / 9, min_val=t_couple, max_val=0)
+        delta_c = delta_pulse(T_total / 3, current_time - 2 * T_total / 3, rise_time=T_total / 9, min_val=delta_couple, max_val=0)
+        H_t = big_H(n_sites, dupes, t, U, eps, Delta,
+                    couple_A=(1,0),
+                    couple_B=(2,0),
+                    t_couple=t_c,
+                    delta_couple=delta_c,
+                    eps_detune=eps_detune)
+    
+    return H_t
+
+
+def time_evolve_system():
+    pass
+
 
 if __name__ == "__main__":
     n_sites = 3
@@ -144,13 +209,6 @@ if __name__ == "__main__":
     sets = [set1, set2, set3]
 
 
-
-    # set1 = single_Hamiltonian(n_sites, t, U, eps, Delta)
-
-    # set2 = single_Hamiltonian(n_sites, t, U, eps, Delta)
-     
-    # set3 = single_Hamiltonian(n_sites, t, U, eps, Delta)
-    # sets = [set1, set2, set3]
     plt.figure(figsize=(12, 6))
     plt.suptitle(f'Spectra for {dupes} Identical {n_sites}-Site Systems', fontsize=16)
     

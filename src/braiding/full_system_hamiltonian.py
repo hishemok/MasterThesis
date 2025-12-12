@@ -117,6 +117,7 @@ def big_H(n, dup, t_vals, U_vals, eps_vals, delta_vals, t_couple=0.0, delta_coup
     return H
 
 
+
 def extract_effective_H(big_H, n, dup, target):
     dim = 2**n
     dims = [dim] * dup
@@ -166,7 +167,18 @@ if __name__ == "__main__":
 
     H = big_H(n_sites, 3, t, U, eps, Delta,
               eps_detune={1: 1.0})  # Detune PMM 1 by +1.0
-    
+
+    # eff_dim = 2**n_sites
+    # arm_map = {
+    #     "A": list(range(0,eff_dim)),
+    #     "B": list(range(eff_dim, 2*eff_dim)),
+    #     "C": list(range(2*eff_dim, 3*eff_dim))
+    # }
+    # print(arm_map)
+    # set1 = extract_effective_H(H, "A", arm_map)
+    # set2 = extract_effective_H(H, "B", arm_map)
+    # set3 = extract_effective_H(H, "C", arm_map)
+
     set1 = extract_effective_H(H, n_sites, 3, target=0)
     set2 = extract_effective_H(H, n_sites, 3, target=1)
     set3 = extract_effective_H(H, n_sites, 3, target=2)
@@ -175,9 +187,9 @@ if __name__ == "__main__":
     evals, evecs = np.linalg.eigh(H)
 
     min_idxs = np.where(np.isclose(evals, min(evals), atol=1e-2))
-    print("Ground state energies and vectors:")
-    for idx in min_idxs:
-        print(f"Energy: {evals[idx]}")
+    # print("Ground state energies and vectors:")
+    # for idx in min_idxs:
+    #     print(f"Energy: {evals[idx]}")
         # print(f"Vector: {evecs[:, idx]}")
 
     _, _, num_t = precompute_ops(n_sites * 3)
