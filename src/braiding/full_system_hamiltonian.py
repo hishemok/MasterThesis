@@ -61,8 +61,8 @@ def precompute_ops(n):
     return cre, ann, num
 
 
-def big_H(n, dup, t_vals, U_vals, eps_vals, delta_vals, t_couple=0.0, delta_couple=0.0, eps_detune=None,
-          couple_A=None, couple_B=None):
+def big_H(n, dup, t_vals, U_vals, eps_vals, delta_vals, t_couple1=0.0, delta_couple1=0.0, t_couple2=0.0, delta_couple2=0.0, eps_detune=None,
+          couple_A=None, couple_B=None, couple_C=None, couple_D=None):
     """
     n: sites per PMM
     dup: number of PMMs
@@ -108,11 +108,25 @@ def big_H(n, dup, t_vals, U_vals, eps_vals, delta_vals, t_couple=0.0, delta_coup
         iA = pmA*n + siteA
         iB = pmB*n + siteB
 
-        if t_couple != 0:
-            H += -t_couple * (cre[iA] @ ann[iB] + ann[iA] @ cre[iB])
-        if delta_couple != 0:
-            H += delta_couple * (cre[iA] @ cre[iB] +
+        if t_couple1 != 0:
+            H += -t_couple1 * (cre[iA] @ ann[iB] + ann[iA] @ cre[iB])
+        if delta_couple1 != 0:
+            H += delta_couple1 * (cre[iA] @ cre[iB] +
                                  ann[iA] @ ann[iB])
+
+    if couple_C is not None and couple_D is not None:
+        pmC, siteC = couple_C
+        pmD, siteD = couple_D
+
+        iC = pmC*n + siteC
+        iD = pmD*n + siteD
+
+        if t_couple2 != 0:
+            H += -t_couple2 * (cre[iC] @ ann[iD] + ann[iC] @ cre[iD])
+        if delta_couple2 != 0:
+            H += delta_couple2 * (cre[iC] @ cre[iD] +
+                                 ann[iC] @ ann[iD])
+
 
     return H
 
@@ -162,8 +176,8 @@ if __name__ == "__main__":
     # H = big_H(n_sites, 3, t, U, eps, Delta,
     #       couple_A=(0,2),   # PMM 0, site 2
     #       couple_B=(1,0),   # PMM 1, site 0
-    #       t_couple=1,
-    #       delta_couple=1)
+    #       t_couple1=1,
+    #       delta_couple1=1)
 
     H = big_H(n_sites, 3, t, U, eps, Delta,
               eps_detune={1: 1.0})  # Detune PMM 1 by +1.0

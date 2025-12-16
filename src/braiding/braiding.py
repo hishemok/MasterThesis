@@ -2,6 +2,7 @@ from full_system_hamiltonian import *
 from get_setup import params_for_n_site_Hamiltonian
 import numpy as np
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 
 def majorana_operators(n):
@@ -148,10 +149,12 @@ def parameter_tuning(current_time,n_sites, dupes, T_total, t, U, eps, Delta, t_c
         delta_couple (float): Coupling detuning parameter.
         eps_detune (dict): Detuning values for specific systems.    
     """
+    pulses = {"A_to_B": (0.0, 0.0), "B_self": 0.0, "B_to_C": (0.0, 0.0)}
     if current_time < T_total / 3:
         # Coupling A to B
         t_c = delta_pulse(T_total / 3, current_time, rise_time=T_total / 9, min_val=0, max_val=t_couple)
         delta_c = delta_pulse(T_total / 3, current_time, rise_time=T_total / 9, min_val=0, max_val=delta_couple)
+        pulses['A_to_B'] = (t_c, delta_c)
         H_t = big_H(n_sites, dupes, t, U, eps, Delta,
                     couple_A=(0,2),
                     couple_B=(1,0),
@@ -161,24 +164,173 @@ def parameter_tuning(current_time,n_sites, dupes, T_total, t, U, eps, Delta, t_c
     elif current_time < 2 * T_total / 3:
         # Couple B to itself by tuning epsilons
         eps_puls = delta_pulse(T_total / 3, current_time - T_total / 3, rise_time=T_total / 9, min_val=0, max_val=eps_detune.get(1, 1))
+        pulses['B_self'] = eps_puls
         H_t = big_H(n_sites, dupes, t, U, eps, Delta,
                     eps_detune={1: eps_puls})
     else:
-        # Decoupling B from C
-        t_c = delta_pulse(T_total / 3, current_time - 2 * T_total / 3, rise_time=T_total / 9, min_val=t_couple, max_val=0)
-        delta_c = delta_pulse(T_total / 3, current_time - 2 * T_total / 3, rise_time=T_total / 9, min_val=delta_couple, max_val=0)
+        # Coupling B to C
+        t_c = delta_pulse(T_total / 3, current_time - 2 * T_total / 3, rise_time=T_total / 9, min_val=0, max_val=t_couple)
+        delta_c = delta_pulse(T_total / 3, current_time - 2 * T_total / 3, rise_time=T_total / 9, min_val=0, max_val=delta_couple)
+        pulses['B_to_C'] = (t_c, delta_c)
         H_t = big_H(n_sites, dupes, t, U, eps, Delta,
-                    couple_A=(1,0),
+                    couple_A=(1,2),
                     couple_B=(2,0),
                     t_couple=t_c,
                     delta_couple=delta_c,
                     eps_detune=eps_detune)
+    return H_t, pulses
+
+
+def time_evolve_system(T_total,n_steps ,n_sites, dupes, t, U, eps, Delta, t_couple, delta_couple, eps_detune):
     
-    return H_t
+    n_steps = n_steps
+    Time_array = np.linspace(0, T_total, n_steps)
+
+    dims = 2**(n_sites * dupes)
+    # U_t = np.eye(dims, dtype=complex)
+
+    eigvals = np.zeros((n_steps, dims))
+    # eigvecs = np.zeros((n_steps, dims, dims), dtype=complex)
+
+    sets_eigvals_even = np.zeros((n_steps, dupes, 2**(n_sites) // 2 ))
+    sets_eigvals_odd = np.zeros_like(sets_eigvals_even)
+    sets_eigvecs_even = np.zeros((n_steps, dupes, 2**(n_sites), 2**(n_sites) // 2), dtype=complex)
+    sets_eigvecs_odd = np.zeros_like(sets_eigvecs_even)
+
+    #MP check storage
+    MP_storage = np.zeros((n_steps, dupes, 2**(n_sites) // 2, n_sites))
+
+    #print shapes
+    print("eigvals shape:", eigvals.shape)
+    print("sets_eigvals_even shape:", sets_eigvals_even.shape)
+    print("sets_eigvals_odd shape:", sets_eigvals_odd.shape)
+    print("sets_eigvecs_even shape:", sets_eigvecs_even.shape)
+    print("sets_eigvecs_odd shape:", sets_eigvecs_odd.shape)
+    print("MP_storage shape:", MP_storage.shape)
+
+    all_pulses = []
 
 
-def time_evolve_system():
-    pass
+    for i in tqdm(range(n_steps)):
+        current = Time_array[i]
+        H_t, pulses = parameter_tuning(current,n_sites, dupes, T_total, t, U, eps, Delta, t_couple, delta_couple, eps_detune)
+        all_pulses.append(pulses)
+        eigvals_t = np.linalg.eigvalsh(H_t)
+
+        eigvals[i] = eigvals_t
+        # eigvecs[i] = eigvecs_t
+
+        for j in range(dupes):
+            set_H_t = extract_effective_H(H_t, n_sites, dupes, target=j)
+            set_evals_t, set_evecs_t = np.linalg.eigh(set_H_t)
+            set_even_states, set_odd_states, set_even_vecs, set_odd_vecs = divide_to_even_odd(set_evals_t, set_evecs_t, n_sites)
+
+            MP = majorana_polarization(set_even_vecs, set_odd_vecs, n_sites)
+ 
+            MP_storage[i, j] = MP
+
+            sets_eigvals_even[i, j] = set_even_states
+            sets_eigvals_odd[i, j] = set_odd_states
+            sets_eigvecs_even[i, j] = set_even_vecs
+            sets_eigvecs_odd[i, j] = set_odd_vecs
+    return (eigvals,
+            sets_eigvals_even,
+            sets_eigvals_odd,
+            sets_eigvecs_even,
+            sets_eigvecs_odd,
+            MP_storage,
+            Time_array,
+            all_pulses)
+
+
+def simple_delta_pulse(t, T_peak, width, s, max_val, min_val):
+
+    
+    T_start = T_peak - width / 2
+    T_end = T_peak + width / 2
+
+    rise = 1/(1 + np.exp(-s*(t - T_start)))
+    fall = 1/(1 + np.exp(s*(t - T_end)))
+
+    return min_val + (max_val - min_val) * rise * fall
+
+
+def build_Hamiltonian(current_time,n_sites, dupes, T_total, t, U, eps, Delta, t_couple1, delta_couple1, t_couple2, delta_couple2, eps_detune, width, s):
+
+    puls_dict = {}
+
+    pulseAB_t = simple_delta_pulse(current_time, T_peak=0, width=width, s=s, max_val=t_couple1, min_val=0) + simple_delta_pulse(current_time, T_peak=T_total, width=width, s=s, max_val=t_couple1, min_val=0)
+    pulseAB_delta = simple_delta_pulse(current_time, T_peak=0, width=width, s=s, max_val=delta_couple1, min_val=0) + simple_delta_pulse(current_time, T_peak=T_total, width=width, s=s, max_val=delta_couple1, min_val=0)
+
+    pulseB = simple_delta_pulse(current_time, T_peak=T_total/3, width=width, s=s, max_val=eps_detune.get(1, 1), min_val=0)
+
+    pulseBC_t = simple_delta_pulse(current_time, T_peak=2*T_total/3, width=width, s=s, max_val=t_couple2, min_val=0)
+    pulseBC_delta = simple_delta_pulse(current_time, T_peak=2*T_total/3, width=width, s=s, max_val=delta_couple2, min_val=0)
+
+    puls_dict['A_to_B'] = (pulseAB_t, pulseAB_delta)
+    puls_dict['B_self'] = pulseB
+    puls_dict['B_to_C'] = (pulseBC_t, pulseBC_delta)
+    H_t = big_H(n_sites, dupes, t, U, eps, Delta,
+                couple_A=(0,2),
+                couple_B=(1,0),
+                t_couple1=pulseAB_t,
+                delta_couple1=pulseAB_delta,
+                couple_C=(1,0),
+                couple_D=(2,0),
+                t_couple2=pulseBC_t,
+                delta_couple2=pulseBC_delta,
+                eps_detune={1: pulseB})
+    return H_t, puls_dict
+
+def time_evolution2(T_total,n_steps ,n_sites, dupes, t, U, eps, Delta, t_couple1, delta_couple1, t_couple2, delta_couple2, eps_detune, width, s):
+    
+    n_steps = n_steps
+    Time_array = np.linspace(0, T_total, n_steps)
+
+    dims = 2**(n_sites * dupes)
+
+    eigvals = np.zeros((n_steps, dims))
+
+    sets_eigvals_even = np.zeros((n_steps, dupes, 2**(n_sites) // 2 ))
+    sets_eigvals_odd = np.zeros_like(sets_eigvals_even)
+    sets_eigvecs_even = np.zeros((n_steps, dupes, 2**(n_sites), 2**(n_sites) // 2), dtype=complex)
+    sets_eigvecs_odd = np.zeros_like(sets_eigvecs_even)
+
+    MP_storage = np.zeros((n_steps, dupes, 2**(n_sites) // 2, n_sites))
+
+    all_pulses = []
+
+
+    for i in tqdm(range(n_steps)):
+        current = Time_array[i]
+        H_t, pulses = build_Hamiltonian(current,n_sites, dupes, T_total, t, U, eps, Delta, t_couple1, delta_couple1, t_couple2, delta_couple2, eps_detune, width, s)
+        all_pulses.append(pulses)
+        eigvals_t = np.linalg.eigvalsh(H_t)
+
+        eigvals[i] = eigvals_t
+
+        for j in range(dupes):
+            set_H_t = extract_effective_H(H_t, n_sites, dupes, target=j)
+            set_evals_t, set_evecs_t = np.linalg.eigh(set_H_t)
+            set_even_states, set_odd_states, set_even_vecs, set_odd_vecs = divide_to_even_odd(set_evals_t, set_evecs_t, n_sites)
+
+            MP = majorana_polarization(set_even_vecs, set_odd_vecs, n_sites)
+ 
+            MP_storage[i, j] = MP
+
+            sets_eigvals_even[i, j] = set_even_states
+            sets_eigvals_odd[i, j] = set_odd_states
+            sets_eigvecs_even[i, j] = set_even_vecs
+            sets_eigvecs_odd[i, j] = set_odd_vecs
+    return (eigvals,
+            sets_eigvals_even,
+            sets_eigvals_odd,
+            sets_eigvecs_even,
+            sets_eigvecs_odd,
+            MP_storage,
+            Time_array,
+            all_pulses)
+        
 
 
 if __name__ == "__main__":
@@ -191,73 +343,124 @@ if __name__ == "__main__":
     pars, extras = params_for_n_site_Hamiltonian(n_sites, configs=None, specified_vals={"U": [0.1]}, path="configuration.json")
 
     t, U, eps, Delta = pars
-#    H = big_H(n_sites, dupes,  t, U, eps, Delta)
 
 
-    # fullH = big_H(n_sites, dupes, t, U, eps, Delta,
-    #               couple_A=(0,2),   # PMM 0, site 2
-    #               couple_B=(1,0),   # PMM 1, site 0
-    #               t_couple=0.1,
-    #               delta_couple=100)
+    T_total = 10
+    n_steps = 500
+    width = T_total / 3
+    s = T_total * 6
+    t_couple = 1.0
+    delta_couple = 1.0
+    eps_detune = {1: 1.0}  # Detune PMM
 
-    fullH = big_H(n_sites, dupes, t, U, eps, Delta,
-                    eps_detune={1: 1.0})  # Detune PMM
+    timearray = np.linspace(0, T_total, n_steps)
+    pulseAB = [simple_delta_pulse(t, T_peak=0, width=width, s=s, max_val=t_couple, min_val=0) + simple_delta_pulse(t, T_peak=T_total, width=width, s=s, max_val=t_couple, min_val=0)  for t in timearray] 
+    pulseB = [simple_delta_pulse(t, T_peak=T_total/3, width=width, s=s, max_val=1.0, min_val=0) for t in timearray]
+    PulseBC = [simple_delta_pulse(t, T_peak=2*T_total/3, width=width, s=s, max_val=t_couple, min_val=0) for t in timearray]
 
-    set1 = extract_effective_H(fullH, n_sites, dupes, target=0)
-    set2 = extract_effective_H(fullH, n_sites, dupes, target=1)
-    set3 = extract_effective_H(fullH, n_sites, dupes, target=2)
-    sets = [set1, set2, set3]
-
-
-    plt.figure(figsize=(12, 6))
-    plt.suptitle(f'Spectra for {dupes} Identical {n_sites}-Site Systems', fontsize=16)
-    
-    original_eps = eps 
-    detuned_eps = [1.0] * n_sites
-    all_eps = [original_eps, detuned_eps, original_eps]
-    print(all_eps)
-    for i in range(dupes):
-        # eps = all_eps[i]
-        H = sets[i]
-        evals, evecs = np.linalg.eigh(H)    
-        even_states, odd_states, even_vecs, odd_vecs = divide_to_even_odd(evals, evecs, n_sites)
-
-        MP = majorana_polarization(even_vecs, odd_vecs, n_sites)
-        print(f"Majorana Polarizations for Set {i+1}:")
-        for j in range(MP.shape[0]):
-            quick_MP_check(even_vecs, odd_vecs, n_sites, threshold=1e-2)
-            # print(f"State {j}: {MP[j]}")
-
-
-        plt.subplot(1, dupes, i+1)
-        plt.hlines(even_states, xmin=-0.2, xmax=0.2, colors='b', label='Even', linestyles='solid')
-        plt.hlines(odd_states, xmin=0.8, xmax=1.2, colors='r', label='Odd', linestyles='dashed')
-        plt.title(f'Spectrum for Set {i+1}')
-        plt.xticks([0.0, 1.0], ["Even", "Odd"])
-        plt.ylabel('Energy')
-        plt.xlim(-0.3, 1.3)
-        if i == 0:
-            plt.legend()
-    plt.tight_layout()
+    plt.plot(timearray, pulseAB, label='t A to B')
+    plt.plot(timearray, pulseB, label='eps B')
+    plt.plot(timearray, PulseBC, label='t B to C')
+    plt.xlabel('Time')
+    plt.ylabel('Pulse Amplitude')
+    plt.title('Tuning Pulses Over Time')
+    plt.legend()
+    plt.grid()
     plt.show()
 
+    H0, _ = build_Hamiltonian(0.1*T_total, n_sites, dupes, T_total, t, U, eps, Delta, t_couple, delta_couple, t_couple, delta_couple, eps_detune, width, s)
+    H1, _ = build_Hamiltonian(0.5*T_total, n_sites, dupes, T_total, t, U, eps, Delta, t_couple, delta_couple, t_couple, delta_couple, eps_detune, width, s)
+    H2, _ = build_Hamiltonian(0.8*T_total, n_sites, dupes, T_total, t, U, eps, Delta, t_couple, delta_couple, t_couple, delta_couple, eps_detune, width, s)
+
+    print(np.linalg.norm(H0 - H1))
+    print(np.linalg.norm(H1 - H2))
+    print(np.linalg.norm(H0 - H2))
 
 
-    # H_uncoupled = big_H(n_sites, dupes, t, U, eps, Delta, t_couple=0, delta_couple=0)
-    # H_coupled   = big_H(n_sites, dupes, t, U, eps, Delta,
-    #                 couple_A=(0,2), couple_B=(1,0),
-    #                 t_couple=0.1, delta_couple=100)
+    # Time evolution
+    outputs = time_evolution2(T_total,n_steps ,n_sites, dupes, t, U, eps, Delta, t_couple, delta_couple, t_couple, delta_couple, eps_detune, width, s)
 
-    # evals_u = np.linalg.eigvalsh(H_uncoupled)
-    # evals_c = np.linalg.eigvalsh(H_coupled)
-    # plt.plot(evals_u[:40], 'o-', label='uncoupled')
-    # plt.plot(evals_c[:40], 'x-', label='coupled')
-    # plt.legend()
-    # plt.xlabel('level index')
-    # plt.ylabel('energy')
-    # plt.show()
+    (eigvals, sets_eigvals_even, sets_eigvals_odd, sets_eigvecs_even, sets_eigvecs_odd, MP_storage, Time_array, all_pulses) = outputs
 
 
-  
+    for i in range(dupes):
+        plt.figure(figsize=(10, 6))
+        plt.suptitle(f'Spectrum Evolution for Set {i+1}', fontsize=16)
+
+        plt.subplot(2, 1, 1)
+        plt.title('Even Parity States')
+        for j in range(sets_eigvals_even.shape[2]):
+            plt.plot(Time_array, sets_eigvals_even[:, i, j], label=f'State {j+1}')
+        plt.ylabel('Energy')
+        plt.legend()
+
+        plt.subplot(2, 1, 2)
+        plt.title('Odd Parity States')
+        for j in range(sets_eigvals_odd.shape[2]):
+            plt.plot(Time_array, sets_eigvals_odd[:, i, j], label=f'State {j+1}')
+        plt.xlabel('Time')
+        plt.ylabel('Energy')
+        plt.legend()
+
+        plt.tight_layout()
+        plt.show()
 
 
+    #Plot 8 lowest eigenvalues over time
+    plt.figure(figsize=(10, 6))
+    plt.title('Lowest 8 Eigenvalues Over Time')
+    for j in range(8):
+        plt.plot(Time_array, eigvals[:, j], label=f'State {j+1}')
+    plt.xlabel('Time')
+    plt.ylabel('Energy')
+    plt.legend()
+    plt.show()
+
+    #Majorana Polarization plots
+    for i in range(dupes):
+        plt.figure(figsize=(10, 6))
+        plt.suptitle(f'Majorana Polarization Evolution for Set {i+1}', fontsize=16)
+
+        for j in range(MP_storage.shape[2]):
+            for k in range(n_sites):
+                plt.plot(Time_array, MP_storage[:, i, j, k], label=f'State {j+1}, Site {k+1}')
+        
+        plt.xlabel('Time')
+        plt.ylabel('Majorana Polarization')
+        plt.legend()
+        plt.show()
+    
+    t_AB = np.array([p["A_to_B"][0] for p in all_pulses])
+    delta_AB = np.array([p["A_to_B"][1] for p in all_pulses])
+
+    t_BC = np.array([p["B_to_C"][0] for p in all_pulses])
+    delta_BC = np.array([p["B_to_C"][1] for p in all_pulses])
+
+    eps_B = np.array([p["B_self"] for p in all_pulses])
+    
+    fig, (ax1, ax2) = plt.subplots(
+        2, 1, figsize=(9, 6), sharex=True
+    )
+
+    # ---- Plot t pulses ----
+    ax1.plot(Time_array, t_AB, label=r"$t_{A\leftrightarrow B}$")
+    ax1.plot(Time_array, t_BC, label=r"$t_{B\leftrightarrow C}$")
+    ax1.plot(Time_array, eps_B, "--", label=r"$\varepsilon_B$")
+
+    ax1.set_ylabel("t / ε amplitude")
+    ax1.set_title("Tunneling & detuning pulses")
+    ax1.legend()
+    ax1.grid(True)
+
+    # ---- Plot delta pulses ----
+    ax2.plot(Time_array, delta_AB, label=r"$\Delta_{A\leftrightarrow B}$")
+    ax2.plot(Time_array, delta_BC, label=r"$\Delta_{B\leftrightarrow C}$")
+    ax2.plot(Time_array, eps_B, "--", label=r"$\varepsilon_B$")
+
+    ax2.set_ylabel("Δ / ε amplitude")
+    ax2.set_xlabel("Time")
+    ax2.legend()
+    ax2.grid(True)
+
+    plt.tight_layout()
+    plt.show()
