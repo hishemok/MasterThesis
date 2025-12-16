@@ -3,6 +3,7 @@ import numpy as np
 import sympy as sp
 import matplotlib.pyplot as plt
 
+
 ### Tools
 
 def tensor_product(*args):
@@ -43,10 +44,14 @@ def creation_annihilation(j,n):
 
 
 def total_parity(num_t):
-    P = np.eye(num_t[0].shape[0], dtype=complex)
+    """Calculate total parity operator from number operators."""
+    # precompute_ops returns a list, so iterate directly
+    P = np.eye(num_t[0].shape[0], dtype=np.complex128)
     for n_op in num_t:
-        P = P @ (np.eye(P.shape[0]) - 2 * n_op)
+        P = P @ (np.eye(P.shape[0], dtype=np.complex128) - 2 * n_op)
     return P
+
+
 
 def precompute_ops(n):
     # returns lists of creation, annihilation, number (numpy)
