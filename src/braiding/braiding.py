@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 from scipy.linalg import expm
 from numba import njit, objmode
+from scipy.sparse.linalg import eigsh
+import time
 
 
 def majorana_operators(n):
@@ -139,7 +141,7 @@ def orthonormalize(vs):
     q, _ = np.linalg.qr(vs)
     return q
 
-@njit
+# @njit
 def berry_phase_kato(times, evecs):
     n = len(times)
     dt = times[1] - times[0]
@@ -163,13 +165,54 @@ def berry_phase_kato(times, evecs):
         dPdt = (P_next - P) / dt
         K = P @ dPdt - dPdt @ P
 
-        with objmode(tmp='complex128[:,:]'):
-            tmp = expm(-dt * K)
+        # with objmode(tmp='complex128[:,:]'):
+        tmp = expm(-dt * K)
 
         U = tmp @ U
 
     return U
 
+def berry_phase_kato_low_energy(times, V_low):
+    """
+    Berry phase calculation in the low-energy K-dimensional subspace.
+    
+    Parameters
+    ----------
+    times : array_like
+        Array of time steps, shape (n_steps,)
+    V_low : array_like
+        Low-energy eigenvectors, shape (n_steps, dim, K)
+    
+    Returns
+    -------
+    U_berry : complex ndarray
+        Berry unitary in K-dimensional subspace, shape (K, K)
+    """
+    n_steps, dim, K = V_low.shape
+    U_berry = np.eye(K, dtype=np.complex128)
+    
+    for i in range(n_steps - 1):
+        dt = times[i+1] - times[i]
+        V = V_low[i]       # (dim, K)
+        W = V_low[i+1]     # (dim, K)
+        
+        # Projectors onto subspace
+        P = V @ V.conj().T
+        P_next = W @ W.conj().T
+        
+        dPdt = (P_next - P) / dt
+        K_mat = P @ dPdt - dPdt @ P
+        
+        # Evolution in full space
+        U_step_full = expm(-dt * K_mat)
+        
+        # Restrict to subspace: V^dagger * U_step * V
+        U_step_subspace = V.conj().T @ U_step_full @ V
+        
+        # Accumulate Berry unitary
+        U_berry = U_step_subspace @ U_berry
+    
+    return U_berry
 
 @njit
 def simple_delta_pulse(t, T_peak, width, s, max_val, min_val):
@@ -183,88 +226,296 @@ def simple_delta_pulse(t, T_peak, width, s, max_val, min_val):
 
     return min_val + (max_val - min_val) * rise * fall
 
+def build_Hamiltonian(current_time,
+                      n_sites, dupes,
+                      T_total,
+                      t, U, eps, Delta,
+                      width, s,
+                      couple_defs,
+                      eps_detune=None,
+                      operators=None):
 
-def build_Hamiltonian(current_time,n_sites, dupes, T_total, t, U, eps, Delta, t_couple1, delta_couple1, t_couple2, delta_couple2, eps_detune, width, s):
-
-    puls_dict = {}
-
-    pulseAB_t = simple_delta_pulse(current_time, T_peak=0, width=width, s=s, max_val=t_couple1, min_val=0) + simple_delta_pulse(current_time, T_peak=T_total, width=width, s=s, max_val=t_couple1, min_val=0)
-    pulseAB_delta = simple_delta_pulse(current_time, T_peak=0, width=width, s=s, max_val=delta_couple1, min_val=0) + simple_delta_pulse(current_time, T_peak=T_total, width=width, s=s, max_val=delta_couple1, min_val=0)
-
-    pulseB = simple_delta_pulse(current_time, T_peak=T_total/3, width=width, s=s, max_val=eps_detune.get(1, 1), min_val=0)
-
-    pulseBC_t = simple_delta_pulse(current_time, T_peak=2*T_total/3, width=width, s=s, max_val=t_couple2, min_val=0)
-    pulseBC_delta = simple_delta_pulse(current_time, T_peak=2*T_total/3, width=width, s=s, max_val=delta_couple2, min_val=0)
-
-    puls_dict['A_to_B'] = (pulseAB_t, pulseAB_delta)
-    puls_dict['B_self'] = pulseB
-    puls_dict['B_to_C'] = (pulseBC_t, pulseBC_delta)
-    H_t = big_H(n_sites, dupes, t, U, eps, Delta,
-                couple_A=(0,2),
-                couple_B=(1,0),
-                t_couple1=pulseAB_t,
-                delta_couple1=pulseAB_delta,
-                couple_C=(1,0),
-                couple_D=(2,0),
-                t_couple2=pulseBC_t,
-                delta_couple2=pulseBC_delta,
-                eps_detune={1: pulseB})
-    return H_t, puls_dict
-
-def time_evolution2(T_total,n_steps ,n_sites, dupes, t, U, eps, Delta, t_couple1, delta_couple1, t_couple2, delta_couple2, eps_detune, width, s):
     
-    n_steps = n_steps
+    # Pulses
+    t_AB = (
+        simple_delta_pulse(current_time, 0, width, s, couple_defs['AB']['t'], 0)
+        + simple_delta_pulse(current_time, T_total, width, s, couple_defs['AB']['t'], 0)
+    )
+    d_AB = (
+        simple_delta_pulse(current_time, 0, width, s, couple_defs['AB']['delta'], 0)
+        + simple_delta_pulse(current_time, T_total, width, s, couple_defs['AB']['delta'], 0)
+    )
+
+    t_BC = simple_delta_pulse(
+        current_time, 2*T_total/3, width, s, couple_defs['BC']['t'], 0
+    )
+    d_BC = simple_delta_pulse(
+        current_time, 2*T_total/3, width, s, couple_defs['BC']['delta'], 0
+    )
+
+    #  Time-dependent coupling list
+    couplings = [
+        (couple_defs['AB']['A'], couple_defs['AB']['B'], t_AB, d_AB),
+        (couple_defs['BC']['A'], couple_defs['BC']['B'], t_BC, d_BC),
+    ]
+    
+
+    #  Time-dependent detuning
+    eps_now = None
+    if eps_detune is not None:
+        pulseB = simple_delta_pulse(
+            current_time, T_total/3, width, s,
+            eps_detune.get(1, 0.0), 0.0
+        )
+        eps_now = {1: pulseB}
+    
+
+    
+    H_t = big_H(
+        n_sites, dupes,
+        t, U, eps, Delta,
+        couplings=couplings,
+        eps_detune=eps_now,
+        operators=operators
+    )
+
+    pulses = {
+        "t_AB": t_AB,
+        "d_AB": d_AB,
+        "t_BC": t_BC,
+        "d_BC": d_BC,
+        "eps_B": eps_now[1] if eps_now else 0.0
+    }
+
+    return H_t, pulses
+
+# def build_Hamiltonian(current_time,n_sites, dupes, T_total, t, U, eps, Delta , width, s, couplings=(), eps_detune=None):
+
+#     puls_dict = {}
+
+#     pulseAB_t = simple_delta_pulse(current_time, T_peak=0, width=width, s=s, max_val=t_couple1, min_val=0) + simple_delta_pulse(current_time, T_peak=T_total, width=width, s=s, max_val=t_couple1, min_val=0)
+#     pulseAB_delta = simple_delta_pulse(current_time, T_peak=0, width=width, s=s, max_val=delta_couple1, min_val=0) + simple_delta_pulse(current_time, T_peak=T_total, width=width, s=s, max_val=delta_couple1, min_val=0)
+
+#     if eps_detune is not None:
+#         pulseB = simple_delta_pulse(current_time, T_peak=T_total/3, width=width, s=s, max_val=eps_detune.get(1, 1), min_val=0)
+#     else:
+#         pulseB = 0
+
+#     pulseBC_t = simple_delta_pulse(current_time, T_peak=2*T_total/3, width=width, s=s, max_val=t_couple2, min_val=0)
+#     pulseBC_delta = simple_delta_pulse(current_time, T_peak=2*T_total/3, width=width, s=s, max_val=delta_couple2, min_val=0)
+
+#     puls_dict['A_to_B'] = (pulseAB_t, pulseAB_delta)
+#     puls_dict['B_self'] = pulseB
+#     puls_dict['B_to_C'] = (pulseBC_t, pulseBC_delta)
+#     H_t = big_H(n_sites, dupes, t, U, eps, Delta,
+#                 couplings=couplings,
+#                 eps_detune=None)
+#     return H_t, puls_dict
+
+# def time_evolution2(T_total,n_steps ,n_sites, dupes, t, U, eps, Delta, width, s, couplings = (), eps_detune = None):
+    
+#     ## TIme how long each calculation takes
+
+#     n_steps = n_steps
+#     Time_array = np.linspace(0, T_total, n_steps)
+
+#     dims = 2**(n_sites * dupes)
+
+#     eigvals = np.zeros((n_steps, dims))
+#     eigvecs = np.zeros((n_steps, dims, dims), dtype=complex)
+
+#     sets_eigvals_even = np.zeros((n_steps, dupes, 2**(n_sites) // 2 ))
+#     sets_eigvals_odd = np.zeros_like(sets_eigvals_even)
+#     sets_eigvecs_even = np.zeros((n_steps, dupes, 2**(n_sites), 2**(n_sites) // 2), dtype=complex)
+#     sets_eigvecs_odd = np.zeros_like(sets_eigvecs_even)
+
+#     MP_storage = np.zeros((n_steps, dupes, 2**(n_sites) // 2, n_sites))
+
+#     all_pulses = []
+
+
+#     for i in tqdm(range(n_steps)):
+#         current = Time_array[i]
+#         H_t, pulses = build_Hamiltonian(current,n_sites, dupes, T_total, t, U, eps, Delta, width, s, couplings=couplings, eps_detune=eps_detune)
+        
+#         all_pulses.append(pulses)
+#         eigvals_t, eigvecs_t = np.linalg.eigh(H_t)
+
+#         eigvals[i] = eigvals_t
+#         eigvecs[i] = eigvecs_t
+
+#         for j in range(dupes):
+#             set_H_t = extract_effective_H(H_t, n_sites, dupes, target=j)
+#             set_evals_t, set_evecs_t = np.linalg.eigh(set_H_t)
+
+#             cre, ann, num = precompute_ops(n_sites)
+#             set_even_states, set_odd_states, set_even_vecs, set_odd_vecs = divide_to_even_odd(set_evals_t, set_evecs_t, num)
+
+#             MP = majorana_polarization(set_even_vecs, set_odd_vecs, n_sites)
+
+
+#             MP_storage[i, j] = MP
+
+#             sets_eigvals_even[i, j] = set_even_states
+#             sets_eigvals_odd[i, j] = set_odd_states
+#             sets_eigvecs_even[i, j] = set_even_vecs
+#             sets_eigvecs_odd[i, j] = set_odd_vecs
+#             exit()
+#     return (eigvals,
+#             eigvecs,
+#             sets_eigvals_even,
+#             sets_eigvals_odd,
+#             sets_eigvecs_even,
+#             sets_eigvecs_odd,
+#             MP_storage,
+#             Time_array,
+#             all_pulses)
+        
+
+
+# def time_evolution2(T_total, n_steps, n_sites, dupes, t, U, eps, Delta,width, s, couple_defs, eps_detune=None):
+
+#     Time_array = np.linspace(0, T_total, n_steps)
+#     dims = 2**(n_sites * dupes)
+#     eigvals = np.zeros((n_steps, dims))
+#     eigvecs = np.zeros((n_steps, dims, dims), dtype=complex)    
+
+#     sets_eigvals_even = np.zeros((n_steps, dupes, 2**(n_sites) // 2 ))
+#     sets_eigvals_odd = np.zeros_like(sets_eigvals_even)
+#     sets_eigvecs_even = np.zeros((n_steps, dupes, 2**(n_sites), 2**(n_sites) // 2), dtype=complex)
+#     sets_eigvecs_odd = np.zeros_like(sets_eigvecs_even) 
+
+#     MP_storage = np.zeros((n_steps, dupes, 2**(n_sites) // 2, n_sites))
+
+#     all_pulses = []
+#     for i in tqdm(range(n_steps)):
+#         current = Time_array[i]
+#         H_t, pulses = build_Hamiltonian(current,
+#                                         n_sites, dupes,
+#                                         T_total,
+#                                         t, U, eps, Delta,
+#                                         width, s,
+#                                         couple_defs,
+#                                         eps_detune=eps_detune)
+        
+#         all_pulses.append(pulses)
+#         eigvals_t, eigvecs_t = np.linalg.eigh(H_t)
+
+#         eigvals[i] = eigvals_t
+#         eigvecs[i] = eigvecs_t
+
+#         for j in range(dupes):
+#             set_H_t = extract_effective_H(H_t, n_sites, dupes, target=j)
+#             set_evals_t, set_evecs_t = np.linalg.eigh(set_H_t)
+
+#             cre, ann, num = precompute_ops(n_sites)
+#             set_even_states, set_odd_states, set_even_vecs, set_odd_vecs = divide_to_even_odd(set_evals_t, set_evecs_t, num)
+
+#             MP = majorana_polarization(set_even_vecs, set_odd_vecs, n_sites)
+
+
+#             MP_storage[i, j] = MP
+
+#             sets_eigvals_even[i, j] = set_even_states
+#             sets_eigvals_odd[i, j] = set_odd_states
+#             sets_eigvecs_even[i, j] = set_even_vecs
+#             sets_eigvecs_odd[i, j] = set_odd_vecs
+#     return (eigvals,
+#             eigvecs,
+#             sets_eigvals_even,
+#             sets_eigvals_odd,
+#             sets_eigvecs_even,
+#             sets_eigvecs_odd,
+#             MP_storage,
+#             Time_array,
+#             all_pulses)
+def time_evolution2(T_total, n_steps, n_sites, dupes, t, U, eps, Delta, width, s, couple_defs, eps_detune=None,K=4
+):
+    big_N = n_sites * dupes
     Time_array = np.linspace(0, T_total, n_steps)
+    dim = 2**big_N
 
-    dims = 2**(n_sites * dupes)
+    # --- Low-energy storage (for Berry, gap, gates) ---
+    E_low = np.zeros((n_steps, K))
+    V_low = np.zeros((n_steps, dim, K), dtype=complex)
+    gap   = np.zeros(n_steps)
 
-    eigvals = np.zeros((n_steps, dims))
-    eigvecs = np.zeros((n_steps, dims, dims), dtype=complex)
 
     sets_eigvals_even = np.zeros((n_steps, dupes, 2**(n_sites) // 2 ))
     sets_eigvals_odd = np.zeros_like(sets_eigvals_even)
-    sets_eigvecs_even = np.zeros((n_steps, dupes, 2**(n_sites), 2**(n_sites) // 2), dtype=complex)
-    sets_eigvecs_odd = np.zeros_like(sets_eigvecs_even)
 
-    MP_storage = np.zeros((n_steps, dupes, 2**(n_sites) // 2, n_sites))
+    # --- Majorana polarization ---
+    MP_storage = np.zeros((n_steps, dupes, 2**n_sites//2, n_sites))
+
+    cre, ann, num = precompute_ops(big_N)
+    hop_ops = {}
+    pair_ops = {}
+    dens_ops = {}
+
+    for i in range(big_N):
+        for j in range(i+1, big_N):
+            hop_ops[(i,j)] = cre[i] @ ann[j] + ann[i] @ cre[j]
+            pair_ops[(i,j)] = cre[i] @ cre[j] + ann[j] @ ann[i]
+            dens_ops[(i,j)] = num[i] @ num[j]
+    
+    operators = {"cre": cre, "ann": ann, "num": num,
+                 "hop": hop_ops, "pair": pair_ops, "dens": dens_ops}
+    
+    _, _, single_site_num = precompute_ops(n_sites)
 
     all_pulses = []
 
-
-    for i in tqdm(range(n_steps)):
-        current = Time_array[i]
-        H_t, pulses = build_Hamiltonian(current,n_sites, dupes, T_total, t, U, eps, Delta, t_couple1, delta_couple1, t_couple2, delta_couple2, eps_detune, width, s)
+    for i, current in enumerate(tqdm(Time_array)):
+        H_t, pulses = build_Hamiltonian(
+            current,
+            n_sites, dupes,
+            T_total,
+            t, U, eps, Delta,
+            width, s,
+            couple_defs,
+            eps_detune=eps_detune,
+            operators=operators
+        )
+        
+        
         all_pulses.append(pulses)
-        eigvals_t, eigvecs_t = np.linalg.eigh(H_t)
 
-        eigvals[i] = eigvals_t
-        eigvecs[i] = eigvecs_t
+        # low energy
+        
+        # evals, evecs = eigsh(H_t, k=K+1, which="SA")
+        # order = np.argsort(evals)
+        eigvals, evecs = np.linalg.eigh(H_t)
+        E_low[i] = eigvals[:K]
+        V_low[i] = evecs[:, :K]
+        gap[i]   = eigvals[K] - eigvals[K-1]
 
-        for j in range(dupes):
-            set_H_t = extract_effective_H(H_t, n_sites, dupes, target=j)
-            set_evals_t, set_evecs_t = np.linalg.eigh(set_H_t)
-            cre, ann, num = precompute_ops(n_sites)
-            set_even_states, set_odd_states, set_even_vecs, set_odd_vecs = divide_to_even_odd(set_evals_t, set_evecs_t, num)
-
-            MP = majorana_polarization(set_even_vecs, set_odd_vecs, n_sites)
- 
-            MP_storage[i, j] = MP
-
-            sets_eigvals_even[i, j] = set_even_states
-            sets_eigvals_odd[i, j] = set_odd_states
-            sets_eigvecs_even[i, j] = set_even_vecs
-            sets_eigvecs_odd[i, j] = set_odd_vecs
-    return (eigvals,
-            eigvecs,
-            sets_eigvals_even,
-            sets_eigvals_odd,
-            sets_eigvecs_even,
-            sets_eigvecs_odd,
-            MP_storage,
-            Time_array,
-            all_pulses)
+        # E_low[i] = evals[order[:K]]
+        # V_low[i] = evecs[:, order[:K]]
+        # gap[i]   = evals[order[K]] - evals[order[K-1]]
+        
         
 
+
+        # --- MAJORANA POLARIZATION ---
+        
+        for j in range(dupes):
+            set_H = extract_effective_H(H_t, n_sites, dupes, target=j)
+            evals_s, evecs_s = np.linalg.eigh(set_H)
+            # cre, ann, num = precompute_ops(n_sites)
+
+            even_e, odd_e, even_v, odd_v = divide_to_even_odd(
+                evals_s, evecs_s, single_site_num
+            )
+
+            sets_eigvals_even[i, j] = even_e
+            sets_eigvals_odd[i, j] = odd_e
+
+            MP_storage[i, j] = majorana_polarization(
+                even_v, odd_v, n_sites
+            )
+        
+        
+    return (Time_array, E_low, V_low, gap, sets_eigvals_even, sets_eigvals_odd, MP_storage, all_pulses)
 
 if __name__ == "__main__":
     n_sites = 3
@@ -279,138 +530,129 @@ if __name__ == "__main__":
 
 
     T_total = 10
-    n_steps = 50
+    n_steps = 500
     width = T_total / 3
     s = T_total * 6
     t_couple = 1.0
     delta_couple = 1.0
     eps_detune = {1: 1.0}  # Detune PMM
 
-    timearray = np.linspace(0, T_total, n_steps)
-    pulseAB = [simple_delta_pulse(t, T_peak=0, width=width, s=s, max_val=t_couple, min_val=0) + simple_delta_pulse(t, T_peak=T_total, width=width, s=s, max_val=t_couple, min_val=0)  for t in timearray] 
-    pulseB = [simple_delta_pulse(t, T_peak=T_total/3, width=width, s=s, max_val=1.0, min_val=0) for t in timearray]
-    PulseBC = [simple_delta_pulse(t, T_peak=2*T_total/3, width=width, s=s, max_val=t_couple, min_val=0) for t in timearray]
-
-    plt.plot(timearray, pulseAB, label='t A to B')
-    plt.plot(timearray, pulseB, label='eps B')
-    plt.plot(timearray, PulseBC, label='t B to C')
-    plt.xlabel('Time')
-    plt.ylabel('Pulse Amplitude')
-    plt.title('Tuning Pulses Over Time')
-    plt.legend()
-    plt.grid()
-    plt.show()
 
 
+    couple_defs = {
+        'AB': {'A': (0,2), 'B': (1,0), 't': t_couple, 'delta': delta_couple},
+        'BC': {'A': (1,0), 'B': (2,0), 't': t_couple, 'delta': delta_couple},
+    }
 
     # Time evolution
-    outputs = time_evolution2(T_total,n_steps ,n_sites, dupes, t, U, eps, Delta, t_couple, delta_couple, t_couple, delta_couple, eps_detune, width, s)
+    outputs = time_evolution2(T_total,n_steps ,n_sites, dupes, t, U, eps, Delta, width, s, couple_defs, eps_detune=eps_detune)
 
-    (eigvals, eigvecs, sets_eigvals_even, sets_eigvals_odd, sets_eigvecs_even, sets_eigvecs_odd, MP_storage, Time_array, all_pulses) = outputs
-
-    # U_berry = berry_phase_kato(Time_array, eigvecs)
-    
-
-    
-
-    cre, ann, num = precompute_ops(n_sites * dupes)
-
-    even_states, odd_states, even_vecs, odd_vecs = divide_to_even_odd(eigvals, eigvecs,num)
-
-    #Plot 12 lowest eigenvalues for each set over time
-    for i in range(12):
-        plt.hlines(even_states[i], xmin=0, xmax=0.5, colors='b', linestyles='dashed', label='Even States' if i == 0 else "")
-        plt.hlines(odd_states[i], xmin=1, xmax=1.5, colors='r', linestyles='dotted', label='Odd States' if i == 0 else "")
-    
-    plt.xlabel('Time')
-    plt.ylabel('Energy')
-    plt.title('Lowest 12 Eigenvalues Over Time')
-    plt.xticks([0.25, 1.25], ["Even", "Odd"])
-
-    plt.legend()
-    plt.show()
+    (Time_array, E_low, V_low, gap, sets_eigvals_even, sets_eigvals_odd, MP_storage, all_pulses) = outputs
 
 
-
-
-    for i in range(dupes):
-        plt.figure(figsize=(10, 6))
-        plt.suptitle(f'Spectrum Evolution for Set {i+1}', fontsize=16)
-
-        plt.subplot(2, 1, 1)
-        plt.title('Even Parity States')
-        for j in range(sets_eigvals_even.shape[2]):
-            plt.plot(Time_array, sets_eigvals_even[:, i, j], label=f'State {j+1}')
-        plt.ylabel('Energy')
+    #plot even odd eigvals
+    for j in range(dupes):
+        plt.figure(figsize=(7,4))
+        plt.title(f"Set {j} eigenvalues")
+        plt.plot(sets_eigvals_even[:, j], label="Even")
+        plt.plot(sets_eigvals_odd[:, j], label="Odd")
+        plt.xlabel("Time step")
+        plt.ylabel("Energy")
         plt.legend()
-
-        plt.subplot(2, 1, 2)
-        plt.title('Odd Parity States')
-        for j in range(sets_eigvals_odd.shape[2]):
-            plt.plot(Time_array, sets_eigvals_odd[:, i, j], label=f'State {j+1}')
-        plt.xlabel('Time')
-        plt.ylabel('Energy')
-        plt.legend()
-
-        plt.tight_layout()
+        plt.grid(True)
         plt.show()
 
 
-    #Plot 8 lowest eigenvalues over time
-    plt.figure(figsize=(10, 6))
-    plt.title('Lowest 8 Eigenvalues Over Time')
-    for j in range(4):
-        plt.plot(Time_array, eigvals[:, j], label=f'State {j+1}')
-    plt.xlabel('Time')
-    plt.ylabel('Energy')
-    plt.legend()
+
+
+
+
+
+
+
+
+
+    plt.figure(figsize=(7,4))
+    plt.plot(Time_array, gap)
+    plt.yscale("log")
+    plt.xlabel("Time")
+    plt.ylabel("Gap to excited states")
+    plt.title("Adiabatic gap")
+    plt.grid(True)
     plt.show()
 
-    #Majorana Polarization plots
-    for i in range(dupes):
-        plt.figure(figsize=(10, 6))
-        plt.suptitle(f'Majorana Polarization Evolution for Set {i+1}', fontsize=16)
+    print("Minimum gap:", gap.min())
 
-        for j in range(MP_storage.shape[2]):
-            for k in range(n_sites):
-                plt.plot(Time_array, MP_storage[:, i, j, k], label=f'State {j+1}, Site {k+1}')
-        
-        plt.xlabel('Time')
-        plt.ylabel('Majorana Polarization')
-        plt.legend()
+    plt.figure(figsize=(7,4))
+    for j in range(2):
+        plt.plot(Time_array, E_low[:, j], label=f"State {j}")
+    plt.xlabel("Time")
+    plt.ylabel("Energy")
+    plt.title("Low-energy spectrum")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+    for i in range(MP_storage.shape[1]):
+        plt.figure(figsize=(7,4))
+        total_MP = MP_storage[:, i].sum(axis=(1,2))
+        plt.plot(Time_array, total_MP)
+        plt.xlabel("Time")
+        plt.ylim(0, 10.1)
+        plt.ylabel("Σ Majorana polarization")
+        plt.title(f"Total Majorana polarization – PMM {i}")
+        plt.grid(True)
         plt.show()
-    
-    t_AB = np.array([p["A_to_B"][0] for p in all_pulses])
-    delta_AB = np.array([p["A_to_B"][1] for p in all_pulses])
 
-    t_BC = np.array([p["B_to_C"][0] for p in all_pulses])
-    delta_BC = np.array([p["B_to_C"][1] for p in all_pulses])
 
-    eps_B = np.array([p["B_self"] for p in all_pulses])
-    
-    fig, (ax1, ax2) = plt.subplots(
-        2, 1, figsize=(9, 6), sharex=True
-    )
+    t_AB = np.array([p["t_AB"] for p in all_pulses])
+    d_AB = np.array([p["d_AB"] for p in all_pulses])
+    t_BC = np.array([p["t_BC"] for p in all_pulses])
+    d_BC = np.array([p["d_BC"] for p in all_pulses])
+    eps_B = np.array([p["eps_B"] for p in all_pulses])
 
-    # ---- Plot t pulses ----
-    ax1.plot(Time_array, t_AB, label=r"$t_{A\leftrightarrow B}$")
-    ax1.plot(Time_array, t_BC, label=r"$t_{B\leftrightarrow C}$")
-    ax1.plot(Time_array, eps_B, "--", label=r"$\varepsilon_B$")
-
-    ax1.set_ylabel("t / ε amplitude")
-    ax1.set_title("Tunneling & detuning pulses")
-    ax1.legend()
-    ax1.grid(True)
-
-    # ---- Plot delta pulses ----
-    ax2.plot(Time_array, delta_AB, label=r"$\Delta_{A\leftrightarrow B}$")
-    ax2.plot(Time_array, delta_BC, label=r"$\Delta_{B\leftrightarrow C}$")
-    ax2.plot(Time_array, eps_B, "--", label=r"$\varepsilon_B$")
-
-    ax2.set_ylabel("Δ / ε amplitude")
-    ax2.set_xlabel("Time")
-    ax2.legend()
-    ax2.grid(True)
-
+    plt.subplots(figsize=(7,6), nrows=2, ncols=1, sharex=True)
+    plt.subplot(2,1,1)
+    plt.plot(Time_array, t_AB, label="t A↔B")
+    plt.plot(Time_array, t_BC, label="t B↔C")
+    plt.plot(Time_array, eps_B, "--", label="ε B")
+    plt.ylabel("Tunneling amplitude")
+    plt.title("Tunneling pulses")
+    plt.legend()
+    plt.grid(True)
+    plt.subplot(2,1,2)
+    plt.plot(Time_array, d_AB, label="Δ A↔B")
+    plt.plot(Time_array, d_BC, label="Δ B↔C")
+    plt.plot(Time_array, eps_B, "--", label="ε B")
+    plt.xlabel("Time")
+    plt.ylabel("Pairing / detuning amplitude")
+    plt.title("Pairing & detuning pulses")
+    plt.legend()
+    plt.grid(True)
     plt.tight_layout()
     plt.show()
+
+    # plt.figure(figsize=(7,4))
+    # plt.plot(Time_array, t_AB, label="t A↔B")
+    # plt.plot(Time_array, t_BC, label="t B↔C")
+    # plt.plot(Time_array, eps_B, "--", label="ε B")
+    # plt.xlabel("Time")
+    # plt.ylabel("Amplitude")
+    # plt.title("Control pulses")
+    # plt.legend()
+    # plt.grid(True)
+    # plt.show()
+
+
+    U_berry = berry_phase_kato_low_energy(Time_array, V_low)
+    print("V_low shape",V_low.shape)
+    print("Berry shape",U_berry.shape)
+
+    print("Berry unitary:")
+    print(U_berry)
+
+    # Eigenphases
+    phases = np.angle(np.linalg.eigvals(U_berry)) / np.pi
+    print("Berry phases / π:", phases)
+
+
