@@ -1,6 +1,6 @@
 # Python cache
-__pycache__/
-*.pyc
+__pycache__/*.pyc
+
 
 # Conda environment folders
 .conda/

@@ -145,7 +145,6 @@ import time
 def big_H(n, dup, t_vals, U_vals, eps_vals, delta_vals,
                couplings=(), eps_detune=None, operators=None):
 
-    start_time = time.time()
     big_N = dup * n
     dim = 2**big_N
     H = np.zeros((dim, dim), dtype=complex)
@@ -168,25 +167,6 @@ def big_H(n, dup, t_vals, U_vals, eps_vals, delta_vals,
         pair_ops = operators["pair"]
         dens_ops = operators["dens"]
     # cre, ann, num = precompute_ops(big_N)
-
-
-    # # Precompute two-site operators
-    # hop_ops = {}
-    # pair_ops = {}
-    # dens_ops = {}
-
-    # end_time = time.time()  
-    # print("Precomputed single-site operators in {:.4f} seconds.".format(end_time - start_time))
-
-    # start_time = time.time()
-    # for i in range(big_N):
-    #     for j in range(i+1, big_N):
-    #         hop_ops[(i,j)] = cre[i] @ ann[j] + ann[i] @ cre[j]
-    #         pair_ops[(i,j)] = cre[i] @ cre[j] + ann[j] @ ann[i]
-    #         dens_ops[(i,j)] = num[i] @ num[j]
-    # end_time = time.time()
-    # print("Precomputed two-site operators in {:.4f} seconds.".format(end_time - start_time))
-
 
     eps_full = np.tile(eps_vals, (dup,1))
     if eps_detune:
@@ -299,10 +279,10 @@ if __name__ == "__main__":
     H = big_H(
         n_sites, 3,
         t, U, eps, Delta,
-        couplings=[
-            (couple_A, couple_B, t_couple1, delta_couple1),
-            (couple_C, couple_D, t_couple2, delta_couple2)
-        ],
+        # couplings=[
+        #     (couple_A, couple_B, t_couple1, delta_couple1),
+        #     (couple_C, couple_D, t_couple2, delta_couple2)
+        # ],
         eps_detune={1: 2.0},
         operators=operators
     )
@@ -346,7 +326,7 @@ if __name__ == "__main__":
         parity = np.vdot(psi, P @ psi)
         parities.append(np.real_if_close(parity))
 
-    print(list(zip(evals, parities)))
+    # print(list(zip(evals, parities)))
     even_states = []
     odd_states = []
     for i in range(len(list(zip(evals, parities)))):
@@ -397,4 +377,35 @@ if __name__ == "__main__":
     plt.xticks([0.1, 1.0], ["Even", "Odd"])
     plt.tight_layout()
     plt.show()
+
+    _, _, num = precompute_ops(n_sites)
+
+    P = total_parity(num)
+
+    for set in sets:
+        # Calculate even odd parity states
+        evals, evecs = np.linalg.eigh(set)
+        parities = []
+        for k in range(len(evals)):
+            psi = evecs[:, k]
+            parity = np.vdot(psi, P @ psi)
+            parities.append(np.real_if_close(parity))
+        # divide even odd spectrum
+        even_states = []
+        odd_states = []
+        for i in range(len(list(zip(evals, parities)))):
+            if np.isclose(parities[i], 1):
+                even_states.append((evals[i], evecs[:, i]))
+            elif np.isclose(parities[i], -1):   
+                odd_states.append((evals[i], evecs[:, i]))
+        #plot spectrum
+        plt.hlines([state[0] for state in even_states], -0.2, 0.4, colors='b')
+        plt.hlines([state[0] for state in odd_states], 0.6, 1.2, colors='r')
+        plt.title("Effective Hamiltonian Energy spectrum (even vs odd parity)")
+        plt.xlabel("Parity sector")
+        plt.ylabel("Energy")
+        plt.xticks([0.1, 1.0], ["Even", "Odd"])
+        plt.tight_layout()
+        plt.show()
+
 
