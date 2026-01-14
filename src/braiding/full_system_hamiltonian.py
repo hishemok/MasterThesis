@@ -66,82 +66,6 @@ def precompute_ops(n):
     return cre, ann, num
 
 
-# def big_H(n, dup, t_vals, U_vals, eps_vals, delta_vals, t_couple1=0.0, delta_couple1=0.0, t_couple2=0.0, delta_couple2=0.0, eps_detune=None,
-#           couple_A=None, couple_B=None, couple_C=None, couple_D=None):
-#     """
-#     n: sites per PMM
-#     dup: number of PMMs
-#     couple_A, couple_B: (PMM_index, local_site_index)
-#     t_couple: hopping strength between couple_A and couple_B
-#     delta_couple: pairing strength between couple_A and couple_B
-#     eps_detune: dictionary {PMM_index: detune_value}
-#     """
-
-#     big_N = dup * n
-#     dim = 2**big_N
-#     H = np.zeros((dim, dim), dtype=complex)
-
-
-
-
-
-#     cre, ann, num = precompute_ops(big_N)
-
-#     eps_full = [eps_vals.copy() for _ in range(dup)]
-
-#     # Apply detuning to specific PMMs
-#     if eps_detune is not None:
-#         for pm_idx, value in eps_detune.items():
-#             for j in range(n):
-#                 eps_full[pm_idx][j] = value
-
-#     # Add intra-PMM terms
-#     for d in range(dup):
-#         off = d * n
-#         for j in range(n - 1):
-#             H += -t_vals[j] * (cre[off+j] @ ann[off+j+1] +
-#                                ann[off+j] @ cre[off+j+1])
-
-#             H += delta_vals[j] * (cre[off+j] @ cre[off+j+1] +
-#                                   ann[off+j+1] @ ann[off+j])
-
-#             H += U_vals[j] * num[off+j] @ num[off+j+1]
-
-#         for j in range(n):
-#             H += eps_full[d][j] * num[off+j]
-
-#     # Add inter-PMM coupling
-#     if couple_A is not None and couple_B is not None:
-#         pmA, siteA = couple_A
-#         pmB, siteB = couple_B
-
-#         iA = pmA*n + siteA
-#         iB = pmB*n + siteB
-
-#         if t_couple1 != 0:
-#             H += -t_couple1 * (cre[iA] @ ann[iB] + ann[iA] @ cre[iB])
-#         if delta_couple1 != 0:
-#             H += delta_couple1 * (cre[iA] @ cre[iB] +
-#                                  ann[iA] @ ann[iB])
-
-#     if couple_C is not None and couple_D is not None:
-#         pmC, siteC = couple_C
-#         pmD, siteD = couple_D
-
-#         iC = pmC*n + siteC
-#         iD = pmD*n + siteD
-
-#         if t_couple2 != 0:
-#             H += -t_couple2 * (cre[iC] @ ann[iD] + ann[iC] @ cre[iD])
-#         if delta_couple2 != 0:
-#             H += delta_couple2 * (cre[iC] @ cre[iD] +
-#                                  ann[iC] @ ann[iD])
-
-
-#     return H
-import time
-
-
 def big_H(n, dup, t_vals, U_vals, eps_vals, delta_vals,
                couplings=(), eps_detune=None, operators=None):
 
@@ -171,7 +95,7 @@ def big_H(n, dup, t_vals, U_vals, eps_vals, delta_vals,
     eps_full = np.tile(eps_vals, (dup,1))
     if eps_detune:
         for pm_idx, val in eps_detune.items():
-            eps_full[pm_idx, :] = val
+            eps_full[pm_idx, 0], eps_full[pm_idx, -1] = val, val
 
 
     # Intra PMM terms
@@ -187,8 +111,8 @@ def big_H(n, dup, t_vals, U_vals, eps_vals, delta_vals,
             H += eps_full[d,j] * num[off+j]
 
 
-
     #  Inter PMM couplings
+  
     for cA, cB, t_c, d_c in couplings:
         if cA is None or cB is None:
             continue

@@ -387,3 +387,4 @@ if __name__ == "__main__":
    
     plot_state_classification(results, n_sites)
     plot_states_transitions(transitions, n_sites)
+

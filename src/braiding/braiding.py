@@ -302,6 +302,33 @@ def berry_phase_kato_low_energy(times, V_low):
     return U_berry
 
 @njit
+def find_number_of_degenerate_ground_states(evals, tol=1e-6):
+    """
+    Find the number of degenerate ground states given a list of eigenvalues.
+    
+    Parameters
+    ----------
+    evals : array_like
+        Array of eigenvalues.
+    tol : float, optional
+        Tolerance for degeneracy check. Default is 1e-6.
+    Returns
+    -------
+    int
+        Number of degenerate ground states.
+    """
+    ground_energy = evals[0]
+    degenerate_count = 1
+    
+    for energy in evals[1:]:
+        if abs(energy - ground_energy) < tol:
+            degenerate_count += 1
+        else:
+            break
+    
+    return degenerate_count
+
+@njit
 def simple_delta_pulse(t, T_peak, width, s, max_val, min_val):
 
     
@@ -313,16 +340,7 @@ def simple_delta_pulse(t, T_peak, width, s, max_val, min_val):
 
     return min_val + (max_val - min_val) * rise * fall
 
-def build_Hamiltonian(current_time,
-                      n_sites, dupes,
-                      T_total,
-                      t, U, eps, Delta,
-                      width, s,
-                      couple_defs,
-                      eps_detune=None,
-                      operators=None):
-
-    
+def build_Hamiltonian(current_time, n_sites, dupes, T_total, t, U, eps, Delta, width, s, couple_defs, eps_detune=None, operators=None):
     # Pulses
     t_AB = (
         simple_delta_pulse(current_time, 0, width, s, couple_defs['AB']['t'], 0)
@@ -377,13 +395,12 @@ def build_Hamiltonian(current_time,
     return H_t, pulses
 
 
-def time_evolution2(T_total, n_steps, n_sites, dupes, t, U, eps, Delta, width, s, couple_defs, eps_detune=None,K=8
-):
+def time_evolution2(T_total, n_steps, n_sites, dupes, t, U, eps, Delta, width, s, couple_defs, eps_detune=None, K=8):
     big_N = n_sites * dupes
     Time_array = np.linspace(0, T_total, n_steps)
     dim = 2**big_N
 
-    # Low-energy storage (for Berry, gap, gates) 
+    # Storage arrays
     E_low = np.zeros((n_steps, K))
     V_low = np.zeros((n_steps, dim, K), dtype=complex)
     gap   = np.zeros(n_steps)
@@ -392,6 +409,7 @@ def time_evolution2(T_total, n_steps, n_sites, dupes, t, U, eps, Delta, width, s
     # Single site information storage
     gamma_ops = majorana_operators(n_sites)
 
+    # Storage for observables
     MP_storage = np.zeros((n_steps, dupes, len(gamma_ops)))
     parity_expectations = np.zeros((n_steps, dupes))
     entropy = np.zeros((n_steps, dupes))
@@ -428,13 +446,15 @@ def time_evolution2(T_total, n_steps, n_sites, dupes, t, U, eps, Delta, width, s
         all_pulses.append(pulses)
   
         eigvals, evecs = np.linalg.eigh(H_t)
+
+
         E_low[i] = eigvals[:K]
         V_low[i] = evecs[:, :K]
-        gap[i]   = eigvals[K] - eigvals[K-1]
+        gap[i]   = eigvals[K+1] - eigvals[K]
 
 
         
-        rho = global_density_matrix(evecs, N=K) # Should equal 8 for n_sites=3
+        rho = global_density_matrix(evecs, N=K) # Should equal 4 for n_sites=3 with the active couplings
         for j in range(dupes):
             keep_sites = list(range(j*n_sites, (j+1)*n_sites))
             rho_reduced = partial_trace(rho, keep=keep_sites, dims=[2]*big_N) 
@@ -474,8 +494,7 @@ if __name__ == "__main__":
     t_couple = 1.0
     delta_couple = 1.0
     eps_detune = {1: 1.0}  # Detune PMM
-    K = 8
-
+    K = 4
 
 
     couple_defs = {
@@ -488,29 +507,29 @@ if __name__ == "__main__":
 
     (Time_array, E_low, V_low, gap, MP_storage, local_occupations, majorana_correlations, entropy, all_pulses) = outputs
 
-    # #Plot gap
-    # plt.figure(figsize=(7,4))
-    # plt.plot(Time_array, gap)
-    # plt.yscale("log")
-    # plt.xlabel("Time")
-    # plt.ylabel("Gap to excited states")
-    # plt.title("Adiabatic gap")
-    # plt.grid(True)
-    # plt.show()
+    #Plot gap
+    plt.figure(figsize=(7,4))
+    plt.plot(Time_array, gap)
+    plt.yscale("log")
+    plt.xlabel("Time")
+    plt.ylabel("Gap to excited states")
+    plt.title("Adiabatic gap")
+    plt.grid(True)
+    plt.show()
 
-    # print("Minimum gap:", gap.min())
+    print("Minimum gap:", gap.min())
 
 
-    # #Plot energy spectrum
-    # plt.figure(figsize=(7,4))
-    # for j in range(2):
-    #     plt.plot(Time_array, E_low[:, j], label=f"State {j}")
-    # plt.xlabel("Time")
-    # plt.ylabel("Energy")
-    # plt.title("Low-energy spectrum")
-    # plt.legend()
-    # plt.grid(True)
-    # plt.show()
+    #Plot energy spectrum
+    plt.figure(figsize=(7,4))
+    for j in range(K):
+        plt.plot(Time_array, E_low[:, j], label=f"State {j}")
+    plt.xlabel("Time")
+    plt.ylabel("Energy")
+    plt.title("Low-energy spectrum")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
 
 
     # # Plot majorana correlation matrix elements for each PMM
