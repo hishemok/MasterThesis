@@ -27,6 +27,12 @@ def review_configurations(n_sites, filename="configuration.json"):
         print(f"\nPlotted {count} configuration(s) for n={n_sites}.")
 
 if __name__ == "__main__":
-    n = 3
+    n = 2
+    """
+    n=2, U=0.1:
+    ϵ = [-0.05, -0.05]
+    t, Δ = 1.00, 1.05
+    """
+
     filename = "configuration.json"
     review_configurations(n, filename)
