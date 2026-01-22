@@ -23,6 +23,7 @@ def compute_spectrum(model, phys_params):
     """
     Build the Hamiltonian and compute the full spectrum and parity classification.
     """
+    print("PHYS PARAMS\n",phys_params, "\n")
     H_torch = model.build(phys_params)
     evals, evecs = torch.linalg.eigh(H_torch)
 
