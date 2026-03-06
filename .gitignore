@@ -5,6 +5,10 @@ __pycache__/*.pyc
 # Conda environment folders
 .conda/
 *.conda/
+.venv/
+
+# Generated braiding data
+src/braiding/braiding_time_evolution.npz
 
 # LaTeX build files
 texmex/*.aux
