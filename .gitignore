@@ -1,11 +1,33 @@
-# Python cache
-__pycache__/*.pyc
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+.coverage
+.coverage.*
+htmlcov/
+build/
+dist/
+*.egg-info/
 
-
-# Conda environment folders
+# Python environment folders
 .conda/
 *.conda/
 .venv/
+venv/
+env/
+ENV/
+.python-version
+
+# Editor and OS cruft
+.DS_Store
+*.swp
+*.swo
+*~
 
 # Generated braiding data
 src/braiding/braiding_time_evolution.npz
