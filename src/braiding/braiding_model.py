@@ -85,38 +85,8 @@ def plot_results(times, energies, couplings):
     plt.show()
 
 
-(gamma_A1_full, gamma_A2_full), (gamma_B1_full, gamma_B2_full), (gamma_C1_full, gamma_C2_full) = get_full_gammas(levels_to_include=4, verbose=False)
 
 
-builder = BraidingHamiltonianBuilder(
-    n_sites=3,
-    dupes=3,
-    specified_vals={"U": [0.1]},
-    config_path=default_config_path(),
-)
-
-
-H_full = builder.full_system_hamiltonian()
-
-
-_, eigvecs = np.linalg.eigh(H_full)
-
-
-
-
-V_ref = eigvecs[:,:8]  # Reference basis (full eigenbasis at t=0)
-gamma_A1_sub = V_ref.conj().T @ gamma_A1_full @ V_ref
-gamma_A2_sub = V_ref.conj().T @ gamma_A2_full @ V_ref
-gamma_B1_sub = V_ref.conj().T @ gamma_B1_full @ V_ref
-gamma_B2_sub = V_ref.conj().T @ gamma_B2_full @ V_ref
-gamma_C1_sub = V_ref.conj().T @ gamma_C1_full @ V_ref
-gamma_C2_sub = V_ref.conj().T @ gamma_C2_full @ V_ref
-gamma_A1_sub /= np.sqrt(np.trace(gamma_A1_sub @ gamma_A1_sub).real / 8)
-gamma_A2_sub /= np.sqrt(np.trace(gamma_A2_sub @ gamma_A2_sub).real / 8)
-gamma_B1_sub /= np.sqrt(np.trace(gamma_B1_sub @ gamma_B1_sub).real / 8)
-gamma_B2_sub /= np.sqrt(np.trace(gamma_B2_sub @ gamma_B2_sub).real / 8)
-gamma_C1_sub /= np.sqrt(np.trace(gamma_C1_sub @ gamma_C1_sub).real / 8)
-gamma_C2_sub /= np.sqrt(np.trace(gamma_C2_sub @ gamma_C2_sub).real / 8)
 
 
 
@@ -157,31 +127,6 @@ def evolve_system(T_total, Δ_max, Δ_min, s, width, γ0, γ1, γ2, γ3, n_point
 
     return times, energies, couplings, U_kato
 
-
-γ0, γ1, γ2, γ3 = gamma_A1_sub, gamma_A2_sub, gamma_B1_sub, gamma_C1_sub
-
-T_total = 1000.0
-Δ_max = 1.0
-Δ_min = 0
-width = T_total/3
-s = 20/width
-# Parameters
-params = {
-    'T_total': T_total,
-    'Δ_max': Δ_max,
-    'Δ_min': Δ_min,
-    's': s,
-    'width': width,
-    'γ0': γ0,
-    'γ1': γ1,
-    'γ2': γ2,
-    'γ3': γ3,
-    'n_points': 10000
-}
-
-
-times, energies, couplings, U_kato = evolve_system(**params)
-plot_results(times, energies, couplings)
 
 
 def build_total_parity_projected(builder, V_ref):
@@ -348,16 +293,78 @@ def check_parity_resolved_gate(U_kato, V0, parity_op, γ2, γ3):
     print(f"even-block target error: {phase_aligned_error(even_block, even_target):.2e}")
 
 
-gamma_list = [γ0, γ1, γ2, γ3]
-parity_projected = build_total_parity_projected(builder, V_ref)
-ground_data = get_ground_manifold_data(γ0, γ1, γ2, γ3)
+if __name__ == "__main__":
 
-check_majorana_algebra(gamma_list)
-check_path_properties(times, energies, parity_projected, γ0, γ1, γ2, γ3)
-check_kato_transport(U_kato, ground_data["P0"], ground_data["PT"])
-check_single_exchange(U_kato, gamma_list)
-check_double_exchange(U_kato, gamma_list)
-check_four_exchanges(U_kato, gamma_list)
-check_parity_resolved_gate(U_kato, ground_data["V0"], parity_projected, γ2, γ3)
+    (gamma_A1_full, gamma_A2_full), (gamma_B1_full, gamma_B2_full), (gamma_C1_full, gamma_C2_full) = get_full_gammas(levels_to_include=4, verbose=False)
 
 
+    builder = BraidingHamiltonianBuilder(
+        n_sites=3,
+        dupes=3,
+        specified_vals={"U": [0.1]},
+        config_path=default_config_path(),
+    )
+
+
+    H_full = builder.full_system_hamiltonian()
+
+
+    _, eigvecs = np.linalg.eigh(H_full)
+
+    V_ref = eigvecs[:,:8]  # Reference basis (full eigenbasis at t=0)
+    gamma_A1_sub = V_ref.conj().T @ gamma_A1_full @ V_ref
+    gamma_A2_sub = V_ref.conj().T @ gamma_A2_full @ V_ref
+    gamma_B1_sub = V_ref.conj().T @ gamma_B1_full @ V_ref
+    gamma_B2_sub = V_ref.conj().T @ gamma_B2_full @ V_ref
+    gamma_C1_sub = V_ref.conj().T @ gamma_C1_full @ V_ref
+    gamma_C2_sub = V_ref.conj().T @ gamma_C2_full @ V_ref
+    gamma_A1_sub /= np.sqrt(np.trace(gamma_A1_sub @ gamma_A1_sub).real / 8)
+    gamma_A2_sub /= np.sqrt(np.trace(gamma_A2_sub @ gamma_A2_sub).real / 8)
+    gamma_B1_sub /= np.sqrt(np.trace(gamma_B1_sub @ gamma_B1_sub).real / 8)
+    gamma_B2_sub /= np.sqrt(np.trace(gamma_B2_sub @ gamma_B2_sub).real / 8)
+    gamma_C1_sub /= np.sqrt(np.trace(gamma_C1_sub @ gamma_C1_sub).real / 8)
+    gamma_C2_sub /= np.sqrt(np.trace(gamma_C2_sub @ gamma_C2_sub).real / 8)
+
+
+
+
+
+    γ0, γ1, γ2, γ3 = gamma_A1_sub, gamma_A2_sub, gamma_B1_sub, gamma_C1_sub
+
+    T_total = 1000.0
+    Δ_max = 1.0
+    Δ_min = 0
+    width = T_total/3
+    s = 20/width
+    # Parameters
+    params = {
+        'T_total': T_total,
+        'Δ_max': Δ_max,
+        'Δ_min': Δ_min,
+        's': s,
+        'width': width,
+        'γ0': γ0,
+        'γ1': γ1,
+        'γ2': γ2,
+        'γ3': γ3,
+        'n_points': 10000
+    }
+
+
+    times, energies, couplings, U_kato = evolve_system(**params)
+    plot_results(times, energies, couplings)
+
+
+
+
+    gamma_list = [γ0, γ1, γ2, γ3]
+    parity_projected = build_total_parity_projected(builder, V_ref)
+    ground_data = get_ground_manifold_data(γ0, γ1, γ2, γ3)
+
+    check_majorana_algebra(gamma_list)
+    check_path_properties(times, energies, parity_projected, γ0, γ1, γ2, γ3)
+    check_kato_transport(U_kato, ground_data["P0"], ground_data["PT"])
+    check_single_exchange(U_kato, gamma_list)
+    check_double_exchange(U_kato, gamma_list)
+    check_four_exchanges(U_kato, gamma_list)
+    check_parity_resolved_gate(U_kato, ground_data["V0"], parity_projected, γ2, γ3)

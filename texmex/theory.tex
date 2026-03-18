@@ -1,0 +1,202 @@
+\section{Theory}
+\subsection{Majorana Fermion}
+{\color{red}
+Quick introduction to Majorana fermions, their properties. Discuss the concept of Majorana zero modes (MZMs) and their significance in topological quantum computing.
+}
+\subsection{Topological Quantum Computing}
+{\color{red}
+Introduce the concept of topological quantum computing, emphasizing the role of MZMs in encoding and manipulating quantum information. Discuss the advantages of topological quantum computing, such as robustness against local perturbations and decoherence.
+}
+
+\subsection{The Superconducting State}
+\subsubsection{From Cooper Pairing to the Energy Gap}
+Superconductivity arises when electrons in a metal form bound pairs, known as Cooper pairs, below a critical temperature $T_c$. These pairs condense into a coherent quantum state that can carry current without resistance, and also expel magnetic fields via the Meissner effect. This immediately distinguishes a superconductor from a perfect conductor, because it is a distinct thermodynamic phase with long-range quantum coherence \cite{Cambridge_MBPhysics}.\\
+The microscopic origin of superconductivity lies in an effective attractive interaction between electrons, mediated by phonons (lattice vibrations). It is somewhat counterintuitive that electrons, which naturally repel each other due to their negative charge, can experience an effective attraction. However, when an electron moves through a lattice structure of positive ions, it distorts the lattice, pulling a group of the ions towards itself. This distortion creates a region of increased positive charge density that can attract another electron with opposite momentum and spin, leading to the formation of a Cooper pair \cite{Physics_libretexts_2025}.\\
+Even a weak attraction can destabilize the normal metallic Fermi sea, allowing electrons of opposite momenta and spins to form bound pairs. These pairs behave as bosons (integer spin particles) and condense into a macroscopic quantum state described by a collective wavefunction $ψ(r)$, whose phase coherence gives rise to the supercurrent.\\
+At the mean-field level, this collective behaviour opens an energy gap $Δ$ around the Fermi surface. This gap represents the minimum energy needed to break a Cooper pair and create excitations, called Bogoliubov quasiparticles, that are mixtures of electron and hole states. The presence of this gap explains the vanishing resistivity and the exponential suppression of heat capacity and other thermodynamic quantities at low temperatures \cite{Cambridge_MBPhysics}, \cite{BCS}.\\
+The pairing gap is what makes superconductors so special for topological applications. Because single-particle excitations cost a finite energy, the superconducting condensate is robust against small perturbations and other local noise. When combined with spin-orbit coupling and appropriate confinement or hybridization, this same pairing mechanism can give rise to topological superconductivity, where the quasiparticles at zero energy behave as Majorana modes.\\
+In essence, superconductivity provides both the microscopic pairing mechanism and the macroscopic phase coherence needed to host non-local, topologically protected excitations, making it the natural foundation for exploring Majorana physics in condensed matter systems.
+
+\subsubsection{Bogoliubov-de Gennes Formalism}
+While the BCS theory captures the essence of superconductivity as a condensate of Cooper pairs, it assumes a spatially uniform order parameter $Δ$. In real systems, superconductivity can vary across space due to interfaces, impurities, or confinement. To describe such spatially inhomogeneous superconductors, the BCS framework must be generalized. This leads to the Bogoliubov-de Gennes (BdG) formalism \cite{Cambridge_MBPhysics}, \cite{BCS}.\\
+\begin{equation}
+  \begin{pmatrix}
+  H_0(r) & Δ(r) \\
+  Δ^{*}(r) & -H_0^{*}(r)
+  \end{pmatrix}
+  \begin{pmatrix}
+  u_n(r) \\
+  v_n(r)
+  \end{pmatrix}= E_n
+  \begin{pmatrix}
+  u_n(r) \\
+  v_n(r)
+  \end{pmatrix}
+  \label{eq:BdGintro}
+\end{equation}
+where $H_0 = \frac{p²}{2m}-μ + V(r)$ describes the normal-state single particle Hamiltonian, and $Δ(r)$ is the superconducting pair potential.\\ 
+Each solution of the BdG equations (\ref{eq:BdGintro}) corresponds to a Bogoliubov quasiparticle, a coherent superposition of electron and hole amplitudes $(u_n(r), v_n(r))$. The resulting excitation spectrum is symmetric about zero energy due to the intrinsic particle-hole symmetry of the BdG Hamiltonian:
+\begin{equation}
+  Ξ H_{BdG} Ξ^{-1} = -H_{BdG}, \quad Ξ = τ_x K
+\end{equation}
+where $τ_x$ acts in particle-hole space and $K$ is complex conjugation. This ensures that if $E_n$ is an eigenvalue, so is $-E_n$.\\
+This symmetry has an important consequence: superconductors no longer conserve particle number, only fermion parity, and the eigenstate at $± E_n$ correspond to the same physical excitation. A zero-energy solution ($E_n = 0$) indicates a self-conjugate quasiparticle, $γ = γ^{†}$, which is the defining property of a Majorana mode \cite{Topocondmat}.\\
+The BdG formalism connects the microscopic BCS theory and the modern description of topological superconductivity. It provides a natural framework for modeling hybrid nanostructures, such as quantum dots coupled to superconducting leads, and low-dimensional systems where topological phases can emerge.  \\
+
+\subsubsection{Hybrid Semiconductor-Supercondcutor Systems}
+Superconductivity on its own already provides a platform for charge transport without resistance, and for pairing electrons into coherent states. However, when a conventional superconductor is coupled to another material, such as a semiconductor, it can transfer its essential properties through what is known as the \textit{proximity effect}. This hybridization allows us to engineer superconductivity in systems that do not exhibit it intrinsically, and forms an experimental foundation for realizing Majorana modes in condensed matter systems  \cite{Qtech}.
+\paragraph{(i) Hybdird Systems:  The Proximity Effect and Induced Superconductivity}
+At the interface between a semiconductor and a superconductor, the superconducting condensate can penetrate into the semiconductor, through a process called the proximity effect. As a result, electrons in the semiconductor acquire pairing correlations from the superconductor, giving rise to an induced superconducting gap $Δ_{\mathrm{ind}}$, even though the semiconductor itself lacks an intrinsic pairing interaction.\\
+This induced pairing allows the semiconductor to behave as a proximitized superconductor. However, the advantage of using a semiconductor is not just that it becomes superconducting, but that it is highly tunable and has strong spin-related effects that are difficult to achieve in conventional superconductors.\\
+In order to induce a topological transition, the idea is to exploit the competition between three different effects. First, the s-wave superconducting proximity effect provides the pairing mechanism. Second, the Zeeman energy $E_Z = \frac{1}{2} g μ_bB$, can break Cooper pairs by aligning their electron spins. Lastly, the spin-orbit coupling, prevents the spins from reaching full alignment. This allows for the opening and closing of the superconducting gap. Such phase transitions occur at $E_Z = \sqrt{Δ_{\mathrm{ind}}^2 + μ^2}$, where $μ$ is the chemical potential in the semiconductor. The topological regime corresponds to $E_Z > \sqrt{Δ_{\mathrm{ind}}^2 + μ^2}$, where Majorana modes can emerge at the ends of one-dimensional systems.\\
+Another important aspect of hybrid semiconductor-superconductor systems is that applying a magnetic field strong enough to reach the topological regime would break the superconductivity in a pure superconductor. However, in a proximitized semiconductor, the effective g-factor can be much larger than in the superconductor, allowing the Zeeman energy to exceed the induced gap without destroying superconductivity. This, alongside the tunability of the semiconductor's chemical potential via gate voltages, makes these hybrid systems ideal platforms for exploring topological superconductivity and Majorana modes \cite{Qtech}.\\
+\paragraph{(ii) Hybrid Systems: Andreev Reflection and Cooper-Pair splitting}
+Microscopically, the proximity effect is a consequence of Andreev reflection, a process where an electron incident on the SM–SC interface is reflected as a hole, while an incoming Cooper pair is absorbed into the superconductor. In confined or low-dimensional hybrid systems, these reflections can lead to discrete subgap states, \textit{Andreev bound states}, that interpolate between conventional superconducting excitations and emergent Majorana modes.\\
+In double-dot systems, this process can become nonlocal: a Cooper pair can effectively split, sending one electron into each region. These nonlocal pairing correlations mimic the nonlocal character of Majorana modes and provide an intuitive picture of how such quasiparticles can emerge from conventional superconducting ingredients.\\
+In summary, hybrid semiconductor–superconductor systems act as the experimental and conceptual link between ordinary $s$-wave superconductivity and topological superconductivity. The same pairing mechanism that gives rise to Cooper pairs, when combined with spin–orbit coupling and magnetic fields, allows us to engineer effective $p$-wave pairing, the key ingredient of the Kitaev chain and the Poor Man’s Majorana system.
+
+
+\subsection{Engineering Majorana Modes in a Minimal System}
+\subsubsection{Kitaev Chains}
+We now want to build on the microscopic understanding of superconductivity we investigated in the previous sections. In particular, we want to see how such pairing phenomena can be engineered to host topological excitations, in particular, Majorana bound states. The theoretical foundation for this lies in the Kitaev chain model, a one-dimensional toy model that captures the essential ingredients of topological superconductivity in its simplest form \cite{Topocondmat}.\\
+\begin{figure}
+  \centering
+  \includegraphics[width=0.45\textwidth]{figs/no_unpaired.png}
+  \includegraphics[width=0.45\textwidth]{figs/unpaired.png}
+  \caption{Schematic representation of the Kitaev chain in its two distinct phases. Left: In the trivial phase, Majorana modes on the same site pair to form conventional fermions, leaving no unpaired modes. Right: In the topological phase, Majoranas on adjacent sites couple, leaving unpaired modes at the chain ends, which combine into a non-local fermionic mode. \cite{Topocondmat}}
+  \label{fig:kitaev}
+\end{figure}
+In the figure above \ref{fig:kitaev}, we see a schematic representation of the Kitaev chain in its two distinct phases, the trivial phase on the left and the topological phase on the right.\\
+In the trivial phase, the Majorana modes on the same site pair to form conventional fermions, leaving no unpaired modes. In contrast, in the topological phase, Majoranas on adjacent sites couple, leaving unpaired modes at the chain ends, which combine into a non-local fermionic mode. At first glance, it may seem impossible to isolate a single Majorana mode, since condensed matter systems are composed of electrons, which always correspond to pairs of Majoranas. However, it turns out that by engineering the Hamiltonian appropriately, one can create a situation where two Majorana modes localize at opposite ends of a one-dimensional system, effectively separating them spatially. This separation is crucial for their non-Abelian statistics and potential applications in topological quantum computing \cite{Topocondmat}.\\
+The Hamiltonian of the Kitaev chain is given by:
+\begin{equation}
+H = -\mu \sum_{j=1}^{N} \left(c_j^\dagger c_j - \frac{1}{2}\right)
+- t \sum_{j=1}^{N-1} \left(c_j^\dagger c_{j+1} + c_{j+1}^\dagger c_j\right)
++ \Delta \sum_{j=1}^{N-1} \left(c_j c_{j+1} + c_{j+1}^\dagger c_j^\dagger\right),
+\label{eq:kitaev_ham}
+\end{equation}
+where $μ$ is the chemical potential, or onsite energy, $t$ is the hopping amplitude, and $Δ$ is the p-wave pairing amplitude. The fermionic operators $c_j^\dagger$ and $c_j$ create and annihilate an electron at site $j$, respectively.\\
+With the parameters $t=Δ=0$ and $μ ≠ 0$, the system is in a trivial insulating phase with no special edge states. However, tuning the parameters such that $t = Δ > 0$ and $μ = 0$, the edges become isolated, leaving two unpaired Majorana modes localized at the ends. These modes combine into a single non-local fermionic mode that costs zero energy to occupy. We will later explore how this model maps onto the QD–SC–QD system, and how the parameters can be tuned experimentally to reach this regime. 
+
+\paragraph{Bulk Spectrum and Topological phases}
+To understand when the Kitaev chain supports topologically non-trivial states, we now turn from the real-space picture to its bulk description in momentum space. This transformation allows us to analyze the quasiparticle excitation spectrum and identify the conditions under which the superconducting gap closes and reopens.\\
+Using translation invariance, we apply a Fourier transform,
+$$
+c_j = \frac{1}{\sqrt{N}} \sum_p e^{ipaj} c_p,
+$$
+This allows us to write the Hamiltonian (\ref{eq:kitaev_ham}) in momentum space $p$ as:
+\begin{equation}
+H = ∑_{ p}^{} ξ_p\left(c_p^{†} c_p - \frac{1}{2}\right) - ∑_{p}^{} t \cos p a + Δ ∑_{p}^{}\left(c_p^{†} c_{-p}^{†} e^{ipa} + c_{-p} c_p e^{-ipa}\right), 
+\end{equation}
+with $ξ_p = -μ - 2t \cos pa$ and $a$ the lattice spacing. This Hamiltonian becomes diagonal in the Bogoliubov–de Gennes (BdG) formalism. The resulting quasiparticle energy spectrum is:
+\begin{equation}
+  E_{p,\pm} = \pm \sqrt{(μ + 2t \cos{pa})^2 + 4Δ^2 \sin^2{pa}},
+\end{equation}
+The spectrum is gapped for most parameter values, but the gap closes when
+$$
+|μ| = 2|t|
+$$
+See Figure ~\ref{fig:kitaev_bands} for a visualization of the quasiparticle energy spectrum. This marks the critical point separating two distinct superconducting phases. When $μ$ crosses this boundry, the system undergoes a topological phase transition: the character of the ground state changes without any symmetry breaking, but through a change in the topology of the quasiparticle band structure \cite{Qtech}.\\
+\begin{figure}
+  \includegraphics[width=1\textwidth]{figs/band_structure.pdf}
+  \caption{Quasiparticle energy spectrum of the Kitaev chain for different chemical potentials $μ$. Left: In the trivial phase ($|μ| > 2|t|$), the spectrum is fully gapped with no zero-energy modes. Right: In the topological phase ($|μ| < 2|t|$), the gap closes and reopens, signaling the emergence of zero-energy edge modes.}
+  \label{fig:kitaev_bands}
+\end{figure}
+% \newpage
+\paragraph{Majorana Representation and Zero Modes}
+In order to further understand the nature of these boundry states, we can express each fermionic operator in terms of two real Majorana operators:
+\begin{equation}
+c_j = \frac{1}{2}(\gamma_j^A + i\gamma_j^B), \quad
+c_j^\dagger = \frac{1}{2}(\gamma_j^A - i\gamma_j^B),
+\end{equation}
+where $\gamma_j^{A,B}$ satisfy $\{\gamma_j^\alpha, \gamma_k^\beta\} = 2\delta_{jk}\delta_{\alpha\beta}$ and $(\gamma_j^\alpha)^\dagger = \gamma_j^\alpha$.\\
+In this basis, the two distinct phases correspond to different pairing patterns between the Majorana operators. For a large $μ$, ($|μ| > 2|t|$), the Majorana operators pair up on the same site, leading to a trivial phase with no zero-energy modes. On the other hand, in the topological phase ($|μ| < 2|t|$) and $t = Δ$, the Majoranas on adjacent sites couple ($\gamma_j^B$ with $\gamma_{j+1}^A$), leaving two unpaired Majorana modes at the ends of the chain: $\gamma_1^A$ at the left end and $\gamma_N^B$ at the right end, see Figure \ref{fig:kitaev}.\\
+These two unpaired Majoranas combine into a single non-local fermionic mode:
+\begin{equation}
+  f = \frac{1}{2 }(\gamma_1^A + i\gamma_N^B),
+\end{equation}
+which satisfies $\{f, f^\dagger\} = 1$ and costs zero energy. The two possible occupations of this non-local fermion correspond to a twofold degenerate ground state. This degeneracy is topologically protected: local perturbations cannot lift it unless they close the bulk gap or couple the two edge Majoranas directly.\\
+The Kitaev chain thus provides the minimal theoretical framework for understanding Majorana zero modes. Its simplicity allows for exact solutions and clear physical intuition, making it an ideal starting point for exploring more complex systems that can host topological superconductivity and Majorana fermions.
+
+\subsubsection{The QD-SC-QD System as an Effective Kitaev Chain}
+While the Kitaev chain provides the minimal theoretical framework for understanding Majorana zero modes, it remains an abstract model, assuming spinless fermions and idealized $p$-wave pairing. Real materials, however, are spinful and typically host conventional $s$-wave superconductivity. The challenge, therefore, is to engineer hybrid systems whose effective low-energy behaviour mimics that of the Kitaev chain.\\
+A particularly compact realization of such a system is the double quantum dot coupled via a superconducting segment, the so-called \textit{Poor Man’s Majorana} (PMM) setup. This device consists of two quantum dots (QDs) connected through a central superconductor, forming the minimal two-site analogue of the Kitaev chain. Despite its simplicity, it reproduces the essential ingredients of topological superconductivity: coherent hopping, non-local pairing, and the emergence of near-zero-energy states with Majorana-like characteristics.
+
+\paragraph{Mapping to the Kitaev Hamiltonian}
+
+Each quantum dot represents a site in the minimal Kitaev chain. The Hamiltonian of the hybrid system can be written in a general form as:
+\begin{equation}
+H = \sum_{i=L,R} \epsilon_i n_i
++ t (d_L^\dagger d_R + d_R^\dagger d_L)
++ \Delta (d_L^\dagger d_R^\dagger + d_R d_L)
++ U \sum_{i=L,R} n_i
+\label{eq:qdsqdh}
+\end{equation}
+where $d_{L/R}^\dagger$ and $d_{L/R}$ are electron creation and annihilation operators on the left and right dots. $n_i$ is the number operator for dot $i$. The parameters $ϵ_{L,R}$ correspond to the dot energy levels, $t$ is the elastic cotunneling amplitude, $Δ$ is the crossed Andreev reflection amplitude, and $U$ is the on-site Coulomb repulsion energy.\\
+The meaning of each parameter is as follows:
+\begin{itemize}
+    \item \textbf{Elastic cotunneling (ECT):} An electron tunnels coherently from one dot to the other via a virtual process through the superconductor. This process defines the effective hopping amplitude $t$, analogous to the kinetic term in the Kitaev model.
+    \item \textbf{Crossed Andreev reflection (CAR):} A Cooper pair in the superconductor splits such that one electron tunnels into each dot. This process produces an effective non-local pairing term $\Delta$, which is mathematically equivalent to the $p$-wave pairing amplitude in the Kitaev chain.
+    \item \textbf{On-site energy:} The local dot energies $\epsilon_L$ and $\epsilon_R$ play the role of the site-dependent chemical potential $\mu$.
+\end{itemize}
+At the so-called sweet spot, where $|\epsilon_L| = |\epsilon_R| = 0$ and $|t| = |\Delta|$, the system enters a regime in which two Majorana-like states localize predominantly on separate dots. These two states form an effective non-local fermion and exhibit many of the qualitative features of true topological Majorana bound states, such as zero-energy modes and near-perfect particle–hole symmetry. However, since the system is finite and lacks a bulk, it does not possess true topological protection, hence the name “poor man’s Majoranas”. \cite{Qtech}
+
+\paragraph{Low-energy Features and Experimental Tunability}
+The poor man's Majorana setup, double quantum dot coupled via a superconductor, provides a minimal realization of the Kitaev chain. In reality, the complete microscopic Hamiltonian includes interactions and spin degrees of freedom. However, in the regime relevant for Poor Man's Majoranas, the low-energy physics is effectively captured by the spinless two-site model introduced above. In this setup, near-zero energy Majorana-like states emerge across the two dots, exhibiting an even- and odd-parity ground state and strong non-local correlations.\\
+This platform is an experimentally attractive method to realize Kitaev chain physics because its parameters can be tuned independently. Gate voltages control the dot energy levels, the transparency of the QD–SC interfaces governs the effective hopping and non-local pairing, and magnetic fields can suppress unwanted spinful excitations. By sweeping these parameters, one can access and identify the  Majorana-like properties. \\
+This minimal setup captures the essential low-energy properties of a Kitaev chain while remaining experimentally controllable, providing a direct route from theoretical modeling to realizable quantum devices.
+
+\subsubsection{Identifying Majorana Modes in the QD-SC-QD System}
+In this section we will briefly go through the key signatures that indicate the presence of Majorana-like modes in the QD–SC–QD system. These signatures arise from the unique properties of Majorana fermions. There are a few quantities we can use to identify the presence of PMMs, and their Robustness to perturbations.\\
+
+\paragraph{The parity Operator}
+The parity operator itself is not a measurement of a Majorana mode, but it is a useful tool in the identification process. The mean-field Hamiltonian of a superconductor does not conserve particle number, but it does conserve fermion parity. What this means is that the number of electrons in the system can change by pairs, but not by single electrons. The parity operator is defined as:
+$$
+P = (-1)^{N} = Π_n(1 - 2c_n ^{†} c_n)
+$$
+where $N$ is the total number of electrons in the system, and $c_n^{†}$ and $c_n$ are the creation and annihilation operators for the fermionic mode formed by the two Majorana modes. The eigenvalues of the parity operator are $+1$ for even parity (an even number of electrons) and $-1$ for odd parity (an odd number of electrons).\\
+When working with Majorana modes, we often consider the two degenerate ground states of the system, which differ by their fermion parity. The presence of a Majorana mode implies that these two states are nearly degenerate and can be transformed into each other by adding or removing a single electron, thus changing the parity.\\
+
+\paragraph{Energy Degeneracy}
+When we try to identify Majorana modes in the QD–SC–QD system, one of the primary signatures we look for is the presence of energy degeneracy (Figure ~\ref{fig:gs_symmetry}) between the even and odd parity ground states. We also want the ground state energies to be separated by a finite energy gap from the excited states. This energy gap protects the Majorana modes from local perturbations and thermal excitations, which is crucial for their stability and potential use in quantum computing. This is because when we want to do quantum computation using Majorana modes, we need to be able to manipulate the states without causing transitions to higher energy states.\\
+\begin{figure}
+  \centering
+  \includegraphics[width=0.5\textwidth]{figs/gs_symmetry}%
+  \caption{Energy spectrum showing how the energy eigenvalues of the system must be symmetric around zero energy due to particle-hole symmetry \cite{Topocondmat}.}
+  \label{fig:gs_symmetry}
+\end{figure}
+
+\paragraph{Local Distinguishability}
+A property of the Kitaev chain in its topological phase is that measurements done locally cannot reveal if the system is in its odd or even ground state. Meaning the two ground states are locally indistinguishable. In order to quantify this property, we will define the local distinguishability parameter LD as:
+$$
+\text{LD} = \frac{1}{N} \sum_{j=1}^{N} || ρ_j^o - ρ_j^e || = \frac{1}{N} \sum_{j=1}^{N} || δ ρ_j ||
+$$
+\cite{Lund1}, \cite{VikMar}.
+Here, $ρ_j^{o/e}$ are the reduced density matrices of site $j$ for the odd and even parity ground states, respectively. The norm $|| \cdot ||$ is the trace norm, which measures the difference between the two local states. The LD parameter quantifies how distinguishable the two ground states are when only local measurements are considered. A value of LD close to zero indicates that the two states are nearly indistinguishable locally, which is a hallmark of Majorana modes. Conversely, a value close to one indicates that the states can be easily distinguished by local measurements, suggesting the absence of Majorana modes.\\
+
+\paragraph{Majorana Polarization}
+In interaction Kitaev chains with finite magnetic fields, there are no ideal Majorana sweet spots, as the presence of the other spin species introduces corrections to the simple picture of Majorana modes. However, sweet spots with very good Majorana localization and close to degenerate ground states with even and odd parity can still appear in the system. To quantify how close we are to an ideal Majorana mode, we can use the Majorana polarization (MP) metric. The MP is a measure of how well the Majorana modes are localized at the ends of the chain and how closely they resemble ideal Majorana fermions. The MP is defined as:
+$$
+M_α = \frac{W_α^2 - Z_α^2}{W_α^2 + Z_α^2}
+$$
+where,
+$$
+W_α = ∑_{σ} \bra{o} c_{ασ} + c_{ασ}^{†} \ket{e}, \quad Z_α = i ∑_{σ} \bra{o} c_{ασ} - c_{ασ}^{†} \ket{e}
+$$
+Here, $α$ denotes the site index (left or right dot), $σ$ is the spin index, and $\ket{o}$ and $\ket{e}$ are the odd and even parity ground states, respectively. In an ideal sweet spot where two Majoranas are perfectly localized on the left and right dots, the MP values would be $M_L = -M_R = ± 1$. \cite{Qtech}.\\
+
+\paragraph{Charge Expectation and non-locality}
+The last measurable property we will discuss is the charge expectation value of the ground states. This id measured by taking the expectation values of the number operators in the odd and even ground states:
+$$
+\bra{e}n_{L(R)} \ket{e}, \quad \bra{o}n_{L(R)} \ket{o}
+$$
+where $n_{L(R)}$ is the number operator for the left (right) dot. In the ideal case, these expectation values should be equal for both ground states. This is because, if the difference is zero, the two ground states share the same local charge distribution, making them locally indistinguishable. 
+
+\subsection{Braiding of Majoranas}
+\subsubsection{Quantum Gates}
+\subsubsection{Jordan-Wigner transforms}
+\subsubsection{Kato Berry Phase}
+\subsubsection{Effective Braiding Hamiltonian}
+\subsection{Sweet spot parameter search}
+\subsubsection{General Loss function}
+\subsubsection{Gradient Descent and Basin-Hopping}

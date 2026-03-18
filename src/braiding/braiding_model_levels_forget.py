@@ -440,3 +440,21 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+"""
+
+Level-to-level differences at fixed projection dimension
+M=  8: levels 1 -> 2  target delta=+3.56e-16  split delta=+2.22e-16  gap delta=+4.44e-16
+M=  8: levels 1 -> 3  target delta=+6.82e-16  split delta=-1.11e-16  gap delta=+1.11e-15
+M=  8: levels 1 -> 4  target delta=+5.41e-16  split delta=-1.11e-16  gap delta=+4.44e-16
+M= 32: levels 1 -> 2  target delta=-3.69e-01  split delta=-1.33e+00  gap delta=+1.41e+00
+M= 32: levels 1 -> 3  target delta=-3.69e-01  split delta=-1.33e+00  gap delta=+1.41e+00
+M= 32: levels 1 -> 4  target delta=-3.69e-01  split delta=-1.33e+00  gap delta=+1.41e+00
+M=256: levels 1 -> 2  target delta=-3.11e-01  split delta=-1.07e+00  gap delta=-4.42e-09
+M=256: levels 1 -> 3  target delta=-9.85e-01  split delta=-1.36e+00  gap delta=+7.09e-05
+M=256: levels 1 -> 4  target delta=-1.54e+00  split delta=-2.46e+00  gap delta=+1.41e+00
+M=512: levels 1 -> 2  target delta=+4.48e-01  split delta=-2.00e+00  gap delta=-8.25e-09
+M=512: levels 1 -> 3  target delta=-6.95e-01  split delta=-2.67e+00  gap delta=-1.10e-08
+M=512: levels 1 -> 4  target delta=-2.61e+00  split delta=-4.00e+00  gap delta=+1.41e+00
+"""

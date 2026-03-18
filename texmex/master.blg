@@ -1,0 +1,15 @@
+[0] Config.pm:328> INFO - This is Biber 2.21
+[0] Config.pm:331> INFO - Logfile is 'master.blg'
+[25] biber:342> INFO - === ti. mars 17, 2026, 17:35:02
+[32] Biber.pm:421> INFO - Reading 'master.bcf'
+[59] Biber.pm:1002> INFO - Found 7 citekeys in bib section 0
+[65] Biber.pm:4487> INFO - Processing section 0
+[69] Biber.pm:4678> INFO - Looking for bibtex file '/home/Hishem/repos/Special_curriculum/tex/refrences.bib' for section 0
+[70] bibtex.pm:1713> INFO - LaTeX decoding ...
+[73] bibtex.pm:1519> INFO - Found BibTeX data source '/home/Hishem/repos/Special_curriculum/tex/refrences.bib'
+[121] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[121] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[121] Biber.pm:4307> INFO - Sorting list 'nty/global//global/global/global' of type 'entry' with template 'nty' and locale 'en-US'
+[121] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
+[125] bbl.pm:676> INFO - Writing 'master.bbl' with encoding 'UTF-8'
+[127] bbl.pm:779> INFO - Output to master.bbl
