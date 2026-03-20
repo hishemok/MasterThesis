@@ -1,0 +1,293 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{Qtech}{book}{}{}
+      \name{author}{4}{}{%
+        {{hash=6f2f2bc0df6953b04c09c9810222fe3b}{%
+           family={Aguado},
+           familyi={A\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod}}}%
+        {{hash=ae4570682a5924b8b2fdd3508e7098b6}{%
+           family={Citro},
+           familyi={C\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod}}}%
+        {{hash=18881d349f79a53870a10bc0b7a19a6b}{%
+           family={Lewenstein},
+           familyi={L\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+        {{hash=69159be6d974e4000e283861f1f7d194}{%
+           family={Stern},
+           familyi={S\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{217d2df1af6d085e5e57c1e8ef0d0bf9}
+      \strng{fullhash}{da01b6ca2c6f2fbe3eb74b7fa5500147}
+      \strng{fullhashraw}{da01b6ca2c6f2fbe3eb74b7fa5500147}
+      \strng{bibnamehash}{217d2df1af6d085e5e57c1e8ef0d0bf9}
+      \strng{authorbibnamehash}{217d2df1af6d085e5e57c1e8ef0d0bf9}
+      \strng{authornamehash}{217d2df1af6d085e5e57c1e8ef0d0bf9}
+      \strng{authorfullhash}{da01b6ca2c6f2fbe3eb74b7fa5500147}
+      \strng{authorfullhashraw}{da01b6ca2c6f2fbe3eb74b7fa5500147}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{978-3-031-55656-2}
+      \field{title}{New Trends and Platforms for Quantum Technologies}
+      \field{year}{2024}
+    \endentry
+    \entry{Topocondmat}{misc}{}{}
+      \name{author}{8}{}{%
+        {{hash=4d7d0caf4eaf65927c8fa717cb35910b}{%
+           family={Akhmerov},
+           familyi={A\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=17a435d423aa0cc715634f06987109c7}{%
+           family={Sau},
+           familyi={S\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=c5e5222d9cc65f77f36793497dcc79af}{%
+           family={Heck},
+           familyi={H\bibinitperiod},
+           given={B.},
+           giveni={B\bibinitperiod},
+           prefix={van},
+           prefixi={v\bibinitperiod}}}%
+        {{hash=da81b18df069f062e1070816e1070300}{%
+           family={Rubbert},
+           familyi={R\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+        {{hash=18fd13cbc1e1b653a9b25410a0b62618}{%
+           family={Skolasinski},
+           familyi={S\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod}}}%
+        {{hash=df529e73a458a52b171e3c489ff53a71}{%
+           family={Nijholt},
+           familyi={N\bibinitperiod},
+           given={B.},
+           giveni={B\bibinitperiod}}}%
+        {{hash=daadc896ce67ef6344dc1888eacc415c}{%
+           family={Muhammad},
+           familyi={M\bibinitperiod},
+           given={I.},
+           giveni={I\bibinitperiod}}}%
+        {{hash=36dc85557fb2e25716cb4ea63141f663}{%
+           family={Rosdahl},
+           familyi={R\bibinitperiod},
+           given={T.\bibnamedelimi O.},
+           giveni={T\bibinitperiod\bibinitdelim O\bibinitperiod}}}%
+      }
+      \strng{namehash}{24ca8f34ff9992464c060453e1618972}
+      \strng{fullhash}{359de0d39a74a79dc33c19a4fb1fdc14}
+      \strng{fullhashraw}{359de0d39a74a79dc33c19a4fb1fdc14}
+      \strng{bibnamehash}{24ca8f34ff9992464c060453e1618972}
+      \strng{authorbibnamehash}{24ca8f34ff9992464c060453e1618972}
+      \strng{authornamehash}{24ca8f34ff9992464c060453e1618972}
+      \strng{authorfullhash}{359de0d39a74a79dc33c19a4fb1fdc14}
+      \strng{authorfullhashraw}{359de0d39a74a79dc33c19a4fb1fdc14}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Accessed: 2025-10-23}
+      \field{title}{Online course on topology in condensed matter}
+      \field{year}{2024}
+      \verb{urlraw}
+      \verb https://topocondmat.org/index.html
+      \endverb
+      \verb{url}
+      \verb https://topocondmat.org/index.html
+      \endverb
+    \endentry
+    \entry{BCS}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=616cd76a955b1fcb011fefbf1af91880}{%
+           family={Bardeen},
+           familyi={B\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=818261d37b65922f250ddf289897eb6c}{%
+           family={Cooper},
+           familyi={C\bibinitperiod},
+           given={L.\bibnamedelimi N.},
+           giveni={L\bibinitperiod\bibinitdelim N\bibinitperiod}}}%
+        {{hash=c2af9bb5b241e45f3afcb0f87b9e1540}{%
+           family={Schrieffer},
+           familyi={S\bibinitperiod},
+           given={J.\bibnamedelimi R.},
+           giveni={J\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+      }
+      \strng{namehash}{c30a83010c772bf453b99545802834fb}
+      \strng{fullhash}{c30a83010c772bf453b99545802834fb}
+      \strng{fullhashraw}{c30a83010c772bf453b99545802834fb}
+      \strng{bibnamehash}{c30a83010c772bf453b99545802834fb}
+      \strng{authorbibnamehash}{c30a83010c772bf453b99545802834fb}
+      \strng{authornamehash}{c30a83010c772bf453b99545802834fb}
+      \strng{authorfullhash}{c30a83010c772bf453b99545802834fb}
+      \strng{authorfullhashraw}{c30a83010c772bf453b99545802834fb}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Physical Review}
+      \field{number}{5}
+      \field{title}{Theory of Superconductivity}
+      \field{volume}{108}
+      \field{year}{1957}
+      \field{pages}{1175\bibrangedash 1204}
+      \range{pages}{30}
+      \verb{doi}
+      \verb 10.1070/1063-7869/44/10S/S29
+      \endverb
+    \endentry
+    \entry{Cambridge_MBPhysics}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=c7f06bf5220bb86c8e795161ca5fb529}{%
+           family={Coleman},
+           familyi={C\bibinitperiod},
+           given={P.},
+           giveni={P\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge University Press}%
+      }
+      \strng{namehash}{c7f06bf5220bb86c8e795161ca5fb529}
+      \strng{fullhash}{c7f06bf5220bb86c8e795161ca5fb529}
+      \strng{fullhashraw}{c7f06bf5220bb86c8e795161ca5fb529}
+      \strng{bibnamehash}{c7f06bf5220bb86c8e795161ca5fb529}
+      \strng{authorbibnamehash}{c7f06bf5220bb86c8e795161ca5fb529}
+      \strng{authornamehash}{c7f06bf5220bb86c8e795161ca5fb529}
+      \strng{authorfullhash}{c7f06bf5220bb86c8e795161ca5fb529}
+      \strng{authorfullhashraw}{c7f06bf5220bb86c8e795161ca5fb529}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{9781139020916}
+      \field{title}{Introduction to Many-Body Physics}
+      \field{year}{2015}
+    \endentry
+    \entry{Physics_libretexts_2025}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=958fd1d1699cbc3a1e96692dbf30b72e}{%
+           family={OpenStax},
+           familyi={O\bibinitperiod}}}%
+      }
+      \strng{namehash}{958fd1d1699cbc3a1e96692dbf30b72e}
+      \strng{fullhash}{958fd1d1699cbc3a1e96692dbf30b72e}
+      \strng{fullhashraw}{958fd1d1699cbc3a1e96692dbf30b72e}
+      \strng{bibnamehash}{958fd1d1699cbc3a1e96692dbf30b72e}
+      \strng{authorbibnamehash}{958fd1d1699cbc3a1e96692dbf30b72e}
+      \strng{authornamehash}{958fd1d1699cbc3a1e96692dbf30b72e}
+      \strng{authorfullhash}{958fd1d1699cbc3a1e96692dbf30b72e}
+      \strng{authorfullhashraw}{958fd1d1699cbc3a1e96692dbf30b72e}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Accessed: 2025-10-23}
+      \field{title}{9.9: Superconductivity}
+      \verb{urlraw}
+      \verb https://phys.libretexts.org/Bookshelves/University_Physics/University_Physics_(OpenStax)/University_Physics_III_-_Optics_and_Modern_Physics_(OpenStax)/09%3A_Condensed_Matter_Physics/9.09%3A_Superconductivity
+      \endverb
+      \verb{url}
+      \verb https://phys.libretexts.org/Bookshelves/University_Physics/University_Physics_(OpenStax)/University_Physics_III_-_Optics_and_Modern_Physics_(OpenStax)/09%3A_Condensed_Matter_Physics/9.09%3A_Superconductivity
+      \endverb
+    \endentry
+    \entry{Lund1}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=5a110d4a505030f4cf0334a7fbf8d01f}{%
+           family={Samuelsen},
+           familyi={S\bibinitperiod},
+           given={W.},
+           giveni={W\bibinitperiod}}}%
+      }
+      \strng{namehash}{5a110d4a505030f4cf0334a7fbf8d01f}
+      \strng{fullhash}{5a110d4a505030f4cf0334a7fbf8d01f}
+      \strng{fullhashraw}{5a110d4a505030f4cf0334a7fbf8d01f}
+      \strng{bibnamehash}{5a110d4a505030f4cf0334a7fbf8d01f}
+      \strng{authorbibnamehash}{5a110d4a505030f4cf0334a7fbf8d01f}
+      \strng{authornamehash}{5a110d4a505030f4cf0334a7fbf8d01f}
+      \strng{authorfullhash}{5a110d4a505030f4cf0334a7fbf8d01f}
+      \strng{authorfullhashraw}{5a110d4a505030f4cf0334a7fbf8d01f}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{LUP student papers}
+      \field{number}{1}
+      \field{title}{Majorana bound states in chains of interacting quantum dots}
+      \field{volume}{1}
+      \field{year}{2023}
+      \field{pages}{1\bibrangedash 17}
+      \range{pages}{17}
+    \endentry
+    \entry{VikMar}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=18a852b6d591882bb35cf7f17f66d8f7}{%
+           family={Svensson},
+           familyi={S\bibinitperiod},
+           given={V.},
+           giveni={V\bibinitperiod}}}%
+        {{hash=3cce9d98df9cbfc214bbaa4ca307906f}{%
+           family={Leijnse},
+           familyi={L\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{e4f812181fde601fbb22fe6b83706720}
+      \strng{fullhash}{e4f812181fde601fbb22fe6b83706720}
+      \strng{fullhashraw}{e4f812181fde601fbb22fe6b83706720}
+      \strng{bibnamehash}{e4f812181fde601fbb22fe6b83706720}
+      \strng{authorbibnamehash}{e4f812181fde601fbb22fe6b83706720}
+      \strng{authornamehash}{e4f812181fde601fbb22fe6b83706720}
+      \strng{authorfullhash}{e4f812181fde601fbb22fe6b83706720}
+      \strng{authorfullhashraw}{e4f812181fde601fbb22fe6b83706720}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Arxiv preprint arXiv:2310.03536}
+      \field{number}{1}
+      \field{title}{Quantum-dot-based Kitaev chains: Majorana quality measures and scaling with increasing chain length}
+      \field{volume}{1}
+      \field{year}{2024}
+      \field{pages}{1\bibrangedash 11}
+      \range{pages}{11}
+      \verb{doi}
+      \verb https://doi.org/10.1103/PhysRevB.110.155436
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

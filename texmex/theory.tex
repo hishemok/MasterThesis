@@ -108,6 +108,7 @@ In order to further understand the nature of these boundry states, we can expres
 \begin{equation}
 c_j = \frac{1}{2}(\gamma_j^A + i\gamma_j^B), \quad
 c_j^\dagger = \frac{1}{2}(\gamma_j^A - i\gamma_j^B),
+\label{eq:first_majorana_rep}
 \end{equation}
 where $\gamma_j^{A,B}$ satisfy $\{\gamma_j^\alpha, \gamma_k^\beta\} = 2\delta_{jk}\delta_{\alpha\beta}$ and $(\gamma_j^\alpha)^\dagger = \gamma_j^\alpha$.\\
 In this basis, the two distinct phases correspond to different pairing patterns between the Majorana operators. For a large $μ$, ($|μ| > 2|t|$), the Majorana operators pair up on the same site, leading to a trivial phase with no zero-energy modes. On the other hand, in the topological phase ($|μ| < 2|t|$) and $t = Δ$, the Majoranas on adjacent sites couple ($\gamma_j^B$ with $\gamma_{j+1}^A$), leaving two unpaired Majorana modes at the ends of the chain: $\gamma_1^A$ at the left end and $\gamma_N^B$ at the right end, see Figure \ref{fig:kitaev}.\\
@@ -193,10 +194,180 @@ $$
 where $n_{L(R)}$ is the number operator for the left (right) dot. In the ideal case, these expectation values should be equal for both ground states. This is because, if the difference is zero, the two ground states share the same local charge distribution, making them locally indistinguishable. 
 
 \subsection{Braiding of Majoranas}
+The process of braiding Majorana modes, in simple terms, involves exchanging the positions of two Majorana modes in a way that their quantum states are transformed.
+The reason braiding of Majorana modes is important to discuss is because it is the key operation that allows us to manipulate the quantum information stored in these modes. Braiding refers to the process of exchanging the positions of two Majorana modes in a way that their quantum states are transformed according to non-Abelian statistics. This is a fundamental operation for topological quantum computing, as it enables the implementation of quantum gates that are robust against local perturbations.\\
+Braiding in the right patterns, with the right systems, can lead to the implementation of a universal set of quantum gates \ref{fig:quantum_gates}, which is necessary for performing arbitrary quantum computations. The non-local nature of Majorana modes means that the information they encode is protected from local sources of decoherence, making them ideal candidates for fault-tolerant quantum computing.{\color{red} SOURCE}\\ 
 \subsubsection{Quantum Gates}
+In quantum computing, and specifically the quantum circuit model of computation, a quantum gate is a basic quantum circuit operating on a small number of qubits. Quantum gates are the building blocks of quantum algorithms, analogous to classical logic gates in classical computing. They manipulate the state of qubits through unitary transformations, allowing for the creation of superposition and entanglement, which are essential for quantum computation.\\
+
+\begin{figure}
+  \centering
+  \includegraphics[width = 0.5\textwidth]{figs/Quantum_logic_gates.png}
+  \label{fig:quantum_gates}
+    \caption{List of common quantum gates and their matrix representations. {\color{red} Wikipedia Quantum logic gates}}
+\end{figure}
+
+\paragraph{Pauli gates in terms of fermions}
+The gates in focus for this thesis are the Pauli gates, which are represented by the Pauli matrices:
+
+\begin{equation}
+X = \begin{pmatrix} 
+0 & 1 \\
+1 & 0
+\end{pmatrix}, \quad
+Y = \begin{pmatrix}
+0 & -i \\
+i & 0
+\end{pmatrix}, \quad
+Z = \begin{pmatrix}
+1 & 0 \\
+0 & -1
+\end{pmatrix}
+\end{equation}
+Suppose you have a pair of quantum states $\ket{0}$ and $\ket{1}$, which can be represented as column vectors:
+\begin{equation}
+\ket{0} = \begin{pmatrix}
+1 \\
+0
+\end{pmatrix}, \quad
+\ket{1} = \begin{pmatrix}
+0 \\
+1
+\end{pmatrix}
+\end{equation}
+Applying the Pauli gates to these states results in the following transformations:
+\begin{align*}
+X\ket{0} &= \ket{1}, \quad X\ket{1} = \ket{0} \\
+Y\ket{0} &= i\ket{1}, \quad Y\ket{1} = -i\ket{0} \\
+Z\ket{0} &= \ket{0}, \quad Z\ket{1} = -\ket{1}
+\end{align*}
+The Pauli-X gate, often reffered to as the NOT gate, flips the state of a qubit. The Pauli-Y gate combines a bit flip with a phase flip, while the Pauli-Z gate applies a phase flip to the $\ket{1}$ state. These gates are fundamental for quantum computation and can be implemented through braiding operations in systems hosting Majorana modes. Other quantum gates can be constructed from these basic gates, and together they form a universal set for quantum computation. The ability to perform these operations through braiding of Majorana modes is what makes them so intriguing for topological quantum computing. \\ 
+In order to find out how to implement these gates through baiding, we must first rewrite these gates in terms of simple fermionic operators. 
+\begin{align*}
+  c_i ^{†} \quad \text{creates a fermion at site } i \\
+  c_i \quad \text{annihilates a fermion at site } i
+\end{align*}
+For a simple two-site system, we can define the fermionic operators for the two sites as $c_1$ and $c_2$. The Pauli gates can be expressed in terms of these operators as follows:
+
+\begin{align*}
+  X &= c_1 ^{†} c_2 + c_2 ^{†} c_1 \\
+  Y &= -i(c_1 ^{†} c_2 - c_2 ^{†} c_1) \\
+  Z &= c_1 ^{†} c_1 - c_2 ^{†} c_2
+\end{align*}
+which quickly can be verified by applying these operators to the basis states $\ket{0}$ and $\ket{1}$.
+
+
+
+
 \subsubsection{Jordan-Wigner transforms}
+The Jordan-Wigner transformation is a transformation that maps spin operators onto fermionic creation and annihilation operators. The reason we want this mapping is that it becomes much easier for us to implement the spin-1/2 Pauli gates in terms of the fermionic operators, which are more natural to implement in our system. We can redefine our fermionic operators in terms of the Pauli matrices as follows:
+\begin{align*}
+σ_j^+ &= \frac{1}{2}(σ_j^x + iσ_j^y) \equiv f_j ^{†} \\
+σ_j^- &= \frac{1}{2}(σ_j^x - iσ_j^y) \equiv f_j \\
+σ_j^z &= 2f_j ^{†} f_j - 1
+\end{align*}
+Now we have the correct same-site fermionic relations $\{f_j ^{†} , f_j\} = I$. However on different sites, we have $\{f_j ^{†} , f_k\} \neq 0$, and $[σ_j^+,σ_k^-] = 0$ for $j \neq k$. So spins on different sites commute, while fermions on different sites anticommute. To fix this, we introduce a string of $σ^z$ operators to ensure the correct anticommutation relations. So we define a new set of fermionic operators as follows:
+\begin{equation}
+  a_j^{†} = Π_{k=1}^{j-1} (-σ_k^z) ⋅ f_j^{†}, \quad a_j = Π_{k=1}^{j-1} (-σ_k^z) ⋅ f_j
+\end{equation}
+The transformed spin operators now have the appropriate fermionic canonical anti-commutation relations:
+\begin{align*}
+\{a_j^{†}, a_k\} &= δ_{jk} \\
+\{a_j^{†}, a_k^{†}\} &= 0 \\
+\{a_j, a_k\} &= 0
+\end{align*}
+{\color{red} SOURCE JW WIKIPEDIA}\\ 
+\paragraph{Pauli Spin Matrices on Majorana representation}
+If we rewrite the majorana representation from equation \ref{eq:first_majorana_rep} in terms of the Jordan-Wigner transformed fermionic operators, we can express the Pauli gates in terms of the Majorana operators. This allows us to see which couplings we need to implement in order to perform the desired quantum gates through braiding of Majorana modes.\\
+In order to do so, we can first define four majorana operators, two for each site, in terms of creation and annihilation operators:
+\begin{align*}
+  c_1 &= (γ_0 + i γ_1)/2 \quad c_1 ^{†} = (γ_0 - i γ_1)/2 \\
+  c_2 &= (γ_2 + i γ_3)/2 \quad c_2 ^{†} = (γ_2 - i γ_3)/2
+\end{align*}
+Then we can express the Pauli gates in terms of these Majorana operators as follows:
+\begin{align*}
+  X &= c_1^{†} c_2 + c_2^{†} c_1 =  \frac{γ_0 - iγ_1}{2}\frac{γ_2 + iγ_3}{2} + \frac{γ_2 - iγ_3}{2}\frac{γ_0 + iγ_1}{2} \\
+    &= \frac{i}{2} (γ_0γ_3 - γ_1γ_2)
+\end{align*}
+From the odd parity subspace we have the total Parity operator $P_{tot}=i²γ_0γ_1γ_2γ_3=-I$. From this we can try to find a relation between $γ_0γ_3$ and $γ_1γ_2$.
+\begin{align*}
+  γ_0&γ_1γ_2γ_3 = I\\
+  γ_0&γ_1γ_2γ_3 γ_3 = γ_3\\
+  γ_0&γ_1γ_2 = γ_3 \\
+  γ_1&γ_2γ_0γ_0 = γ_3γ_0\\
+  γ_1&γ_2=γ_3γ_0=-γ_0γ_3
+\end{align*}
+
+\begin{align*}
+  Y &= -i(c_1^{†} c_2 - c_2^{†} c_1) = -i\left(\frac{γ_0 - iγ_1}{2}\frac{γ_2 + iγ_3}{2} - \frac{γ_2 - iγ_3}{2}\frac{γ_0 + iγ_1}{2}\right) \\
+    &= -\frac{i}{2} (γ_0γ_2 + γ_1γ_3)
+  Y &= -i γ_0γ_2 \text{ or } Y = -i γ_1γ_3
+\end{align*}
+
+\begin{align*}
+  Z &= c_1^{†} c_1 - c_2^{†} c_2 = \frac{γ_0 - iγ_1}{2}\frac{γ_0 + iγ_1}{2} - \frac{γ_2 - iγ_3}{2}\frac{γ_2 + iγ_3}{2} \\
+    &= \frac{i}{2} (γ_0γ_1 + γ_2γ_3)
+  Z &= iγ_0γ_1 \text{ or } Z= iγ_2γ_3
+\end{align*}
+By using the parity conservation and the relation between the Majorana operators, we can express the Pauli gates in terms of different pairs of Majorana operators. So what this means is we can represent the Pauli gates as specific couplings between the Majorana modes:
+\begin{align*}
+  X &= \frac{i}{2} (γ_0γ_3 - γ_1γ_2) = iγ_0γ_3 = -iγ_1γ_2 \\
+  Y &= -\frac{i}{2} (γ_0γ_2 + γ_1γ_3) = -i γ_0γ_2 = -i γ_1γ_3 \\
+  Z &= \frac{i}{2} (γ_0γ_1 + γ_2γ_3) = iγ_0γ_1 = iγ_2γ_3
+\end{align*}
+
+\paragraph{Majorana Exchange Gates}
+We can take a step towards braiding by defining Majorana exchange operators. We need to find unitaries $B_{ij}$ that exchange Majoranas $γ_i$ and $γ_j$ while leaving the others unchanged. Meaning they should act as follows:
+\begin{align*}
+B_{ij} γ_i B_{ij} ^{†} &= γ_j \\
+B_{ij} γ_j B_{ij} ^{†} &= -γ_i \\
+B_{ij} γ_k B_{ij} ^{†} &= γ_k \quad \text{for } k \neq i,j
+\end{align*}
+So we need to express these unitary gates in terms of the Majorana operators, in a way that relates them to the Pauli gates we want to implement. It turns out that the Majorana exchange operators can be expressed as:
+\begin{equation}
+B_{ij} = \frac{i}{\sqrt{2}} (1 - γ_i γ_j) \quad B_{ij} ^{†} = \frac{1-i}{\sqrt{2}} (1 + γ_i γ_j)
+\end{equation}
+Using the combinations of Majorana operators we just found for the Pauli gates, we can express the Majorana exchange operators in terms of the Pauli gates as follows:
+\begin{align*}
+B_{12}^2 &= -iγ_1γ_2 = -X \\
+B_{03}^2 &= iγ_0γ_3 = X \\
+B_{02}^2 &= iγ_0γ_2 = -Y\\
+B_{13}^2 &= iγ_1γ_3 = -Y\\
+B_{01}^2 &= iγ_0γ_1 =  Z\\
+B_{23}^2 &= iγ_2γ_3 =  -Z
+\end{align*}
+
 \subsubsection{Kato Berry Phase}
+Berry phase is a geometric phase acquired by the wavefunction of a quantum system when it undergoes adiabatic evolution around a closed loop in parameter space. In the context of Majorana modes, the Berry phase can be used to characterize the topological properties of the system and to understand how the quantum states transform under braiding operations.\\
+In this thesis, the berry phase will help us measure wether or not we manage to implement the desired quantum gates through braiding of Majorana modes. By calculating the Berry phase associated with the braiding process, we can determine if the resulting transformation corresponds to the expected unitary operation on the qubit space defined by the Majorana modes.\\
+
+If we follow a non-degenerate eigenstate of a Hamiltonian as we slowly (adiabatically) change a
+parameter in a loop in parameter space, we will end up with the same state up to a phase. The phase
+has two contributions, one is dynamical and depends on the actual time scale of the evolution and
+the energy of the state. But there is another contribution that is independent of the details of the
+evolution. It only depends on the path taken. It is a geometric quantity and comes from a sort of
+curvature in the space of eigenstates. It is called the Berry phase and can be calculated from the
+Berry connection $A=i\braket{dψ|ψ}$ integrated during the evolution.
+If the state is degenerate, we can get more than a phase. Even for adiabatic evolution, the degenerate
+states will mix together. Thus, the Berry phase will be represented by a matrix that mixes the states
+together. The Berry connection is also a matrix with a dimension equal to the number of degenerate
+states: $A_{nm} = i \braket{dψ_n|ψ_m}$. 
+
+A nice way to calculate non-abelian Berry phase is known as the Kato method. This method uses the projector $P$ that projects on the two degenerate ground
+states. Then one solves the differential equation
+$$
+∂_{t}U_t = i \left[P, ∂_{t}P\right]U_t \\
+U_0 = I
+$$
+and the final unitary is the non-abelian Berry phase $U_{T}$. It shouldn’t matter if the total time $T$ is long or short. $UT$ is the gate that a proper adiabatic evolution would implement. Note that the projector $P$ is time-dependent. It can be calculated numerrically by diagonalizing the Hamiltonian, or analytically if the hamitonian is simple enough. 
+
+
 \subsubsection{Effective Braiding Hamiltonian}
 \subsection{Sweet spot parameter search}
 \subsubsection{General Loss function}
 \subsubsection{Gradient Descent and Basin-Hopping}
+\begin{figure}
+\centering
+\input{tikzfig}
+\caption{Surface with multiple extrema}
+\end{figure}

@@ -24,9 +24,12 @@
 \contentsline {paragraph}{Charge Expectation and non-locality}{11}{section*.15}%
 \contentsline {subsection}{\numberline {2.5}Braiding of Majoranas}{11}{subsection.2.5}%
 \contentsline {subsubsection}{\numberline {2.5.1}Quantum Gates}{11}{subsubsection.2.5.1}%
-\contentsline {subsubsection}{\numberline {2.5.2}Jordan-Wigner transforms}{11}{subsubsection.2.5.2}%
-\contentsline {subsubsection}{\numberline {2.5.3}Kato Berry Phase}{11}{subsubsection.2.5.3}%
-\contentsline {subsubsection}{\numberline {2.5.4}Effective Braiding Hamiltonian}{11}{subsubsection.2.5.4}%
-\contentsline {subsection}{\numberline {2.6}Sweet spot parameter search}{11}{subsection.2.6}%
-\contentsline {subsubsection}{\numberline {2.6.1}General Loss function}{11}{subsubsection.2.6.1}%
-\contentsline {subsubsection}{\numberline {2.6.2}Gradient Descent and Basin-Hopping}{11}{subsubsection.2.6.2}%
+\contentsline {paragraph}{Pauli gates in terms of fermions}{11}{section*.17}%
+\contentsline {subsubsection}{\numberline {2.5.2}Jordan-Wigner transforms}{13}{subsubsection.2.5.2}%
+\contentsline {paragraph}{Pauli Spin Matrices on Majorana representation}{13}{section*.18}%
+\contentsline {paragraph}{Majorana Exchange Gates}{14}{section*.19}%
+\contentsline {subsubsection}{\numberline {2.5.3}Kato Berry Phase}{15}{subsubsection.2.5.3}%
+\contentsline {subsubsection}{\numberline {2.5.4}Effective Braiding Hamiltonian}{15}{subsubsection.2.5.4}%
+\contentsline {subsection}{\numberline {2.6}Sweet spot parameter search}{15}{subsection.2.6}%
+\contentsline {subsubsection}{\numberline {2.6.1}General Loss function}{15}{subsubsection.2.6.1}%
+\contentsline {subsubsection}{\numberline {2.6.2}Gradient Descent and Basin-Hopping}{15}{subsubsection.2.6.2}%
