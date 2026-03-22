@@ -1,29 +1,37 @@
 \begin{tikzpicture}
 \begin{axis}[
+    title = Loss function grid,
     width=0.9\textwidth,
-    view={45}{45},
-    axis lines=center,
-    xlabel={$f(\theta)$},
-    ylabel={$f'(\theta)$},
-    zlabel={$L(\theta)$},
-    domain=-4:4,
-    y domain=-4:4,
-    zmin=-1, zmax=1,
-    samples=65,
-    samples y=65,
+    view={15}{45},
+    axis lines=box,
+    % axis lines=center,
+    xlabel={$X(\theta)$},
+    ylabel={$Y(\theta)$},
+    zlabel={$Loss(\theta)$},
+    % domain=-4:4,
+    % y domain=-4:4,
+    % zmin=-1, zmax=1,
+    % samples=65,
+    % samples y=65,
+    grid =major,
     colormap/viridis,
     % colorbar,
 ]
 \addplot3[
     surf,
-    mesh,
-    shader=interp,
-    point meta=rawz,
+    % mesh,
+    % shader=interp,
+    % point meta=rawz,
+    samples=50,
 ]
 {
 0.5*sin(deg(0.8*x))*cos(deg(0.8*y))
 * exp(-0.1*(x + y^2))
 - 0.1*sin(deg(1.6*x + 0.8*y))
+- 0.58*exp(-5.5*((x-3.3)^2 + (y+3.0)^2))
+- 0.93*exp(-6.5*((x+2.8)^2 + 0.7*(y-2.5)^2))
+- 0.68*exp(-8.0*(0.8*(x-0.2)^2 + (y-2.3)^2))
++1
 };
 
 \end{axis}
