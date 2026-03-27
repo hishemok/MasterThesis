@@ -363,7 +363,38 @@ and the final unitary is the non-abelian Berry phase $U_{T}$. It shouldn’t mat
 
 
 \subsubsection{Effective Braiding Hamiltonian}
+If we assume that we already have a system with four Majorana modes, we are able to write down an effective Hamiltonian that describes the couplings between these Majorana modes. 
+\begin{figure}
+  \centering
+  \includegraphics[width=0.5\textwidth]{figs/sixmajoranas.pdf}
+  \caption{Schematic representation of a system hosting six majoranas. The illustrations shows pairs of two and two Majoranas coupling together, in a Y-junction, each pair form a subsystem that can be described by a Poor Man’s Majorana setup, A, B and C.}
+  \label{fig:6_majoranas}
+\end{figure}
+In the figure above \ref{fig:6_majoranas}, we see a schematic representation of a system hosting six Majorana modes, arranged in a Y-junction. The Majorana modes are represented by the X-markers. In the figure we see that the Majoranas are coupled in pairs. This represents a standard initial state of three Poor Man’s Majorana setups, where each pair represents the emerging edge modes of each setup. \\
+The four most relevant Majorana modes for our braiding operation are the ones labeled as $γ_0$, $γ_1$, $γ_2$, and $γ_3$. While the other two Majoranas, $γ_4$ and $γ_5$, are coupled together and form a non-local fermionic mode that is not involved in the braiding process. The effective Hamiltonian describing the couplings between the four Majorana modes can take the simple form of:
+\begin{equation}
+  \begin{aligned}
+    H = &Δ_{01} iγ_0γ_1 + \\
+    &Δ_{02} iγ_0γ_2 + \\
+    &Δ_{03} iγ_0γ_3 
+  \end{aligned}
+  \label{eq:H_eff}
+\end{equation}
+where $Δ_{ij}$ represents a tunable coupling strength between Majorana modes $γ_i$ and $γ_j$. In reality this $Δ_{ij}$ will be a function of the physical parameters of the system, such as the tunneling amplitudes, the superconducting gap, and the gate voltages. By tuning these parameters to the correct values, we can control the couplings between the Majorana modes and thus implement the desired braiding operations.\\ \\
+The $Δ$ in the effective Hamiltonian is a simplified version of what we would have in a real system. In a more realistic model, we would replace these, with a intra PMM junction coupling. However, if we look back at our Poor Mans Hamiltonian \ref{eq:qdsqdh}, the recipe for the junction Hamiltonian are the same coupling effects as the effective Hamiltonian. In essence, we are just extending a Poor Man’s Majorana to where if a coupling is turned on, we just have one longer PMM chain, and one shorter. So if we want to couple $γ_0$ and $γ_2$, we would now have a chain connecting $γ_0, γ_1, γ_2, γ_5$. Where the coupling now can be represented by turning on a new superconducting segment between the two PMM setups. This junction Hamiltonian would simply be:
+\begin{equation}
+  H_{JuncAB} = t_{AB} (d_{A} ^{†} d_{B} + d_{B} ^{†} d_{A}) + Δ_{AB} (d_{A} ^{†} d_{B} ^{†} + d_{B} d_{A})
+  \label{eq:junctionHamiltonian}
+\end{equation}
+but if we are simply testing out if our braiding protocol works, and we have stable Majorana modes, we can just use the effective Hamiltonian in equation \ref{eq:H_eff} to simulate the braiding process and calculate the resulting Berry phase. This allows us to verify if the braiding operation implements the desired quantum gate on the qubit space defined by the Majorana modes.
+
 \subsection{Sweet spot parameter search}
+\begin{figure}
+  \centering
+  \includegraphics[width=0.5\textwidth]{figs/PMMSetup.png}
+  \caption{Schematic representation of the PMM setup. The three quantum dots are represented by the blue circles, and the superconducting segments are represented by the grey rectangles. The tunable parameters of the system, such as the dot energy levels, ECT, CAR and the coloumb interaction, are indicated by their respective labels. By tuning these parameters, we can access different regimes of the system and identify the sweet spots where Majorana-like modes emerge.}
+  \label{fig:PMM_setup}
+\end{figure}
 \subsubsection{General Loss function}
 \subsubsection{Gradient Descent and Basin-Hopping}
 \begin{figure}

@@ -30,6 +30,6 @@
 \contentsline {paragraph}{Majorana Exchange Gates}{14}{section*.19}%
 \contentsline {subsubsection}{\numberline {2.5.3}Kato Berry Phase}{15}{subsubsection.2.5.3}%
 \contentsline {subsubsection}{\numberline {2.5.4}Effective Braiding Hamiltonian}{15}{subsubsection.2.5.4}%
-\contentsline {subsection}{\numberline {2.6}Sweet spot parameter search}{15}{subsection.2.6}%
-\contentsline {subsubsection}{\numberline {2.6.1}General Loss function}{15}{subsubsection.2.6.1}%
-\contentsline {subsubsection}{\numberline {2.6.2}Gradient Descent and Basin-Hopping}{15}{subsubsection.2.6.2}%
+\contentsline {subsection}{\numberline {2.6}Sweet spot parameter search}{16}{subsection.2.6}%
+\contentsline {subsubsection}{\numberline {2.6.1}General Loss function}{16}{subsubsection.2.6.1}%
+\contentsline {subsubsection}{\numberline {2.6.2}Gradient Descent and Basin-Hopping}{16}{subsubsection.2.6.2}%
