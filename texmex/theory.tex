@@ -57,7 +57,7 @@ In summary, hybrid semiconductor–superconductor systems act as the experimenta
 
 
 \subsection{Engineering Majorana Modes in a Minimal System}
-\subsubsection{Kitaev Chains}
+\subsubsection{Kitaev Chains}\label{KitaevChains}
 We now want to build on the microscopic understanding of superconductivity we investigated in the previous sections. In particular, we want to see how such pairing phenomena can be engineered to host topological excitations, in particular, Majorana bound states. The theoretical foundation for this lies in the Kitaev chain model, a one-dimensional toy model that captures the essential ingredients of topological superconductivity in its simplest form \cite{Topocondmat}.\\
 \begin{figure}
   \centering
@@ -389,16 +389,42 @@ The $Δ$ in the effective Hamiltonian is a simplified version of what we would h
 but if we are simply testing out if our braiding protocol works, and we have stable Majorana modes, we can just use the effective Hamiltonian in equation \ref{eq:H_eff} to simulate the braiding process and calculate the resulting Berry phase. This allows us to verify if the braiding operation implements the desired quantum gate on the qubit space defined by the Majorana modes.
 
 \subsection{Sweet spot parameter search}
+The Poor Man’s Majorana setup is a highly tunable system, with several parameters that can be adjusted to access different regimes of the system. We know of certain non-interacting sweet spots where the Majorana modes are perfectly localized and the ground states are exactly degenerate. However, in the presence of interactions, these ideal sweet spots may no longer exist. \\
+In an ideal system, we would have a perfect sweet spot where the Majorana modes are perfectly localized on the left and right dots and with degeneracy protection accross multiple energy levels, for topological protection. \\ \\
+As we found in \ref{KitaevChains}, we very well know the ideal parameters for a non-interacting two-dot system. However, when introducing interactions, the parameter space becomes slightly more complex. And it does not seem possible to find degeneracy accross multiple energy levels, which is preferable for topological protection. However, there is no evidence that it is not possible to find such a sweet spot if you increase the number of quantum dots in the system, creating longer chain. Figure \ref{fig:PMM_setup} shows a schematic representation of a three-dot system, where we can see that there are multiple tunable parameters. The more dots we add, the more tunable parameters we have. But with more tunable parameters, the problem of finding a sweet spot analytically becomes very complex, especially if we dont rely on symmetries and assumptions. Therefore, we will need to explore the parameter space numerically, using optimization techniques to find the sweet spots where Majorana-like modes emerge.\\
 \begin{figure}
   \centering
-  \includegraphics[width=0.5\textwidth]{figs/PMMSetup.png}
+  \includegraphics[width=0.8\textwidth]{figs/PMMSetup.png}
   \caption{Schematic representation of the PMM setup. The three quantum dots are represented by the blue circles, and the superconducting segments are represented by the grey rectangles. The tunable parameters of the system, such as the dot energy levels, ECT, CAR and the coloumb interaction, are indicated by their respective labels. By tuning these parameters, we can access different regimes of the system and identify the sweet spots where Majorana-like modes emerge.}
   \label{fig:PMM_setup}
 \end{figure}
-\subsubsection{General Loss function}
+\subsubsection{General Loss function}\label{Lossfunctionsection}
+For a simple two-dot system, we have a total of 5 tunable parameters: the dot energy levels $\epsilon_L$ and $\epsilon_R$, the elastic cotunneling amplitude $t$, the crossed Andreev reflection amplitude $Δ$, and the on-site Coulomb repulsion energy $U$. If we introduce a third dot, we get 9 independent tunable parameters, assuming the interaction strengths can be different for each dot. With more dots, the number of tunable parameters increases significantly, making the parameter space more complex and harder to explore analytically, vizualised in \ref{fig:paramVisualization}.\\
+Before setting up the optimization problem, we need to define a loss function that quantifies how close we are to finding a sweet spot with Majorana-like modes. This loss function should take into account the key signatures of Majorana modes, such as energy degeneracy and gap, local indistinguishability, Majorana polarization, and charge expectation values. By minimizing this loss function, we can identify the regions in parameter space where Majorana-like modes are likely to emerge.\\
+The loss function can be defined as a weighted sum of the different metrics that characterize the presence of Majorana modes. The weights can vary depending on the importance we assign to each metric. For example ground state degeneracy and gap is much more important than the gap and degeneracy of the higher energy levels, so we can assign a higher weight to the first one, gradiually decreasing the weights for the higher energy levels. Other metrics, defining for Majoranas, such as local indistinguishability, charge expectation values, and Majorana polarization should be included with a significant weight, as they are crucial for the identification of Majorana modes.
 \subsubsection{Gradient Descent and Basin-Hopping}
+Once we have defined our loss function, we can use optimization techniques to explore the parameter space and find the sweet spots. Gradient descent is a common optimization algorithm that iteratively updates the parameters in the direction of the negative gradient of the loss function. However, due to the complex landscape of the parameter space, with multiple local minima, gradient descent may get stuck in a local minimum and fail to find the global minimum corresponding to the ideal sweet spot.\\ \\
+If a multi-variable function, such as our loss function $L(Θ)$, is defined and differentiable in a neighborhood of a point $Θ_0$, then $L(Θ)$ decreases fastest if one goes from $Θ_0$ in the direction of the negative gradient of $L$ at $Θ_0$, denoted as $-∇L(Θ_0)$. If:
+$$
+Θ_{n+1} = Θ_n - α ∇L(Θ_n)
+$$ {\color{red} WIKI Gradient descent}for some positive scalar $α$, then $L(Θ_{n+1}) < L(Θ_n)$, at least for sufficiently small $α$. The parameter $α$ is called the learning rate. Iteratively, this method will converge to a local minimum of the loss function. However, our parameter space is likely to have multiple local minima.\\
+In order to overcome this issue, we can use a more sophisticated optimization technique called basin-hopping. Basin-hopping is a global optimization technique that iteratively performs local optimization (such as gradient descent) followed by a random perturbation of the parameters. \\
+The algorithm works as follows:
+\begin{itemize}
+  \item Start with an initial guess for the parameters $Θ_0$.
+  \item Perform a local optimization (e.g., gradient descent) to find a local minimum of the loss function, resulting in parameters $Θ_{local}$.
+  \item Randomly perturb the parameters to escape the local minimum, resulting in new parameters $Θ_{new}$.
+  \item Perform another local optimization starting from $Θ_{new}$ to find a new local minimum, resulting in parameters $Θ_{new\_local}$.
+  \item If the loss function at $Θ_{new\_local}$ is lower than the loss function at $Θ_{local}$, accept $Θ_{new\_local}$ as the new current solution; otherwise, keep $Θ_{local}$.
+  \item Repeat for a suiting number of iterations or until convergence criteria are met.
+\end{itemize}
+Basin-hopping allows us to explore the parameter space more effectively and increases the chances of finding the global minimum corresponding to the ideal sweet spot with Majorana-like modes. By combining local optimization with random perturbations, we can navigate through the complex landscape of the loss function and identify the optimal parameters for realizing Majorana modes in our system. \\ \\
+However, it is important to note that this optimization process, as any optimization process, will return the best parameter solution it can find. It is not a given that it will find a set of parameters that corresponds to a perfect sweet spot with ideal Majorana modes, but it can still find an approximate sweet spot, which can point us in the right direction and give us insights into the parameter regimes where Majorana-like modes are likely to emerge.  
+
+
 \begin{figure}
 \centering
-\input{tikzfig}
-\caption{Surface with multiple extrema}
+\includegraphics[width=\textwidth]{figs/3dparametersearch.pdf}
+\caption{Visualization of the parameter space for an n-dot system, showing how multiple parameters and their combinations create a complex landscape with multiple local minima.}
+\label{fig:paramVisualization}
 \end{figure}

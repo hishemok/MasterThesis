@@ -472,11 +472,9 @@ INPUT ./figs/sixmajoranas.pdf
 INPUT ./figs/PMMSetup.png
 INPUT ./figs/PMMSetup.png
 INPUT ./figs/PMMSetup.png
-INPUT ./tikzfig.tex
-INPUT ./tikzfig.tex
-INPUT ./tikzfig.tex
-INPUT ./tikzfig.tex
-INPUT tikzfig.tex
+INPUT ./figs/3dparametersearch.pdf
+INPUT ./figs/3dparametersearch.pdf
+INPUT ./figs/3dparametersearch.pdf
 INPUT master.aux
 INPUT ./introduction.aux
 INPUT ./introduction.aux
