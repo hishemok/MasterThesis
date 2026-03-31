@@ -392,6 +392,9 @@ INPUT introduction.aux
 INPUT ./theory.aux
 INPUT ./theory.aux
 INPUT theory.aux
+INPUT ./method.aux
+INPUT ./method.aux
+INPUT method.aux
 OUTPUT master.aux
 INPUT /usr/share/texmf-dist/tex/latex/cbfonts-fd/lgrcmr.fd
 INPUT /usr/share/texmf-dist/tex/latex/cbfonts-fd/lgrcmr.fd
@@ -475,6 +478,12 @@ INPUT ./figs/PMMSetup.png
 INPUT ./figs/3dparametersearch.pdf
 INPUT ./figs/3dparametersearch.pdf
 INPUT ./figs/3dparametersearch.pdf
+INPUT ./method.tex
+INPUT ./method.tex
+OUTPUT method.aux
+INPUT ./method.tex
+INPUT ./method.tex
+INPUT method.tex
 INPUT master.aux
 INPUT ./introduction.aux
 INPUT ./introduction.aux
@@ -482,6 +491,9 @@ INPUT introduction.aux
 INPUT ./theory.aux
 INPUT ./theory.aux
 INPUT theory.aux
+INPUT ./method.aux
+INPUT ./method.aux
+INPUT method.aux
 INPUT ./master.out
 INPUT ./master.out
 INPUT master.run.xml

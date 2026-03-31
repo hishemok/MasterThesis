@@ -1,18 +1,18 @@
 # Fdb version 4
-["biber master"] 1774620419.93758 "master.bcf" "master.bbl" "master" 1774724017.81851 0
+["biber master"] 0 "master.bcf" "master.bbl" "master" 1774968974.40078 -1
   "/home/Hishem/repos/Special_curriculum/tex/refrences.bib" 1761309618.27162 2840 139a316dd6a3b1568866d5644843c919 ""
-  "master.bcf" 1774724017.22775 109499 68039d8e797f37d6eeed8b32c2b05023 "xelatex"
+  "master.bcf" 1774968973.84023 109499 68039d8e797f37d6eeed8b32c2b05023 "xelatex"
   (generated)
   "master.bbl"
   "master.blg"
   (rewritten before read)
-["xdvipdfmx"] 1774724017.28975 "master.xdv" "master.pdf" "master" 1774724017.82149 0
-  "master.xdv" 1774724017.22953 516980 6277d78c8786a1546753a6bdcc200248 "xelatex"
+["xdvipdfmx"] 1774968973.89576 "master.xdv" "master.pdf" "master" 1774968974.40236 0
+  "master.xdv" 1774968973.84172 595252 6b7cc2a654f839a72cc833c1735c1dab "xelatex"
   (generated)
   "master.pdf"
   (rewritten before read)
-["xelatex"] 1774724015.85329 "/home/Hishem/repos/MastersThesis/texmex/master.tex" "master.xdv" "master" 1774724017.81865 0
-  "/home/Hishem/repos/MastersThesis/texmex/master.tex" 1773828876.33864 1917 7a5ef9da0ad86aa90d9efbe39350b927 ""
+["xelatex"] 1774968972.45548 "/home/Hishem/repos/MastersThesis/texmex/master.tex" "master.xdv" "master" 1774968974.40087 0
+  "/home/Hishem/repos/MastersThesis/texmex/master.tex" 1774948671.38449 1951 ca6bdbf332e6ae0dd2107580c89bfbb1 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1772820570 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texmf-dist/fonts/tfm/adobe/helvetic/phvb8t.tfm" 1772820570 6628 34c39492c0adc454c1c199922bba8363 ""
   "/usr/share/texmf-dist/fonts/tfm/adobe/helvetic/phvr8t.tfm" 1772820570 7040 b2bd27e2bfe6f6948cbc3239cae7444f ""
@@ -245,15 +245,17 @@
   "figs/no_unpaired.png" 1773765051.73322 13709 4b6752072797cc01a0dc7f246d61a203 ""
   "figs/sixmajoranas.pdf" 1774624628.15598 10734 31eca30b63e16acf6b2a100a8ee888bc ""
   "figs/unpaired.png" 1773765055.43201 16862 7358786d9dfaf9c67b28e1295bdb383a ""
-  "introduction.aux" 1774724016.98679 4248 0197b5371a22a6fcabb3d8cf7a121b35 "xelatex"
+  "introduction.aux" 1774968973.57223 4248 0197b5371a22a6fcabb3d8cf7a121b35 "xelatex"
   "introduction.tex" 1773764263.14168 35 f5ba13d24eff86fb485aacbd8b716022 ""
-  "master.aux" 1774724017.22044 1696 cdbd55214fd193ce94148b21811838a5 "xelatex"
+  "master.aux" 1774968973.83423 1716 74c9d3336cf6a2837ad531f3d9857496 "xelatex"
   "master.bbl" 1774620420.5108 11721 064625f364bf4f830aff520518570c40 "biber master"
-  "master.out" 1774724017.22775 4096 60d9dc5127b5d851891ce18fdd358801 "xelatex"
-  "master.run.xml" 1774724017.22953 2395 9491a4cd1e05601e2928b217f1c8309b "xelatex"
-  "master.tex" 1773828876.33864 1917 7a5ef9da0ad86aa90d9efbe39350b927 ""
-  "master.toc" 1774724017.22953 3136 7ec5bcc2017fb84226f3b3163146b90c "xelatex"
-  "theory.aux" 1774724017.21944 14135 3855e6e09765ec0ce5b2c6213f8601fe "xelatex"
+  "master.out" 1774968973.83949 7373 32860188d881ac61f2d991f1b83d315a "xelatex"
+  "master.run.xml" 1774968973.84172 2395 9491a4cd1e05601e2928b217f1c8309b "xelatex"
+  "master.tex" 1774948671.38449 1951 ca6bdbf332e6ae0dd2107580c89bfbb1 ""
+  "master.toc" 1774968973.84172 4673 22e9155949b80a8e4ac22b45017cd01e "xelatex"
+  "method.aux" 1774968973.83359 6289 1ca74931b0f6b5ecde1c834d972496a5 "xelatex"
+  "method.tex" 1774968970.87923 5949 19d9be1edbf850a9e46890b148d991c4 ""
+  "theory.aux" 1774968973.81092 14135 3855e6e09765ec0ce5b2c6213f8601fe "xelatex"
   "theory.tex" 1774724015.67344 48812 a275ecf68ef7c432d84c9f64d02b67e1 ""
   "uio-fp-navn-eng.pdf" 1643568007 9896 3790f54969705c4284148bf62f780187 ""
   "uio-fp-segl.pdf" 1643566874 64936 89441810db60f45a672971bad5b14ed1 ""
@@ -267,5 +269,6 @@
   "master.run.xml"
   "master.toc"
   "master.xdv"
+  "method.aux"
   "theory.aux"
   (rewritten before read)

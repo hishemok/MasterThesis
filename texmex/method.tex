@@ -1,0 +1,30 @@
+\section{Method}
+This chapter describes the methods used to optimize the Majorana modes in the junction setup and to analyze their properties. We first discuss the parameter optimization process, including the model parameterization, loss function design based on Majorana criteria, and the optimization strategy. Next, we detail the post-optimization analysis of the setup, covering Hamiltonian reconstruction, parity classification, and various diagnostics. Finally, we describe the braiding protocol implemented in an effective Majorana model and how we validate the results using gate-validation checks.
+\subsection{Parameter Optimization}
+A key aspect of our approach is the optimization of the n-dot PMM parameters. Since the sweet spot parameters are well known for a non-interacting system, we need to find out how the coulomb repulsion affects a system of n dots. It is possible to find a analytical solution for the 2-dot system, where the solution provides degenerate ground states. However, taking into account the excited states, the energy gap, and degeneracies accross multiple energy levels, the solution becomes more complex, especially when we consider more than 2 dots. Therefore, we use numerical optimization techniques to find the optimal parameters that yield Majorana modes with the desired properties. This also gives the opportunity to explore the parameter space more broadly and identify regimes that may not be accessible through analytical methods, or even to explore parameter ranges that have not been considered in the literature. \\ \\
+The optimization process is guided by a loss function that quantifies how well the system's properties align with the criteria for Majorana modes, such as energy degeneracy and spatial localization. We employ gradient-based optimization algorithms to efficiently navigate the parameter space and converge towards optimal solutions. \\ \\
+We initialized the system by creating the n-dot PMM Hamiltonian with initial parameters based on the known sweet spot for the non-interacting case. Sinse the well known sweet spot is where the coulomb repulsion,$U$ is zero, we set $U$ to a specific value an did not allow for the optimization of $U$. By doing this we are forcing the optimization process to find the optimal parameters for a system with a specific value of $U$. \\ 
+By making a general optimization process, which is highly tunable, we can easily change the optimization strategy, the loss function, and the model parameterization. This allows us to explore how parameters differs relative to each other, and relative to how many quantum dots we have in the system. It is based on a few assumptions, such as the fact that the sweet spot for the non-interacting case is a good starting point for the optimization process, and that the loss function we design effectively captures the key properties of Majorana modes. We also assume uniform coulumb interaction between quantum dots, which may not always be the case in real systems. However, this simplification allows us to focus on the essential physics of the problem and to identify general trends in the parameter space. \\ \\
+The goal of this optimization method is to explore the possibility of new parameter regimes that may yield Majorana modes with enhanced properties, such as increased energy gaps or improved localization. It is not to find the exact sweet spot for a specific system, but rather to understand what part of the parameter space the optimizer repeatedly finds, and how the optimal parameters differ from the known sweet spot for the non-interacting case. By doing this, we can gain insights into how interactions affect the properties of Majorana modes and identify potential avenues for experimental realization.
+\subsubsection{Model parameterization}
+The model parameterization is simply based on the n-dot PMM Hamiltonian:
+\begin{equation}
+H = \sum_{i=1}^{n} ϵ_i n_i + ∑_{i=1}^{n-1}  \left[ -t_i (c_i^{†} c_{i+1} + c_{i+1}^{†} c_i) + Δ_i (c_i c_{i+1} + c_{i+1}^{†} c_i^{†}) + U n_i n_{i+1} \right]
+\end{equation}
+
+where for a n-dot system, we have n on-site energies $ϵ_i$, n-1 hopping amplitudes $t_i$, n-1 pairing amplitudes $Δ_i$, and a uniform coulomb interaction $U$. The initial values of the parameters are set based on the known sweet spot for a 2-dot system, where $ϵ = -\frac{U}{2}$, $t_i = Δ_i$, and $U = 1$. \\From here we iteratively optimize by gradient descent, where the parameters are updated according to the gradient of the loss function with respect to the parameters. The optimization process continues until convergence, which is determined by a predefined threshold for the change in the loss function or a maximum number of iterations. \\In order to cover as much area as possible of the Loss function landscape, we re-initialize the parameters and add a random shuffle to the parameters before optimizing again. This can be done as many times as we want, but a good number of re-initializations is around 20, which allows us to explore the parameter space more broadly and identify multiple local minima that may correspond to different Majorana modes. By analyzing the results from multiple optimization runs, we can gain insights into the structure of the parameter space and the conditions that lead to the emergence of Majorana modes with desirable properties.
+\subsubsection{Loss function and Majorana criteria}
+\subsubsection{Optimization strategy}
+
+\subsection{Post-Optimization Analysis of the Setup}
+\subsubsection{Hamiltonian reconstruction and parity classification}
+\subsubsection{Spectral and local diagnostics}
+
+\subsection{Braiding in an Effective Majorana Model}
+\subsubsection{Pulse protocol}
+\subsubsection{Kato Berry-phase calculation}
+
+\subsection{Braiding with Optimized Majorana Modes}
+\subsubsection{Extraction of Majorana operators}
+\subsubsection{Projected microscopic junction Hamiltonian}
+\subsubsection{Gate-validation checks}
