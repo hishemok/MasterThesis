@@ -32,19 +32,19 @@
 \contentsline {subsubsection}{\numberline {2.5.4}Effective Braiding Hamiltonian}{15}{subsubsection.2.5.4}%
 \contentsline {subsection}{\numberline {2.6}Sweet spot parameter search}{16}{subsection.2.6}%
 \contentsline {subsubsection}{\numberline {2.6.1}General Loss function}{17}{subsubsection.2.6.1}%
-\contentsline {subsubsection}{\numberline {2.6.2}Gradient Descent and Basin-Hopping}{18}{subsubsection.2.6.2}%
-\contentsline {section}{\numberline {3}Method}{20}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Parameter Optimization}{20}{subsection.3.1}%
-\contentsline {subsubsection}{\numberline {3.1.1}Model parameterization}{21}{subsubsection.3.1.1}%
-\contentsline {subsubsection}{\numberline {3.1.2}Loss function and Majorana criteria}{21}{subsubsection.3.1.2}%
-\contentsline {subsubsection}{\numberline {3.1.3}Optimization strategy}{21}{subsubsection.3.1.3}%
+\contentsline {subsubsection}{\numberline {2.6.2}Optimization landscape}{18}{subsubsection.2.6.2}%
+\contentsline {section}{\numberline {3}Method}{19}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Parameter Optimization}{19}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}Model parameterization}{19}{subsubsection.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.1.2}Loss function and Majorana criteria}{19}{subsubsection.3.1.2}%
+\contentsline {subsubsection}{\numberline {3.1.3}Optimization strategy}{20}{subsubsection.3.1.3}%
 \contentsline {subsection}{\numberline {3.2}Post-Optimization Analysis of the Setup}{21}{subsection.3.2}%
 \contentsline {subsubsection}{\numberline {3.2.1}Hamiltonian reconstruction and parity classification}{21}{subsubsection.3.2.1}%
 \contentsline {subsubsection}{\numberline {3.2.2}Spectral and local diagnostics}{21}{subsubsection.3.2.2}%
-\contentsline {subsection}{\numberline {3.3}Braiding in an Effective Majorana Model}{21}{subsection.3.3}%
-\contentsline {subsubsection}{\numberline {3.3.1}Pulse protocol}{21}{subsubsection.3.3.1}%
-\contentsline {subsubsection}{\numberline {3.3.2}Kato Berry-phase calculation}{21}{subsubsection.3.3.2}%
-\contentsline {subsection}{\numberline {3.4}Braiding with Optimized Majorana Modes}{21}{subsection.3.4}%
-\contentsline {subsubsection}{\numberline {3.4.1}Extraction of Majorana operators}{21}{subsubsection.3.4.1}%
-\contentsline {subsubsection}{\numberline {3.4.2}Projected microscopic junction Hamiltonian}{21}{subsubsection.3.4.2}%
-\contentsline {subsubsection}{\numberline {3.4.3}Gate-validation checks}{21}{subsubsection.3.4.3}%
+\contentsline {subsection}{\numberline {3.3}Braiding in an Effective Majorana Model}{22}{subsection.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.1}Pulse protocol}{22}{subsubsection.3.3.1}%
+\contentsline {subsubsection}{\numberline {3.3.2}Kato Berry-phase calculation}{22}{subsubsection.3.3.2}%
+\contentsline {subsection}{\numberline {3.4}Braiding with Optimized Majorana Modes}{22}{subsection.3.4}%
+\contentsline {subsubsection}{\numberline {3.4.1}Extraction of Majorana operators}{22}{subsubsection.3.4.1}%
+\contentsline {subsubsection}{\numberline {3.4.2}Projected microscopic junction Hamiltonian}{23}{subsubsection.3.4.2}%
+\contentsline {subsubsection}{\numberline {3.4.3}Gate-validation checks}{23}{subsubsection.3.4.3}%
