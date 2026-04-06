@@ -1,0 +1,90 @@
+\section{Results and Physical Interpretation}
+This chapter presents the main numerical results of the thesis and discusses their physical meaning. I first report the outcome of the parameter optimization, then analyze the spectral and local signatures of the optimized configurations, and finally study whether the resulting low-energy states support the intended braiding behavior. The emphasis is not only on which parameter sets minimize the loss function, but also on whether those configurations can be interpreted as physically meaningful Majorana-like regimes.
+
+\subsection{Parameter Optimization Results}
+To obtain an overview of the optimization landscape, I first compare the lowest-loss configuration found for each combination of system size $n$ and fixed interaction strength $U$. This separates the global trends of the optimization procedure from the more detailed diagnostics of individual configurations. For the two-dot system, the optimizer reproduces the known non-interacting sweet spot at $U=0$, while increasing interaction strength gradually shifts the optimal on-site energies and pairing amplitudes away from that limit. For three and four dots, the optimization landscape becomes more complex, and the best solutions show stronger inhomogeneity in both the onsite energies and the pairing amplitudes.
+
+
+\subsubsection{Dependence on interaction strength and system size}
+Table \ref{tab:best_optimized_configs} summarizes the lowest-loss configuration found for each combination of system size $n$ and fixed interaction strength $U$. Since the hopping amplitudes were fixed to $t_i = 1$ in these runs, only the optimized pairing amplitudes and on-site energies are listed. Empty entries indicate parameters that do not exist for that system size.
+
+\begin{table}[htbp]
+  \centering
+  \scriptsize
+  \setlength{\tabcolsep}{4pt}
+  \resizebox{\textwidth}{!}{
+  \begin{tabular}{cccccccccc}
+    \hline
+    $n$ & $U$ & Loss & $\Delta_1$ & $\Delta_2$ & $\Delta_3$ & $\epsilon_1$ & $\epsilon_2$ & $\epsilon_3$ & $\epsilon_4$ \\
+    \hline
+    2 & 0.0 & 5.657e-03 & 1.000 & -- & -- & -0.001 & 0.002 & -- & -- \\
+    2 & 0.1 & 2.617e-01 & 1.047 & -- & -- & -0.050 & -0.047 & -- & -- \\
+    2 & 0.5 & 1.083e+00 & 1.249 & -- & -- & -0.255 & -0.249 & -- & -- \\
+    2 & 1.0 & 1.940e+00 & 1.498 & -- & -- & -0.499 & -0.496 & -- & -- \\
+    2 & 2.0 & 3.203e+00 & 2.000 & -- & -- & -1.006 & -1.004 & -- & -- \\
+    2 & 5.0 & 4.004e+00 & 3.499 & -- & -- & -2.508 & -2.506 & -- & -- \\
+    \hline
+    3 & 0.0 & 3.442e-01 & 1.010 & 1.348 & -- & 0.019 & 1.774 & -0.466 & -- \\
+    3 & 0.1 & 5.603e-01 & 1.001 & 1.002 & -- & -0.101 & -0.607 & -0.003 & -- \\
+    3 & 0.5 & 9.359e-01 & 1.004 & 1.012 & -- & -0.046 & -0.889 & -0.454 & -- \\
+    3 & 1.0 & 1.452e+00 & 1.025 & 1.130 & -- & -0.195 & -1.530 & -0.802 & -- \\
+    3 & 2.0 & 2.326e+00 & 1.584 & 0.978 & -- & -1.511 & -3.077 & -0.484 & -- \\
+    3 & 5.0 & 3.142e+00 & 0.846 & 1.746 & -- & -4.814 & 1.009 & -0.184 & -- \\
+    \hline
+    4 & 0.0 & 3.161e-01 & 2.698 & 5.332 & 1.004 & -0.059 & -4.252 & 0.236 & -0.003 \\
+    4 & 0.1 & 4.840e-01 & 1.790 & 5.002 & 1.013 & 0.156 & 2.376 & -1.966 & -0.050 \\
+    4 & 0.5 & 1.006e+00 & 1.212 & 3.490 & 1.206 & -0.246 & -0.499 & -0.503 & -0.250 \\
+    4 & 1.0 & 5.670e-01 & 2.238 & 18.807 & 1.072 & -0.500 & -1.028 & -1.025 & -0.496 \\
+    4 & 2.0 & 1.824e+00 & 1.492 & 5.537 & 1.588 & -0.869 & 3.526 & -6.508 & -1.220 \\
+    4 & 5.0 & 2.600e+00 & 3.389 & 9.513 & 3.336 & -2.645 & 5.032 & -15.431 & -2.293 \\
+    \hline
+  \end{tabular}}
+  \caption{Lowest-loss optimized configurations extracted from \texttt{configuration.json} for each combination of system size $n$ and fixed interaction strength $U$.}
+  \label{tab:best_optimized_configs}
+\end{table}
+The reason for a fixed $t_i = 1$ is that if we do not lock the hopping amplitudes, the optimizer can simply increase $t_i$ in order to replicate a non-interacting sweet spot even at strong interactions, which is not the intended behavior. By fixing $t_i$, we force the optimizer to find nontrivial parameter profiles that satisfy the Majorana-based loss criteria without relying on trivial rescaling.
+Several trends are immediately visible. For the two-dot system, the optimizer reproduces the expected non-interacting sweet spot at $U=0$, where $\Delta_1 \approx t_1$ and the on-site energies remain very close to zero. As the interaction strength is increased, the loss grows steadily, the optimized pairing amplitude increases above the fixed hopping, and the on-site energies move approximately toward $\epsilon_i \approx -U/2$. This indicates that the optimizer is deforming the well-known two-dot sweet spot in a smooth and physically interpretable way.
+
+\subsubsection{Trends in the optimized parameters}
+For the three-dot system, the best configurations at weak and intermediate interaction strengths still remain relatively close to the homogeneous limit, with $\Delta_1 \approx \Delta_2 \approx 1$ for $U=0.1$ and $U=0.5$. At the same time, the middle-site energy becomes substantially more negative than the edge-site energies, suggesting that the optimization favors a differentiated central region even when the pairing amplitudes remain nearly uniform. At larger interaction strengths, both the loss and the parameter asymmetry increase, indicating that the system is moving away from the simplest weak-coupling Majorana picture.
+
+The four-dot system shows the clearest sign that the optimization landscape becomes more complicated as the chain length increases. In several of the best configurations, the optimizer strongly enhances the central pairing amplitudes while leaving the outer pairing amplitudes much smaller. This is especially visible for $U=0$, $U=0.1$, and $U=1.0$, where the middle bond is favored much more strongly than the edge bonds. The optimized on-site energies also become highly inhomogeneous, particularly at stronger interactions. Taken together, these results suggest that for longer PMM chains the optimizer does not simply preserve the two-dot sweet-spot structure, but instead searches for more nontrivial inhomogeneous parameter profiles that still satisfy the Majorana-based loss criteria.
+
+\subsection{Post-Optimization Diagnostics}
+After presenting the optimized parameters themselves, the next step is to test whether the corresponding Hamiltonians display the expected signatures of Majorana-like physics. This section should therefore focus on the parity-resolved spectrum and on the local observables introduced in the method chapter.
+
+\subsubsection{Parity-resolved spectra and low-energy gaps}
+\textit{Suggested content: show representative parity-resolved spectra for the most important optimized configurations. Discuss the ground-state splitting, the gap to higher excited states, and whether the low-energy manifold remains isolated well enough to support a Majorana interpretation.}
+
+\subsubsection{Local diagnostics and Majorana character}
+\textit{Suggested content: analyze the Majorana polarization, charge difference, local occupancy, and operator matrix elements for the best configurations. The key question here is whether the low-energy states are merely numerically low-loss solutions, or whether they also exhibit clear spatial localization and parity structure consistent with Majorana modes.}
+
+\subsection{Braiding Results in the Effective Model}
+Before interpreting the results of the full microscopic setup, it is useful to summarize the idealized braiding calculation. This section should therefore act as a reference point for what the intended exchange looks like in the simplified four-Majorana model.
+
+\subsubsection{Evolution of the effective spectrum}
+\textit{Suggested content: present the time-dependent couplings and the instantaneous spectrum during the ideal braid. Emphasize whether the low-energy manifold remains approximately degenerate and whether the gap to excited states stays open throughout the protocol.}
+
+\subsubsection{Berry phase and ideal exchange behavior}
+\textit{Suggested content: report the unitary obtained from the Kato transport calculation and compare it with the expected Majorana exchange. This is the place to explain what the ideal protocol is supposed to produce before moving to the more realistic projected model.}
+
+\subsection{Braiding Results for Optimized Majorana Modes}
+This section should present the main braiding results of the thesis: whether the optimized microscopic system can reproduce the exchange behavior suggested by the ideal model.
+
+\subsubsection{Projected microscopic braid}
+\textit{Suggested content: show the spectrum of the projected microscopic Hamiltonian during the braid, and discuss how closely it follows the ideal four-Majorana picture. If useful, compare the projected junction operators with the dominant Majorana bilinears to show where the microscopic model agrees with or deviates from the toy model.}
+
+\subsubsection{Gate-validation checks}
+\textit{Suggested content: present the checks on parity conservation, ground-state splitting, path closure, and the transformation of the Majorana operators under single and repeated exchanges. Also discuss the parity-resolved gate blocks and how close they are to the expected target unitary.}
+
+\subsection{Physical Interpretation}
+This section should connect the numerical findings back to the physical questions of the thesis. The central issue is not only whether the optimizer finds low-loss configurations, but whether those configurations correspond to robust and interpretable low-energy Majorana physics.
+
+\subsubsection{What the optimization results suggest}
+\textit{Suggested content: discuss what the optimized parameter trends imply physically. For example, do interactions simply deform the non-interacting sweet spot, or do they point toward a different mechanism for obtaining Majorana-like behavior in longer PMM chains?}
+
+\subsubsection{What the braiding results imply}
+\textit{Suggested content: interpret whether the optimized setups support genuinely useful braiding behavior, or whether the deviations from the ideal exchange indicate that the microscopic system is still too far from the topological limit. This is also a good place to separate promising signatures from clear limitations.}
+
+\subsection{Limitations and Outlook}
+\textit{Suggested content: briefly summarize the main limitations of the present study, such as finite system size, approximate degeneracy rather than exact topological protection, the restricted parameter ansatz, and the use of projected low-energy descriptions. End by pointing to the most natural next steps for improving the optimization or making the braiding analysis more realistic.}

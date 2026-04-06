@@ -1,50 +1,67 @@
 \babel@toc {english}{}\relax 
-\contentsline {section}{\numberline {1}Introduction}{2}{section.1}%
-\contentsline {section}{\numberline {2}Theory}{3}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Majorana Fermion}{3}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}Topological Quantum Computing}{3}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}The Superconducting State}{3}{subsection.2.3}%
-\contentsline {subsubsection}{\numberline {2.3.1}From Cooper Pairing to the Energy Gap}{3}{subsubsection.2.3.1}%
-\contentsline {subsubsection}{\numberline {2.3.2}Bogoliubov-de Gennes Formalism}{3}{subsubsection.2.3.2}%
-\contentsline {subsubsection}{\numberline {2.3.3}Hybrid Semiconductor-Supercondcutor Systems}{4}{subsubsection.2.3.3}%
-\contentsline {paragraph}{(i) Hybdird Systems: The Proximity Effect and Induced Superconductivity}{4}{section*.2}%
-\contentsline {paragraph}{(ii) Hybrid Systems: Andreev Reflection and Cooper-Pair splitting}{5}{section*.3}%
-\contentsline {subsection}{\numberline {2.4}Engineering Majorana Modes in a Minimal System}{5}{subsection.2.4}%
-\contentsline {subsubsection}{\numberline {2.4.1}Kitaev Chains}{5}{subsubsection.2.4.1}%
-\contentsline {paragraph}{Bulk Spectrum and Topological phases}{6}{section*.5}%
-\contentsline {paragraph}{Majorana Representation and Zero Modes}{6}{section*.7}%
-\contentsline {subsubsection}{\numberline {2.4.2}The QD-SC-QD System as an Effective Kitaev Chain}{8}{subsubsection.2.4.2}%
-\contentsline {paragraph}{Mapping to the Kitaev Hamiltonian}{8}{section*.8}%
-\contentsline {paragraph}{Low-energy Features and Experimental Tunability}{9}{section*.9}%
-\contentsline {subsubsection}{\numberline {2.4.3}Identifying Majorana Modes in the QD-SC-QD System}{9}{subsubsection.2.4.3}%
-\contentsline {paragraph}{The parity Operator}{9}{section*.10}%
-\contentsline {paragraph}{Energy Degeneracy}{10}{section*.11}%
-\contentsline {paragraph}{Local Distinguishability}{10}{section*.13}%
-\contentsline {paragraph}{Majorana Polarization}{10}{section*.14}%
-\contentsline {paragraph}{Charge Expectation and non-locality}{11}{section*.15}%
-\contentsline {subsection}{\numberline {2.5}Braiding of Majoranas}{11}{subsection.2.5}%
-\contentsline {subsubsection}{\numberline {2.5.1}Quantum Gates}{11}{subsubsection.2.5.1}%
-\contentsline {paragraph}{Pauli gates in terms of fermions}{11}{section*.17}%
-\contentsline {subsubsection}{\numberline {2.5.2}Jordan-Wigner transforms}{13}{subsubsection.2.5.2}%
-\contentsline {paragraph}{Pauli Spin Matrices on Majorana representation}{13}{section*.18}%
-\contentsline {paragraph}{Majorana Exchange Gates}{14}{section*.19}%
-\contentsline {subsubsection}{\numberline {2.5.3}Kato Berry Phase}{15}{subsubsection.2.5.3}%
-\contentsline {subsubsection}{\numberline {2.5.4}Effective Braiding Hamiltonian}{15}{subsubsection.2.5.4}%
-\contentsline {subsection}{\numberline {2.6}Sweet spot parameter search}{16}{subsection.2.6}%
-\contentsline {subsubsection}{\numberline {2.6.1}General Loss function}{17}{subsubsection.2.6.1}%
-\contentsline {subsubsection}{\numberline {2.6.2}Optimization landscape}{18}{subsubsection.2.6.2}%
-\contentsline {section}{\numberline {3}Method}{19}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Parameter Optimization}{19}{subsection.3.1}%
-\contentsline {subsubsection}{\numberline {3.1.1}Model parameterization}{19}{subsubsection.3.1.1}%
-\contentsline {subsubsection}{\numberline {3.1.2}Loss function and Majorana criteria}{19}{subsubsection.3.1.2}%
-\contentsline {subsubsection}{\numberline {3.1.3}Optimization strategy}{20}{subsubsection.3.1.3}%
-\contentsline {subsection}{\numberline {3.2}Post-Optimization Analysis of the Setup}{21}{subsection.3.2}%
-\contentsline {subsubsection}{\numberline {3.2.1}Hamiltonian reconstruction and parity classification}{21}{subsubsection.3.2.1}%
-\contentsline {subsubsection}{\numberline {3.2.2}Spectral and local diagnostics}{21}{subsubsection.3.2.2}%
-\contentsline {subsection}{\numberline {3.3}Braiding in an Effective Majorana Model}{22}{subsection.3.3}%
-\contentsline {subsubsection}{\numberline {3.3.1}Pulse protocol}{22}{subsubsection.3.3.1}%
-\contentsline {subsubsection}{\numberline {3.3.2}Kato Berry-phase calculation}{22}{subsubsection.3.3.2}%
-\contentsline {subsection}{\numberline {3.4}Braiding with Optimized Majorana Modes}{22}{subsection.3.4}%
-\contentsline {subsubsection}{\numberline {3.4.1}Extraction of Majorana operators}{22}{subsubsection.3.4.1}%
-\contentsline {subsubsection}{\numberline {3.4.2}Projected microscopic junction Hamiltonian}{23}{subsubsection.3.4.2}%
-\contentsline {subsubsection}{\numberline {3.4.3}Gate-validation checks}{23}{subsubsection.3.4.3}%
+\contentsline {section}{\numberline {1}Introduction}{3}{section.1}%
+\contentsline {section}{\numberline {2}Theory}{4}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Majorana Fermion}{4}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Topological Quantum Computing}{4}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}The Superconducting State}{4}{subsection.2.3}%
+\contentsline {subsubsection}{\numberline {2.3.1}From Cooper Pairing to the Energy Gap}{4}{subsubsection.2.3.1}%
+\contentsline {subsubsection}{\numberline {2.3.2}Bogoliubov-de Gennes Formalism}{4}{subsubsection.2.3.2}%
+\contentsline {subsubsection}{\numberline {2.3.3}Hybrid Semiconductor-Supercondcutor Systems}{5}{subsubsection.2.3.3}%
+\contentsline {paragraph}{(i) Hybdird Systems: The Proximity Effect and Induced Superconductivity}{5}{section*.2}%
+\contentsline {paragraph}{(ii) Hybrid Systems: Andreev Reflection and Cooper-Pair splitting}{6}{section*.3}%
+\contentsline {subsection}{\numberline {2.4}Engineering Majorana Modes in a Minimal System}{6}{subsection.2.4}%
+\contentsline {subsubsection}{\numberline {2.4.1}Kitaev Chains}{6}{subsubsection.2.4.1}%
+\contentsline {paragraph}{Bulk Spectrum and Topological phases}{7}{section*.5}%
+\contentsline {paragraph}{Majorana Representation and Zero Modes}{7}{section*.7}%
+\contentsline {subsubsection}{\numberline {2.4.2}The QD-SC-QD System as an Effective Kitaev Chain}{9}{subsubsection.2.4.2}%
+\contentsline {paragraph}{Mapping to the Kitaev Hamiltonian}{9}{section*.8}%
+\contentsline {paragraph}{Low-energy Features and Experimental Tunability}{10}{section*.9}%
+\contentsline {subsubsection}{\numberline {2.4.3}Identifying Majorana Modes in the QD-SC-QD System}{10}{subsubsection.2.4.3}%
+\contentsline {paragraph}{The parity Operator}{10}{section*.10}%
+\contentsline {paragraph}{Energy Degeneracy}{11}{section*.11}%
+\contentsline {paragraph}{Local Distinguishability}{11}{section*.13}%
+\contentsline {paragraph}{Majorana Polarization}{11}{section*.14}%
+\contentsline {paragraph}{Charge Expectation and non-locality}{12}{section*.15}%
+\contentsline {subsection}{\numberline {2.5}Braiding of Majoranas}{12}{subsection.2.5}%
+\contentsline {subsubsection}{\numberline {2.5.1}Quantum Gates}{12}{subsubsection.2.5.1}%
+\contentsline {paragraph}{Pauli gates in terms of fermions}{12}{section*.17}%
+\contentsline {subsubsection}{\numberline {2.5.2}Jordan-Wigner transforms}{14}{subsubsection.2.5.2}%
+\contentsline {paragraph}{Pauli Spin Matrices on Majorana representation}{14}{section*.18}%
+\contentsline {paragraph}{Majorana Exchange Gates}{15}{section*.19}%
+\contentsline {subsubsection}{\numberline {2.5.3}Kato Berry Phase}{16}{subsubsection.2.5.3}%
+\contentsline {subsubsection}{\numberline {2.5.4}Effective Braiding Hamiltonian}{16}{subsubsection.2.5.4}%
+\contentsline {subsection}{\numberline {2.6}Sweet spot parameter search}{17}{subsection.2.6}%
+\contentsline {subsubsection}{\numberline {2.6.1}General Loss function}{18}{subsubsection.2.6.1}%
+\contentsline {subsubsection}{\numberline {2.6.2}Optimization landscape}{19}{subsubsection.2.6.2}%
+\contentsline {section}{\numberline {3}Method}{20}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Parameter Optimization}{20}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}Model parameterization}{20}{subsubsection.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.1.2}Loss function and Majorana criteria}{20}{subsubsection.3.1.2}%
+\contentsline {subsubsection}{\numberline {3.1.3}Optimization strategy}{21}{subsubsection.3.1.3}%
+\contentsline {subsection}{\numberline {3.2}Post-Optimization Analysis of the Setup}{22}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Hamiltonian reconstruction and parity classification}{22}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Spectral and local diagnostics}{22}{subsubsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.3}Braiding in an Effective Majorana Model}{23}{subsection.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.1}Pulse protocol}{23}{subsubsection.3.3.1}%
+\contentsline {subsubsection}{\numberline {3.3.2}Kato Berry-phase calculation}{23}{subsubsection.3.3.2}%
+\contentsline {subsection}{\numberline {3.4}Braiding with Optimized Majorana Modes}{23}{subsection.3.4}%
+\contentsline {subsubsection}{\numberline {3.4.1}Extraction of Majorana operators}{23}{subsubsection.3.4.1}%
+\contentsline {subsubsection}{\numberline {3.4.2}Projected microscopic junction Hamiltonian}{24}{subsubsection.3.4.2}%
+\contentsline {subsubsection}{\numberline {3.4.3}Gate-validation checks}{24}{subsubsection.3.4.3}%
+\contentsline {section}{\numberline {4}Results and Physical Interpretation}{25}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Parameter Optimization Results}{25}{subsection.4.1}%
+\contentsline {subsubsection}{\numberline {4.1.1}Dependence on interaction strength and system size}{25}{subsubsection.4.1.1}%
+\contentsline {subsubsection}{\numberline {4.1.2}Trends in the optimized parameters}{26}{subsubsection.4.1.2}%
+\contentsline {subsection}{\numberline {4.2}Post-Optimization Diagnostics}{26}{subsection.4.2}%
+\contentsline {subsubsection}{\numberline {4.2.1}Parity-resolved spectra and low-energy gaps}{26}{subsubsection.4.2.1}%
+\contentsline {subsubsection}{\numberline {4.2.2}Local diagnostics and Majorana character}{26}{subsubsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.3}Braiding Results in the Effective Model}{26}{subsection.4.3}%
+\contentsline {subsubsection}{\numberline {4.3.1}Evolution of the effective spectrum}{27}{subsubsection.4.3.1}%
+\contentsline {subsubsection}{\numberline {4.3.2}Berry phase and ideal exchange behavior}{27}{subsubsection.4.3.2}%
+\contentsline {subsection}{\numberline {4.4}Braiding Results for Optimized Majorana Modes}{27}{subsection.4.4}%
+\contentsline {subsubsection}{\numberline {4.4.1}Projected microscopic braid}{27}{subsubsection.4.4.1}%
+\contentsline {subsubsection}{\numberline {4.4.2}Gate-validation checks}{27}{subsubsection.4.4.2}%
+\contentsline {subsection}{\numberline {4.5}Physical Interpretation}{27}{subsection.4.5}%
+\contentsline {subsubsection}{\numberline {4.5.1}What the optimization results suggest}{27}{subsubsection.4.5.1}%
+\contentsline {subsubsection}{\numberline {4.5.2}What the braiding results imply}{27}{subsubsection.4.5.2}%
+\contentsline {subsection}{\numberline {4.6}Limitations and Outlook}{28}{subsection.4.6}%
