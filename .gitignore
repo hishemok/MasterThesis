@@ -34,6 +34,10 @@ src/braiding/braiding_time_evolution.npz
 
 # LaTeX build files
 texmex/*.aux
+texmex/*.toc
+texmex/*.xdv
+texmex/*.fls
+texmex/*.fdb_latexmk
 texmex/*.bcf
 texmex/*.log
 texmex/*.out
@@ -51,3 +55,6 @@ texmex/uio-fp-segl.pdf
 texmex/uiomasterfp-guide.pdf
 texmex/uiomasterfp.sty
 texmex/uiomasterfp.zip
+
+# ML Agents
+ML-Agents/*

@@ -28,7 +28,7 @@ def review_configurations(n_sites, filename="configuration.json"):
 
 
 if __name__ == "__main__":
-    n = 3
+    n = 3   
     """
     n=2, U=0.1:
     ϵ = [-0.05, -0.05]

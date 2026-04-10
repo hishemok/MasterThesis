@@ -84,6 +84,22 @@ def plot_results(times, energies, couplings):
     plt.tight_layout()
     plt.show()
 
+    labels = ['Δ₁(t)', 'Δ₂(t)', 'Δ₃(t)']
+    linestyles = ['--', '-', '-']
+    for i in range(3):
+        plt.plot(times, couplings[:, i], label=labels[i], linestyle=linestyles[i], linewidth=4)
+    # for i in range(3):
+    #     plt.plot(times, couplings[:, i], label=labels[i])
+    plt.xlabel('Time', fontsize=18)
+    plt.xticks(fontsize=16)
+    plt.ylabel('Coupling Strength', fontsize=18)
+    plt.yticks(fontsize=16)
+    plt.title('Time-Dependent Couplings', fontsize=24)
+    plt.legend(fontsize=16)
+    
+    plt.tight_layout()
+    plt.show()
+
 
 
 

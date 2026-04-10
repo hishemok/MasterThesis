@@ -72,11 +72,13 @@ These subsystem operators are then embedded into the full multi-arm Hilbert spac
 
 \subsubsection{Projected microscopic junction Hamiltonian}
 To move beyond the idealized braid Hamiltonian, we construct junction operators that couple neighboring subsystems through microscopic hopping and pairing terms. These operators are first defined in the full Hilbert space and are then projected onto the low-energy manifold spanned by the relevant optimized states. The projected operators,
-\[
-T_{AB} = P^\dagger H^{\mathrm{junc}}_{AB} P,
+\begin{equation}
+  T_{AB} = P^\dagger H^{\mathrm{junc}}_{AB} P,
 \qquad
 T_{AC} = P^\dagger H^{\mathrm{junc}}_{AC} P,
-\]
+\label{eq:junction_hamiltonian}
+\end{equation}
+
 replace the hand-chosen Majorana bilinears of the toy model.
 
 The time-dependent braiding Hamiltonian is then built by driving these projected junction operators with the same pulse sequence used in the effective model. This keeps the geometry of the braid fixed while allowing us to test whether the microscopic optimized setup reproduces the desired exchange dynamics in its low-energy sector.

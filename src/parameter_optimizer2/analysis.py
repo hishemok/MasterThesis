@@ -45,9 +45,9 @@ def plot_majorana_polarization(even_vecs, odd_vecs, n):
         plt.plot(range(n), MP[i], 'o-', label=f'State {i}')
 
     plt.axhline(0, color='k', linestyle='--')
-    plt.xlabel('Site index')
-    plt.ylabel('Majorana polarization')
-    plt.title(f'Majorana polarization profile ({n}-site system)')
+    plt.xlabel('Site index', fontsize=16)
+    plt.ylabel('Majorana polarization', fontsize=16)
+    plt.title(f'Majorana polarization profile ({n}-site system)', fontsize=20)
     plt.legend()
     plt.tight_layout()
     plt.show()
@@ -166,10 +166,10 @@ def combined_analysis_plot(n, evals, even_states, odd_states, even_vecs, odd_vec
     if degeneracy_lines:
         ax1.hlines(degeneracy_lines, 0.2, 0.8, color='tab:gray', linestyles='dashed', label='Degeneracies')
     ax1.set_xticks([0,1])
-    ax1.set_xticklabels(['Even', 'Odd'])
-    ax1.set_ylabel("Energy")
-    ax1.set_title(f"Parity-resolved spectrum ({n}-dot)")
-    ax1.legend(frameon=False)
+    ax1.set_xticklabels(['Even', 'Odd'], fontsize=16)
+    ax1.set_ylabel("Energy", fontsize=16)
+    ax1.set_title(f"Parity-resolved spectrum ({n}-dot)", fontsize=20)
+    ax1.legend(frameon=False, fontsize=14)
 
     # -----------------------------
     # Bottom: QD–SC–QD schematic
@@ -184,7 +184,7 @@ def combined_analysis_plot(n, evals, even_states, odd_states, even_vecs, odd_vec
 
     for i in range(n):
         ax2.scatter(i, dot_y, s=800, color='tab:blue', edgecolor='black', zorder=3)
-        ax2.text(i, dot_y-0.5, f"$\\epsilon_{i}$={eps[i]:.2f}", ha='center', fontsize=9)
+        ax2.text(i, dot_y-0.5, f"$\\epsilon_{i}$={eps[i]:.2f}", ha='center', fontsize=14)
 
     for i in range(n-1):
         x = (i + (i+1))/2
@@ -193,10 +193,10 @@ def combined_analysis_plot(n, evals, even_states, odd_states, even_vecs, odd_vec
                              color='lightgray', ec='black', lw=1.2, zorder=2)
         ax2.add_patch(rect)
         ax2.text(x, dot_y, f"t={float(t[i]):.2f}\nΔ={float(Delta[i]):.2f}", 
-                 ha='center', va='center', fontsize=8)
-        ax2.text(x, dot_y + 0.6, f"$U_{i}$={float(U[i]):.2f}", ha='center', fontsize=9, color='tab:purple')
+                 ha='center', va='center', fontsize=14)
+        ax2.text(x, dot_y + 0.6, f"$U_{i}$={float(U[i]):.2f}", ha='center', fontsize=14, color='tab:purple')
 
-    ax2.set_title("Optimized QD–SC–QD setup")
+    ax2.set_title("Optimized QD–SC–QD setup", fontsize=20)
 
     plt.tight_layout()
     plt.show()
