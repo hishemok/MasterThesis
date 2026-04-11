@@ -213,6 +213,28 @@ Table \ref{tab:braiding_checks_comparison} shows that the microscopic braid repr
 
 Table \ref{tab:braiding_local_projection} also explains why the local-site version in \texttt{braiding\_model\_ad2.py} appears insensitive to whether the first or last site of subsystem B or C is used. After projection, both $\chi_{B1,y}$ and $\chi_{B2,y}$ reduce to $\gamma_{B2}$ up to opposite sign, and similarly both $\chi_{C1,y}$ and $\chi_{C2,y}$ reduce to $\gamma_{C2}$. The different microscopic site choices therefore feed into the same low-energy braid channel rather than producing genuinely different braiding operations. This makes the apparent insensitivity of the projected local model a physical consequence of the low-energy projection, not a numerical inconsistency in the implementation.
 
+\subsection{Braiding in Higher Energy Levels}
+The previous braiding checks only use the lowest projected manifold. To test whether the result is an accidental ground-state feature, I also repeat the ideal projected-Majorana braid after enlarging the projection space. The projectors are added cumulatively, so that the first row contains only the ground-state block, while later rows include increasingly many excited parity-paired blocks. In the largest case the projection dimension reaches the full $512$-dimensional Hilbert space of the three-subsystem setup.
+
+\begin{table}[p]
+  \centering
+  \scriptsize
+  \setlength{\tabcolsep}{4pt}
+  \resizebox{\textwidth}{!}{\input{generated/extended_projection_braiding_compact.tex}}
+  \caption{Extended projected-Majorana braid checks for cumulative projectors. The column ``Levels'' gives the included block range in the cumulative stack, and $\dim P$ is the dimension of the full projected space. Here $E_\delta$ is the maximum instantaneous splitting inside the transported manifold, $E_{\mathrm{gap}}$ is the minimum gap to the next state, and ``Resid.'' is the largest relative residual when the physical projected AB/AC junction operators are compared with the ideal Majorana bilinears. The braid and gate errors are normalized by the relevant Hilbert-space dimension to make different projector sizes comparable.}
+  \label{tab:extended_projection_braiding}
+\end{table}
+
+Table \ref{tab:extended_projection_braiding} shows a clear separation between two questions. If the braid is implemented directly with the projected Majorana bilinears, then the exchange remains very stable as the cumulative projector is enlarged. For both $U=0$ and $U=0.1$, the normalized single-exchange error stays at approximately $1.86 \times 10^{-3}$, while the normalized parity-block gate error stays at approximately $9.46 \times 10^{-7}$ across the full range of projection dimensions. The gap above the transported manifold also remains open, with $E_{\mathrm{gap}} \approx 1.414$ for all rows.
+
+The degeneracy splitting is small compared with this gap. For the non-interacting case it is of order $10^{-13}$, while for $U=0.1$ it is of order $10^{-12}$. This means that the simple adiabatic window condition,
+\[
+  1/E_{\mathrm{gap}} \ll T \ll 1/E_\delta,
+\]
+is comfortably satisfied for the protocol time used here, $T=1000$. In this sense, the extended projected-Majorana calculation supports the idea that the ideal exchange structure can be consistently represented beyond the four-dimensional ground-state manifold.
+
+The residual column should be interpreted more carefully. It is not a gate error. Instead, it measures how well the physical projected junction operators resemble the ideal bilinears used in the braid. The residual becomes close to one once sufficiently many excited manifolds are included, which means that the microscopic junction no longer looks like a clean single Majorana bilinear in the enlarged space. Thus the higher-energy calculation gives a useful consistency check: the ideal projected-Majorana braid remains algebraically stable in the extended basis, but the physical microscopic junction interpretation is most reliable in the low-energy projected subspace.
+
 \subsection{Physical Interpretation}
 This section should connect the numerical findings back to the physical questions of the thesis. The central issue is not only whether the optimizer finds low-loss configurations, but whether those configurations correspond to robust and interpretable low-energy Majorana physics.
 

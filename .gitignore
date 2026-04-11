@@ -33,6 +33,7 @@ ENV/
 src/braiding/braiding_time_evolution.npz
 
 # LaTeX build files
+.texlive-cache/
 texmex/*.aux
 texmex/*.toc
 texmex/*.xdv

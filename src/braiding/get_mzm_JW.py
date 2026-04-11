@@ -155,7 +155,10 @@ def subsys_parity_oper(sites = 3):
 
 
 
-def get_full_gammas(levels_to_include = 4,verbose=False):
+def get_full_gammas(levels_to_include = 4,verbose=False, specified_vals=None):
+    if specified_vals is None:
+        specified_vals = {"U": [0.1]}
+
     JW_A = np.eye(2**3)  # nothing before A
     JW_B = build_JW_string(3)            # sees all A sites
     JW_C = build_JW_string(6)            # sees all A+B sites
@@ -163,14 +166,14 @@ def get_full_gammas(levels_to_include = 4,verbose=False):
     builder = BraidingHamiltonianBuilder(
         n_sites=3,
         dupes=3,
-        specified_vals={"U": [0.1]},
+        specified_vals=specified_vals,
         config_path=default_config_path(),
     )
 
     builder_sub = BraidingHamiltonianBuilder(
         n_sites=3,
         dupes=1,
-        specified_vals={"U": [0.1]},
+        specified_vals=specified_vals,
         config_path=default_config_path(),
     )
 
@@ -230,5 +233,3 @@ def get_full_gammas(levels_to_include = 4,verbose=False):
 
 if __name__ == "__main__":
     get_full_gammas()
-
-

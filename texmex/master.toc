@@ -61,7 +61,8 @@
 \contentsline {subsection}{\numberline {4.4}Braiding Results for Optimized Majorana Modes}{37}{subsection.4.4}%
 \contentsline {subsubsection}{\numberline {4.4.1}Projected microscopic braid}{37}{subsubsection.4.4.1}%
 \contentsline {subsubsection}{\numberline {4.4.2}Gate-validation checks}{40}{subsubsection.4.4.2}%
-\contentsline {subsection}{\numberline {4.5}Physical Interpretation}{41}{subsection.4.5}%
-\contentsline {subsubsection}{\numberline {4.5.1}What the optimization results suggest}{41}{subsubsection.4.5.1}%
-\contentsline {subsubsection}{\numberline {4.5.2}What the braiding results imply}{41}{subsubsection.4.5.2}%
-\contentsline {subsection}{\numberline {4.6}Limitations and Outlook}{41}{subsection.4.6}%
+\contentsline {subsection}{\numberline {4.5}Braiding in Higher Energy Levels}{41}{subsection.4.5}%
+\contentsline {subsection}{\numberline {4.6}Physical Interpretation}{43}{subsection.4.6}%
+\contentsline {subsubsection}{\numberline {4.6.1}What the optimization results suggest}{43}{subsubsection.4.6.1}%
+\contentsline {subsubsection}{\numberline {4.6.2}What the braiding results imply}{43}{subsubsection.4.6.2}%
+\contentsline {subsection}{\numberline {4.7}Limitations and Outlook}{43}{subsection.4.7}%
