@@ -1,15 +1,15 @@
 [0] Config.pm:328> INFO - This is Biber 2.21
 [0] Config.pm:331> INFO - Logfile is 'master.blg'
-[35] biber:342> INFO - === Sat Apr 11, 2026, 19:08:05
-[46] Biber.pm:421> INFO - Reading 'master.bcf'
-[86] Biber.pm:1002> INFO - Found 7 citekeys in bib section 0
-[96] Biber.pm:4487> INFO - Processing section 0
-[103] Biber.pm:4678> INFO - Looking for bibtex file '/home/Hishem/repos/Special_curriculum/tex/refrences.bib' for section 0
-[103] bibtex.pm:1713> INFO - LaTeX decoding ...
-[108] bibtex.pm:1519> INFO - Found BibTeX data source '/home/Hishem/repos/Special_curriculum/tex/refrences.bib'
-[166] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[166] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[166] Biber.pm:4307> INFO - Sorting list 'nty/global//global/global/global' of type 'entry' with template 'nty' and locale 'en-US'
-[166] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
-[175] bbl.pm:676> INFO - Writing 'master.bbl' with encoding 'UTF-8'
-[177] bbl.pm:779> INFO - Output to master.bbl
+[28] biber:342> INFO - === Sun Apr 12, 2026, 12:28:43
+[34] Biber.pm:421> INFO - Reading 'master.bcf'
+[62] Biber.pm:1002> INFO - Found 7 citekeys in bib section 0
+[69] Biber.pm:4487> INFO - Processing section 0
+[74] Biber.pm:4678> INFO - Looking for bibtex file '/home/Hishem/repos/Special_curriculum/tex/refrences.bib' for section 0
+[74] bibtex.pm:1713> INFO - LaTeX decoding ...
+[77] bibtex.pm:1519> INFO - Found BibTeX data source '/home/Hishem/repos/Special_curriculum/tex/refrences.bib'
+[124] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[124] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[124] Biber.pm:4307> INFO - Sorting list 'nty/global//global/global/global' of type 'entry' with template 'nty' and locale 'en-US'
+[124] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
+[131] bbl.pm:676> INFO - Writing 'master.bbl' with encoding 'UTF-8'
+[133] bbl.pm:779> INFO - Output to master.bbl

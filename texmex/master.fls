@@ -435,6 +435,7 @@ INPUT ./figs/braiding_junction_decomposition.pdf
 INPUT ./generated/braiding_checks_comparison.tex
 INPUT ./generated/braiding_local_projection.tex
 INPUT ./generated/extended_projection_braiding_compact.tex
+INPUT ./generated/extended_projection_physical_junction_braiding_compact.tex
 INPUT ./master.aux
 INPUT ./introduction.aux
 INPUT ./theory.aux

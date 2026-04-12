@@ -221,19 +221,28 @@ The previous braiding checks only use the lowest projected manifold. To test whe
   \scriptsize
   \setlength{\tabcolsep}{4pt}
   \resizebox{\textwidth}{!}{\input{generated/extended_projection_braiding_compact.tex}}
-  \caption{Extended projected-Majorana braid checks for cumulative projectors. The column ``Levels'' gives the included block range in the cumulative stack, and $\dim P$ is the dimension of the full projected space. Here $E_\delta$ is the maximum instantaneous splitting inside the transported manifold, $E_{\mathrm{gap}}$ is the minimum gap to the next state, and ``Resid.'' is the largest relative residual when the physical projected AB/AC junction operators are compared with the ideal Majorana bilinears. The braid and gate errors are normalized by the relevant Hilbert-space dimension to make different projector sizes comparable.}
+  \caption{Extended projected-Majorana braid checks for cumulative projectors. The column ``Levels'' gives the included block range in the cumulative stack, $\dim P$ is the dimension of the full projected space, and $d_p$ is the dimension of each parity block inside the transported manifold. ``Braid raw'' is the largest single-exchange Majorana error, while ``Braid norm.'' divides this by the square root of the transported-manifold dimension. ``Odd raw'' and ``Even raw'' are the raw parity-block target-gate errors, while the corresponding normalized columns divide by $\sqrt{d_p}$.}
   \label{tab:extended_projection_braiding}
 \end{table}
 
-Table \ref{tab:extended_projection_braiding} shows a clear separation between two questions. If the braid is implemented directly with the projected Majorana bilinears, then the exchange remains very stable as the cumulative projector is enlarged. For both $U=0$ and $U=0.1$, the normalized single-exchange error stays at approximately $1.86 \times 10^{-3}$, while the normalized parity-block gate error stays at approximately $9.46 \times 10^{-7}$ across the full range of projection dimensions. The gap above the transported manifold also remains open, with $E_{\mathrm{gap}} \approx 1.414$ for all rows.
+Table \ref{tab:extended_projection_braiding} resolves the apparent discrepancy between the raw console output and the previous table. For example, for $\dim P = 56$ the transported manifold has $28$ states, split into parity blocks of dimension $d_p=14$. The raw odd- and even-block target errors are both about $3.54 \times 10^{-6}$. Dividing this by $\sqrt{14}$ gives the normalized value $9.46 \times 10^{-7}$, which is the number that appeared in the earlier table.
 
-The degeneracy splitting is small compared with this gap. For the non-interacting case it is of order $10^{-13}$, while for $U=0.1$ it is of order $10^{-12}$. This means that the simple adiabatic window condition,
-\[
-  1/E_{\mathrm{gap}} \ll T \ll 1/E_\delta,
-\]
-is comfortably satisfied for the protocol time used here, $T=1000$. In this sense, the extended projected-Majorana calculation supports the idea that the ideal exchange structure can be consistently represented beyond the four-dimensional ground-state manifold.
+The raw errors therefore do change as the projection space is enlarged. For both $U=0$ and $U=0.1$, the raw odd/even target-gate errors grow from approximately $1.34 \times 10^{-6}$ in the ground-state block to approximately $1.07 \times 10^{-5}$ in the full projected space. The normalized errors remain essentially constant because the ideal projected-Majorana braid acts as the same exchange operation repeated across the included parity blocks, so the Frobenius-norm error scales approximately as the square root of the block dimension.
 
-The residual column should be interpreted more carefully. It is not a gate error. Instead, it measures how well the physical projected junction operators resemble the ideal bilinears used in the braid. The residual becomes close to one once sufficiently many excited manifolds are included, which means that the microscopic junction no longer looks like a clean single Majorana bilinear in the enlarged space. Thus the higher-energy calculation gives a useful consistency check: the ideal projected-Majorana braid remains algebraically stable in the extended basis, but the physical microscopic junction interpretation is most reliable in the low-energy projected subspace.
+The same pattern appears in the single-exchange Majorana error. The raw error grows with the size of the transported manifold, while the dimension-normalized value remains approximately $1.86 \times 10^{-3}$. This means that the constant normalized errors are not a sign that the table failed to update; they indicate that the error per included block is roughly unchanged in this ideal projected-Majorana calculation.
+
+This also means that Table \ref{tab:extended_projection_braiding} should be interpreted as an ideal control calculation, not as evidence that the Coulomb interaction is irrelevant. In that table the effective braid is constructed from normalized projected Majorana operators, so once the algebra has been enforced the remaining error is mostly a numerical and dimensional normalization effect. To test the interaction dependence more directly, I also repeat the calculation using the physical projected junction operators, where the microscopic coupling is projected into the enlarged manifold instead of replacing it by the ideal Majorana bilinear.
+
+\begin{table}[p]
+  \centering
+  \scriptsize
+  \setlength{\tabcolsep}{4pt}
+  \resizebox{\textwidth}{!}{\input{generated/extended_projection_physical_junction_braiding_compact.tex}}
+  \caption{Physical projected-junction braid checks for selected cumulative projectors. The columns are defined as in Table \ref{tab:extended_projection_braiding}, but the braid is generated by the projected microscopic junction terms rather than by the ideal normalized Majorana bilinears.}
+  \label{tab:extended_projection_physical_junction_braiding}
+\end{table}
+
+Table \ref{tab:extended_projection_physical_junction_braiding} shows a much stronger dependence on the structure of the enlarged manifold. For the ground-state block, the odd- and even-parity target-gate errors remain small for all three interaction strengths, with normalized errors of order $10^{-6}$. Once excited blocks are included, however, the physical projected-junction braid no longer acts as the desired gate throughout the full transported space. The normalized parity-block errors become order one already at $\dim P=32$, and for $U=2.0$ they increase from approximately $1.00$ at $\dim P=32$ to approximately $1.08$ at $\dim P=80$. Thus the Coulomb interaction does matter in the microscopic projected-junction calculation, but not as a simple monotonic trend in this small set of runs. The main conclusion is instead that the low-energy braid remains well defined in the ground-state manifold, while the higher-energy sectors are not described by the same clean effective Majorana exchange.
 
 \subsection{Physical Interpretation}
 This section should connect the numerical findings back to the physical questions of the thesis. The central issue is not only whether the optimizer finds low-loss configurations, but whether those configurations correspond to robust and interpretable low-energy Majorana physics.

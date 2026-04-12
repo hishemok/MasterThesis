@@ -564,25 +564,26 @@ def write_tex(path, rows):
 
 def write_compact_tex(path, rows):
     lines = [
-        r"\begin{tabular}{cccccccc}",
+        r"\begin{tabular}{cccccccccc}",
         r"\hline",
-        r"$U$ & Levels & $\dim P$ & $E_\delta$ & $E_{\mathrm{gap}}$ & Resid. & Braid err.$/\sqrt{d}$ & Gate err.$/\sqrt{d}$ \\",
+        r"$U$ & Levels & $\dim P$ & $d_p$ & Braid raw & Braid norm. & Odd raw & Odd norm. & Even raw & Even norm. \\",
         r"\hline",
     ]
     for row in rows:
-        residual = max(row["ab_relative_residual"], row["ac_relative_residual"])
-        gate_error = max(row["odd_target_error_normalized"], row["even_target_error_normalized"])
+        parity_dim = int(round(float(row["transport_dim"]) / 2.0))
         lines.append(
             " & ".join(
                 [
                     f"{float(row['U']):.1f}",
                     row["included_groups"],
                     str(row["projection_dim"]),
-                    metric(row["max_transport_splitting"]),
-                    metric(row["min_gap_above_transport"]),
-                    metric(residual),
+                    str(parity_dim),
+                    metric(row["max_exchange_error_raw"]),
                     metric(row["max_exchange_error_normalized"]),
-                    metric(gate_error),
+                    metric(row["odd_target_error_raw"]),
+                    metric(row["odd_target_error_normalized"]),
+                    metric(row["even_target_error_raw"]),
+                    metric(row["even_target_error_normalized"]),
                 ]
             )
             + r" \\"
@@ -642,6 +643,10 @@ def main():
     if physical_rows:
         write_csv(physical_output_base.with_suffix(".csv"), physical_rows)
         write_tex(physical_output_base.with_suffix(".tex"), physical_rows)
+        write_compact_tex(
+            physical_output_base.with_name(f"{physical_output_base.name}_compact.tex"),
+            physical_rows,
+        )
 
     if ideal_rows:
         print(f"Saved {output_base.with_suffix('.csv')}")
@@ -651,6 +656,7 @@ def main():
     if physical_rows:
         print(f"Saved {physical_output_base.with_suffix('.csv')}")
         print(f"Saved {physical_output_base.with_suffix('.tex')}")
+        print(f"Saved {physical_output_base.with_name(f'{physical_output_base.name}_compact.tex')}")
 
 
 if __name__ == "__main__":
