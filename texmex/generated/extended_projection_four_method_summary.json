@@ -1,0 +1,566 @@
+[
+  {
+    "u": 0.0,
+    "block_name": "P_gs",
+    "cum_dim": 8,
+    "methods": {
+      "ideal": {
+        "max_braid_error": 0.00372,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=3.72e-03, \u03b33 ->  \u03b32=5.31e-06, \u03b31 ->  \u03b31=3.72e-03, \u03b30 ->  \u03b30=3.97e-13",
+        "off_block_leakage": 1.98e-13,
+        "odd_target_error": 1.34e-06,
+        "even_target_error": 1.34e-06
+      },
+      "bilinear_fit": {
+        "max_braid_error": 0.00372,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=3.72e-03, \u03b33 ->  \u03b32=5.32e-06, \u03b31 ->  \u03b31=3.72e-03, \u03b30 ->  \u03b30=2.24e-11",
+        "off_block_leakage": 1.02e-15,
+        "odd_target_error": 1.34e-06,
+        "even_target_error": 1.34e-06
+      },
+      "local_projection": {
+        "max_braid_error": 0.00372,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=3.72e-03, \u03b33 ->  \u03b32=5.31e-06, \u03b31 ->  \u03b31=3.72e-03, \u03b30 ->  \u03b30=1.05e-14",
+        "off_block_leakage": 4.23e-16,
+        "odd_target_error": 1.34e-06,
+        "even_target_error": 1.34e-06
+      },
+      "physical": {
+        "max_braid_error": 0.00372,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=3.72e-03, \u03b33 ->  \u03b32=5.32e-06, \u03b31 ->  \u03b31=3.72e-03, \u03b30 ->  \u03b30=2.24e-11",
+        "off_block_leakage": 2.13e-16,
+        "odd_target_error": 1.34e-06,
+        "even_target_error": 1.34e-06
+      }
+    },
+    "active_majoranas": [
+      "\u03b3A1",
+      "\u03b3A2",
+      "\u03b3B2",
+      "\u03b3C2"
+    ],
+    "physical_bilinear_residual_ab": 6.97e-16,
+    "physical_bilinear_residual_ac": 4.08e-16
+  },
+  {
+    "u": 0.0,
+    "block_name": "P_excited1",
+    "cum_dim": 32,
+    "methods": {
+      "ideal": {
+        "max_braid_error": 0.00743,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=7.43e-03, \u03b33 ->  \u03b32=1.06e-05, \u03b31 ->  \u03b31=7.43e-03, \u03b30 ->  \u03b30=7.07e-13",
+        "off_block_leakage": 3.54e-13,
+        "odd_target_error": 2.68e-06,
+        "even_target_error": 2.68e-06
+      },
+      "bilinear_fit": {
+        "max_braid_error": 0.00743,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=7.43e-03, \u03b33 ->  \u03b32=1.09e-05, \u03b31 ->  \u03b31=7.43e-03, \u03b30 ->  \u03b30=2.24e-11",
+        "off_block_leakage": 3.59e-15,
+        "odd_target_error": 2.78e-06,
+        "even_target_error": 2.78e-06
+      },
+      "local_projection": {
+        "max_braid_error": 8.0,
+        "normalized_braid_error": 1.41,
+        "braid_errors": "\u03b32 -> -\u03b33=8.00e+00, \u03b33 ->  \u03b32=8.00e+00, \u03b31 ->  \u03b31=7.43e-03, \u03b30 ->  \u03b30=2.50e-14",
+        "off_block_leakage": 3.97e-15,
+        "odd_target_error": 2.83,
+        "even_target_error": 2.83
+      },
+      "physical": {
+        "max_braid_error": 8.0,
+        "normalized_braid_error": 1.41,
+        "braid_errors": "\u03b32 -> -\u03b33=8.00e+00, \u03b33 ->  \u03b32=8.00e+00, \u03b31 ->  \u03b31=9.30e-03, \u03b30 ->  \u03b30=5.64e-03",
+        "off_block_leakage": 3.01e-15,
+        "odd_target_error": 2.83,
+        "even_target_error": 2.83
+      }
+    },
+    "active_majoranas": [
+      "\u03b3A1",
+      "\u03b3A2",
+      "\u03b3B2",
+      "\u03b3C2"
+    ],
+    "physical_bilinear_residual_ab": 0.856,
+    "physical_bilinear_residual_ac": 0.856
+  },
+  {
+    "u": 0.0,
+    "block_name": "P_excited2",
+    "cum_dim": 56,
+    "methods": {
+      "ideal": {
+        "max_braid_error": 0.00983,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=9.83e-03, \u03b33 ->  \u03b32=1.41e-05, \u03b31 ->  \u03b31=9.83e-03, \u03b30 ->  \u03b30=8.45e-13",
+        "off_block_leakage": 4.22e-13,
+        "odd_target_error": 3.54e-06,
+        "even_target_error": 3.54e-06
+      },
+      "bilinear_fit": {
+        "max_braid_error": 0.00983,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=9.83e-03, \u03b33 ->  \u03b32=1.73e-05, \u03b31 ->  \u03b31=9.83e-03, \u03b30 ->  \u03b30=8.45e-12",
+        "off_block_leakage": 6.4e-15,
+        "odd_target_error": 4.39e-06,
+        "even_target_error": 4.39e-06
+      },
+      "local_projection": {
+        "max_braid_error": 11.3,
+        "normalized_braid_error": 1.51,
+        "braid_errors": "\u03b32 -> -\u03b33=1.13e+01, \u03b33 ->  \u03b32=1.13e+01, \u03b31 ->  \u03b31=9.83e-03, \u03b30 ->  \u03b30=4.25e-14",
+        "off_block_leakage": 5.69e-15,
+        "odd_target_error": 4.0,
+        "even_target_error": 4.0
+      },
+      "physical": {
+        "max_braid_error": 11.3,
+        "normalized_braid_error": 1.51,
+        "braid_errors": "\u03b32 -> -\u03b33=1.13e+01, \u03b33 ->  \u03b32=1.13e+01, \u03b31 ->  \u03b31=1.13e-02, \u03b30 ->  \u03b30=5.68e-03",
+        "off_block_leakage": 5.15e-15,
+        "odd_target_error": 4.0,
+        "even_target_error": 4.0
+      }
+    },
+    "active_majoranas": [
+      "\u03b3A1",
+      "\u03b3A2",
+      "\u03b3B2",
+      "\u03b3C2"
+    ],
+    "physical_bilinear_residual_ab": 0.98,
+    "physical_bilinear_residual_ac": 0.98
+  },
+  {
+    "u": 0.0,
+    "block_name": "P_excited3",
+    "cum_dim": 80,
+    "methods": {
+      "ideal": {
+        "max_braid_error": 0.0118,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=1.18e-02, \u03b33 ->  \u03b32=1.68e-05, \u03b31 ->  \u03b31=1.18e-02, \u03b30 ->  \u03b30=1.32e-12",
+        "off_block_leakage": 6.61e-13,
+        "odd_target_error": 4.23e-06,
+        "even_target_error": 4.23e-06
+      },
+      "bilinear_fit": {
+        "max_braid_error": 0.0118,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=1.18e-02, \u03b33 ->  \u03b32=1.93e-05, \u03b31 ->  \u03b31=1.18e-02, \u03b30 ->  \u03b30=1.41e-11",
+        "off_block_leakage": 8.11e-15,
+        "odd_target_error": 4.91e-06,
+        "even_target_error": 4.91e-06
+      },
+      "local_projection": {
+        "max_braid_error": 11.3,
+        "normalized_braid_error": 1.26,
+        "braid_errors": "\u03b32 -> -\u03b33=1.13e+01, \u03b33 ->  \u03b32=1.13e+01, \u03b31 ->  \u03b31=1.18e-02, \u03b30 ->  \u03b30=5.74e-14",
+        "off_block_leakage": 7.57e-15,
+        "odd_target_error": 4.0,
+        "even_target_error": 4.0
+      },
+      "physical": {
+        "max_braid_error": 11.3,
+        "normalized_braid_error": 1.26,
+        "braid_errors": "\u03b32 -> -\u03b33=1.13e+01, \u03b33 ->  \u03b32=1.13e+01, \u03b31 ->  \u03b31=1.30e-02, \u03b30 ->  \u03b30=5.70e-03",
+        "off_block_leakage": 6.89e-15,
+        "odd_target_error": 4.0,
+        "even_target_error": 4.0
+      }
+    },
+    "active_majoranas": [
+      "\u03b3A1",
+      "\u03b3A2",
+      "\u03b3B2",
+      "\u03b3C2"
+    ],
+    "physical_bilinear_residual_ab": 0.972,
+    "physical_bilinear_residual_ac": 0.972
+  },
+  {
+    "u": 0.1,
+    "block_name": "P_gs",
+    "cum_dim": 8,
+    "methods": {
+      "ideal": {
+        "max_braid_error": 0.00372,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=3.72e-03, \u03b33 ->  \u03b32=5.31e-06, \u03b31 ->  \u03b31=3.72e-03, \u03b30 ->  \u03b30=1.29e-11",
+        "off_block_leakage": 6.43e-12,
+        "odd_target_error": 1.34e-06,
+        "even_target_error": 1.34e-06
+      },
+      "bilinear_fit": {
+        "max_braid_error": 0.00372,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=3.72e-03, \u03b33 ->  \u03b32=5.31e-06, \u03b31 ->  \u03b31=3.72e-03, \u03b30 ->  \u03b30=6.52e-11",
+        "off_block_leakage": 9.11e-16,
+        "odd_target_error": 1.34e-06,
+        "even_target_error": 1.34e-06
+      },
+      "local_projection": {
+        "max_braid_error": 0.00372,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=3.72e-03, \u03b33 ->  \u03b32=5.31e-06, \u03b31 ->  \u03b31=3.72e-03, \u03b30 ->  \u03b30=3.97e-15",
+        "off_block_leakage": 7.27e-16,
+        "odd_target_error": 1.34e-06,
+        "even_target_error": 1.34e-06
+      },
+      "physical": {
+        "max_braid_error": 0.00372,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=3.72e-03, \u03b33 ->  \u03b32=5.31e-06, \u03b31 ->  \u03b31=3.72e-03, \u03b30 ->  \u03b30=6.52e-11",
+        "off_block_leakage": 8.65e-16,
+        "odd_target_error": 1.34e-06,
+        "even_target_error": 1.34e-06
+      }
+    },
+    "active_majoranas": [
+      "\u03b3A1",
+      "\u03b3A2",
+      "\u03b3B2",
+      "\u03b3C2"
+    ],
+    "physical_bilinear_residual_ab": 9.27e-16,
+    "physical_bilinear_residual_ac": 8.71e-16
+  },
+  {
+    "u": 0.1,
+    "block_name": "P_excited1",
+    "cum_dim": 32,
+    "methods": {
+      "ideal": {
+        "max_braid_error": 0.00743,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=7.43e-03, \u03b33 ->  \u03b32=1.06e-05, \u03b31 ->  \u03b31=7.43e-03, \u03b30 ->  \u03b30=2.87e-11",
+        "off_block_leakage": 1.44e-11,
+        "odd_target_error": 2.68e-06,
+        "even_target_error": 2.68e-06
+      },
+      "bilinear_fit": {
+        "max_braid_error": 0.00743,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=7.43e-03, \u03b33 ->  \u03b32=1.09e-05, \u03b31 ->  \u03b31=7.43e-03, \u03b30 ->  \u03b30=7.84e-11",
+        "off_block_leakage": 3.22e-15,
+        "odd_target_error": 2.77e-06,
+        "even_target_error": 2.77e-06
+      },
+      "local_projection": {
+        "max_braid_error": 8.0,
+        "normalized_braid_error": 1.41,
+        "braid_errors": "\u03b32 -> -\u03b33=8.00e+00, \u03b33 ->  \u03b32=8.00e+00, \u03b31 ->  \u03b31=7.43e-03, \u03b30 ->  \u03b30=2.33e-14",
+        "off_block_leakage": 3.05e-15,
+        "odd_target_error": 2.83,
+        "even_target_error": 2.83
+      },
+      "physical": {
+        "max_braid_error": 8.0,
+        "normalized_braid_error": 1.41,
+        "braid_errors": "\u03b32 -> -\u03b33=8.00e+00, \u03b33 ->  \u03b32=8.00e+00, \u03b31 ->  \u03b31=7.43e-03, \u03b30 ->  \u03b30=2.59e-04",
+        "off_block_leakage": 2.91e-15,
+        "odd_target_error": 2.83,
+        "even_target_error": 2.83
+      }
+    },
+    "active_majoranas": [
+      "\u03b3A1",
+      "\u03b3A2",
+      "\u03b3B2",
+      "\u03b3C2"
+    ],
+    "physical_bilinear_residual_ab": 0.866,
+    "physical_bilinear_residual_ac": 0.866
+  },
+  {
+    "u": 0.1,
+    "block_name": "P_excited2",
+    "cum_dim": 56,
+    "methods": {
+      "ideal": {
+        "max_braid_error": 0.00983,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=9.83e-03, \u03b33 ->  \u03b32=1.41e-05, \u03b31 ->  \u03b31=9.83e-03, \u03b30 ->  \u03b30=3.40e-11",
+        "off_block_leakage": 1.7e-11,
+        "odd_target_error": 3.54e-06,
+        "even_target_error": 3.54e-06
+      },
+      "bilinear_fit": {
+        "max_braid_error": 0.00983,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=9.83e-03, \u03b33 ->  \u03b32=1.46e-05, \u03b31 ->  \u03b31=9.83e-03, \u03b30 ->  \u03b30=6.72e-11",
+        "off_block_leakage": 5.26e-15,
+        "odd_target_error": 3.72e-06,
+        "even_target_error": 3.72e-06
+      },
+      "local_projection": {
+        "max_braid_error": 8.0,
+        "normalized_braid_error": 1.07,
+        "braid_errors": "\u03b32 -> -\u03b33=8.00e+00, \u03b33 ->  \u03b32=8.00e+00, \u03b31 ->  \u03b31=9.83e-03, \u03b30 ->  \u03b30=3.01e-14",
+        "off_block_leakage": 5.21e-15,
+        "odd_target_error": 2.83,
+        "even_target_error": 2.83
+      },
+      "physical": {
+        "max_braid_error": 8.0,
+        "normalized_braid_error": 1.07,
+        "braid_errors": "\u03b32 -> -\u03b33=8.00e+00, \u03b33 ->  \u03b32=8.00e+00, \u03b31 ->  \u03b31=1.09e-02, \u03b30 ->  \u03b30=4.71e-03",
+        "off_block_leakage": 7.76e-15,
+        "odd_target_error": 2.83,
+        "even_target_error": 2.83
+      }
+    },
+    "active_majoranas": [
+      "\u03b3A1",
+      "\u03b3A2",
+      "\u03b3B2",
+      "\u03b3C2"
+    ],
+    "physical_bilinear_residual_ab": 0.904,
+    "physical_bilinear_residual_ac": 0.904
+  },
+  {
+    "u": 0.1,
+    "block_name": "P_excited3",
+    "cum_dim": 80,
+    "methods": {
+      "ideal": {
+        "max_braid_error": 0.0118,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=1.18e-02, \u03b33 ->  \u03b32=1.68e-05, \u03b31 ->  \u03b31=1.18e-02, \u03b30 ->  \u03b30=4.45e-11",
+        "off_block_leakage": 2.23e-11,
+        "odd_target_error": 4.23e-06,
+        "even_target_error": 4.23e-06
+      },
+      "bilinear_fit": {
+        "max_braid_error": 0.0118,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=1.18e-02, \u03b33 ->  \u03b32=1.93e-05, \u03b31 ->  \u03b31=1.18e-02, \u03b30 ->  \u03b30=6.48e-11",
+        "off_block_leakage": 7.77e-15,
+        "odd_target_error": 4.9e-06,
+        "even_target_error": 4.9e-06
+      },
+      "local_projection": {
+        "max_braid_error": 11.3,
+        "normalized_braid_error": 1.27,
+        "braid_errors": "\u03b32 -> -\u03b33=1.13e+01, \u03b33 ->  \u03b32=1.13e+01, \u03b31 ->  \u03b31=1.18e-02, \u03b30 ->  \u03b30=4.83e-14",
+        "off_block_leakage": 7.35e-15,
+        "odd_target_error": 4.0,
+        "even_target_error": 4.0
+      },
+      "physical": {
+        "max_braid_error": 11.3,
+        "normalized_braid_error": 1.27,
+        "braid_errors": "\u03b32 -> -\u03b33=1.13e+01, \u03b33 ->  \u03b32=1.13e+01, \u03b31 ->  \u03b31=1.27e-02, \u03b30 ->  \u03b30=4.78e-03",
+        "off_block_leakage": 8.86e-15,
+        "odd_target_error": 4.0,
+        "even_target_error": 4.0
+      }
+    },
+    "active_majoranas": [
+      "\u03b3A1",
+      "\u03b3A2",
+      "\u03b3B2",
+      "\u03b3C2"
+    ],
+    "physical_bilinear_residual_ab": 0.98,
+    "physical_bilinear_residual_ac": 0.98
+  },
+  {
+    "u": 2.0,
+    "block_name": "P_gs",
+    "cum_dim": 8,
+    "methods": {
+      "ideal": {
+        "max_braid_error": 0.00372,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=3.72e-03, \u03b33 ->  \u03b32=5.31e-06, \u03b31 ->  \u03b31=3.72e-03, \u03b30 ->  \u03b30=2.29e-12",
+        "off_block_leakage": 1.15e-12,
+        "odd_target_error": 1.34e-06,
+        "even_target_error": 1.34e-06
+      },
+      "bilinear_fit": {
+        "max_braid_error": 0.00372,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=3.72e-03, \u03b33 ->  \u03b32=5.31e-06, \u03b31 ->  \u03b31=3.72e-03, \u03b30 ->  \u03b30=2.81e-06",
+        "off_block_leakage": 5.37e-16,
+        "odd_target_error": 1.34e-06,
+        "even_target_error": 1.34e-06
+      },
+      "local_projection": {
+        "max_braid_error": 0.00372,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=3.72e-03, \u03b33 ->  \u03b32=5.32e-06, \u03b31 ->  \u03b31=3.72e-03, \u03b30 ->  \u03b30=8.19e-15",
+        "off_block_leakage": 1.44e-15,
+        "odd_target_error": 1.34e-06,
+        "even_target_error": 1.34e-06
+      },
+      "physical": {
+        "max_braid_error": 0.00372,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=3.72e-03, \u03b33 ->  \u03b32=5.31e-06, \u03b31 ->  \u03b31=3.72e-03, \u03b30 ->  \u03b30=2.81e-06",
+        "off_block_leakage": 5.57e-16,
+        "odd_target_error": 1.34e-06,
+        "even_target_error": 1.34e-06
+      }
+    },
+    "active_majoranas": [
+      "\u03b3A1",
+      "\u03b3A2",
+      "\u03b3B2",
+      "\u03b3C2"
+    ],
+    "physical_bilinear_residual_ab": 9.02e-15,
+    "physical_bilinear_residual_ac": 8.85e-15
+  },
+  {
+    "u": 2.0,
+    "block_name": "P_excited1",
+    "cum_dim": 32,
+    "methods": {
+      "ideal": {
+        "max_braid_error": 0.00743,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=7.43e-03, \u03b33 ->  \u03b32=1.06e-05, \u03b31 ->  \u03b31=7.43e-03, \u03b30 ->  \u03b30=4.21e-12",
+        "off_block_leakage": 2.1e-12,
+        "odd_target_error": 2.68e-06,
+        "even_target_error": 2.68e-06
+      },
+      "bilinear_fit": {
+        "max_braid_error": 0.00743,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=7.43e-03, \u03b33 ->  \u03b32=1.09e-05, \u03b31 ->  \u03b31=7.43e-03, \u03b30 ->  \u03b30=1.60e-07",
+        "off_block_leakage": 3.58e-15,
+        "odd_target_error": 2.77e-06,
+        "even_target_error": 2.77e-06
+      },
+      "local_projection": {
+        "max_braid_error": 8.0,
+        "normalized_braid_error": 1.41,
+        "braid_errors": "\u03b32 -> -\u03b33=8.00e+00, \u03b33 ->  \u03b32=8.00e+00, \u03b31 ->  \u03b31=7.43e-03, \u03b30 ->  \u03b30=2.43e-14",
+        "off_block_leakage": 3.04e-15,
+        "odd_target_error": 2.83,
+        "even_target_error": 2.83
+      },
+      "physical": {
+        "max_braid_error": 8.0,
+        "normalized_braid_error": 1.41,
+        "braid_errors": "\u03b32 -> -\u03b33=8.00e+00, \u03b33 ->  \u03b32=8.00e+00, \u03b31 ->  \u03b31=2.30e-01, \u03b30 ->  \u03b30=2.30e-01",
+        "off_block_leakage": 2.48e-14,
+        "odd_target_error": 2.83,
+        "even_target_error": 2.83
+      }
+    },
+    "active_majoranas": [
+      "\u03b3A1",
+      "\u03b3A2",
+      "\u03b3B2",
+      "\u03b3C2"
+    ],
+    "physical_bilinear_residual_ab": 0.987,
+    "physical_bilinear_residual_ac": 0.987
+  },
+  {
+    "u": 2.0,
+    "block_name": "P_excited2",
+    "cum_dim": 56,
+    "methods": {
+      "ideal": {
+        "max_braid_error": 0.00983,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=9.83e-03, \u03b33 ->  \u03b32=1.41e-05, \u03b31 ->  \u03b31=9.83e-03, \u03b30 ->  \u03b30=5.32e-12",
+        "off_block_leakage": 2.66e-12,
+        "odd_target_error": 3.54e-06,
+        "even_target_error": 3.54e-06
+      },
+      "bilinear_fit": {
+        "max_braid_error": 0.00983,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=9.83e-03, \u03b33 ->  \u03b32=1.45e-05, \u03b31 ->  \u03b31=9.83e-03, \u03b30 ->  \u03b30=5.01e-06",
+        "off_block_leakage": 5.15e-15,
+        "odd_target_error": 3.67e-06,
+        "even_target_error": 3.67e-06
+      },
+      "local_projection": {
+        "max_braid_error": 11.1,
+        "normalized_braid_error": 1.48,
+        "braid_errors": "\u03b32 -> -\u03b33=1.11e+01, \u03b33 ->  \u03b32=1.11e+01, \u03b31 ->  \u03b31=9.84e-03, \u03b30 ->  \u03b30=3.40e-14",
+        "off_block_leakage": 5.08e-15,
+        "odd_target_error": 3.92,
+        "even_target_error": 3.92
+      },
+      "physical": {
+        "max_braid_error": 11.1,
+        "normalized_braid_error": 1.48,
+        "braid_errors": "\u03b32 -> -\u03b33=1.11e+01, \u03b33 ->  \u03b32=1.11e+01, \u03b31 ->  \u03b31=4.22e-01, \u03b30 ->  \u03b30=4.22e-01",
+        "off_block_leakage": 3.8e-14,
+        "odd_target_error": 3.92,
+        "even_target_error": 3.92
+      }
+    },
+    "active_majoranas": [
+      "\u03b3A1",
+      "\u03b3A2",
+      "\u03b3B2",
+      "\u03b3C2"
+    ],
+    "physical_bilinear_residual_ab": 1.01,
+    "physical_bilinear_residual_ac": 1.01
+  },
+  {
+    "u": 2.0,
+    "block_name": "P_excited3",
+    "cum_dim": 80,
+    "methods": {
+      "ideal": {
+        "max_braid_error": 0.0118,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=1.18e-02, \u03b33 ->  \u03b32=1.68e-05, \u03b31 ->  \u03b31=1.18e-02, \u03b30 ->  \u03b30=6.13e-12",
+        "off_block_leakage": 3.06e-12,
+        "odd_target_error": 4.23e-06,
+        "even_target_error": 4.23e-06
+      },
+      "bilinear_fit": {
+        "max_braid_error": 0.0118,
+        "normalized_braid_error": 0.00131,
+        "braid_errors": "\u03b32 -> -\u03b33=1.18e-02, \u03b33 ->  \u03b32=1.85e-05, \u03b31 ->  \u03b31=1.18e-02, \u03b30 ->  \u03b30=2.75e-06",
+        "off_block_leakage": 7.55e-15,
+        "odd_target_error": 4.7e-06,
+        "even_target_error": 4.7e-06
+      },
+      "local_projection": {
+        "max_braid_error": 13.7,
+        "normalized_braid_error": 1.53,
+        "braid_errors": "\u03b32 -> -\u03b33=1.37e+01, \u03b33 ->  \u03b32=1.37e+01, \u03b31 ->  \u03b31=1.18e-02, \u03b30 ->  \u03b30=5.85e-14",
+        "off_block_leakage": 8.03e-15,
+        "odd_target_error": 4.84,
+        "even_target_error": 4.84
+      },
+      "physical": {
+        "max_braid_error": 13.7,
+        "normalized_braid_error": 1.53,
+        "braid_errors": "\u03b32 -> -\u03b33=1.37e+01, \u03b33 ->  \u03b32=1.37e+01, \u03b31 ->  \u03b31=1.13e+00, \u03b30 ->  \u03b30=1.13e+00",
+        "off_block_leakage": 6.37e-14,
+        "odd_target_error": 4.83,
+        "even_target_error": 4.83
+      }
+    },
+    "active_majoranas": [
+      "\u03b3A1",
+      "\u03b3A2",
+      "\u03b3B2",
+      "\u03b3C2"
+    ],
+    "physical_bilinear_residual_ab": 1.13,
+    "physical_bilinear_residual_ac": 1.13
+  }
+]

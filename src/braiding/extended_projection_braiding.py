@@ -359,19 +359,37 @@ def check_kato_transport(U_kato, P0, PT):
     print(f"||PT - P0|| = {loop_closure_error:.2e}")
 
 
+def compute_single_exchange_metrics(U_kato, gamma_list, transport_dim):
+    checks = {
+        "gamma2_to_minus_gamma3": (gamma_list[2], -gamma_list[3]),
+        "gamma3_to_gamma2": (gamma_list[3], gamma_list[2]),
+        "gamma1_to_gamma1": (gamma_list[1], gamma_list[1]),
+        "gamma0_to_gamma0": (gamma_list[0], gamma_list[0]),
+    }
+
+    errors = {}
+    for label, (source, target) in checks.items():
+        transformed = U_kato.conj().T @ source @ U_kato
+        errors[label] = float(np.linalg.norm(transformed - target))
+
+    max_error = max(errors.values())
+    return {
+        "single_exchange_errors": errors,
+        "max_exchange_error_raw": float(max_error),
+        "max_exchange_error_normalized": float(max_error / np.sqrt(transport_dim)),
+    }
+
+
 def check_single_exchange(U_kato, gamma_list):
-    expected_maps = [
-        ("γ2 -> -γ3", gamma_list[2], -gamma_list[3]),
-        ("γ3 ->  γ2", gamma_list[3], gamma_list[2]),
-        ("γ1 ->  γ1", gamma_list[1], gamma_list[1]),
-        ("γ0 ->  γ0", gamma_list[0], gamma_list[0]),
-    ]
+    metrics = compute_single_exchange_metrics(U_kato, gamma_list, gamma_list[0].shape[0] // 2)
 
     print("\nSingle-exchange checks")
-    for label, source, target in expected_maps:
-        transformed = U_kato.conj().T @ source @ U_kato
-        error = np.linalg.norm(transformed - target)
-        print(f"{label}: {error:.2e}")
+    print(f"γ2 -> -γ3: {metrics['single_exchange_errors']['gamma2_to_minus_gamma3']:.2e}")
+    print(f"γ3 ->  γ2: {metrics['single_exchange_errors']['gamma3_to_gamma2']:.2e}")
+    print(f"γ1 ->  γ1: {metrics['single_exchange_errors']['gamma1_to_gamma1']:.2e}")
+    print(f"γ0 ->  γ0: {metrics['single_exchange_errors']['gamma0_to_gamma0']:.2e}")
+    print(f"max single-exchange error: {metrics['max_exchange_error_raw']:.2e}")
+    return metrics
 
 
 def check_double_exchange(U_kato, gamma_list):
@@ -433,6 +451,14 @@ def check_parity_resolved_gate(U_kato, V0, parity_op, γ2, γ3):
     print(f"even-block eigenvalues: {np.round(np.linalg.eigvals(even_block), 8)}")
     print(f"odd-block target error:  {phase_aligned_error(odd_block, odd_target):.2e}")
     print(f"even-block target error: {phase_aligned_error(even_block, even_target):.2e}")
+    value_dict = {
+        "off_block_leakage": off_block,
+        "odd_block_eigenvalues": np.round(np.linalg.eigvals(odd_block), 8),
+        "even_block_eigenvalues": np.round(np.linalg.eigvals(even_block), 8),
+        "odd_block_target_error": phase_aligned_error(odd_block, odd_target),
+        "even_block_target_error": phase_aligned_error(even_block, even_target),
+    }
+    return value_dict
 
 
 def normalize_projected_majorana(gamma, label):
@@ -447,7 +473,7 @@ if __name__ == "__main__":
     from get_mzm_JW import get_full_gammas
     from hamiltonian_builder import BraidingHamiltonianBuilder, default_config_path
 
-    specified_vals = {"U": [0.0]}
+    specified_vals = {"U": [2.0]}
 
     (gamma_A1_full, gamma_A2_full), (gamma_B1_full, gamma_B2_full), (gamma_C1_full, gamma_C2_full) = get_full_gammas(
         levels_to_include=4,
@@ -518,9 +544,11 @@ if __name__ == "__main__":
 
     # These checks get expensive quickly because the matrices grow as 8, 32, 56, ...
     # Increase this once the small cases are behaving.
-    max_cumulative_checks = min(4, len(P_cumulative_stack))
+    max_cumulative_checks = min(16, len(P_cumulative_stack))
     n_points = 300
     make_plots = False
+
+    all_stored_vals = []
 
     for block, P in zip(projection_blocks[:max_cumulative_checks], P_cumulative_stack[:max_cumulative_checks]):
         print(f"\nRunning checks up to {block['name']} with basis shape {P.shape}")
@@ -556,7 +584,7 @@ if __name__ == "__main__":
         # optimized configurations; B1/C1 has essentially zero overlap.
         γ0, γ1, γ2, γ3 = gamma_A1_sub, gamma_A2_sub, gamma_B2_sub, gamma_C2_sub
 
-        T_total = 1000.0
+        T_total = 1.0
         Δ_max = 1.0
         Δ_min = 0
         width = T_total/3
@@ -619,7 +647,28 @@ if __name__ == "__main__":
 
 
         check_kato_transport(U_kato, ground_data["P0"], ground_data["PT"])
-        check_single_exchange(U_kato, gamma_list)
+        exchange_vals = check_single_exchange(U_kato, gamma_list)
         check_double_exchange(U_kato, gamma_list)
         check_four_exchanges(U_kato, gamma_list)
-        check_parity_resolved_gate(U_kato, ground_data["V0"], parity_projected, γ2, γ3)
+        store_vals = check_parity_resolved_gate(U_kato, ground_data["V0"], parity_projected, γ2, γ3)
+        #Add block info to stored values
+        store_vals["block_name"] = block["name"]
+        store_vals["projection_dim"] = dim_sub
+        store_vals["manifold_dim"] = block["dim"]
+        store_vals["max_exchange_error_raw"] = exchange_vals["max_exchange_error_raw"]
+        store_vals["max_exchange_error_normalized"] = exchange_vals["max_exchange_error_normalized"]
+
+
+        all_stored_vals.append(store_vals)
+    
+    print("\nSummary of parity-resolved gate checks for cumulative projections U=2.0:")
+    for vals in all_stored_vals:
+        print(
+              f"Up to {vals['block_name']} "
+              f"(cumulative dim={vals['projection_dim']}, manifold dim={vals['manifold_dim']}): "
+              f"braid error={vals['max_exchange_error_raw']:.2e}, "
+              f"braid error/sqrt(d)={vals['max_exchange_error_normalized']:.2e}, "
+              f"off-block leakage={vals['off_block_leakage']:.2e}, "
+              f"odd-block target error={vals['odd_block_target_error']:.2e}, "
+              f"even-block target error={vals['even_block_target_error']:.2e}"
+        )

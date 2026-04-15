@@ -1,0 +1,69 @@
+From AD2
+U = 0:
+P_gs cum_dim=8 max_braid_error=3.72e-03
+ braid_errors: γ2 -> -γ3=3.72e-03, γ3 ->  γ2=5.31e-06, γ1 ->  γ1=3.72e-03, γ0 ->  γ0=1.05e-14
+P_excited1 cum_dim=32 max_braid_error=8.00e+00
+ braid_errors: γ2 -> -γ3=8.00e+00, γ3 ->  γ2=8.00e+00, γ1 ->  γ1=7.43e-03, γ0 ->  γ0=2.50e-14
+P_excited2 cum_dim=56 max_braid_error=1.13e+01
+ braid_errors: γ2 -> -γ3=1.13e+01, γ3 ->  γ2=1.13e+01, γ1 ->  γ1=9.83e-03, γ0 ->  γ0=4.25e-14
+P_excited3 cum_dim=80 max_braid_error=1.13e+01
+ braid_errors: γ2 -> -γ3=1.13e+01, γ3 ->  γ2=1.13e+01, γ1 ->  γ1=1.18e-02, γ0 ->  γ0=5.74e-14
+P_excited4 cum_dim=88 max_braid_error=1.13e+01
+ braid_errors: γ2 -> -γ3=1.13e+01, γ3 ->  γ2=1.13e+01, γ1 ->  γ1=1.23e-02, γ0 ->  γ0=5.75e-14
+P_excited5 cum_dim=160 max_braid_error=1.79e+01
+ braid_errors: γ2 -> -γ3=1.79e+01, γ3 ->  γ2=1.79e+01, γ1 ->  γ1=1.66e-02, γ0 ->  γ0=7.52e-14
+P_excited6 cum_dim=232 max_braid_error=2.26e+01
+ braid_errors: γ2 -> -γ3=2.26e+01, γ3 ->  γ2=2.26e+01, γ1 ->  γ1=2.00e-02, γ0 ->  γ0=3.02e-12
+P_excited7 cum_dim=256 max_braid_error=2.26e+01
+ braid_errors: γ2 -> -γ3=2.26e+01, γ3 ->  γ2=2.26e+01, γ1 ->  γ1=2.10e-02, γ0 ->  γ0=1.18e-13
+P_excited8 cum_dim=280 max_braid_error=2.26e+01
+ braid_errors: γ2 -> -γ3=2.26e+01, γ3 ->  γ2=2.26e+01, γ1 ->  γ1=2.20e-02, γ0 ->  γ0=1.20e-13
+P_excited9 cum_dim=352 max_braid_error=2.65e+01
+ braid_errors: γ2 -> -γ3=2.65e+01, γ3 ->  γ2=2.65e+01, γ1 ->  γ1=2.47e-02, γ0 ->  γ0=1.37e-13
+P_excited10 cum_dim=424 max_braid_error=2.99e+01
+ braid_errors: γ2 -> -γ3=2.99e+01, γ3 ->  γ2=2.99e+01, γ1 ->  γ1=2.71e-02, γ0 ->  γ0=1.49e-13
+P_excited11 cum_dim=432 max_braid_error=2.99e+01
+ braid_errors: γ2 -> -γ3=2.99e+01, γ3 ->  γ2=2.99e+01, γ1 ->  γ1=2.73e-02, γ0 ->  γ0=1.49e-13
+P_excited12 cum_dim=456 max_braid_error=2.99e+01
+ braid_errors: γ2 -> -γ3=2.99e+01, γ3 ->  γ2=2.99e+01, γ1 ->  γ1=2.81e-02, γ0 ->  γ0=1.56e-13
+P_excited13 cum_dim=480 max_braid_error=3.10e+01
+ braid_errors: γ2 -> -γ3=3.10e+01, γ3 ->  γ2=3.10e+01, γ1 ->  γ1=2.88e-02, γ0 ->  γ0=1.59e-13
+P_excited14 cum_dim=504 max_braid_error=3.20e+01
+ braid_errors: γ2 -> -γ3=3.20e+01, γ3 ->  γ2=3.20e+01, γ1 ->  γ1=2.95e-02, γ0 ->  γ0=1.70e-13
+P_excited15 cum_dim=512 max_braid_error=3.20e+01
+ braid_errors: γ2 -> -γ3=3.20e+01, γ3 ->  γ2=3.20e+01, γ1 ->  γ1=2.97e-02, γ0 ->  γ0=1.73e-13
+
+
+U = 0.1
+P_gs cum_dim=8 max_braid_error=3.72e-03
+ braid_errors: γ2 -> -γ3=3.72e-03, γ3 ->  γ2=5.31e-06, γ1 ->  γ1=3.72e-03, γ0 ->  γ0=3.97e-15
+P_excited1 cum_dim=32 max_braid_error=8.00e+00
+ braid_errors: γ2 -> -γ3=8.00e+00, γ3 ->  γ2=8.00e+00, γ1 ->  γ1=7.43e-03, γ0 ->  γ0=2.33e-14
+P_excited2 cum_dim=56 max_braid_error=8.00e+00
+ braid_errors: γ2 -> -γ3=8.00e+00, γ3 ->  γ2=8.00e+00, γ1 ->  γ1=9.83e-03, γ0 ->  γ0=3.01e-14
+P_excited3 cum_dim=80 max_braid_error=1.13e+01
+ braid_errors: γ2 -> -γ3=1.13e+01, γ3 ->  γ2=1.13e+01, γ1 ->  γ1=1.18e-02, γ0 ->  γ0=4.83e-14
+P_excited4 cum_dim=152 max_braid_error=1.79e+01
+ braid_errors: γ2 -> -γ3=1.79e+01, γ3 ->  γ2=1.79e+01, γ1 ->  γ1=1.62e-02, γ0 ->  γ0=5.78e-14
+P_excited5 cum_dim=176 max_braid_error=1.79e+01
+ braid_errors: γ2 -> -γ3=1.79e+01, γ3 ->  γ2=1.79e+01, γ1 ->  γ1=1.74e-02, γ0 ->  γ0=8.04e-14
+P_excited6 cum_dim=184 max_braid_error=1.79e+01
+ braid_errors: γ2 -> -γ3=1.79e+01, γ3 ->  γ2=1.79e+01, γ1 ->  γ1=1.78e-02, γ0 ->  γ0=8.16e-14
+P_excited7 cum_dim=256 max_braid_error=2.26e+01
+ braid_errors: γ2 -> -γ3=2.26e+01, γ3 ->  γ2=2.26e+01, γ1 ->  γ1=2.10e-02, γ0 ->  γ0=1.17e-13
+P_excited8 cum_dim=328 max_braid_error=2.65e+01
+ braid_errors: γ2 -> -γ3=2.65e+01, γ3 ->  γ2=2.65e+01, γ1 ->  γ1=2.38e-02, γ0 ->  γ0=1.25e-13
+P_excited9 cum_dim=336 max_braid_error=2.65e+01
+ braid_errors: γ2 -> -γ3=2.65e+01, γ3 ->  γ2=2.65e+01, γ1 ->  γ1=2.41e-02, γ0 ->  γ0=1.27e-13
+P_excited10 cum_dim=360 max_braid_error=2.65e+01
+ braid_errors: γ2 -> -γ3=2.65e+01, γ3 ->  γ2=2.65e+01, γ1 ->  γ1=2.49e-02, γ0 ->  γ0=1.32e-13
+P_excited11 cum_dim=432 max_braid_error=2.99e+01
+ braid_errors: γ2 -> -γ3=2.99e+01, γ3 ->  γ2=2.99e+01, γ1 ->  γ1=2.73e-02, γ0 ->  γ0=1.43e-13
+P_excited12 cum_dim=456 max_braid_error=3.10e+01
+ braid_errors: γ2 -> -γ3=3.10e+01, γ3 ->  γ2=3.10e+01, γ1 ->  γ1=2.81e-02, γ0 ->  γ0=1.51e-13
+P_excited13 cum_dim=480 max_braid_error=3.10e+01
+ braid_errors: γ2 -> -γ3=3.10e+01, γ3 ->  γ2=3.10e+01, γ1 ->  γ1=2.88e-02, γ0 ->  γ0=1.59e-13
+P_excited14 cum_dim=504 max_braid_error=3.20e+01
+ braid_errors: γ2 -> -γ3=3.20e+01, γ3 ->  γ2=3.20e+01, γ1 ->  γ1=2.95e-02, γ0 ->  γ0=1.73e-13
+P_excited15 cum_dim=512 max_braid_error=3.20e+01
+ braid_errors: γ2 -> -γ3=3.20e+01, γ3 ->  γ2=3.20e+01, γ1 ->  γ1=2.97e-02, γ0 ->  γ0=1.77e-13

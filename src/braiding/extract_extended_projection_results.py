@@ -1,663 +1,743 @@
-from __future__ import annotations
+""" More realistic braiding test using projected microscopic junction operators.
 
-import argparse
-import csv
-import json
-import os
-from pathlib import Path
+The old sweet-spot model used
+    H_eff(t) = Δ1(t) i γ0 γ1 + Δ2(t) i γ0 γ2 + Δ3(t) i γ0 γ3
+with hand-picked Majoranas inside the projected low-energy space.
 
-os.environ.setdefault("MPLBACKEND", "Agg")
-os.environ.setdefault("MPLCONFIGDIR", str(Path(__file__).resolve().parents[2] / ".mplconfig"))
-os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
-os.environ.setdefault("OMP_NUM_THREADS", "1")
-os.environ.setdefault("MKL_NUM_THREADS", "1")
+Here I keep the same pulse order, but replace the external ideal terms by
+projected microscopic junction terms:
+    T_AB = P^† H_AB^junc P
+    T_AC = P^† H_AC^junc P
 
+so the effective Hamiltonian becomes
+    H_eff(t) = Δ1(t) i γ0 γ1 + λ_AB(t) T_AB + λ_AC(t) T_AC
+
+If the microscopic couplings are close to the ideal braid picture, then T_AB
+and T_AC should mostly line up with the desired Majorana bilinears. If not,
+other bilinears should appear in their decomposition, and the braid checks
+should get worse.
+"""
+
+
+from get_mzm_JW import get_full_gammas
 import numpy as np
 from scipy.linalg import expm
-
-try:
-    from .extended_projection_braiding import (
-        build_hamiltonian,
-        build_projection_stack,
-        build_total_parity_full,
-        build_total_parity_projected,
-        delta_pulse,
-        evolve_system,
-        normalize_projected_majorana,
-        phase_aligned_error,
-    )
-    from .get_mzm_JW import get_full_gammas
-    from .hamiltonian_builder import BraidingHamiltonianBuilder, default_config_path
-except ImportError:
-    from extended_projection_braiding import (
-        build_hamiltonian,
-        build_projection_stack,
-        build_total_parity_full,
-        build_total_parity_projected,
-        delta_pulse,
-        evolve_system,
-        normalize_projected_majorana,
-        phase_aligned_error,
-    )
-    from get_mzm_JW import get_full_gammas
-    from hamiltonian_builder import BraidingHamiltonianBuilder, default_config_path
+from tqdm import tqdm
+from hamiltonian_builder import BraidingHamiltonianBuilder, default_config_path
+from braiding_model import delta_pulse, plot_results
+from extended_projection_braiding import normalize_projected_majorana, build_total_parity_full, build_projection_stack
 
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_GENERATED_DIR = REPO_ROOT / "texmex" / "generated"
+def project_operator(operator_full, basis):
+    return basis.conj().T @ operator_full @ basis
+
+
+def project_and_normalize(operator_full, basis):
+    operator_sub = project_operator(operator_full, basis)
+    return normalize_projected_majorana(operator_sub, "projected_operator")
 
 
 def flatten_site(subsystem, site, n_sites=3):
     return subsystem * n_sites + site
 
 
-def build_junction_operator(builder, site_a, site_b):
-    operators = builder.get_operators()
-    left, right = min(site_a, site_b), max(site_a, site_b)
+def build_junction_operator(operators, site_a, site_b, t_couple=0.0, delta_couple=0.0):
+    left = min(site_a, site_b)
+    right = max(site_a, site_b)
     key = (left, right)
+
     dim = operators["num"][0].shape[0]
     junction = np.zeros((dim, dim), dtype=complex)
-    junction += -builder.t[0] * operators["hop"][key]
-    junction += builder.Delta[0] * operators["pair"][key]
+
+    if t_couple != 0:
+        junction += -float(t_couple) * operators["hop"][key]
+    if delta_couple != 0:
+        junction += float(delta_couple) * operators["pair"][key]
+
     return 0.5 * (junction + junction.conj().T)
 
 
-def project_and_normalize(full_operator, basis, label):
-    return normalize_projected_majorana(basis.conj().T @ full_operator @ basis, label)
+def build_projected_hamiltonian(t, T_total, Δ_max, Δ_min, s, width, T_A, T_AB, T_AC):
+    Δ1 = delta_pulse(t, 0, width, s, Δ_max, Δ_min) + delta_pulse(t, T_total, width, s, Δ_max, Δ_min) - Δ_min
+    Δ2 = delta_pulse(t, T_total / 3, width, s, Δ_max, Δ_min)
+    Δ3 = delta_pulse(t, 2 * T_total / 3, width, s, Δ_max, Δ_min)
+
+    H = Δ1 * T_A + Δ2 * T_AB + Δ3 * T_AC
+    return H, (Δ1, Δ2, Δ3)
 
 
-def decompose_against(term, desired):
-    dim = term.shape[0]
-    coeff = np.trace(desired.conj().T @ term).real / dim
-    residual = np.linalg.norm(term - coeff * desired) / np.linalg.norm(term)
-    return {"desired_coeff": float(coeff), "relative_residual": float(residual)}
+def evolve_projected_system(
+    T_total,
+    Δ_max,
+    Δ_min,
+    s,
+    width,
+    T_A,
+    T_AB,
+    T_AC,
+    n_points=1000,
+    transport_dim=None,
+    verbose=False,
+):
+    times = np.linspace(0, T_total, n_points)
+    dt = times[1] - times[0] if n_points > 1 else T_total
+
+    dim = T_A.shape[0]
+    if transport_dim is None:
+        transport_dim = dim // 2
+    if not 0 < transport_dim < dim:
+        raise ValueError(f"transport_dim must be between 1 and {dim - 1}, got {transport_dim}.")
+
+    energies = np.zeros((n_points, dim))
+    couplings = np.zeros((n_points, 3))
+    U_kato = np.eye(dim, dtype=complex)
+
+    H0, coupling0 = build_projected_hamiltonian(0, T_total, Δ_max, Δ_min, s, width, T_A, T_AB, T_AC)
+    evals, evecs = np.linalg.eigh(H0)
+    energies[0] = evals
+    couplings[0] = coupling0
+
+    V = evecs[:, :transport_dim]
+
+    if verbose:
+        print("Analyzing projected microscopic braid...")
+    for i in tqdm(range(1, len(times)), total=len(times) - 1, disable=not verbose):
+        t = times[i]
+        H, couplings[i] = build_projected_hamiltonian(t, T_total, Δ_max, Δ_min, s, width, T_A, T_AB, T_AC)
+
+        evals, evecs = np.linalg.eigh(H)
+        energies[i] = evals
+
+        W = evecs[:, :transport_dim]
+        P = V @ V.conj().T
+        P_next = W @ W.conj().T
+        K = P @ ((P_next - P) / dt) - ((P_next - P) / dt) @ P
+        U_kato = expm(-dt * K) @ U_kato
+        V = W
+
+    return times, energies, couplings, U_kato
 
 
-def exchange_metrics(u_kato, gamma_list, transport_dim):
-    checks = {
-        "gamma2_to_minus_gamma3": (gamma_list[2], -gamma_list[3]),
-        "gamma3_to_gamma2": (gamma_list[3], gamma_list[2]),
-        "gamma1_to_gamma1": (gamma_list[1], gamma_list[1]),
-        "gamma0_to_gamma0": (gamma_list[0], gamma_list[0]),
-    }
-    errors = {}
-    for label, (source, target) in checks.items():
-        transformed = u_kato.conj().T @ source @ u_kato
-        errors[label] = float(np.linalg.norm(transformed - target))
+def build_total_parity_projected(builder, basis):
+    operators = builder.get_operators()
+    num_ops = operators["num"]
+    dim_full = num_ops[0].shape[0]
+    identity_full = np.eye(dim_full, dtype=complex)
+    parity_full = identity_full.copy()
 
-    max_error = max(errors.values())
+    for number_op in num_ops:
+        parity_full = parity_full @ (identity_full - 2 * number_op)
+
+    return basis.conj().T @ parity_full @ basis
+
+
+def get_ground_manifold_data(T_total, Δ_max, Δ_min, s, width, T_A, T_AB, T_AC, transport_dim):
+    H0, _ = build_projected_hamiltonian(0, T_total, Δ_max, Δ_min, s, width, T_A, T_AB, T_AC)
+    HT, _ = build_projected_hamiltonian(T_total, T_total, Δ_max, Δ_min, s, width, T_A, T_AB, T_AC)
+
+    evals_0, evecs_0 = np.linalg.eigh(H0)
+    evals_T, evecs_T = np.linalg.eigh(HT)
+
+    V0 = evecs_0[:, :transport_dim]
+    VT = evecs_T[:, :transport_dim]
+
+    P0 = V0 @ V0.conj().T
+    PT = VT @ VT.conj().T
+
     return {
-        "single_exchange_errors": errors,
-        "max_exchange_error_raw": float(max_error),
-        "max_exchange_error_normalized": float(max_error / np.sqrt(transport_dim)),
+        "evals_0": evals_0,
+        "evals_T": evals_T,
+        "V0": V0,
+        "VT": VT,
+        "P0": P0,
+        "PT": PT,
     }
 
 
-def parity_gate_metrics(u_kato, v0, parity_op, gamma2, gamma3):
-    u_ground = v0.conj().T @ u_kato @ v0
-    parity_ground = v0.conj().T @ parity_op @ v0
+def phase_aligned_error(U, target):
+    overlap = np.trace(target.conj().T @ U)
+    phase = 0.0 if np.isclose(np.abs(overlap), 0.0) else np.angle(overlap)
+    return np.linalg.norm(U - np.exp(1j * phase) * target)
+
+
+def check_majorana_algebra(gamma_list, verbose=False):
+    if not verbose:
+        return
+
+    print("\nMajorana algebra checks")
+    dim = gamma_list[0].shape[0]
+    identity = np.eye(dim, dtype=complex)
+
+    for i, gamma in enumerate(gamma_list):
+        hermitian_error = np.linalg.norm(gamma - gamma.conj().T)
+        square_error = np.linalg.norm(gamma @ gamma - identity)
+        print(
+            f"γ{i}: ||γ - γ†|| = {hermitian_error:.2e}, "
+            f"||γ² - I|| = {square_error:.2e}"
+        )
+
+    for i in range(len(gamma_list)):
+        for j in range(i + 1, len(gamma_list)):
+            anticommutator_error = np.linalg.norm(
+                gamma_list[i] @ gamma_list[j] + gamma_list[j] @ gamma_list[i]
+            )
+            print(f"{{γ{i}, γ{j}}}: {anticommutator_error:.2e}")
+
+
+def check_path_properties(times, energies, parity_op, T_total, Δ_max, Δ_min, s, width, T_A, T_AB, T_AC, transport_dim, verbose=False):
+    max_hermiticity_error = 0.0
+    max_parity_commutator = 0.0
+
+    for t in times:
+        H, _ = build_projected_hamiltonian(t, T_total, Δ_max, Δ_min, s, width, T_A, T_AB, T_AC)
+        max_hermiticity_error = max(max_hermiticity_error, np.linalg.norm(H - H.conj().T))
+        max_parity_commutator = max(
+            max_parity_commutator,
+            np.linalg.norm(H @ parity_op - parity_op @ H),
+        )
+
+    ground_splitting = np.max(energies[:, transport_dim - 1] - energies[:, 0])
+    min_gap = np.min(energies[:, transport_dim] - energies[:, transport_dim - 1])
+
+    if verbose:
+        print("\nPath checks")
+        print(f"max_t ||H(t) - H(t)†|| = {max_hermiticity_error:.2e}")
+        print(f"max_t ||[H(t), P_tot]|| = {max_parity_commutator:.2e}")
+        print(f"max_t (E{transport_dim - 1} - E0) = {ground_splitting:.2e}")
+        print(f"min_t (E{transport_dim} - E{transport_dim - 1}) = {min_gap:.2e}")
+
+    return {
+        "max_hermiticity_error": max_hermiticity_error,
+        "max_parity_commutator": max_parity_commutator,
+        "ground_splitting": ground_splitting,
+        "min_gap": min_gap,
+    }
+
+
+def check_kato_transport(U_kato, P0, PT, verbose=False):
+    dim = U_kato.shape[0]
+    identity = np.eye(dim, dtype=complex)
+    unitary_error = np.linalg.norm(U_kato.conj().T @ U_kato - identity)
+    transport_error = np.linalg.norm(U_kato @ P0 @ U_kato.conj().T - PT)
+    loop_closure_error = np.linalg.norm(PT - P0)
+
+    if verbose:
+        print("\nKato transport checks")
+        print(f"||U†U - I|| = {unitary_error:.2e}")
+        print(f"||U P0 U† - PT|| = {transport_error:.2e}")
+        print(f"||PT - P0|| = {loop_closure_error:.2e}")
+
+    return {
+        "unitary_error": unitary_error,
+        "transport_error": transport_error,
+        "loop_closure_error": loop_closure_error,
+    }
+
+
+def check_single_exchange(U_kato, gamma_list, verbose=False):
+    expected_maps = [
+        ("γ2 -> -γ3", gamma_list[2], -gamma_list[3]),
+        ("γ3 ->  γ2", gamma_list[3], gamma_list[2]),
+        ("γ1 ->  γ1", gamma_list[1], gamma_list[1]),
+        ("γ0 ->  γ0", gamma_list[0], gamma_list[0]),
+    ]
+
+    errors = {}
+    if verbose:
+        print("\nSingle-exchange checks")
+    for label, source, target in expected_maps:
+        transformed = U_kato.conj().T @ source @ U_kato
+        error = np.linalg.norm(transformed - target)
+        errors[label] = error
+        if verbose:
+            print(f"{label}: {error:.2e}")
+
+    return {
+        "errors": errors,
+        "max_error": max(errors.values()) if errors else 0.0,
+    }
+
+
+def format_single_exchange_errors(single_exchange):
+    ordered_labels = [
+        "γ2 -> -γ3",
+        "γ3 ->  γ2",
+        "γ1 ->  γ1",
+        "γ0 ->  γ0",
+    ]
+    return ", ".join(
+        f"{label}={single_exchange['errors'][label]:.2e}"
+        for label in ordered_labels
+    )
+
+
+def check_double_exchange(U_kato, gamma_list, verbose=False):
+    U_double = U_kato @ U_kato
+    expected_maps = [
+        ("γ2 -> -γ2", gamma_list[2], -gamma_list[2]),
+        ("γ3 -> -γ3", gamma_list[3], -gamma_list[3]),
+        ("γ1 ->  γ1", gamma_list[1], gamma_list[1]),
+        ("γ0 ->  γ0", gamma_list[0], gamma_list[0]),
+    ]
+
+    if not verbose:
+        return
+
+    print("\nDouble-exchange checks")
+    for label, source, target in expected_maps:
+        transformed = U_double.conj().T @ source @ U_double
+        error = np.linalg.norm(transformed - target)
+        print(f"{label}: {error:.2e}")
+
+
+def check_four_exchanges(U_kato, gamma_list, verbose=False):
+    U_four = U_kato @ U_kato @ U_kato @ U_kato
+
+    if not verbose:
+        return
+
+    print("\nFour-exchange checks")
+    for i, gamma in enumerate(gamma_list):
+        transformed = U_four.conj().T @ gamma @ U_four
+        print(f"γ{i} -> γ{i}: {np.linalg.norm(transformed - gamma):.2e}")
+
+
+def check_parity_resolved_gate(U_kato, V0, parity_op, γ2, γ3, verbose=False):
+    U_ground = V0.conj().T @ U_kato @ V0
+    parity_ground = V0.conj().T @ parity_op @ V0
 
     parity_vals, parity_vecs = np.linalg.eigh(parity_ground)
-    u_parity = parity_vecs.conj().T @ u_ground @ parity_vecs
+    U_parity = parity_vecs.conj().T @ U_ground @ parity_vecs
 
     odd_indices = np.flatnonzero(parity_vals < -1e-8)
     even_indices = np.flatnonzero(parity_vals > 1e-8)
     mixed_indices = np.flatnonzero(np.abs(parity_vals) <= 1e-8)
 
-    odd_block = u_parity[np.ix_(odd_indices, odd_indices)]
-    even_block = u_parity[np.ix_(even_indices, even_indices)]
     off_block = (
-        np.linalg.norm(u_parity[np.ix_(odd_indices, even_indices)])
-        + np.linalg.norm(u_parity[np.ix_(even_indices, odd_indices)])
+        np.linalg.norm(U_parity[np.ix_(odd_indices, even_indices)])
+        + np.linalg.norm(U_parity[np.ix_(even_indices, odd_indices)])
     )
+    odd_block = U_parity[np.ix_(odd_indices, odd_indices)]
+    even_block = U_parity[np.ix_(even_indices, even_indices)]
 
-    u_target = expm(-0.25 * np.pi * (gamma2 @ gamma3))
-    u_target_ground = v0.conj().T @ u_target @ v0
-    u_target_parity = parity_vecs.conj().T @ u_target_ground @ parity_vecs
-    odd_target = u_target_parity[np.ix_(odd_indices, odd_indices)]
-    even_target = u_target_parity[np.ix_(even_indices, even_indices)]
+    U_target = expm(-0.25 * np.pi * (γ2 @ γ3))
+    U_target_ground = V0.conj().T @ U_target @ V0
+    U_target_parity = parity_vecs.conj().T @ U_target_ground @ parity_vecs
+    odd_target = U_target_parity[np.ix_(odd_indices, odd_indices)]
+    even_target = U_target_parity[np.ix_(even_indices, even_indices)]
 
-    odd_error_raw = phase_aligned_error(odd_block, odd_target)
-    even_error_raw = phase_aligned_error(even_block, even_target)
+    odd_error = phase_aligned_error(odd_block, odd_target)
+    even_error = phase_aligned_error(even_block, even_target)
 
-    return {
-        "parity_eigenvalues": [float(value) for value in np.real_if_close(parity_vals)],
-        "odd_dim": int(len(odd_indices)),
-        "even_dim": int(len(even_indices)),
-        "mixed_dim": int(len(mixed_indices)),
-        "off_block_leakage_raw": float(off_block),
-        "off_block_leakage_normalized": float(off_block / np.sqrt(max(1, len(parity_vals)))),
-        "odd_target_error_raw": float(odd_error_raw),
-        "odd_target_error_normalized": float(odd_error_raw / np.sqrt(max(1, len(odd_indices)))),
-        "even_target_error_raw": float(even_error_raw),
-        "even_target_error_normalized": float(even_error_raw / np.sqrt(max(1, len(even_indices)))),
-    }
-
-
-def transported_endpoint_data(t_total, delta_max, delta_min, steepness, width, gamma_list, transport_dim):
-    h0, _ = build_hamiltonian(0.0, t_total, delta_max, delta_min, steepness, width, *gamma_list)
-    h1, _ = build_hamiltonian(t_total, t_total, delta_max, delta_min, steepness, width, *gamma_list)
-
-    evals_0, evecs_0 = np.linalg.eigh(h0)
-    evals_1, evecs_1 = np.linalg.eigh(h1)
-    v0 = evecs_0[:, :transport_dim]
-    v1 = evecs_1[:, :transport_dim]
-    p0 = v0 @ v0.conj().T
-    p1 = v1 @ v1.conj().T
-    return {
-        "evals_0": evals_0,
-        "evals_1": evals_1,
-        "V0": v0,
-        "VT": v1,
-        "P0": p0,
-        "PT": p1,
-    }
-
-
-def pulse_couplings(t_value, args, steepness, width):
-    delta_1 = (
-        delta_pulse(t_value, 0.0, width, steepness, args.delta_max, args.delta_min)
-        + delta_pulse(t_value, args.t_total, width, steepness, args.delta_max, args.delta_min)
-        - args.delta_min
-    )
-    delta_2 = delta_pulse(t_value, args.t_total / 3.0, width, steepness, args.delta_max, args.delta_min)
-    delta_3 = delta_pulse(t_value, 2.0 * args.t_total / 3.0, width, steepness, args.delta_max, args.delta_min)
-    return delta_1, delta_2, delta_3
-
-
-def build_term_hamiltonian(t_value, args, steepness, width, term_1, term_2, term_3):
-    delta_1, delta_2, delta_3 = pulse_couplings(t_value, args, steepness, width)
-    hamiltonian = delta_1 * term_1 + delta_2 * term_2 + delta_3 * term_3
-    return hamiltonian, (delta_1, delta_2, delta_3)
-
-
-def evolve_term_protocol(term_1, term_2, term_3, args, steepness, width, transport_dim):
-    times = np.linspace(0.0, args.t_total, args.n_points)
-    dt = times[1] - times[0] if args.n_points > 1 else args.t_total
-    dim = term_1.shape[0]
-    energies = np.zeros((args.n_points, dim))
-    couplings = np.zeros((args.n_points, 3))
-    u_kato = np.eye(dim, dtype=complex)
-
-    hamiltonian, couplings[0] = build_term_hamiltonian(times[0], args, steepness, width, term_1, term_2, term_3)
-    evals, evecs = np.linalg.eigh(hamiltonian)
-    energies[0] = evals
-    basis = evecs[:, :transport_dim]
-
-    for idx in range(1, len(times)):
-        hamiltonian, couplings[idx] = build_term_hamiltonian(
-            times[idx],
-            args,
-            steepness,
-            width,
-            term_1,
-            term_2,
-            term_3,
+    if verbose:
+        print("\nParity-resolved gate checks")
+        print(
+            "parity counts in transported manifold: "
+            f"odd={len(odd_indices)}, even={len(even_indices)}, mixed={len(mixed_indices)}"
         )
-        evals, evecs = np.linalg.eigh(hamiltonian)
-        energies[idx] = evals
-        next_basis = evecs[:, :transport_dim]
-        projector = basis @ basis.conj().T
-        next_projector = next_basis @ next_basis.conj().T
-        d_projector = (next_projector - projector) / dt
-        kato_generator = projector @ d_projector - d_projector @ projector
-        u_kato = expm(-dt * kato_generator) @ u_kato
-        basis = next_basis
+        print(f"off-block leakage in parity basis: {off_block:.2e}")
+        print(f"odd-block eigenvalues:  {np.round(np.linalg.eigvals(odd_block), 8)}")
+        print(f"even-block eigenvalues: {np.round(np.linalg.eigvals(even_block), 8)}")
+        print(f"odd-block target error:  {odd_error:.2e}")
+        print(f"even-block target error: {even_error:.2e}")
 
-    return times, energies, couplings, u_kato
-
-
-def endpoint_data_from_terms(term_1, term_2, term_3, args, steepness, width, transport_dim):
-    h0, _ = build_term_hamiltonian(0.0, args, steepness, width, term_1, term_2, term_3)
-    h1, _ = build_term_hamiltonian(args.t_total, args, steepness, width, term_1, term_2, term_3)
-    evals_0, evecs_0 = np.linalg.eigh(h0)
-    evals_1, evecs_1 = np.linalg.eigh(h1)
-    v0 = evecs_0[:, :transport_dim]
-    v1 = evecs_1[:, :transport_dim]
-    p0 = v0 @ v0.conj().T
-    p1 = v1 @ v1.conj().T
     return {
-        "evals_0": evals_0,
-        "evals_1": evals_1,
-        "V0": v0,
-        "VT": v1,
-        "P0": p0,
-        "PT": p1,
+        "off_block_leakage": off_block,
+        "odd_target_error": odd_error,
+        "even_target_error": even_error,
+        "odd_dim": len(odd_indices),
+        "even_dim": len(even_indices),
+        "mixed_dim": len(mixed_indices),
     }
 
 
-def build_result_row(
-    model,
-    u_value,
-    args,
-    projection_blocks,
-    eigvals,
-    block_index,
-    projection_dim,
+def get_bilinear_components(term, gamma_labels, gamma_ops):
+    dim = term.shape[0]
+    rows = []
+
+    for i in range(len(gamma_ops)):
+        for j in range(i + 1, len(gamma_ops)):
+            basis_op = 1j * gamma_ops[i] @ gamma_ops[j]
+            coeff = np.trace(basis_op.conj().T @ term).real / dim
+            rows.append((abs(coeff), coeff, i, j, f"i {gamma_labels[i]} {gamma_labels[j]}"))
+
+    rows.sort(reverse=True, key=lambda item: item[0])
+    return rows
+
+
+def reconstruct_bilinear_term(rows, gamma_ops):
+    term = np.zeros_like(gamma_ops[0], dtype=complex)
+
+    for _, coeff, i, j, _ in rows:
+        term += coeff * (1j * gamma_ops[i] @ gamma_ops[j])
+
+    return 0.5 * (term + term.conj().T)
+
+
+def print_bilinear_decomposition(rows, title, max_terms=None, verbose=False):
+    if not verbose:
+        return
+
+    print(f"\n{title}")
+    if max_terms is None:
+        max_terms = len(rows)
+
+    for _, coeff, _, _, label in rows[:max_terms]:
+        print(f"{label}: {coeff:.3e}")
+
+
+def get_partner_index(index):
+    pair_map = {
+        0: 1,
+        1: 0,
+        2: 3,
+        3: 2,
+        4: 5,
+        5: 4,
+    }
+    return pair_map[index]
+
+
+def choose_active_majoranas(rows_AB, rows_AC, gamma_labels, gamma_ops, verbose=False):
+    _, coeff_AB, i_AB, j_AB, label_AB = rows_AB[0]
+    _, coeff_AC, i_AC, j_AC, label_AC = rows_AC[0]
+
+    pair_AB = {i_AB, j_AB}
+    pair_AC = {i_AC, j_AC}
+    common = pair_AB & pair_AC
+
+    if len(common) != 1:
+        raise ValueError(
+            "Could not identify a unique shared Majorana between the dominant AB and AC junction terms."
+        )
+
+    γ0_idx = common.pop()
+    γ2_idx = j_AB if i_AB == γ0_idx else i_AB
+    γ3_idx = j_AC if i_AC == γ0_idx else i_AC
+    γ1_idx = get_partner_index(γ0_idx)
+
+    if verbose:
+        print("\nActive Majoranas chosen from dominant projected junction terms")
+        print(f"AB dominant term: {label_AB} = {coeff_AB:.3e}")
+        print(f"AC dominant term: {label_AC} = {coeff_AC:.3e}")
+        print(f"Shared Majorana γ0 = {gamma_labels[γ0_idx]}")
+        print(f"Partner on same subsystem γ1 = {gamma_labels[γ1_idx]}")
+        print(f"Exchange pair: γ2 = {gamma_labels[γ2_idx]}, γ3 = {gamma_labels[γ3_idx]}")
+
+    return {
+        "γ0_idx": γ0_idx,
+        "γ1_idx": γ1_idx,
+        "γ2_idx": γ2_idx,
+        "γ3_idx": γ3_idx,
+        "γ0": gamma_ops[γ0_idx],
+        "γ1": gamma_ops[γ1_idx],
+        "γ2": gamma_ops[γ2_idx],
+        "γ3": gamma_ops[γ3_idx],
+    }
+
+
+def run_model_comparison(
+    model_name,
+    T_total,
+    Δ_max,
+    Δ_min,
+    s,
+    width,
+    T_A,
+    T_AB,
+    T_AC,
+    n_points,
     transport_dim,
-    times,
-    energies,
-    u_kato,
-    ground_data,
     gamma_list,
-    parity_projected,
-    ab_decomposition,
-    ac_decomposition,
+    verbose=False,
 ):
-    stop = projection_blocks[block_index]["stop"]
-    next_gap = float(eigvals[stop] - eigvals[stop - 1]) if stop < len(eigvals) else None
-    max_transport_splitting = float(np.max(energies[:, transport_dim - 1] - energies[:, 0]))
-    min_gap_above_transport = float(np.min(energies[:, transport_dim] - energies[:, transport_dim - 1]))
-    adiabatic_lower_time = float(1.0 / min_gap_above_transport)
-    degeneracy_upper_time = float(1.0 / max_transport_splitting) if max_transport_splitting > 0 else float("inf")
-    exchange = exchange_metrics(u_kato, gamma_list, transport_dim)
-    gate = parity_gate_metrics(u_kato, ground_data["V0"], parity_projected, gamma_list[2], gamma_list[3])
-    group_dims = [projection_blocks[idx]["dim"] for idx in range(block_index + 1)]
+    times, energies, couplings, U_kato = evolve_projected_system(
+        T_total=T_total,
+        Δ_max=Δ_max,
+        Δ_min=Δ_min,
+        s=s,
+        width=width,
+        T_A=T_A,
+        T_AB=T_AB,
+        T_AC=T_AC,
+        n_points=n_points,
+        transport_dim=transport_dim,
+        verbose=verbose,
+    )
 
     return {
-        "model": model,
-        "U": float(u_value),
-        "included_groups": f"0-{block_index}",
-        "group_dims": "+".join(str(dim) for dim in group_dims),
-        "projection_dim": int(projection_dim),
-        "transport_dim": int(transport_dim),
-        "hfull_spread_included": float(eigvals[stop - 1] - eigvals[0]),
-        "hfull_gap_to_next": next_gap,
-        "max_transport_splitting": max_transport_splitting,
-        "min_gap_above_transport": min_gap_above_transport,
-        "adiabatic_lower_time": adiabatic_lower_time,
-        "degeneracy_upper_time": degeneracy_upper_time,
-        "adiabatic_window_ratio": float(degeneracy_upper_time / adiabatic_lower_time),
-        "suggested_geometric_mean_time": float(np.sqrt(adiabatic_lower_time * degeneracy_upper_time)),
-        "requested_T": float(args.t_total),
-        "T_in_simple_window": bool(adiabatic_lower_time < args.t_total < degeneracy_upper_time),
-        "holonomy_unitarity_error": float(
-            np.linalg.norm(u_kato.conj().T @ u_kato - np.eye(projection_dim, dtype=complex))
-        ),
-        "loop_closure_error": float(np.linalg.norm(ground_data["PT"] - ground_data["P0"])),
-        "ab_decomposition": ab_decomposition,
-        "ac_decomposition": ac_decomposition,
-        **exchange,
-        "parity_gate": gate,
+        "name": model_name,
+        "times": times,
+        "energies": energies,
+        "couplings": couplings,
+        "U_kato": U_kato,
+        "single_exchange": check_single_exchange(U_kato, gamma_list, verbose=verbose),
     }
 
+if __name__ == "__main__":
+    from get_mzm_JW import get_full_gammas
+    from hamiltonian_builder import BraidingHamiltonianBuilder, default_config_path
+    specified_vals = {"U": [0.1]}
+    verbose = False
+    run_extended_diagnostics = True
+    models_to_run = ("ideal", "bilinear_fit", "physical")
 
-def collect_case(u_value, args):
-    specified_vals = {"U": [u_value]}
+    (gamma_A1_full, gamma_A2_full), (gamma_B1_full, gamma_B2_full), (gamma_C1_full, gamma_C2_full) = get_full_gammas(
+        levels_to_include=4,
+        verbose=verbose,
+        specified_vals=specified_vals,
+    )
+
+
     builder = BraidingHamiltonianBuilder(
         n_sites=3,
         dupes=3,
         specified_vals=specified_vals,
         config_path=default_config_path(),
     )
-    h_full = builder.full_system_hamiltonian()
-    eigvals, eigvecs = np.linalg.eigh(h_full)
-    parity_full = build_total_parity_full(builder)
-    projection_blocks = build_projection_stack(
-        eigvals,
-        eigvecs,
-        parity_full,
-        energy_tol=args.degeneracy_tol,
+
+
+    H_full = builder.full_system_hamiltonian()
+
+    eigvals, eigvecs = np.linalg.eigh(H_full)
+
+    # These full-space junction operators do not depend on the cumulative
+    # projection block, so build them once and only re-project inside the loop.
+    operators = builder.get_operators()
+    A_edge = flatten_site(0, 2)
+    B_edge = flatten_site(1, 0)
+    C_edge = flatten_site(2, 0)
+
+    t_AB = builder.t[0]
+    delta_AB = builder.Delta[0]
+    t_AC = builder.t[0]
+    delta_AC = builder.Delta[0]
+
+    junction_AB_full = build_junction_operator(
+        operators, A_edge, B_edge, t_couple=t_AB, delta_couple=delta_AB
     )
-    basis_stack = [block["basis"] for block in projection_blocks]
-    cumulative_stack = [np.hstack(basis_stack[: idx + 1]) for idx in range(len(basis_stack))]
-
-    (gamma_a1_full, gamma_a2_full), (_, gamma_b2_full), (_, gamma_c2_full) = get_full_gammas(
-        levels_to_include=args.levels,
-        verbose=False,
-        specified_vals=specified_vals,
+    junction_AC_full = build_junction_operator(
+        operators, A_edge, C_edge, t_couple=t_AC, delta_couple=delta_AC
     )
+    
+    energy_tol = 1e-2
+    P_full = build_total_parity_full(builder)
+    projection_blocks = build_projection_stack(eigvals, eigvecs, P_full, energy_tol=energy_tol)
 
-    junction_ab_full = build_junction_operator(
-        builder,
-        flatten_site(0, 2),
-        flatten_site(1, 0),
-    )
-    junction_ac_full = build_junction_operator(
-        builder,
-        flatten_site(0, 2),
-        flatten_site(2, 0),
-    )
+    # P_stack contains the basis matrices V_gs, V_excited1, ...
+    # Use these for projections: O_sub = V.conj().T @ O_full @ V.
+    P_stack = [block["basis"] for block in projection_blocks]
 
-    width = args.t_total / 3.0
-    steepness = 20.0 / width
-    ideal_results = []
-    physical_results = []
+    # P_projector_stack contains the literal full-space projectors V V†.
+    P_projector_stack = [block["projector"] for block in projection_blocks]
 
-    for block_index, basis in enumerate(cumulative_stack):
-        projection_dim = basis.shape[1]
-        if projection_dim > args.max_dim:
-            break
+    # Cumulative bases are useful when you want P_gs, then
+    # P_gs + P_excited1, then P_gs + P_excited1 + P_excited2, ...
+    P_cumulative_stack = [
+        np.hstack(P_stack[: idx + 1])
+        for idx in range(len(P_stack))
+    ]
 
-        transport_dim = projection_dim // 2
-        if projection_dim % 2 != 0:
+    even_energies = []
+    odd_energies = []
+    for block in projection_blocks:
+        even_energies.extend([block["energy_center"]] * block["even_dim"])
+        odd_energies.extend([block["energy_center"]] * block["odd_dim"])
+
+
+    if verbose:
+        print(f"Built {len(P_stack)} energy-manifold basis blocks with energy_tol={energy_tol:g}.")
+        print(f"Total parity counts: even={sum(block['even_dim'] for block in projection_blocks)}, "
+              f"odd={sum(block['odd_dim'] for block in projection_blocks)}, "
+              f"mixed={sum(block['mixed_dim'] for block in projection_blocks)}")
+
+        for block in projection_blocks:
+            gap = "--" if block["gap_to_next"] is None else f"{block['gap_to_next']:.4e}"
+            print(
+                f"{block['name']}: columns {block['start']}:{block['stop']}, "
+                f"dim={block['dim']}, even={block['even_dim']}, odd={block['odd_dim']}, "
+                f"mixed={block['mixed_dim']}, E=[{block['energy_min']:.4f}, {block['energy_max']:.4f}], "
+                f"spread={block['energy_spread']:.4e}, gap_next={gap}"
+            )
+
+        for idx, basis in enumerate(P_cumulative_stack):
+            print(f"Cumulative P up to {projection_blocks[idx]['name']}: basis shape = {basis.shape}")
+
+    # These checks get expensive quickly because the matrices grow as 8, 32, 56, ...
+    # Increase this once the small cases are behaving.
+    max_cumulative_checks = min(16, len(P_cumulative_stack))
+    # Keep this modest for sweeps: each time step does a dense eigh + expm.
+    n_points = 300
+    make_plots = False
+
+    all_stored_vals = []
+
+    for block, P in zip(projection_blocks[:max_cumulative_checks], P_cumulative_stack[:max_cumulative_checks]):
+        if verbose:
+            print(f"\nRunning checks up to {block['name']} with basis shape {P.shape}")
+        V_ref = P
+        dim_sub = V_ref.shape[1]
+        transport_dim = dim_sub // 2
+
+        if dim_sub % 2 != 0:
+            if verbose:
+                print(f"Skipping odd-dimensional projection with dim={dim_sub}.")
             continue
 
-        gamma_a1 = project_and_normalize(gamma_a1_full, basis, "gamma_a1")
-        gamma_a2 = project_and_normalize(gamma_a2_full, basis, "gamma_a2")
-        gamma_b2 = project_and_normalize(gamma_b2_full, basis, "gamma_b2")
-        gamma_c2 = project_and_normalize(gamma_c2_full, basis, "gamma_c2")
-        gamma_list = [gamma_a1, gamma_a2, gamma_b2, gamma_c2]
+        if verbose:
+            orthonormality_error = np.linalg.norm(V_ref.conj().T @ V_ref - np.eye(dim_sub))
+            print(f"projection basis orthonormality error: {orthonormality_error:.2e}")
 
-        parity_projected = build_total_parity_projected(builder, basis)
+        gamma_A1_sub = V_ref.conj().T @ gamma_A1_full @ V_ref
+        gamma_A2_sub = V_ref.conj().T @ gamma_A2_full @ V_ref
+        gamma_B1_sub = V_ref.conj().T @ gamma_B1_full @ V_ref
+        gamma_B2_sub = V_ref.conj().T @ gamma_B2_full @ V_ref
+        gamma_C1_sub = V_ref.conj().T @ gamma_C1_full @ V_ref
+        gamma_C2_sub = V_ref.conj().T @ gamma_C2_full @ V_ref
+        gamma_A1_sub = normalize_projected_majorana(gamma_A1_sub, "gamma_A1_sub")
+        gamma_A2_sub = normalize_projected_majorana(gamma_A2_sub, "gamma_A2_sub")
+        gamma_B1_sub = normalize_projected_majorana(gamma_B1_sub, "gamma_B1_sub")
+        gamma_B2_sub = normalize_projected_majorana(gamma_B2_sub, "gamma_B2_sub")
+        gamma_C1_sub = normalize_projected_majorana(gamma_C1_sub, "gamma_C1_sub")
+        gamma_C2_sub = normalize_projected_majorana(gamma_C2_sub, "gamma_C2_sub")
+        gamma_labels = ["γA1", "γA2", "γB1", "γB2", "γC1", "γC2"]
+        gamma_ops = [gamma_A1_sub, gamma_A2_sub, gamma_B1_sub, gamma_B2_sub, gamma_C1_sub, gamma_C2_sub]
 
-        junction_ab = basis.conj().T @ junction_ab_full @ basis
-        junction_ac = basis.conj().T @ junction_ac_full @ basis
-        desired_ab = 1j * gamma_a1 @ gamma_b2
-        desired_ac = 1j * gamma_a1 @ gamma_c2
-        ab_decomposition = decompose_against(junction_ab, desired_ab)
-        ac_decomposition = decompose_against(junction_ac, desired_ac)
+        T_AB = project_operator(junction_AB_full, V_ref)
+        T_AC = project_operator(junction_AC_full, V_ref)
 
-        ideal_row = None
-        if args.models in {"ideal", "both"}:
-            ideal_times, ideal_energies, _, ideal_u_kato = evolve_system(
-                args.t_total,
-                args.delta_max,
-                args.delta_min,
-                steepness,
-                width,
-                gamma_a1,
-                gamma_a2,
-                gamma_b2,
-                gamma_c2,
-                n_points=args.n_points,
+        rows_AB = get_bilinear_components(T_AB, gamma_labels, gamma_ops)
+        rows_AC = get_bilinear_components(T_AC, gamma_labels, gamma_ops)
+
+        print_bilinear_decomposition(rows_AB, "Projected AB junction decomposition", max_terms=6, verbose=verbose)
+        print_bilinear_decomposition(rows_AC, "Projected AC junction decomposition", max_terms=6, verbose=verbose)
+
+        active = choose_active_majoranas(rows_AB, rows_AC, gamma_labels, gamma_ops, verbose=verbose)
+        γ0, γ1, γ2, γ3 = active["γ0"], active["γ1"], active["γ2"], active["γ3"]
+
+        T_A = 1j * γ0 @ γ1
+        T_AB_bilinear_fit = reconstruct_bilinear_term(rows_AB, gamma_ops)
+        T_AC_bilinear_fit = reconstruct_bilinear_term(rows_AC, gamma_ops)
+        T_AB_ideal = 1j * γ0 @ γ2
+        T_AC_ideal = 1j * γ0 @ γ3
+        bilinear_residual_AB = np.linalg.norm(T_AB - T_AB_bilinear_fit) / np.sqrt(dim_sub)
+        bilinear_residual_AC = np.linalg.norm(T_AC - T_AC_bilinear_fit) / np.sqrt(dim_sub)
+
+
+        T_total = 1.0
+        Δ_max = 1.0
+        Δ_min = 0.0
+        width = T_total / 3
+        s = 20 / width
+
+        gamma_list = [γ0, γ1, γ2, γ3]
+        model_terms = {
+            "ideal": (T_A, T_AB_ideal, T_AC_ideal),
+            "bilinear_fit": (T_A, T_AB_bilinear_fit, T_AC_bilinear_fit),
+            "physical": (T_A, T_AB, T_AC),
+        }
+        model_results = {}
+
+        for model_name in models_to_run:
+            if model_name not in model_terms:
+                raise ValueError(f"Unknown model '{model_name}'. Expected one of {tuple(model_terms)}.")
+
+            model_T_A, model_T_AB, model_T_AC = model_terms[model_name]
+            model_results[model_name] = run_model_comparison(
+                model_name=model_name,
+                T_total=T_total,
+                Δ_max=Δ_max,
+                Δ_min=Δ_min,
+                s=s,
+                width=width,
+                T_A=model_T_A,
+                T_AB=model_T_AB,
+                T_AC=model_T_AC,
+                n_points=n_points,
                 transport_dim=transport_dim,
+                gamma_list=gamma_list,
+                verbose=verbose,
             )
-            ideal_ground_data = transported_endpoint_data(
-                args.t_total,
-                args.delta_max,
-                args.delta_min,
-                steepness,
-                width,
-                gamma_list,
-                transport_dim,
+
+        if make_plots:
+            physical_result = model_results.get("physical")
+            if physical_result is not None:
+                plot_results(
+                    physical_result["times"],
+                    physical_result["energies"],
+                    physical_result["couplings"],
+                )
+
+        parity_gate = None
+
+        if run_extended_diagnostics:
+            physical_result = model_results["physical"]
+            parity_projected = build_total_parity_projected(builder, V_ref)
+            ground_data = get_ground_manifold_data(
+                T_total, Δ_max, Δ_min, s, width, T_A, T_AB, T_AC, transport_dim
             )
-            ideal_row = build_result_row(
-                "ideal_projected_majorana",
-                u_value,
-                args,
-                projection_blocks,
-                eigvals,
-                block_index,
-                projection_dim,
-                transport_dim,
-                ideal_times,
-                ideal_energies,
-                ideal_u_kato,
-                ideal_ground_data,
-                gamma_list,
+
+            check_majorana_algebra(gamma_list, verbose=verbose)
+            check_path_properties(
+                physical_result["times"],
+                physical_result["energies"],
                 parity_projected,
-                ab_decomposition,
-                ac_decomposition,
-            )
-            ideal_results.append(ideal_row)
-
-        physical_row = None
-        if args.models in {"physical", "both"}:
-            term_a = 1j * gamma_a1 @ gamma_a2
-            physical_times, physical_energies, _, physical_u_kato = evolve_term_protocol(
-                term_a,
-                junction_ab,
-                junction_ac,
-                args,
-                steepness,
+                T_total,
+                Δ_max,
+                Δ_min,
+                s,
                 width,
+                T_A,
+                T_AB,
+                T_AC,
                 transport_dim,
+                verbose=verbose,
             )
-            physical_ground_data = endpoint_data_from_terms(
-                term_a,
-                junction_ab,
-                junction_ac,
-                args,
-                steepness,
-                width,
-                transport_dim,
+            check_kato_transport(
+                physical_result["U_kato"], ground_data["P0"], ground_data["PT"], verbose=verbose
             )
-            physical_row = build_result_row(
-                "physical_projected_junction",
-                u_value,
-                args,
-                projection_blocks,
-                eigvals,
-                block_index,
-                projection_dim,
-                transport_dim,
-                physical_times,
-                physical_energies,
-                physical_u_kato,
-                physical_ground_data,
-                gamma_list,
+            check_double_exchange(physical_result["U_kato"], gamma_list, verbose=verbose)
+            check_four_exchanges(physical_result["U_kato"], gamma_list, verbose=verbose)
+            parity_gate = check_parity_resolved_gate(
+                physical_result["U_kato"],
+                ground_data["V0"],
                 parity_projected,
-                ab_decomposition,
-                ac_decomposition,
+                γ2,
+                γ3,
+                verbose=verbose,
             )
-            physical_results.append(physical_row)
 
-        status = [f"U={u_value:g}", f"dim={projection_dim:>3}"]
-        if ideal_row is not None:
-            status.append(
-                "ideal_gate="
-                f"{max(ideal_row['parity_gate']['odd_target_error_normalized'], ideal_row['parity_gate']['even_target_error_normalized']):.3e}"
+        summary_lines = [
+            f"{block['name']} cum_dim={dim_sub}",
+            (
+                " bilinear_projection_residuals: "
+                f"AB={bilinear_residual_AB:.2e}, AC={bilinear_residual_AC:.2e}"
+            ),
+        ]
+
+        for model_name in models_to_run:
+            single_exchange = model_results[model_name]["single_exchange"]
+            summary_lines.append(
+                f" {model_name}: max_braid_error={single_exchange['max_error']:.2e} "
+                f"| normalized={single_exchange['max_error'] / np.sqrt(dim_sub):.2e}"
             )
-        if physical_row is not None:
-            status.append(
-                "physical_gate="
-                f"{max(physical_row['parity_gate']['odd_target_error_normalized'], physical_row['parity_gate']['even_target_error_normalized']):.3e}"
+            summary_lines.append(
+                f"  braid_errors: {format_single_exchange_errors(single_exchange)}"
             )
-        status.append(f"residual={max(ab_decomposition['relative_residual'], ac_decomposition['relative_residual']):.3e}")
-        print(" ".join(status))
 
-    return {
-        "U": float(u_value),
-        "selection": builder.selection,
-        "groups": [
-            {
-                "group": block["group_index"],
-                "dim": block["dim"],
-                "even_dim": block["even_dim"],
-                "odd_dim": block["odd_dim"],
-                "mixed_dim": block["mixed_dim"],
-                "energy_min": block["energy_min"],
-                "energy_max": block["energy_max"],
-                "energy_spread": block["energy_spread"],
-                "gap_to_next": block["gap_to_next"],
-            }
-            for block in projection_blocks
-        ],
-        "results": physical_results,
-        "physical_results": physical_results,
-        "ideal_results": ideal_results,
-    }
-
-
-def metric(value):
-    if value is None:
-        return "--"
-    if isinstance(value, bool):
-        return str(value)
-    value = float(value)
-    if value == 0:
-        return "0"
-    if abs(value) < 1e-2 or abs(value) >= 1e3:
-        return f"{value:.3e}"
-    return f"{value:.3f}"
-
-
-def flatten_rows(cases, result_key="results"):
-    rows = []
-    for case in cases:
-        for result in case[result_key]:
-            rows.append(
-                {
-                    "model": result["model"],
-                    "U": result["U"],
-                    "included_groups": result["included_groups"],
-                    "group_dims": result["group_dims"],
-                    "projection_dim": result["projection_dim"],
-                    "transport_dim": result["transport_dim"],
-                    "hfull_spread_included": result["hfull_spread_included"],
-                    "hfull_gap_to_next": result["hfull_gap_to_next"],
-                    "max_transport_splitting": result["max_transport_splitting"],
-                    "min_gap_above_transport": result["min_gap_above_transport"],
-                    "adiabatic_lower_time": result["adiabatic_lower_time"],
-                    "degeneracy_upper_time": result["degeneracy_upper_time"],
-                    "adiabatic_window_ratio": result["adiabatic_window_ratio"],
-                    "suggested_geometric_mean_time": result["suggested_geometric_mean_time"],
-                    "requested_T": result["requested_T"],
-                    "T_in_simple_window": result["T_in_simple_window"],
-                    "holonomy_unitarity_error": result["holonomy_unitarity_error"],
-                    "loop_closure_error": result["loop_closure_error"],
-                    "ab_desired_coeff": result["ab_decomposition"]["desired_coeff"],
-                    "ab_relative_residual": result["ab_decomposition"]["relative_residual"],
-                    "ac_desired_coeff": result["ac_decomposition"]["desired_coeff"],
-                    "ac_relative_residual": result["ac_decomposition"]["relative_residual"],
-                    "max_exchange_error_raw": result["max_exchange_error_raw"],
-                    "max_exchange_error_normalized": result["max_exchange_error_normalized"],
-                    "off_block_leakage_raw": result["parity_gate"]["off_block_leakage_raw"],
-                    "off_block_leakage_normalized": result["parity_gate"]["off_block_leakage_normalized"],
-                    "odd_target_error_raw": result["parity_gate"]["odd_target_error_raw"],
-                    "odd_target_error_normalized": result["parity_gate"]["odd_target_error_normalized"],
-                    "even_target_error_raw": result["parity_gate"]["even_target_error_raw"],
-                    "even_target_error_normalized": result["parity_gate"]["even_target_error_normalized"],
-                }
-            )
-    return rows
-
-
-def write_csv(path, rows):
-    fieldnames = list(rows[0].keys())
-    with path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(rows)
-
-
-def write_tex(path, rows):
-    lines = [
-        r"\begin{tabular}{ccccccccc}",
-        r"\hline",
-        r"$U$ & Groups & $\dim P$ & $E_\delta$ & $E_{\mathrm{gap}}$ & $1/E_\delta$ & Resid. & Braid err.$/\sqrt{d}$ & Gate err.$/\sqrt{d}$ \\",
-        r"\hline",
-    ]
-    for row in rows:
-        residual = max(row["ab_relative_residual"], row["ac_relative_residual"])
-        gate_error = max(row["odd_target_error_normalized"], row["even_target_error_normalized"])
-        lines.append(
-            " & ".join(
+        if parity_gate is not None:
+            summary_lines.extend(
                 [
-                    f"{row['U']:.1f}",
-                    f"{row['included_groups']} ({row['group_dims']})",
-                    str(row["projection_dim"]),
-                    metric(row["max_transport_splitting"]),
-                    metric(row["min_gap_above_transport"]),
-                    metric(row["degeneracy_upper_time"]),
-                    metric(residual),
-                    metric(row["max_exchange_error_normalized"]),
-                    metric(gate_error),
+                    f" off_block_leakage={parity_gate['off_block_leakage']:.2e}",
+                    (
+                        f" odd_target_error={parity_gate['odd_target_error']:.2e} "
+                        f"| normalized {parity_gate['odd_target_error'] / np.sqrt(dim_sub):.2e}"
+                    ),
+                    (
+                        f" even_target_error={parity_gate['even_target_error']:.2e} "
+                        f"| normalized {parity_gate['even_target_error'] / np.sqrt(dim_sub):.2e}"
+                    ),
                 ]
             )
-            + r" \\"
-        )
-    lines.extend([r"\hline", r"\end{tabular}"])
-    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
-
-def write_compact_tex(path, rows):
-    lines = [
-        r"\begin{tabular}{cccccccccc}",
-        r"\hline",
-        r"$U$ & Levels & $\dim P$ & $d_p$ & Braid raw & Braid norm. & Odd raw & Odd norm. & Even raw & Even norm. \\",
-        r"\hline",
-    ]
-    for row in rows:
-        parity_dim = int(round(float(row["transport_dim"]) / 2.0))
-        lines.append(
-            " & ".join(
-                [
-                    f"{float(row['U']):.1f}",
-                    row["included_groups"],
-                    str(row["projection_dim"]),
-                    str(parity_dim),
-                    metric(row["max_exchange_error_raw"]),
-                    metric(row["max_exchange_error_normalized"]),
-                    metric(row["odd_target_error_raw"]),
-                    metric(row["odd_target_error_normalized"]),
-                    metric(row["even_target_error_raw"]),
-                    metric(row["even_target_error_normalized"]),
-                ]
-            )
-            + r" \\"
-        )
-    lines.extend([r"\hline", r"\end{tabular}"])
-    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
-
-
-def build_argument_parser():
-    parser = argparse.ArgumentParser(description="Extract extended-projection braiding errors for the thesis.")
-    parser.add_argument("--u-values", type=float, nargs="+", default=[0.0, 0.1])
-    parser.add_argument("--levels", type=int, default=4)
-    parser.add_argument("--degeneracy-tol", type=float, default=1e-2)
-    parser.add_argument("--max-dim", type=int, default=80)
-    parser.add_argument("--n-points", type=int, default=300)
-    parser.add_argument("--models", choices=["ideal", "physical", "both"], default="both")
-    parser.add_argument("--t-total", type=float, default=1000.0)
-    parser.add_argument("--delta-max", type=float, default=1.0)
-    parser.add_argument("--delta-min", type=float, default=0.0)
-    parser.add_argument("--generated-dir", type=Path, default=DEFAULT_GENERATED_DIR)
-    return parser
-
-
-def main():
-    args = build_argument_parser().parse_args()
-    args.generated_dir.mkdir(parents=True, exist_ok=True)
-
-    cases = [collect_case(u_value, args) for u_value in args.u_values]
-    ideal_rows = flatten_rows(cases, "ideal_results")
-    physical_rows = flatten_rows(cases, "physical_results")
-
-    payload = {
-        "args": {
-            "u_values": args.u_values,
-            "levels": args.levels,
-            "degeneracy_tol": args.degeneracy_tol,
-            "max_dim": args.max_dim,
-            "n_points": args.n_points,
-            "models": args.models,
-            "t_total": args.t_total,
-            "delta_max": args.delta_max,
-            "delta_min": args.delta_min,
-            "generated_dir": str(args.generated_dir),
-        },
-        "active_majoranas": ["gammaA1", "gammaA2", "gammaB2", "gammaC2"],
-        "results": cases,
-    }
-
-    output_base = args.generated_dir / "extended_projection_braiding"
-    if ideal_rows:
-        write_csv(output_base.with_suffix(".csv"), ideal_rows)
-        write_tex(output_base.with_suffix(".tex"), ideal_rows)
-        write_compact_tex(output_base.with_name(f"{output_base.name}_compact.tex"), ideal_rows)
-    output_base.with_suffix(".json").write_text(json.dumps(payload, indent=2), encoding="utf-8")
-
-    physical_output_base = args.generated_dir / "extended_projection_physical_junction_braiding"
-    if physical_rows:
-        write_csv(physical_output_base.with_suffix(".csv"), physical_rows)
-        write_tex(physical_output_base.with_suffix(".tex"), physical_rows)
-        write_compact_tex(
-            physical_output_base.with_name(f"{physical_output_base.name}_compact.tex"),
-            physical_rows,
-        )
-
-    if ideal_rows:
-        print(f"Saved {output_base.with_suffix('.csv')}")
-        print(f"Saved {output_base.with_suffix('.tex')}")
-        print(f"Saved {output_base.with_name(f'{output_base.name}_compact.tex')}")
-    print(f"Saved {output_base.with_suffix('.json')}")
-    if physical_rows:
-        print(f"Saved {physical_output_base.with_suffix('.csv')}")
-        print(f"Saved {physical_output_base.with_suffix('.tex')}")
-        print(f"Saved {physical_output_base.with_name(f'{physical_output_base.name}_compact.tex')}")
-
-
-if __name__ == "__main__":
-    main()
+        print("\n".join(summary_lines))

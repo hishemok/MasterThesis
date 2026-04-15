@@ -1,0 +1,194 @@
+U = 0.0
+P_gs cum_dim=8
+ active_majoranas: γ0=γA1, γ1=γA2, γ2=γB2, γ3=γC2
+ physical_bilinear_residuals: AB=6.97e-16, AC=4.08e-16
+ ideal: max_braid_error=3.72e-03 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=3.72e-03, γ3 ->  γ2=5.31e-06, γ1 ->  γ1=3.72e-03, γ0 ->  γ0=3.97e-13
+  off_block_leakage=1.98e-13 | odd_target_error=1.34e-06 | even_target_error=1.34e-06
+ bilinear_fit: max_braid_error=3.72e-03 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=3.72e-03, γ3 ->  γ2=5.32e-06, γ1 ->  γ1=3.72e-03, γ0 ->  γ0=2.24e-11
+  off_block_leakage=1.02e-15 | odd_target_error=1.34e-06 | even_target_error=1.34e-06
+ ad2: max_braid_error=3.72e-03 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=3.72e-03, γ3 ->  γ2=5.31e-06, γ1 ->  γ1=3.72e-03, γ0 ->  γ0=1.05e-14
+  off_block_leakage=4.23e-16 | odd_target_error=1.34e-06 | even_target_error=1.34e-06
+ physical: max_braid_error=3.72e-03 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=3.72e-03, γ3 ->  γ2=5.32e-06, γ1 ->  γ1=3.72e-03, γ0 ->  γ0=2.24e-11
+  off_block_leakage=2.13e-16 | odd_target_error=1.34e-06 | even_target_error=1.34e-06
+
+P_excited1 cum_dim=32
+ active_majoranas: γ0=γA1, γ1=γA2, γ2=γB2, γ3=γC2
+ physical_bilinear_residuals: AB=8.56e-01, AC=8.56e-01
+ ideal: max_braid_error=7.43e-03 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=7.43e-03, γ3 ->  γ2=1.06e-05, γ1 ->  γ1=7.43e-03, γ0 ->  γ0=7.07e-13
+  off_block_leakage=3.54e-13 | odd_target_error=2.68e-06 | even_target_error=2.68e-06
+ bilinear_fit: max_braid_error=7.43e-03 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=7.43e-03, γ3 ->  γ2=1.09e-05, γ1 ->  γ1=7.43e-03, γ0 ->  γ0=2.24e-11
+  off_block_leakage=3.59e-15 | odd_target_error=2.78e-06 | even_target_error=2.78e-06
+ ad2: max_braid_error=8.00e+00 | normalized=1.41e+00
+  braid_errors: γ2 -> -γ3=8.00e+00, γ3 ->  γ2=8.00e+00, γ1 ->  γ1=7.43e-03, γ0 ->  γ0=2.50e-14
+  off_block_leakage=3.97e-15 | odd_target_error=2.83e+00 | even_target_error=2.83e+00
+ physical: max_braid_error=8.00e+00 | normalized=1.41e+00
+  braid_errors: γ2 -> -γ3=8.00e+00, γ3 ->  γ2=8.00e+00, γ1 ->  γ1=9.30e-03, γ0 ->  γ0=5.64e-03
+  off_block_leakage=3.01e-15 | odd_target_error=2.83e+00 | even_target_error=2.83e+00
+
+P_excited2 cum_dim=56
+ active_majoranas: γ0=γA1, γ1=γA2, γ2=γB2, γ3=γC2
+ physical_bilinear_residuals: AB=9.80e-01, AC=9.80e-01
+ ideal: max_braid_error=9.83e-03 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=9.83e-03, γ3 ->  γ2=1.41e-05, γ1 ->  γ1=9.83e-03, γ0 ->  γ0=8.45e-13
+  off_block_leakage=4.22e-13 | odd_target_error=3.54e-06 | even_target_error=3.54e-06
+ bilinear_fit: max_braid_error=9.83e-03 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=9.83e-03, γ3 ->  γ2=1.73e-05, γ1 ->  γ1=9.83e-03, γ0 ->  γ0=8.45e-12
+  off_block_leakage=6.40e-15 | odd_target_error=4.39e-06 | even_target_error=4.39e-06
+ ad2: max_braid_error=1.13e+01 | normalized=1.51e+00
+  braid_errors: γ2 -> -γ3=1.13e+01, γ3 ->  γ2=1.13e+01, γ1 ->  γ1=9.83e-03, γ0 ->  γ0=4.25e-14
+  off_block_leakage=5.69e-15 | odd_target_error=4.00e+00 | even_target_error=4.00e+00
+ physical: max_braid_error=1.13e+01 | normalized=1.51e+00
+  braid_errors: γ2 -> -γ3=1.13e+01, γ3 ->  γ2=1.13e+01, γ1 ->  γ1=1.13e-02, γ0 ->  γ0=5.68e-03
+  off_block_leakage=5.15e-15 | odd_target_error=4.00e+00 | even_target_error=4.00e+00
+
+P_excited3 cum_dim=80
+ active_majoranas: γ0=γA1, γ1=γA2, γ2=γB2, γ3=γC2
+ physical_bilinear_residuals: AB=9.72e-01, AC=9.72e-01
+ ideal: max_braid_error=1.18e-02 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=1.18e-02, γ3 ->  γ2=1.68e-05, γ1 ->  γ1=1.18e-02, γ0 ->  γ0=1.32e-12
+  off_block_leakage=6.61e-13 | odd_target_error=4.23e-06 | even_target_error=4.23e-06
+ bilinear_fit: max_braid_error=1.18e-02 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=1.18e-02, γ3 ->  γ2=1.93e-05, γ1 ->  γ1=1.18e-02, γ0 ->  γ0=1.41e-11
+  off_block_leakage=8.11e-15 | odd_target_error=4.91e-06 | even_target_error=4.91e-06
+ ad2: max_braid_error=1.13e+01 | normalized=1.26e+00
+  braid_errors: γ2 -> -γ3=1.13e+01, γ3 ->  γ2=1.13e+01, γ1 ->  γ1=1.18e-02, γ0 ->  γ0=5.74e-14
+  off_block_leakage=7.57e-15 | odd_target_error=4.00e+00 | even_target_error=4.00e+00
+ physical: max_braid_error=1.13e+01 | normalized=1.26e+00
+  braid_errors: γ2 -> -γ3=1.13e+01, γ3 ->  γ2=1.13e+01, γ1 ->  γ1=1.30e-02, γ0 ->  γ0=5.70e-03
+  off_block_leakage=6.89e-15 | odd_target_error=4.00e+00 | even_target_error=4.00e+00
+
+U = 0.1
+P_gs cum_dim=8
+ active_majoranas: γ0=γA1, γ1=γA2, γ2=γB2, γ3=γC2
+ physical_bilinear_residuals: AB=9.27e-16, AC=8.71e-16
+ ideal: max_braid_error=3.72e-03 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=3.72e-03, γ3 ->  γ2=5.31e-06, γ1 ->  γ1=3.72e-03, γ0 ->  γ0=1.29e-11
+  off_block_leakage=6.43e-12 | odd_target_error=1.34e-06 | even_target_error=1.34e-06
+ bilinear_fit: max_braid_error=3.72e-03 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=3.72e-03, γ3 ->  γ2=5.31e-06, γ1 ->  γ1=3.72e-03, γ0 ->  γ0=6.52e-11
+  off_block_leakage=9.11e-16 | odd_target_error=1.34e-06 | even_target_error=1.34e-06
+ ad2: max_braid_error=3.72e-03 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=3.72e-03, γ3 ->  γ2=5.31e-06, γ1 ->  γ1=3.72e-03, γ0 ->  γ0=3.97e-15
+  off_block_leakage=7.27e-16 | odd_target_error=1.34e-06 | even_target_error=1.34e-06
+ physical: max_braid_error=3.72e-03 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=3.72e-03, γ3 ->  γ2=5.31e-06, γ1 ->  γ1=3.72e-03, γ0 ->  γ0=6.52e-11
+  off_block_leakage=8.65e-16 | odd_target_error=1.34e-06 | even_target_error=1.34e-06
+
+P_excited1 cum_dim=32
+ active_majoranas: γ0=γA1, γ1=γA2, γ2=γB2, γ3=γC2
+ physical_bilinear_residuals: AB=8.66e-01, AC=8.66e-01
+ ideal: max_braid_error=7.43e-03 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=7.43e-03, γ3 ->  γ2=1.06e-05, γ1 ->  γ1=7.43e-03, γ0 ->  γ0=2.87e-11
+  off_block_leakage=1.44e-11 | odd_target_error=2.68e-06 | even_target_error=2.68e-06
+ bilinear_fit: max_braid_error=7.43e-03 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=7.43e-03, γ3 ->  γ2=1.09e-05, γ1 ->  γ1=7.43e-03, γ0 ->  γ0=7.84e-11
+  off_block_leakage=3.22e-15 | odd_target_error=2.77e-06 | even_target_error=2.77e-06
+ ad2: max_braid_error=8.00e+00 | normalized=1.41e+00
+  braid_errors: γ2 -> -γ3=8.00e+00, γ3 ->  γ2=8.00e+00, γ1 ->  γ1=7.43e-03, γ0 ->  γ0=2.33e-14
+  off_block_leakage=3.05e-15 | odd_target_error=2.83e+00 | even_target_error=2.83e+00
+ physical: max_braid_error=8.00e+00 | normalized=1.41e+00
+  braid_errors: γ2 -> -γ3=8.00e+00, γ3 ->  γ2=8.00e+00, γ1 ->  γ1=7.43e-03, γ0 ->  γ0=2.59e-04
+  off_block_leakage=2.91e-15 | odd_target_error=2.83e+00 | even_target_error=2.83e+00
+
+P_excited2 cum_dim=56
+ active_majoranas: γ0=γA1, γ1=γA2, γ2=γB2, γ3=γC2
+ physical_bilinear_residuals: AB=9.04e-01, AC=9.04e-01
+ ideal: max_braid_error=9.83e-03 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=9.83e-03, γ3 ->  γ2=1.41e-05, γ1 ->  γ1=9.83e-03, γ0 ->  γ0=3.40e-11
+  off_block_leakage=1.70e-11 | odd_target_error=3.54e-06 | even_target_error=3.54e-06
+ bilinear_fit: max_braid_error=9.83e-03 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=9.83e-03, γ3 ->  γ2=1.46e-05, γ1 ->  γ1=9.83e-03, γ0 ->  γ0=6.72e-11
+  off_block_leakage=5.26e-15 | odd_target_error=3.72e-06 | even_target_error=3.72e-06
+ ad2: max_braid_error=8.00e+00 | normalized=1.07e+00
+  braid_errors: γ2 -> -γ3=8.00e+00, γ3 ->  γ2=8.00e+00, γ1 ->  γ1=9.83e-03, γ0 ->  γ0=3.01e-14
+  off_block_leakage=5.21e-15 | odd_target_error=2.83e+00 | even_target_error=2.83e+00
+ physical: max_braid_error=8.00e+00 | normalized=1.07e+00
+  braid_errors: γ2 -> -γ3=8.00e+00, γ3 ->  γ2=8.00e+00, γ1 ->  γ1=1.09e-02, γ0 ->  γ0=4.71e-03
+  off_block_leakage=7.76e-15 | odd_target_error=2.83e+00 | even_target_error=2.83e+00
+
+P_excited3 cum_dim=80
+ active_majoranas: γ0=γA1, γ1=γA2, γ2=γB2, γ3=γC2
+ physical_bilinear_residuals: AB=9.80e-01, AC=9.80e-01
+ ideal: max_braid_error=1.18e-02 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=1.18e-02, γ3 ->  γ2=1.68e-05, γ1 ->  γ1=1.18e-02, γ0 ->  γ0=4.45e-11
+  off_block_leakage=2.23e-11 | odd_target_error=4.23e-06 | even_target_error=4.23e-06
+ bilinear_fit: max_braid_error=1.18e-02 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=1.18e-02, γ3 ->  γ2=1.93e-05, γ1 ->  γ1=1.18e-02, γ0 ->  γ0=6.48e-11
+  off_block_leakage=7.77e-15 | odd_target_error=4.90e-06 | even_target_error=4.90e-06
+ ad2: max_braid_error=1.13e+01 | normalized=1.27e+00
+  braid_errors: γ2 -> -γ3=1.13e+01, γ3 ->  γ2=1.13e+01, γ1 ->  γ1=1.18e-02, γ0 ->  γ0=4.83e-14
+  off_block_leakage=7.35e-15 | odd_target_error=4.00e+00 | even_target_error=4.00e+00
+ physical: max_braid_error=1.13e+01 | normalized=1.27e+00
+  braid_errors: γ2 -> -γ3=1.13e+01, γ3 ->  γ2=1.13e+01, γ1 ->  γ1=1.27e-02, γ0 ->  γ0=4.78e-03
+  off_block_leakage=8.86e-15 | odd_target_error=4.00e+00 | even_target_error=4.00e+00
+
+U = 2.0
+P_gs cum_dim=8
+ active_majoranas: γ0=γA1, γ1=γA2, γ2=γB2, γ3=γC2
+ physical_bilinear_residuals: AB=9.02e-15, AC=8.85e-15
+ ideal: max_braid_error=3.72e-03 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=3.72e-03, γ3 ->  γ2=5.31e-06, γ1 ->  γ1=3.72e-03, γ0 ->  γ0=2.29e-12
+  off_block_leakage=1.15e-12 | odd_target_error=1.34e-06 | even_target_error=1.34e-06
+ bilinear_fit: max_braid_error=3.72e-03 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=3.72e-03, γ3 ->  γ2=5.31e-06, γ1 ->  γ1=3.72e-03, γ0 ->  γ0=2.81e-06
+  off_block_leakage=5.37e-16 | odd_target_error=1.34e-06 | even_target_error=1.34e-06
+ ad2: max_braid_error=3.72e-03 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=3.72e-03, γ3 ->  γ2=5.32e-06, γ1 ->  γ1=3.72e-03, γ0 ->  γ0=8.19e-15
+  off_block_leakage=1.44e-15 | odd_target_error=1.34e-06 | even_target_error=1.34e-06
+ physical: max_braid_error=3.72e-03 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=3.72e-03, γ3 ->  γ2=5.31e-06, γ1 ->  γ1=3.72e-03, γ0 ->  γ0=2.81e-06
+  off_block_leakage=5.57e-16 | odd_target_error=1.34e-06 | even_target_error=1.34e-06
+
+P_excited1 cum_dim=32
+ active_majoranas: γ0=γA1, γ1=γA2, γ2=γB2, γ3=γC2
+ physical_bilinear_residuals: AB=9.87e-01, AC=9.87e-01
+ ideal: max_braid_error=7.43e-03 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=7.43e-03, γ3 ->  γ2=1.06e-05, γ1 ->  γ1=7.43e-03, γ0 ->  γ0=4.21e-12
+  off_block_leakage=2.10e-12 | odd_target_error=2.68e-06 | even_target_error=2.68e-06
+ bilinear_fit: max_braid_error=7.43e-03 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=7.43e-03, γ3 ->  γ2=1.09e-05, γ1 ->  γ1=7.43e-03, γ0 ->  γ0=1.60e-07
+  off_block_leakage=3.58e-15 | odd_target_error=2.77e-06 | even_target_error=2.77e-06
+ ad2: max_braid_error=8.00e+00 | normalized=1.41e+00
+  braid_errors: γ2 -> -γ3=8.00e+00, γ3 ->  γ2=8.00e+00, γ1 ->  γ1=7.43e-03, γ0 ->  γ0=2.43e-14
+  off_block_leakage=3.04e-15 | odd_target_error=2.83e+00 | even_target_error=2.83e+00
+ physical: max_braid_error=8.00e+00 | normalized=1.41e+00
+  braid_errors: γ2 -> -γ3=8.00e+00, γ3 ->  γ2=8.00e+00, γ1 ->  γ1=2.30e-01, γ0 ->  γ0=2.30e-01
+  off_block_leakage=2.48e-14 | odd_target_error=2.83e+00 | even_target_error=2.83e+00
+
+P_excited2 cum_dim=56
+ active_majoranas: γ0=γA1, γ1=γA2, γ2=γB2, γ3=γC2
+ physical_bilinear_residuals: AB=1.01e+00, AC=1.01e+00
+ ideal: max_braid_error=9.83e-03 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=9.83e-03, γ3 ->  γ2=1.41e-05, γ1 ->  γ1=9.83e-03, γ0 ->  γ0=5.32e-12
+  off_block_leakage=2.66e-12 | odd_target_error=3.54e-06 | even_target_error=3.54e-06
+ bilinear_fit: max_braid_error=9.83e-03 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=9.83e-03, γ3 ->  γ2=1.45e-05, γ1 ->  γ1=9.83e-03, γ0 ->  γ0=5.01e-06
+  off_block_leakage=5.15e-15 | odd_target_error=3.67e-06 | even_target_error=3.67e-06
+ ad2: max_braid_error=1.11e+01 | normalized=1.48e+00
+  braid_errors: γ2 -> -γ3=1.11e+01, γ3 ->  γ2=1.11e+01, γ1 ->  γ1=9.84e-03, γ0 ->  γ0=3.40e-14
+  off_block_leakage=5.08e-15 | odd_target_error=3.92e+00 | even_target_error=3.92e+00
+ physical: max_braid_error=1.11e+01 | normalized=1.48e+00
+  braid_errors: γ2 -> -γ3=1.11e+01, γ3 ->  γ2=1.11e+01, γ1 ->  γ1=4.22e-01, γ0 ->  γ0=4.22e-01
+  off_block_leakage=3.80e-14 | odd_target_error=3.92e+00 | even_target_error=3.92e+00
+
+P_excited3 cum_dim=80
+ active_majoranas: γ0=γA1, γ1=γA2, γ2=γB2, γ3=γC2
+ physical_bilinear_residuals: AB=1.13e+00, AC=1.13e+00
+ ideal: max_braid_error=1.18e-02 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=1.18e-02, γ3 ->  γ2=1.68e-05, γ1 ->  γ1=1.18e-02, γ0 ->  γ0=6.13e-12
+  off_block_leakage=3.06e-12 | odd_target_error=4.23e-06 | even_target_error=4.23e-06
+ bilinear_fit: max_braid_error=1.18e-02 | normalized=1.31e-03
+  braid_errors: γ2 -> -γ3=1.18e-02, γ3 ->  γ2=1.85e-05, γ1 ->  γ1=1.18e-02, γ0 ->  γ0=2.75e-06
+  off_block_leakage=7.55e-15 | odd_target_error=4.70e-06 | even_target_error=4.70e-06
+ ad2: max_braid_error=1.37e+01 | normalized=1.53e+00
+  braid_errors: γ2 -> -γ3=1.37e+01, γ3 ->  γ2=1.37e+01, γ1 ->  γ1=1.18e-02, γ0 ->  γ0=5.85e-14
+  off_block_leakage=8.03e-15 | odd_target_error=4.84e+00 | even_target_error=4.84e+00
+ physical: max_braid_error=1.37e+01 | normalized=1.53e+00
+  braid_errors: γ2 -> -γ3=1.37e+01, γ3 ->  γ2=1.37e+01, γ1 ->  γ1=1.13e+00, γ0 ->  γ0=1.13e+00
+  off_block_leakage=6.37e-14 | odd_target_error=4.83e+00 | even_target_error=4.83e+00

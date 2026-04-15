@@ -1,6 +1,5 @@
 from get_setup import params_for_n_site_Hamiltonian
 import numpy as np
-import sympy as sp
 import matplotlib.pyplot as plt
 
 
@@ -331,5 +330,4 @@ if __name__ == "__main__":
         plt.xticks([0.1, 1.0], ["Even", "Odd"])
         plt.tight_layout()
         plt.show()
-
 

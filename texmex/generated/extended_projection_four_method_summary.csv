@@ -1,0 +1,13 @@
+u,block_name,cum_dim,active_gamma0,active_gamma1,active_gamma2,active_gamma3,physical_bilinear_residual_ab,physical_bilinear_residual_ac,ideal_normalized_braid_error,bilinear_fit_normalized_braid_error,local_projection_normalized_braid_error,physical_normalized_braid_error
+0.0,P_gs,8,γA1,γA2,γB2,γC2,6.97e-16,4.08e-16,0.00131,0.00131,0.00131,0.00131
+0.0,P_excited1,32,γA1,γA2,γB2,γC2,0.856,0.856,0.00131,0.00131,1.41,1.41
+0.0,P_excited2,56,γA1,γA2,γB2,γC2,0.98,0.98,0.00131,0.00131,1.51,1.51
+0.0,P_excited3,80,γA1,γA2,γB2,γC2,0.972,0.972,0.00131,0.00131,1.26,1.26
+0.1,P_gs,8,γA1,γA2,γB2,γC2,9.27e-16,8.71e-16,0.00131,0.00131,0.00131,0.00131
+0.1,P_excited1,32,γA1,γA2,γB2,γC2,0.866,0.866,0.00131,0.00131,1.41,1.41
+0.1,P_excited2,56,γA1,γA2,γB2,γC2,0.904,0.904,0.00131,0.00131,1.07,1.07
+0.1,P_excited3,80,γA1,γA2,γB2,γC2,0.98,0.98,0.00131,0.00131,1.27,1.27
+2.0,P_gs,8,γA1,γA2,γB2,γC2,9.02e-15,8.85e-15,0.00131,0.00131,0.00131,0.00131
+2.0,P_excited1,32,γA1,γA2,γB2,γC2,0.987,0.987,0.00131,0.00131,1.41,1.41
+2.0,P_excited2,56,γA1,γA2,γB2,γC2,1.01,1.01,0.00131,0.00131,1.48,1.48
+2.0,P_excited3,80,γA1,γA2,γB2,γC2,1.13,1.13,0.00131,0.00131,1.53,1.53
