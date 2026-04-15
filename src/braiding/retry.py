@@ -291,6 +291,7 @@ if __name__ == "__main__":
         )   
 
         ideal_reference_gammas = [gamma0, gamma1, gamma2_ideal, gamma3_ideal]
+        physical_reference_gammas = [gamma0, gamma1, gamma_2_phys_imag, gamma_3_phys_imag]
 
         ideal_basis = get_initial_transport_basis(
             t_total=T_total,
@@ -316,7 +317,12 @@ if __name__ == "__main__":
         )
 
         ideal_operator_action = check_operator_action(u_kato_ideal, ideal_reference_gammas)
-        physical_operator_action = check_operator_action(u_kato_phys, ideal_reference_gammas)
+        physical_operator_action_ideal_basis = check_operator_action(
+            u_kato_phys, ideal_reference_gammas
+        )
+        physical_operator_action_physical_basis = check_operator_action(
+            u_kato_phys, physical_reference_gammas
+        )
 
         ideal_target_error = compare_to_target_gate(
             u_kato_ideal,
@@ -324,15 +330,35 @@ if __name__ == "__main__":
             gamma2_ideal,
             gamma3_ideal,
         )
-        physical_target_error = compare_to_target_gate(
+        physical_target_error_ideal_basis = compare_to_target_gate(
             u_kato_phys,
             physical_basis,
             gamma2_ideal,
             gamma3_ideal,
         )
+        physical_target_error_physical_basis = compare_to_target_gate(
+            u_kato_phys,
+            physical_basis,
+            gamma_2_phys_imag,
+            gamma_3_phys_imag,
+        )
 
         print(f"Projection level: {levels}")
         print(f"  ideal operator action:    {format_operator_action(ideal_operator_action)}")
-        print(f"  physical operator action: {format_operator_action(physical_operator_action)}")
+        print(
+            "  physical operator action in ideal basis:    "
+            f"{format_operator_action(physical_operator_action_ideal_basis)}"
+        )
+        print(
+            "  physical operator action in physical basis: "
+            f"{format_operator_action(physical_operator_action_physical_basis)}"
+        )
         print(f"  ideal phase-aligned target-gate error:    {ideal_target_error:.4e}")
-        print(f"  physical phase-aligned target-gate error: {physical_target_error:.4e}")
+        print(
+            "  physical phase-aligned target-gate error in ideal basis:    "
+            f"{physical_target_error_ideal_basis:.4e}"
+        )
+        print(
+            "  physical phase-aligned target-gate error in physical basis: "
+            f"{physical_target_error_physical_basis:.4e}"
+        )
