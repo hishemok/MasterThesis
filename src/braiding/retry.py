@@ -1,3 +1,6 @@
+import csv
+from pathlib import Path
+
 from get_mzm_JW import get_full_gammas
 import numpy as np
 from scipy.linalg import expm
@@ -5,6 +8,14 @@ from tqdm import tqdm
 from hamiltonian_builder import BraidingHamiltonianBuilder, default_config_path
 from braiding_model import delta_pulse, plot_results
 from extended_projection_braiding import normalize_projected_majorana
+
+
+OPERATOR_ACTION_COLUMNS = [
+    ("γ2 -> -γ3", "gamma2_to_minus_gamma3"),
+    ("γ3 ->  γ2", "gamma3_to_gamma2"),
+    ("γ1 ->  γ1", "gamma1_to_gamma1"),
+    ("γ0 ->  γ0", "gamma0_to_gamma0"),
+]
 
 
 
@@ -169,6 +180,78 @@ def compare_to_target_gate(u_kato, transport_basis, gamma2_target, gamma3_target
     return phase_aligned_error(u_subspace, target_subspace)
 
 
+def flatten_operator_action(prefix, action_check):
+    row = {}
+    for label, column_suffix in OPERATOR_ACTION_COLUMNS:
+        row[f"{prefix}_{column_suffix}_error"] = float(action_check["errors"][label])
+    row[f"{prefix}_max_error"] = float(action_check["max_error"])
+    return row
+
+
+def build_result_row(
+    u_value,
+    projection_level,
+    transport_dim,
+    ideal_operator_action,
+    physical_operator_action_ideal_basis,
+    physical_operator_action_physical_basis,
+    ideal_target_error,
+    physical_target_error_ideal_basis,
+    physical_target_error_physical_basis,
+):
+    row = {
+        "interaction_u": float(u_value),
+        "projection_level": int(projection_level),
+        "transport_dim": int(transport_dim),
+        "ideal_target_gate_error": float(ideal_target_error),
+        "physical_target_gate_error_in_ideal_basis": float(physical_target_error_ideal_basis),
+        "physical_target_gate_error_in_physical_basis": float(physical_target_error_physical_basis),
+    }
+    row.update(flatten_operator_action("ideal_single_exchange", ideal_operator_action))
+    row.update(
+        flatten_operator_action(
+            "physical_single_exchange_in_ideal_basis",
+            physical_operator_action_ideal_basis,
+        )
+    )
+    row.update(
+        flatten_operator_action(
+            "physical_single_exchange_in_physical_basis",
+            physical_operator_action_physical_basis,
+        )
+    )
+    return row
+
+
+def result_fieldnames():
+    fieldnames = [
+        "interaction_u",
+        "projection_level",
+        "transport_dim",
+        "ideal_target_gate_error",
+        "physical_target_gate_error_in_ideal_basis",
+        "physical_target_gate_error_in_physical_basis",
+    ]
+    for prefix in (
+        "ideal_single_exchange",
+        "physical_single_exchange_in_ideal_basis",
+        "physical_single_exchange_in_physical_basis",
+    ):
+        for _, column_suffix in OPERATOR_ACTION_COLUMNS:
+            fieldnames.append(f"{prefix}_{column_suffix}_error")
+        fieldnames.append(f"{prefix}_max_error")
+    return fieldnames
+
+
+def save_results_table(results, output_path):
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    fieldnames = result_fieldnames()
+    with output_path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, delimiter="\t")
+        writer.writeheader()
+        writer.writerows(results)
+
+
 
 
 
@@ -179,186 +262,186 @@ if __name__ == "__main__":
     steepness = 20 / width
 
     verbose = True
-    specified_vals = {"U": [0.0]}
-
-    (gamma_A1_full, gamma_A2_full), (gamma_B1_full, gamma_B2_full), (gamma_C1_full, gamma_C2_full) = get_full_gammas(
-    levels_to_include=4,
-    verbose=verbose,
-    specified_vals=specified_vals,
-    )
-
-
-    builder = BraidingHamiltonianBuilder(
-        n_sites=3,
-        dupes=3,
-        specified_vals=specified_vals,
-        config_path=default_config_path(),
-    )
-
-
-    H_full = builder.full_system_hamiltonian()
-
-    eigvals, eigvecs = np.linalg.eigh(H_full)
-
-    # These full-space junction operators do not depend on the cumulative
-    # projection block, so build them once and only re-project inside the loop.
-    operators = builder.get_operators()
-
-    print(operators.keys())
-    
-    A_outer = 0
-    A_inner = 2
-    B_inner = 3
-    B_outer = 5
-    C_inner = 6
-    C_outer = 8
-
-    creA1 = operators["cre"][A_outer]
-    annA1 = operators["ann"][A_outer]
-    creA2 = operators["cre"][A_inner]
-    annA2 = operators["ann"][A_inner]
-    creB1 = operators["cre"][B_outer]
-    annB1 = operators["ann"][B_outer]
-    creB2 = operators["cre"][B_inner]   
-    annB2 = operators["ann"][B_inner]
-    creC1 = operators["cre"][C_outer]
-    annC1 = operators["ann"][C_outer]
-    creC2 = operators["cre"][C_inner]
-    annC2 = operators["ann"][C_inner]
-
+    interaction_u_values = [0.0, 0.1, 2.0]
     projection_level_list = [8, 32, 56, 80]
+    results_output_path = Path(__file__).with_name("retry_projection_scan_results.txt")
+    all_results = []
 
+    for u_value in interaction_u_values:
+        print(f"\nRunning scan for U={u_value}")
+        specified_vals = {"U": [u_value]}
 
-    for levels in projection_level_list:
-        print("Working with projection level:", levels)
-        P = get_projection_basis(eigvecs, levels)
-        A1_proj, A2_proj = projected_majoranas(creA1, annA1, P)
-        B1_proj, B2_proj = projected_majoranas(creB1, annB1, P)
-        C1_proj, C2_proj = projected_majoranas(creC1, annC1, P)
-
-        gamma0 = normalize_projected_majorana(project_ideal_majoranas(gamma_A1_full, P), "gamma0")
-        gamma1 = normalize_projected_majorana(project_ideal_majoranas(gamma_A2_full, P), "gamma1")
-        gamma2_ideal = normalize_projected_majorana(project_ideal_majoranas(gamma_B2_full, P), "gamma2_ideal")
-        gamma3_ideal = normalize_projected_majorana(project_ideal_majoranas(gamma_C2_full, P), "gamma3_ideal")
-
-
-        gamma_2_phys_real =  normalize_projected_majorana(projected_majoranas(creB2, annB2, P)[0], "gamma_2_phys_real")
-        gamma_2_phys_imag = normalize_projected_majorana(projected_majoranas(creB2, annB2, P)[1], "gamma_2_phys_imag")
-        gamma_3_phys_real =  normalize_projected_majorana(projected_majoranas(creC2, annC2, P)[0], "gamma_3_phys_real")
-        gamma_3_phys_imag = normalize_projected_majorana(projected_majoranas(creC2, annC2, P)[1], "gamma_3_phys_imag")
-
-        #Term A 
-        TA = 1j * (gamma0 @ gamma1)
-        
-        #Braid in ideal system
-        TB_ideal = 1j * (gamma0 @ gamma2_ideal) 
-        TC_ideal = 1j * (gamma0 @ gamma3_ideal) 
-        #Evolve ideal system
-        transport_dim = TA.shape[0] // 2
-
-        times, energies, couplings, u_kato_ideal = evolve_system(
-            t_total=T_total,
-            delta_max=1.0,
-            delta_min=0.0,
-            steepness=steepness,
-            width=width,
-            term_a=TA,
-            term_b=TB_ideal,
-            term_c=TC_ideal,
-            n_points=n_points,
-            transport_dim=transport_dim,
+        (gamma_A1_full, gamma_A2_full), (gamma_B1_full, gamma_B2_full), (gamma_C1_full, gamma_C2_full) = get_full_gammas(
+            levels_to_include=4,
             verbose=verbose,
+            specified_vals=specified_vals,
         )
 
-
-        #Braid in physical system
-        TB_phys = 1j * (gamma0 @ gamma_2_phys_imag) 
-        TC_phys =  1j * (gamma0 @ gamma_3_phys_imag)
-
-        #Evolve physical system
-        times, energies, couplings, u_kato_phys = evolve_system(
-            t_total=T_total,
-            delta_max=1.0,
-            delta_min=0.0,
-            steepness=steepness,
-            width=width,
-            term_a=TA,
-            term_b=TB_phys,
-            term_c=TC_phys,
-            n_points=n_points,
-            transport_dim=transport_dim,
-            verbose=verbose,
-        )   
-
-        ideal_reference_gammas = [gamma0, gamma1, gamma2_ideal, gamma3_ideal]
-        physical_reference_gammas = [gamma0, gamma1, gamma_2_phys_imag, gamma_3_phys_imag]
-
-        ideal_basis = get_initial_transport_basis(
-            t_total=T_total,
-            delta_max=1.0,
-            delta_min=0.0,
-            steepness=steepness,
-            width=width,
-            term_a=TA,
-            term_b=TB_ideal,
-            term_c=TC_ideal,
-            transport_dim=transport_dim,
-        )
-        physical_basis = get_initial_transport_basis(
-            t_total=T_total,
-            delta_max=1.0,
-            delta_min=0.0,
-            steepness=steepness,
-            width=width,
-            term_a=TA,
-            term_b=TB_phys,
-            term_c=TC_phys,
-            transport_dim=transport_dim,
+        builder = BraidingHamiltonianBuilder(
+            n_sites=3,
+            dupes=3,
+            specified_vals=specified_vals,
+            config_path=default_config_path(),
         )
 
-        ideal_operator_action = check_operator_action(u_kato_ideal, ideal_reference_gammas)
-        physical_operator_action_ideal_basis = check_operator_action(
-            u_kato_phys, ideal_reference_gammas
-        )
-        physical_operator_action_physical_basis = check_operator_action(
-            u_kato_phys, physical_reference_gammas
-        )
+        H_full = builder.full_system_hamiltonian()
+        eigvals, eigvecs = np.linalg.eigh(H_full)
 
-        ideal_target_error = compare_to_target_gate(
-            u_kato_ideal,
-            ideal_basis,
-            gamma2_ideal,
-            gamma3_ideal,
-        )
-        physical_target_error_ideal_basis = compare_to_target_gate(
-            u_kato_phys,
-            physical_basis,
-            gamma2_ideal,
-            gamma3_ideal,
-        )
-        physical_target_error_physical_basis = compare_to_target_gate(
-            u_kato_phys,
-            physical_basis,
-            gamma_2_phys_imag,
-            gamma_3_phys_imag,
-        )
+        # These full-space junction operators do not depend on the cumulative
+        # projection block, so build them once and only re-project inside the loop.
+        operators = builder.get_operators()
 
-        print(f"Projection level: {levels}")
-        print(f"  ideal operator action:    {format_operator_action(ideal_operator_action)}")
-        print(
-            "  physical operator action in ideal basis:    "
-            f"{format_operator_action(physical_operator_action_ideal_basis)}"
-        )
-        print(
-            "  physical operator action in physical basis: "
-            f"{format_operator_action(physical_operator_action_physical_basis)}"
-        )
-        print(f"  ideal phase-aligned target-gate error:    {ideal_target_error:.4e}")
-        print(
-            "  physical phase-aligned target-gate error in ideal basis:    "
-            f"{physical_target_error_ideal_basis:.4e}"
-        )
-        print(
-            "  physical phase-aligned target-gate error in physical basis: "
-            f"{physical_target_error_physical_basis:.4e}"
-        )
+        B_inner = 3
+        C_inner = 6
+        creB2 = operators["cre"][B_inner]
+        annB2 = operators["ann"][B_inner]
+        creC2 = operators["cre"][C_inner]
+        annC2 = operators["ann"][C_inner]
+
+        for levels in projection_level_list:
+            print("Working with projection level:", levels)
+            P = get_projection_basis(eigvecs, levels)
+
+            gamma0 = normalize_projected_majorana(project_ideal_majoranas(gamma_A1_full, P), "gamma0")
+            gamma1 = normalize_projected_majorana(project_ideal_majoranas(gamma_A2_full, P), "gamma1")
+            gamma2_ideal = normalize_projected_majorana(project_ideal_majoranas(gamma_B2_full, P), "gamma2_ideal")
+            gamma3_ideal = normalize_projected_majorana(project_ideal_majoranas(gamma_C2_full, P), "gamma3_ideal")
+
+            gamma_2_phys_imag = normalize_projected_majorana(
+                projected_majoranas(creB2, annB2, P)[1],
+                "gamma_2_phys_imag",
+            )
+            gamma_3_phys_imag = normalize_projected_majorana(
+                projected_majoranas(creC2, annC2, P)[1],
+                "gamma_3_phys_imag",
+            )
+
+            # Term A
+            TA = 1j * (gamma0 @ gamma1)
+
+            # Braid in ideal system
+            TB_ideal = 1j * (gamma0 @ gamma2_ideal)
+            TC_ideal = 1j * (gamma0 @ gamma3_ideal)
+            transport_dim = TA.shape[0] // 2
+
+            times, energies, couplings, u_kato_ideal = evolve_system(
+                t_total=T_total,
+                delta_max=1.0,
+                delta_min=0.0,
+                steepness=steepness,
+                width=width,
+                term_a=TA,
+                term_b=TB_ideal,
+                term_c=TC_ideal,
+                n_points=n_points,
+                transport_dim=transport_dim,
+                verbose=verbose,
+            )
+
+            # Braid in physical system
+            TB_phys = 1j * (gamma0 @ gamma_2_phys_imag)
+            TC_phys = 1j * (gamma0 @ gamma_3_phys_imag)
+
+            times, energies, couplings, u_kato_phys = evolve_system(
+                t_total=T_total,
+                delta_max=1.0,
+                delta_min=0.0,
+                steepness=steepness,
+                width=width,
+                term_a=TA,
+                term_b=TB_phys,
+                term_c=TC_phys,
+                n_points=n_points,
+                transport_dim=transport_dim,
+                verbose=verbose,
+            )
+
+            ideal_reference_gammas = [gamma0, gamma1, gamma2_ideal, gamma3_ideal]
+            physical_reference_gammas = [gamma0, gamma1, gamma_2_phys_imag, gamma_3_phys_imag]
+
+            ideal_basis = get_initial_transport_basis(
+                t_total=T_total,
+                delta_max=1.0,
+                delta_min=0.0,
+                steepness=steepness,
+                width=width,
+                term_a=TA,
+                term_b=TB_ideal,
+                term_c=TC_ideal,
+                transport_dim=transport_dim,
+            )
+            physical_basis = get_initial_transport_basis(
+                t_total=T_total,
+                delta_max=1.0,
+                delta_min=0.0,
+                steepness=steepness,
+                width=width,
+                term_a=TA,
+                term_b=TB_phys,
+                term_c=TC_phys,
+                transport_dim=transport_dim,
+            )
+
+            ideal_operator_action = check_operator_action(u_kato_ideal, ideal_reference_gammas)
+            physical_operator_action_ideal_basis = check_operator_action(
+                u_kato_phys, ideal_reference_gammas
+            )
+            physical_operator_action_physical_basis = check_operator_action(
+                u_kato_phys, physical_reference_gammas
+            )
+
+            ideal_target_error = compare_to_target_gate(
+                u_kato_ideal,
+                ideal_basis,
+                gamma2_ideal,
+                gamma3_ideal,
+            )
+            physical_target_error_ideal_basis = compare_to_target_gate(
+                u_kato_phys,
+                physical_basis,
+                gamma2_ideal,
+                gamma3_ideal,
+            )
+            physical_target_error_physical_basis = compare_to_target_gate(
+                u_kato_phys,
+                physical_basis,
+                gamma_2_phys_imag,
+                gamma_3_phys_imag,
+            )
+
+            print(f"Projection level: {levels}")
+            print(f"  ideal operator action:    {format_operator_action(ideal_operator_action)}")
+            print(
+                "  physical operator action in ideal basis:    "
+                f"{format_operator_action(physical_operator_action_ideal_basis)}"
+            )
+            print(
+                "  physical operator action in physical basis: "
+                f"{format_operator_action(physical_operator_action_physical_basis)}"
+            )
+            print(f"  ideal phase-aligned target-gate error:    {ideal_target_error:.4e}")
+            print(
+                "  physical phase-aligned target-gate error in ideal basis:    "
+                f"{physical_target_error_ideal_basis:.4e}"
+            )
+            print(
+                "  physical phase-aligned target-gate error in physical basis: "
+                f"{physical_target_error_physical_basis:.4e}"
+            )
+
+            result_row = build_result_row(
+                u_value=u_value,
+                projection_level=levels,
+                transport_dim=transport_dim,
+                ideal_operator_action=ideal_operator_action,
+                physical_operator_action_ideal_basis=physical_operator_action_ideal_basis,
+                physical_operator_action_physical_basis=physical_operator_action_physical_basis,
+                ideal_target_error=ideal_target_error,
+                physical_target_error_ideal_basis=physical_target_error_ideal_basis,
+                physical_target_error_physical_basis=physical_target_error_physical_basis,
+            )
+            all_results.append(result_row)
+            save_results_table(all_results, results_output_path)
+            print(f"  Results table updated: {results_output_path}")
+
+    print(f"\nSaved {len(all_results)} result rows to {results_output_path}")

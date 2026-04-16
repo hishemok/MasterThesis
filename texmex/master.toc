@@ -62,7 +62,7 @@
 \contentsline {subsubsection}{\numberline {4.4.1}Projected microscopic braid}{37}{subsubsection.4.4.1}%
 \contentsline {subsubsection}{\numberline {4.4.2}Gate-validation checks}{40}{subsubsection.4.4.2}%
 \contentsline {subsection}{\numberline {4.5}Braiding in Higher Energy Levels}{41}{subsection.4.5}%
-\contentsline {subsection}{\numberline {4.6}Physical Interpretation}{45}{subsection.4.6}%
-\contentsline {subsubsection}{\numberline {4.6.1}What the optimization results suggest}{45}{subsubsection.4.6.1}%
+\contentsline {subsection}{\numberline {4.6}Physical Interpretation}{43}{subsection.4.6}%
+\contentsline {subsubsection}{\numberline {4.6.1}What the optimization results suggest}{43}{subsubsection.4.6.1}%
 \contentsline {subsubsection}{\numberline {4.6.2}What the braiding results imply}{45}{subsubsection.4.6.2}%
 \contentsline {subsection}{\numberline {4.7}Limitations and Outlook}{45}{subsection.4.7}%
