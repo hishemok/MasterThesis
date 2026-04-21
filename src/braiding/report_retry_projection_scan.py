@@ -34,11 +34,12 @@ plt.rcParams.update(
 )
 
 
-PREFERRED_U_ORDER = (0.0, 0.1, 2.0)
+PREFERRED_U_ORDER = (0.0, 0.1, 0.2, 2.0)
 INT_FIELDS = {"projection_level", "transport_dim"}
 U_STYLES = {
     0.0: {"color": "#1f77b4", "marker": "o"},
     0.1: {"color": "#ff7f0e", "marker": "s"},
+    0.2: {"color": "#2ca02c", "marker": "^"},
     2.0: {"color": "#d62728", "marker": "D"},
 }
 IDEAL_REFERENCE_STYLE = {
@@ -93,6 +94,11 @@ def build_argument_parser():
         default=REPO_ROOT / "texmex" / "generated",
         help="Directory where generated LaTeX tables should be written.",
     )
+    parser.add_argument(
+        "--stem-suffix",
+        default="",
+        help="Optional suffix appended to each output filename stem before the extension.",
+    )
     return parser
 
 
@@ -108,7 +114,10 @@ def parse_results(path: Path):
                 if key in INT_FIELDS:
                     row[key] = int(value)
                 else:
-                    row[key] = float(value)
+                    try:
+                        row[key] = float(value)
+                    except (TypeError, ValueError):
+                        row[key] = value
             rows.append(row)
     if not rows:
         raise ValueError(f"No result rows found in {path}")
@@ -154,6 +163,12 @@ def ideal_reference_rows(rows):
 
 def projection_levels_from_rows(rows):
     return [row["projection_level"] for row in rows]
+
+
+def apply_stem_suffix(path: Path, stem_suffix: str):
+    if not stem_suffix:
+        return path
+    return path.with_name(f"{path.stem}{stem_suffix}{path.suffix}")
 
 
 def save_figure(fig, output_path: Path):
@@ -421,12 +436,16 @@ def main():
     args.fig_dir.mkdir(parents=True, exist_ok=True)
     args.generated_dir.mkdir(parents=True, exist_ok=True)
 
+    stem_suffix = args.stem_suffix
     output_paths = [
-        args.fig_dir / "retry_projection_interaction_comparison.pdf",
-        args.fig_dir / "retry_projection_basis_diagnostic.pdf",
-        args.fig_dir / "retry_projection_channel_breakdown.pdf",
+        apply_stem_suffix(args.fig_dir / "retry_projection_interaction_comparison.pdf", stem_suffix),
+        apply_stem_suffix(args.fig_dir / "retry_projection_basis_diagnostic.pdf", stem_suffix),
+        apply_stem_suffix(args.fig_dir / "retry_projection_channel_breakdown.pdf", stem_suffix),
     ]
-    summary_table_path = args.generated_dir / "retry_projection_scan_summary.tex"
+    summary_table_path = apply_stem_suffix(
+        args.generated_dir / "retry_projection_scan_summary.tex",
+        stem_suffix,
+    )
 
     plot_interaction_comparison(grouped_rows, reference_rows, output_paths[0])
     plot_basis_diagnostic(grouped_rows, output_paths[1])

@@ -1,7 +1,8 @@
+import argparse
 import csv
 from pathlib import Path
 
-from get_mzm_JW import get_full_gammas
+from remake_majoranas import candidate_metadata, get_full_gammas
 import numpy as np
 from scipy.linalg import expm
 from tqdm import tqdm
@@ -188,10 +189,23 @@ def flatten_operator_action(prefix, action_check):
     return row
 
 
+def flatten_candidate(prefix, candidate):
+    return {
+        f"{prefix}_target_axis": candidate["target_axis"],
+        f"{prefix}_overlap_x": float(candidate["overlap_x"]),
+        f"{prefix}_overlap_y": float(candidate["overlap_y"]),
+        f"{prefix}_score": float(candidate["score"]),
+        f"{prefix}_coefficients_plus": ",".join(f"{value:.6g}" for value in candidate["coefficients_plus"]),
+        f"{prefix}_coefficients_minus": ",".join(f"{value:.6g}" for value in candidate["coefficients_minus"]),
+    }
+
+
 def build_result_row(
     u_value,
     projection_level,
     transport_dim,
+    best_b_candidate,
+    best_c_candidate,
     ideal_operator_action,
     physical_operator_action_ideal_basis,
     physical_operator_action_physical_basis,
@@ -220,6 +234,8 @@ def build_result_row(
             physical_operator_action_physical_basis,
         )
     )
+    row.update(flatten_candidate("best_b_candidate", best_b_candidate))
+    row.update(flatten_candidate("best_c_candidate", best_c_candidate))
     return row
 
 
@@ -231,6 +247,18 @@ def result_fieldnames():
         "ideal_target_gate_error",
         "physical_target_gate_error_in_ideal_basis",
         "physical_target_gate_error_in_physical_basis",
+        "best_b_candidate_target_axis",
+        "best_b_candidate_overlap_x",
+        "best_b_candidate_overlap_y",
+        "best_b_candidate_score",
+        "best_b_candidate_coefficients_plus",
+        "best_b_candidate_coefficients_minus",
+        "best_c_candidate_target_axis",
+        "best_c_candidate_overlap_x",
+        "best_c_candidate_overlap_y",
+        "best_c_candidate_score",
+        "best_c_candidate_coefficients_plus",
+        "best_c_candidate_coefficients_minus",
     ]
     for prefix in (
         "ideal_single_exchange",
@@ -252,30 +280,79 @@ def save_results_table(results, output_path):
         writer.writerows(results)
 
 
+def build_argument_parser():
+    parser = argparse.ArgumentParser(
+        description="Run the retry projection scan with reconstructed ideal Majoranas.",
+    )
+    parser.add_argument(
+        "--u-values",
+        type=float,
+        nargs="+",
+        default=[0.0, 0.1, 2.0],
+        help="Interaction strengths U to scan.",
+    )
+    parser.add_argument(
+        "--projection-levels",
+        type=int,
+        nargs="+",
+        default=[8, 32, 56, 80, 512],
+        help="Projection dimensions to include in the cumulative projector.",
+    )
+    parser.add_argument(
+        "--levels-to-include",
+        type=int,
+        default=4,
+        help="Number of even/odd subsystem pairs used in the Majorana fit.",
+    )
+    parser.add_argument(
+        "--n-points",
+        type=int,
+        default=300,
+        help="Number of time steps in each Kato evolution.",
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=Path(__file__).with_name("retry_projection_scan_results.txt"),
+        help="Path to the tab-separated results table to write.",
+    )
+    parser.add_argument(
+        "--quiet",
+        action="store_true",
+        help="Disable verbose progress output from the Majorana fit and braid evolution.",
+    )
+    return parser
 
 
 
-if __name__ == "__main__":
-    n_points = 300
+
+
+def main():
+    args = build_argument_parser().parse_args()
+
+    n_points = args.n_points
     T_total = 1.0
     width = T_total / 3
     steepness = 20 / width
 
-    verbose = True
-    interaction_u_values = [0.0, 0.1, 2.0]
-    projection_level_list = [8, 32, 56, 80]
-    results_output_path = Path(__file__).with_name("retry_projection_scan_results.txt")
+    verbose = not args.quiet
+    interaction_u_values = args.u_values
+    projection_level_list = args.projection_levels
+    levels_to_include = args.levels_to_include
+    results_output_path = args.output
     all_results = []
+    candidate_rankings = {}
+
+    print("Retry projection scan configuration:")
+    print(f"  U values: {interaction_u_values}")
+    print(f"  Projection dimensions: {projection_level_list}")
+    print(f"  Majorana fit levels: {levels_to_include}")
+    print(f"  Time steps: {n_points}")
+    print(f"  Output path: {results_output_path}")
 
     for u_value in interaction_u_values:
         print(f"\nRunning scan for U={u_value}")
         specified_vals = {"U": [u_value]}
-
-        (gamma_A1_full, gamma_A2_full), (gamma_B1_full, gamma_B2_full), (gamma_C1_full, gamma_C2_full) = get_full_gammas(
-            levels_to_include=4,
-            verbose=verbose,
-            specified_vals=specified_vals,
-        )
 
         builder = BraidingHamiltonianBuilder(
             n_sites=3,
@@ -301,19 +378,53 @@ if __name__ == "__main__":
         for levels in projection_level_list:
             print("Working with projection level:", levels)
             P = get_projection_basis(eigvecs, levels)
+            (
+                (gamma_A1_full, gamma_A2_full),
+                (gamma_B1_full, gamma_B2_full),
+                (gamma_C1_full, gamma_C2_full),
+            ), candidate_data = get_full_gammas(
+                levels_to_include=levels_to_include,
+                verbose=verbose,
+                specified_vals=specified_vals,
+                projection_basis=P,
+                return_candidates=True,
+            )
+            candidate_rankings[(u_value, levels)] = {
+                "A": {
+                    "x": candidate_metadata(candidate_data["A"]["x"]),
+                    "y": candidate_metadata(candidate_data["A"]["y"]),
+                },
+                "B": {
+                    "x": candidate_metadata(candidate_data["B"]["x"]),
+                    "y": candidate_metadata(candidate_data["B"]["y"]),
+                    "selected": candidate_metadata(candidate_data["B"]["selected"]),
+                },
+                "C": {
+                    "x": candidate_metadata(candidate_data["C"]["x"]),
+                    "y": candidate_metadata(candidate_data["C"]["y"]),
+                    "selected": candidate_metadata(candidate_data["C"]["selected"]),
+                },
+            }
+            best_b_candidate = candidate_rankings[(u_value, levels)]["B"]["selected"]
+            best_c_candidate = candidate_rankings[(u_value, levels)]["C"]["selected"]
 
             gamma0 = normalize_projected_majorana(project_ideal_majoranas(gamma_A1_full, P), "gamma0")
             gamma1 = normalize_projected_majorana(project_ideal_majoranas(gamma_A2_full, P), "gamma1")
             gamma2_ideal = normalize_projected_majorana(project_ideal_majoranas(gamma_B2_full, P), "gamma2_ideal")
             gamma3_ideal = normalize_projected_majorana(project_ideal_majoranas(gamma_C2_full, P), "gamma3_ideal")
 
-            gamma_2_phys_imag = normalize_projected_majorana(
-                projected_majoranas(creB2, annB2, P)[1],
-                "gamma_2_phys_imag",
+            gamma_b_phys_components = projected_majoranas(creB2, annB2, P)
+            gamma_c_phys_components = projected_majoranas(creC2, annC2, P)
+            b_phys_index = 0 if best_b_candidate["target_axis"] == "x" else 1
+            c_phys_index = 0 if best_c_candidate["target_axis"] == "x" else 1
+
+            gamma_2_phys = normalize_projected_majorana(
+                gamma_b_phys_components[b_phys_index],
+                "gamma_2_phys",
             )
-            gamma_3_phys_imag = normalize_projected_majorana(
-                projected_majoranas(creC2, annC2, P)[1],
-                "gamma_3_phys_imag",
+            gamma_3_phys = normalize_projected_majorana(
+                gamma_c_phys_components[c_phys_index],
+                "gamma_3_phys",
             )
 
             # Term A
@@ -339,8 +450,8 @@ if __name__ == "__main__":
             )
 
             # Braid in physical system
-            TB_phys = 1j * (gamma0 @ gamma_2_phys_imag)
-            TC_phys = 1j * (gamma0 @ gamma_3_phys_imag)
+            TB_phys = 1j * (gamma0 @ gamma_2_phys)
+            TC_phys = 1j * (gamma0 @ gamma_3_phys)
 
             times, energies, couplings, u_kato_phys = evolve_system(
                 t_total=T_total,
@@ -357,7 +468,7 @@ if __name__ == "__main__":
             )
 
             ideal_reference_gammas = [gamma0, gamma1, gamma2_ideal, gamma3_ideal]
-            physical_reference_gammas = [gamma0, gamma1, gamma_2_phys_imag, gamma_3_phys_imag]
+            physical_reference_gammas = [gamma0, gamma1, gamma_2_phys, gamma_3_phys]
 
             ideal_basis = get_initial_transport_basis(
                 t_total=T_total,
@@ -398,18 +509,20 @@ if __name__ == "__main__":
             )
             physical_target_error_ideal_basis = compare_to_target_gate(
                 u_kato_phys,
-                physical_basis,
+                ideal_basis,
                 gamma2_ideal,
                 gamma3_ideal,
             )
             physical_target_error_physical_basis = compare_to_target_gate(
                 u_kato_phys,
                 physical_basis,
-                gamma_2_phys_imag,
-                gamma_3_phys_imag,
+                gamma_2_phys,
+                gamma_3_phys,
             )
 
             print(f"Projection level: {levels}")
+            print(f"  best B candidate: {best_b_candidate}")
+            print(f"  best C candidate: {best_c_candidate}")
             print(f"  ideal operator action:    {format_operator_action(ideal_operator_action)}")
             print(
                 "  physical operator action in ideal basis:    "
@@ -433,6 +546,8 @@ if __name__ == "__main__":
                 u_value=u_value,
                 projection_level=levels,
                 transport_dim=transport_dim,
+                best_b_candidate=best_b_candidate,
+                best_c_candidate=best_c_candidate,
                 ideal_operator_action=ideal_operator_action,
                 physical_operator_action_ideal_basis=physical_operator_action_ideal_basis,
                 physical_operator_action_physical_basis=physical_operator_action_physical_basis,
@@ -445,3 +560,7 @@ if __name__ == "__main__":
             print(f"  Results table updated: {results_output_path}")
 
     print(f"\nSaved {len(all_results)} result rows to {results_output_path}")
+
+
+if __name__ == "__main__":
+    main()
