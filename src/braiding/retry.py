@@ -124,6 +124,14 @@ def phase_aligned_error(U, target):
     return np.linalg.norm(U - np.exp(1j * phase) * target)
 
 
+def normalized_frobenius_norm(matrix):
+    return np.linalg.norm(matrix) / np.sqrt(matrix.shape[0])
+
+
+def normalized_operator_error(left, right):
+    return normalized_frobenius_norm(left - right)
+
+
 def get_initial_transport_basis(
     t_total,
     delta_max,
@@ -151,13 +159,17 @@ def check_operator_action(u_kato, gamma_list):
     ]
 
     errors = {}
+    normalized_errors = {}
     for label, source, target in expected_maps:
         transformed = u_kato.conj().T @ source @ u_kato
         errors[label] = np.linalg.norm(transformed - target)
+        normalized_errors[label] = normalized_operator_error(transformed, target)
 
     return {
         "errors": errors,
+        "normalized_errors": normalized_errors,
         "max_error": max(errors.values()) if errors else 0.0,
+        "max_error_normalized": max(normalized_errors.values()) if normalized_errors else 0.0,
     }
 
 
@@ -181,11 +193,53 @@ def compare_to_target_gate(u_kato, transport_basis, gamma2_target, gamma3_target
     return phase_aligned_error(u_subspace, target_subspace)
 
 
+def compare_transport_unitaries(u_reference, u_test, transport_basis):
+    u_reference_subspace = transport_basis.conj().T @ u_reference @ transport_basis
+    u_test_subspace = transport_basis.conj().T @ u_test @ transport_basis
+    return phase_aligned_error(u_test_subspace, u_reference_subspace)
+
+
+def check_majorana_algebra(gamma_list):
+    dim = gamma_list[0].shape[0]
+    identity = np.eye(dim, dtype=complex)
+    square_errors = {}
+    anticommutator_errors = {}
+
+    for index, gamma in enumerate(gamma_list):
+        label = f"gamma{index}"
+        square_errors[label] = normalized_operator_error(gamma @ gamma, identity)
+
+    for left_index in range(len(gamma_list)):
+        for right_index in range(left_index + 1, len(gamma_list)):
+            label = f"gamma{left_index}_gamma{right_index}"
+            anticommutator = gamma_list[left_index] @ gamma_list[right_index] + gamma_list[right_index] @ gamma_list[left_index]
+            anticommutator_errors[label] = normalized_frobenius_norm(anticommutator)
+
+    return {
+        "square_errors": square_errors,
+        "max_square_error": max(square_errors.values()) if square_errors else 0.0,
+        "anticommutator_errors": anticommutator_errors,
+        "max_anticommutator_error": max(anticommutator_errors.values()) if anticommutator_errors else 0.0,
+    }
+
+
 def flatten_operator_action(prefix, action_check):
     row = {}
     for label, column_suffix in OPERATOR_ACTION_COLUMNS:
         row[f"{prefix}_{column_suffix}_error"] = float(action_check["errors"][label])
+        row[f"{prefix}_{column_suffix}_error_normalized"] = float(action_check["normalized_errors"][label])
     row[f"{prefix}_max_error"] = float(action_check["max_error"])
+    row[f"{prefix}_max_error_normalized"] = float(action_check["max_error_normalized"])
+    return row
+
+
+def flatten_algebra_check(prefix, algebra_check):
+    row = {
+        f"{prefix}_max_square_error_normalized": float(algebra_check["max_square_error"]),
+        f"{prefix}_max_anticommutator_error_normalized": float(algebra_check["max_anticommutator_error"]),
+    }
+    for label, value in algebra_check["square_errors"].items():
+        row[f"{prefix}_{label}_square_error_normalized"] = float(value)
     return row
 
 
@@ -212,14 +266,24 @@ def build_result_row(
     ideal_target_error,
     physical_target_error_ideal_basis,
     physical_target_error_physical_basis,
+    physical_vs_ideal_target_error_ideal_basis,
+    ideal_algebra_check,
+    physical_algebra_check,
 ):
     row = {
         "interaction_u": float(u_value),
         "projection_level": int(projection_level),
         "transport_dim": int(transport_dim),
         "ideal_target_gate_error": float(ideal_target_error),
+        "ideal_target_gate_error_normalized": float(ideal_target_error / np.sqrt(transport_dim)),
         "physical_target_gate_error_in_ideal_basis": float(physical_target_error_ideal_basis),
+        "physical_target_gate_error_in_ideal_basis_normalized": float(physical_target_error_ideal_basis / np.sqrt(transport_dim)),
         "physical_target_gate_error_in_physical_basis": float(physical_target_error_physical_basis),
+        "physical_target_gate_error_in_physical_basis_normalized": float(physical_target_error_physical_basis / np.sqrt(transport_dim)),
+        "physical_vs_ideal_target_gate_error_in_ideal_basis": float(physical_vs_ideal_target_error_ideal_basis),
+        "physical_vs_ideal_target_gate_error_in_ideal_basis_normalized": float(
+            physical_vs_ideal_target_error_ideal_basis / np.sqrt(transport_dim)
+        ),
     }
     row.update(flatten_operator_action("ideal_single_exchange", ideal_operator_action))
     row.update(
@@ -236,6 +300,8 @@ def build_result_row(
     )
     row.update(flatten_candidate("best_b_candidate", best_b_candidate))
     row.update(flatten_candidate("best_c_candidate", best_c_candidate))
+    row.update(flatten_algebra_check("ideal_majorana_algebra", ideal_algebra_check))
+    row.update(flatten_algebra_check("physical_majorana_algebra", physical_algebra_check))
     return row
 
 
@@ -245,8 +311,13 @@ def result_fieldnames():
         "projection_level",
         "transport_dim",
         "ideal_target_gate_error",
+        "ideal_target_gate_error_normalized",
         "physical_target_gate_error_in_ideal_basis",
+        "physical_target_gate_error_in_ideal_basis_normalized",
         "physical_target_gate_error_in_physical_basis",
+        "physical_target_gate_error_in_physical_basis_normalized",
+        "physical_vs_ideal_target_gate_error_in_ideal_basis",
+        "physical_vs_ideal_target_gate_error_in_ideal_basis_normalized",
         "best_b_candidate_target_axis",
         "best_b_candidate_overlap_x",
         "best_b_candidate_overlap_y",
@@ -267,7 +338,20 @@ def result_fieldnames():
     ):
         for _, column_suffix in OPERATOR_ACTION_COLUMNS:
             fieldnames.append(f"{prefix}_{column_suffix}_error")
+            fieldnames.append(f"{prefix}_{column_suffix}_error_normalized")
         fieldnames.append(f"{prefix}_max_error")
+        fieldnames.append(f"{prefix}_max_error_normalized")
+    for prefix in ("ideal_majorana_algebra", "physical_majorana_algebra"):
+        fieldnames.extend(
+            [
+                f"{prefix}_gamma0_square_error_normalized",
+                f"{prefix}_gamma1_square_error_normalized",
+                f"{prefix}_gamma2_square_error_normalized",
+                f"{prefix}_gamma3_square_error_normalized",
+                f"{prefix}_max_square_error_normalized",
+                f"{prefix}_max_anticommutator_error_normalized",
+            ]
+        )
     return fieldnames
 
 
@@ -405,8 +489,10 @@ def main():
                     "selected": candidate_metadata(candidate_data["C"]["selected"]),
                 },
             }
-            best_b_candidate = candidate_rankings[(u_value, levels)]["B"]["selected"]
-            best_c_candidate = candidate_rankings[(u_value, levels)]["C"]["selected"]
+            # Keep the original Majorana labeling convention:
+            # gamma_B2 / gamma_C2 are the y-like operators.
+            best_b_candidate = candidate_rankings[(u_value, levels)]["B"]["y"]
+            best_c_candidate = candidate_rankings[(u_value, levels)]["C"]["y"]
 
             gamma0 = normalize_projected_majorana(project_ideal_majoranas(gamma_A1_full, P), "gamma0")
             gamma1 = normalize_projected_majorana(project_ideal_majoranas(gamma_A2_full, P), "gamma1")
@@ -415,8 +501,8 @@ def main():
 
             gamma_b_phys_components = projected_majoranas(creB2, annB2, P)
             gamma_c_phys_components = projected_majoranas(creC2, annC2, P)
-            b_phys_index = 0 if best_b_candidate["target_axis"] == "x" else 1
-            c_phys_index = 0 if best_c_candidate["target_axis"] == "x" else 1
+            b_phys_index = 1
+            c_phys_index = 1
 
             gamma_2_phys = normalize_projected_majorana(
                 gamma_b_phys_components[b_phys_index],
@@ -469,6 +555,8 @@ def main():
 
             ideal_reference_gammas = [gamma0, gamma1, gamma2_ideal, gamma3_ideal]
             physical_reference_gammas = [gamma0, gamma1, gamma_2_phys, gamma_3_phys]
+            ideal_algebra_check = check_majorana_algebra(ideal_reference_gammas)
+            physical_algebra_check = check_majorana_algebra(physical_reference_gammas)
 
             ideal_basis = get_initial_transport_basis(
                 t_total=T_total,
@@ -519,6 +607,11 @@ def main():
                 gamma_2_phys,
                 gamma_3_phys,
             )
+            physical_vs_ideal_target_error_ideal_basis = compare_transport_unitaries(
+                u_kato_ideal,
+                u_kato_phys,
+                ideal_basis,
+            )
 
             print(f"Projection level: {levels}")
             print(f"  best B candidate: {best_b_candidate}")
@@ -541,6 +634,10 @@ def main():
                 "  physical phase-aligned target-gate error in physical basis: "
                 f"{physical_target_error_physical_basis:.4e}"
             )
+            print(
+                "  physical-vs-ideal phase-aligned braid mismatch in ideal basis: "
+                f"{physical_vs_ideal_target_error_ideal_basis:.4e}"
+            )
 
             result_row = build_result_row(
                 u_value=u_value,
@@ -554,6 +651,9 @@ def main():
                 ideal_target_error=ideal_target_error,
                 physical_target_error_ideal_basis=physical_target_error_ideal_basis,
                 physical_target_error_physical_basis=physical_target_error_physical_basis,
+                physical_vs_ideal_target_error_ideal_basis=physical_vs_ideal_target_error_ideal_basis,
+                ideal_algebra_check=ideal_algebra_check,
+                physical_algebra_check=physical_algebra_check,
             )
             all_results.append(result_row)
             save_results_table(all_results, results_output_path)

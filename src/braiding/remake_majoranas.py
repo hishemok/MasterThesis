@@ -160,6 +160,31 @@ def construct_majorana_components(even_vecs, odd_vecs, even_energies, odd_energi
     return components
 
 
+def construct_majorana_fit_components(even_vecs, odd_vecs, levels_to_include):
+    """
+    Build a full odd-even operator basis from the included levels.
+
+    Restricting the fit to matched same-level pairs leaves out cross-level terms
+    |o_j><e_k| +/- h.c. with j != k. Those missing components turn out to matter
+    for the projected local operators at large projection dimension.
+    """
+
+    max_even = min(levels_to_include, even_vecs.shape[1])
+    max_odd = min(levels_to_include, odd_vecs.shape[1])
+    components = []
+
+    for even_index in range(max_even):
+        even_vec = even_vecs[:, even_index]
+        for odd_index in range(max_odd):
+            odd_vec = odd_vecs[:, odd_index]
+
+            plus_component = np.outer(odd_vec, even_vec.conj()) + np.outer(even_vec, odd_vec.conj())
+            minus_component = 1j * (np.outer(odd_vec, even_vec.conj()) - np.outer(even_vec, odd_vec.conj()))
+            components.append((plus_component, minus_component))
+
+    return components
+
+
 def construct_majoranas_from_pattern(components, pattern):
     dim = components[0][0].shape[0]
     gamma_first = np.zeros((dim, dim), dtype=complex)
@@ -308,11 +333,9 @@ def get_full_gammas_with_check(
             f"dimension={dimension} does not match the basis width {basis.shape[1]}."
         )
 
-    components = construct_majorana_components(
+    components = construct_majorana_fit_components(
         even_vecs,
         odd_vecs,
-        even_energies,
-        odd_energies,
         levels_to_include=levels_to_include,
     )
     if not components:
@@ -445,19 +468,16 @@ def get_full_gammas(
         subsystem="C",
         verbose=verbose,
     )
-
     gamma_A1_full = embedded_subsystem_operator(a_fits["x"].gamma_local, "A")
     gamma_A2_full = embedded_subsystem_operator(a_fits["y"].gamma_local, "A")
-    best_b = b_fits["selected"]
-    best_c = c_fits["selected"]
     gamma_B1_full, gamma_B2_full = embed_subsystem_majoranas(
-        b_fits["companion"].gamma_local,
-        best_b.gamma_local,
+        b_fits["x"].gamma_local,
+        b_fits["y"].gamma_local,
         "B",
     )
     gamma_C1_full, gamma_C2_full = embed_subsystem_majoranas(
-        c_fits["companion"].gamma_local,
-        best_c.gamma_local,
+        c_fits["x"].gamma_local,
+        c_fits["y"].gamma_local,
         "C",
     )
 

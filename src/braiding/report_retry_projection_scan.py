@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import math
 import os
 from pathlib import Path
 
@@ -41,12 +42,6 @@ U_STYLES = {
     0.1: {"color": "#ff7f0e", "marker": "s"},
     0.2: {"color": "#2ca02c", "marker": "^"},
     2.0: {"color": "#d62728", "marker": "D"},
-}
-IDEAL_REFERENCE_STYLE = {
-    "color": "#222222",
-    "marker": "o",
-    "linestyle": "--",
-    "markerfacecolor": "white",
 }
 BASIS_STYLES = {
     "physical_basis": {"linestyle": "-", "label": "Scored in physical basis"},
@@ -139,30 +134,12 @@ def ordered_u_values(grouped_rows):
     return known + extras
 
 
-def ideal_reference_rows(rows):
-    fields_to_average = [
-        "ideal_target_gate_error",
-        "ideal_single_exchange_max_error",
-    ]
-    for channel_key, _ in CHANNEL_PANELS:
-        fields_to_average.append(f"ideal_single_exchange_{channel_key}_error")
-
-    grouped = {}
-    for row in rows:
-        grouped.setdefault(row["projection_level"], []).append(row)
-
-    averaged_rows = []
-    for projection_level in sorted(grouped):
-        level_rows = grouped[projection_level]
-        averaged_row = {"projection_level": projection_level}
-        for field in fields_to_average:
-            averaged_row[field] = sum(row[field] for row in level_rows) / len(level_rows)
-        averaged_rows.append(averaged_row)
-    return averaged_rows
-
-
 def projection_levels_from_rows(rows):
     return [row["projection_level"] for row in rows]
+
+
+def rows_have_metric(rows, key):
+    return all(key in row for row in rows)
 
 
 def apply_stem_suffix(path: Path, stem_suffix: str):
@@ -186,14 +163,35 @@ def format_u_value(value):
     return f"{value:g}"
 
 
+def metric_value(row, key):
+    if key in row:
+        return row[key]
+
+    if not key.endswith("_normalized"):
+        raise KeyError(f"Metric {key!r} not found in row and no fallback is available.")
+
+    raw_key = key[: -len("_normalized")]
+    if raw_key not in row:
+        raise KeyError(f"Normalized metric {key!r} could not be derived because {raw_key!r} is missing.")
+
+    if "target_gate_error" in raw_key:
+        return row[raw_key] / math.sqrt(row["transport_dim"])
+
+    if "single_exchange" in raw_key:
+        return row[raw_key] / math.sqrt(row["projection_level"])
+
+    raise KeyError(f"Do not know how to derive normalized metric {key!r}.")
+
+
 def write_summary_table_tex(rows, output_path: Path):
     sorted_rows = sorted(rows, key=lambda row: (row["interaction_u"], row["projection_level"]))
+    direct_match_key = "physical_vs_ideal_target_gate_error_in_ideal_basis"
     lines = [
-        r"\begin{tabular}{cccccccc}",
+        r"\begin{tabular}{ccccccccc}",
         r"\hline",
         (
             r"$U$ & $\dim P$ & Ideal gate & Phys.\ gate & Phys.\ gate vs.\ ideal & "
-            r"Ideal exch. & Phys.\ exch. & Phys.\ exch.\ vs.\ ideal \\"
+            r"Phys.\ vs.\ ideal braid & Ideal exch. & Phys.\ exch. & Phys.\ exch.\ vs.\ ideal \\"
         ),
         r"\hline",
     ]
@@ -211,6 +209,7 @@ def write_summary_table_tex(rows, output_path: Path):
                     format_metric(row["ideal_target_gate_error"]),
                     format_metric(row["physical_target_gate_error_in_physical_basis"]),
                     format_metric(row["physical_target_gate_error_in_ideal_basis"]),
+                    format_metric(row[direct_match_key]) if direct_match_key in row else "--",
                     format_metric(row["ideal_single_exchange_max_error"]),
                     format_metric(row["physical_single_exchange_in_physical_basis_max_error"]),
                     format_metric(row["physical_single_exchange_in_ideal_basis_max_error"]),
@@ -242,21 +241,21 @@ def plot_series(axis, x_values, y_values, style, label, zorder=2):
     )
 
 
-def plot_interaction_comparison(grouped_rows, reference_rows, output_path: Path):
+def plot_interaction_comparison(grouped_rows, output_path: Path):
     u_values = ordered_u_values(grouped_rows)
-    projection_levels = projection_levels_from_rows(reference_rows)
+    projection_levels = projection_levels_from_rows(grouped_rows[u_values[0]])
 
     fig, axes = plt.subplots(1, 2, figsize=(10.2, 4.2), sharex=True)
     metric_specs = (
         (
-            "ideal_target_gate_error",
-            "physical_target_gate_error_in_physical_basis",
-            "Phase-aligned target-gate error",
+            "ideal_target_gate_error_normalized",
+            "physical_target_gate_error_in_physical_basis_normalized",
+            "Normalized target-gate error",
         ),
         (
-            "ideal_single_exchange_max_error",
-            "physical_single_exchange_in_physical_basis_max_error",
-            "Max single-exchange error",
+            "ideal_single_exchange_max_error_normalized",
+            "physical_single_exchange_in_physical_basis_max_error_normalized",
+            "Normalized max single-exchange error",
         ),
     )
 
@@ -267,28 +266,75 @@ def plot_interaction_comparison(grouped_rows, reference_rows, output_path: Path)
             plot_series(
                 axis,
                 projection_levels_from_rows(rows),
-                [row[physical_key] for row in rows],
-                style,
-                fr"$U={u_value:g}$ physical",
+                [metric_value(row, physical_key) for row in rows],
+                {
+                    "color": style["color"],
+                    "marker": style["marker"],
+                    "linestyle": "-",
+                    "markerfacecolor": style["color"],
+                },
+                f"_nolegend_{u_value}_physical",
             )
-        plot_series(
-            axis,
-            projection_levels,
-            [row[reference_key] for row in reference_rows],
-            IDEAL_REFERENCE_STYLE,
-            "Ideal reference",
-            zorder=4,
-        )
+            plot_series(
+                axis,
+                projection_levels_from_rows(rows),
+                [metric_value(row, reference_key) for row in rows],
+                {
+                    "color": style["color"],
+                    "marker": style["marker"],
+                    "linestyle": "--",
+                    "markerfacecolor": "white",
+                },
+                f"_nolegend_{u_value}_ideal",
+                zorder=4,
+            )
         axis.set_title(title)
         axis.set_xlabel(r"Projection dimension $\dim P$")
         axis.set_xticks(projection_levels)
         axis.set_yscale("log")
         axis.grid(True, which="both", alpha=0.25)
 
-    axes[0].set_ylabel("Error")
-    handles, labels = axes[0].get_legend_handles_labels()
-    fig.legend(handles, labels, loc="upper center", ncol=4, frameon=False, bbox_to_anchor=(0.5, 1.07))
-    fig.tight_layout(rect=(0.0, 0.0, 1.0, 0.90))
+    axes[0].set_ylabel("Normalized Error")
+    color_handles = [
+        Line2D(
+            [0],
+            [0],
+            color=U_STYLES.get(u_value, {"color": "black"})["color"],
+            marker=U_STYLES.get(u_value, {"marker": "o"})["marker"],
+            linestyle="-",
+            linewidth=2.0,
+            markersize=6.0,
+            label=fr"$U={u_value:g}$",
+        )
+        for u_value in u_values
+    ]
+    curve_handles = [
+        Line2D(
+            [0],
+            [0],
+            color="#444444",
+            linestyle="-",
+            linewidth=2.0,
+            label="Physical braid",
+        ),
+        Line2D(
+            [0],
+            [0],
+            color="#444444",
+            linestyle="--",
+            linewidth=2.0,
+            label="Ideal braid",
+        ),
+    ]
+    fig.legend(
+        color_handles + curve_handles,
+        [handle.get_label() for handle in color_handles + curve_handles],
+        loc="upper center",
+        ncol=max(3, len(color_handles) + len(curve_handles)),
+        frameon=False,
+        bbox_to_anchor=(0.5, 1.10),
+    )
+    fig.tight_layout(rect=(0.0, 0.0, 1.0, 0.86))
     save_figure(fig, output_path)
 
 
@@ -299,14 +345,14 @@ def plot_basis_diagnostic(grouped_rows, output_path: Path):
     fig, axes = plt.subplots(1, 2, figsize=(10.2, 4.2), sharex=True)
     metric_specs = (
         (
-            "physical_target_gate_error_in_physical_basis",
-            "physical_target_gate_error_in_ideal_basis",
-            "Physical target-gate error",
+            "physical_target_gate_error_in_physical_basis_normalized",
+            "physical_target_gate_error_in_ideal_basis_normalized",
+            "Normalized physical target-gate error",
         ),
         (
-            "physical_single_exchange_in_physical_basis_max_error",
-            "physical_single_exchange_in_ideal_basis_max_error",
-            "Physical max single-exchange error",
+            "physical_single_exchange_in_physical_basis_max_error_normalized",
+            "physical_single_exchange_in_ideal_basis_max_error_normalized",
+            "Normalized physical max single-exchange error",
         ),
     )
 
@@ -317,7 +363,7 @@ def plot_basis_diagnostic(grouped_rows, output_path: Path):
             plot_series(
                 axis,
                 projection_levels_from_rows(rows),
-                [row[physical_key] for row in rows],
+                [metric_value(row, physical_key) for row in rows],
                 {
                     "color": style["color"],
                     "marker": style["marker"],
@@ -329,7 +375,7 @@ def plot_basis_diagnostic(grouped_rows, output_path: Path):
             plot_series(
                 axis,
                 projection_levels_from_rows(rows),
-                [row[ideal_key] for row in rows],
+                [metric_value(row, ideal_key) for row in rows],
                 {
                     "color": style["color"],
                     "marker": style["marker"],
@@ -344,7 +390,7 @@ def plot_basis_diagnostic(grouped_rows, output_path: Path):
         axis.set_yscale("log")
         axis.grid(True, which="both", alpha=0.25)
 
-    axes[0].set_ylabel("Error")
+    axes[0].set_ylabel("Normalized Error")
 
     color_handles = [
         Line2D(
@@ -382,45 +428,165 @@ def plot_basis_diagnostic(grouped_rows, output_path: Path):
     save_figure(fig, output_path)
 
 
-def plot_channel_breakdown(grouped_rows, reference_rows, output_path: Path):
+def plot_direct_match_diagnostic(grouped_rows, output_path: Path):
     u_values = ordered_u_values(grouped_rows)
-    projection_levels = projection_levels_from_rows(reference_rows)
+    projection_levels = projection_levels_from_rows(grouped_rows[u_values[0]])
+
+    fig, axis = plt.subplots(1, 1, figsize=(5.6, 4.2), sharex=True)
+    metric_key = "physical_vs_ideal_target_gate_error_in_ideal_basis_normalized"
+
+    if not rows_have_metric(
+        [row for rows in grouped_rows.values() for row in rows],
+        metric_key,
+    ):
+        axis.axis("off")
+        axis.text(
+            0.5,
+            0.5,
+            "Direct physical-vs-ideal braid metric\nis not present in this results file.",
+            ha="center",
+            va="center",
+            fontsize=12,
+        )
+        fig.tight_layout()
+        save_figure(fig, output_path)
+        return
+
+    for u_value in u_values:
+        rows = grouped_rows[u_value]
+        style = U_STYLES.get(u_value, {"color": "black", "marker": "o"})
+        plot_series(
+            axis,
+            projection_levels_from_rows(rows),
+            [metric_value(row, metric_key) for row in rows],
+            {
+                "color": style["color"],
+                "marker": style["marker"],
+                "linestyle": "-",
+                "markerfacecolor": style["color"],
+            },
+            f"_nolegend_{u_value}_direct_match",
+        )
+
+    axis.set_title("Normalized physical-vs-ideal braid mismatch")
+    axis.set_xlabel(r"Projection dimension $\dim P$")
+    axis.set_ylabel("Normalized Error")
+    axis.set_xticks(projection_levels)
+    axis.set_yscale("log")
+    axis.grid(True, which="both", alpha=0.25)
+
+    color_handles = [
+        Line2D(
+            [0],
+            [0],
+            color=U_STYLES.get(u_value, {"color": "black"})["color"],
+            marker=U_STYLES.get(u_value, {"marker": "o"})["marker"],
+            linestyle="-",
+            linewidth=2.0,
+            markersize=6.0,
+            label=fr"$U={u_value:g}$",
+        )
+        for u_value in u_values
+    ]
+    fig.legend(
+        color_handles,
+        [handle.get_label() for handle in color_handles],
+        loc="upper center",
+        ncol=max(3, len(color_handles)),
+        frameon=False,
+        bbox_to_anchor=(0.5, 1.06),
+    )
+    fig.tight_layout(rect=(0.0, 0.0, 1.0, 0.90))
+    save_figure(fig, output_path)
+
+
+def plot_channel_breakdown(grouped_rows, output_path: Path):
+    u_values = ordered_u_values(grouped_rows)
+    projection_levels = projection_levels_from_rows(grouped_rows[u_values[0]])
 
     fig, axes = plt.subplots(2, 2, figsize=(10.2, 7.6), sharex=True)
     axes = axes.ravel()
 
     for axis, (channel_key, channel_label) in zip(axes, CHANNEL_PANELS):
-        physical_key = f"physical_single_exchange_in_physical_basis_{channel_key}_error"
+        ideal_key = f"ideal_single_exchange_{channel_key}_error_normalized"
+        physical_key = f"physical_single_exchange_in_physical_basis_{channel_key}_error_normalized"
         for u_value in u_values:
             rows = grouped_rows[u_value]
             style = U_STYLES.get(u_value, {"color": "black", "marker": "o"})
             plot_series(
                 axis,
                 projection_levels_from_rows(rows),
-                [row[physical_key] for row in rows],
-                style,
-                fr"$U={u_value:g}$ physical",
+                [metric_value(row, physical_key) for row in rows],
+                {
+                    "color": style["color"],
+                    "marker": style["marker"],
+                    "linestyle": "-",
+                    "markerfacecolor": style["color"],
+                },
+                f"_nolegend_{u_value}_physical",
             )
-        plot_series(
-            axis,
-            projection_levels,
-            [row[f"ideal_single_exchange_{channel_key}_error"] for row in reference_rows],
-            IDEAL_REFERENCE_STYLE,
-            "Ideal reference",
-            zorder=4,
-        )
+            plot_series(
+                axis,
+                projection_levels_from_rows(rows),
+                [metric_value(row, ideal_key) for row in rows],
+                {
+                    "color": style["color"],
+                    "marker": style["marker"],
+                    "linestyle": "--",
+                    "markerfacecolor": "white",
+                },
+                f"_nolegend_{u_value}_ideal",
+                zorder=4,
+            )
         axis.set_title(channel_label)
         axis.set_xticks(projection_levels)
         axis.set_yscale("log")
         axis.grid(True, which="both", alpha=0.25)
 
-    axes[0].set_ylabel("Single-exchange error")
-    axes[2].set_ylabel("Single-exchange error")
+    axes[0].set_ylabel("Normalized single-exchange error")
+    axes[2].set_ylabel("Normalized single-exchange error")
     axes[2].set_xlabel(r"Projection dimension $\dim P$")
     axes[3].set_xlabel(r"Projection dimension $\dim P$")
 
-    handles, labels = axes[0].get_legend_handles_labels()
-    fig.legend(handles, labels, loc="upper center", ncol=4, frameon=False, bbox_to_anchor=(0.5, 1.03))
+    color_handles = [
+        Line2D(
+            [0],
+            [0],
+            color=U_STYLES.get(u_value, {"color": "black"})["color"],
+            marker=U_STYLES.get(u_value, {"marker": "o"})["marker"],
+            linestyle="-",
+            linewidth=2.0,
+            markersize=6.0,
+            label=fr"$U={u_value:g}$",
+        )
+        for u_value in u_values
+    ]
+    curve_handles = [
+        Line2D(
+            [0],
+            [0],
+            color="#444444",
+            linestyle="-",
+            linewidth=2.0,
+            label="Physical braid",
+        ),
+        Line2D(
+            [0],
+            [0],
+            color="#444444",
+            linestyle="--",
+            linewidth=2.0,
+            label="Ideal braid",
+        ),
+    ]
+    fig.legend(
+        color_handles + curve_handles,
+        [handle.get_label() for handle in color_handles + curve_handles],
+        loc="upper center",
+        ncol=max(3, len(color_handles) + len(curve_handles)),
+        frameon=False,
+        bbox_to_anchor=(0.5, 1.06),
+    )
     fig.tight_layout(rect=(0.0, 0.0, 1.0, 0.94))
     save_figure(fig, output_path)
 
@@ -431,7 +597,6 @@ def main():
 
     rows = parse_results(args.input)
     grouped_rows = group_rows_by_u(rows)
-    reference_rows = ideal_reference_rows(rows)
 
     args.fig_dir.mkdir(parents=True, exist_ok=True)
     args.generated_dir.mkdir(parents=True, exist_ok=True)
@@ -440,6 +605,7 @@ def main():
     output_paths = [
         apply_stem_suffix(args.fig_dir / "retry_projection_interaction_comparison.pdf", stem_suffix),
         apply_stem_suffix(args.fig_dir / "retry_projection_basis_diagnostic.pdf", stem_suffix),
+        apply_stem_suffix(args.fig_dir / "retry_projection_direct_match_diagnostic.pdf", stem_suffix),
         apply_stem_suffix(args.fig_dir / "retry_projection_channel_breakdown.pdf", stem_suffix),
     ]
     summary_table_path = apply_stem_suffix(
@@ -447,9 +613,10 @@ def main():
         stem_suffix,
     )
 
-    plot_interaction_comparison(grouped_rows, reference_rows, output_paths[0])
+    plot_interaction_comparison(grouped_rows, output_paths[0])
     plot_basis_diagnostic(grouped_rows, output_paths[1])
-    plot_channel_breakdown(grouped_rows, reference_rows, output_paths[2])
+    plot_direct_match_diagnostic(grouped_rows, output_paths[2])
+    plot_channel_breakdown(grouped_rows, output_paths[3])
     write_summary_table_tex(rows, summary_table_path)
 
     print(f"Loaded {len(rows)} scan rows from {args.input}")
