@@ -178,7 +178,7 @@ def plot_parity_summary(
     u_values: list[float],
     filename: str | Path,
     output: str | Path,
-    max_levels: int | None = 4,
+    max_levels: int | None = None,
     degeneracy_tol: float = 1e-2,
 ) -> list[SpectrumRecord]:
     style_matplotlib()
@@ -226,8 +226,9 @@ def plot_parity_summary(
             record = build_spectrum_record(entry)
             selected_records.append(record)
 
-            even_levels = record.even[:max_levels] if max_levels is not None else record.even
-            odd_levels = record.odd[:max_levels] if max_levels is not None else record.odd
+            level_limit = max_levels if max_levels is not None else 2 ** (n - 1)
+            even_levels = record.even[:level_limit]
+            odd_levels = record.odd[:level_limit]
 
             ax.hlines(
                 even_levels,
@@ -280,6 +281,7 @@ def plot_parity_summary(
 
     output_path = Path(output)
     output_path.parent.mkdir(parents=True, exist_ok=True)
+    # plt.show()
     fig.savefig(output_path, bbox_inches="tight")
     plt.close(fig)
 
@@ -343,8 +345,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--max-levels",
         type=int,
-        default=4,
-        help="Maximum number of even and odd levels shown per configuration.",
+        default=None,
+        help=(
+            "Maximum number of even and odd levels shown per configuration. "
+            "Defaults to 2^(n-1), so n=4 shows 8 levels per parity sector."
+        ),
     )
     return parser.parse_args()
 

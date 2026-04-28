@@ -2,12 +2,13 @@ import argparse
 import csv
 from pathlib import Path
 
-from remake_majoranas import candidate_metadata, get_full_gammas
+from get_mzm_JW import get_full_gammas as get_basic_full_gammas
+from remake_majoranas2 import make_majoranas_for_B_and_C_with_projection_dim
 import numpy as np
 from scipy.linalg import expm
 from tqdm import tqdm
 from hamiltonian_builder import BraidingHamiltonianBuilder, default_config_path
-from braiding_model import delta_pulse, plot_results
+from braiding_model import delta_pulse
 from extended_projection_braiding import normalize_projected_majorana
 
 
@@ -20,12 +21,25 @@ OPERATOR_ACTION_COLUMNS = [
 
 
 
-def build_projected_hamiltonian(t, T_total, Δ_max, Δ_min, s, width, T_A, T_AB, T_AC):
+def build_projected_hamiltonian(
+    t,
+    T_total,
+    Δ_max,
+    Δ_min,
+    s,
+    width,
+    T_A,
+    T_AB,
+    T_AC,
+    static_term=None,
+):
     Δ1 = delta_pulse(t, 0, width, s, Δ_max, Δ_min) + delta_pulse(t, T_total, width, s, Δ_max, Δ_min) - Δ_min
     Δ2 = delta_pulse(t, T_total / 3, width, s, Δ_max, Δ_min)
     Δ3 = delta_pulse(t, 2 * T_total / 3, width, s, Δ_max, Δ_min)
 
     H = Δ1 * T_A + Δ2 * T_AB + Δ3 * T_AC
+    if static_term is not None:
+        H = H + static_term
     return H, (Δ1, Δ2, Δ3)
 
 def get_projection_basis(eigenvectors, levels_to_include):
@@ -58,6 +72,38 @@ def project_ideal_majoranas(gamma, P):
     return projected_gamma
 
 
+def normalized_projected_inner_product(left, right):
+    dim = left.shape[0]
+    return float(np.real(np.trace(left.conj().T @ right)) / dim)
+
+
+def fit_result_metadata(fit_result, *, target_axis="minus"):
+    subsystem = fit_result["subsystem"]
+    gamma_projected = normalize_projected_majorana(
+        fit_result[f"gamma_{target_axis}_projected"],
+        f"{subsystem}_{target_axis}_gamma_projected",
+    )
+    check_plus = normalize_projected_majorana(
+        fit_result["check_plus_projected"],
+        f"{subsystem}_plus_check_projected",
+    )
+    check_minus = normalize_projected_majorana(
+        fit_result["check_minus_projected"],
+        f"{subsystem}_minus_check_projected",
+    )
+    overlap_x = normalized_projected_inner_product(gamma_projected, check_plus)
+    overlap_y = normalized_projected_inner_product(gamma_projected, check_minus)
+    score = overlap_x if target_axis == "plus" else overlap_y
+    return {
+        "target_axis": target_axis,
+        "overlap_x": overlap_x,
+        "overlap_y": overlap_y,
+        "score": score,
+        "coefficients_plus": fit_result["coefficients_plus"].copy(),
+        "coefficients_minus": fit_result["coefficients_minus"].copy(),
+    }
+
+
 
 
 def evolve_system(
@@ -69,6 +115,7 @@ def evolve_system(
     term_a,
     term_b,
     term_c,
+    static_term=None,
     n_points=1000,
     transport_dim=None,
     verbose=False,
@@ -86,7 +133,18 @@ def evolve_system(
     couplings = np.zeros((n_points, 3))
     u_kato = np.eye(dim, dtype=complex)
 
-    hamiltonian, couplings[0] = build_projected_hamiltonian(times[0], t_total, delta_max, delta_min, steepness, width, term_a, term_b, term_c)
+    hamiltonian, couplings[0] = build_projected_hamiltonian(
+        times[0],
+        t_total,
+        delta_max,
+        delta_min,
+        steepness,
+        width,
+        term_a,
+        term_b,
+        term_c,
+        static_term=static_term,
+    )
     evals, evecs = np.linalg.eigh(hamiltonian)
     energies[0] = evals
     basis = evecs[:, :transport_dim]
@@ -104,6 +162,7 @@ def evolve_system(
             term_a,
             term_b,
             term_c,
+            static_term=static_term,
         )
         evals, evecs = np.linalg.eigh(hamiltonian)
         energies[idx] = evals
@@ -141,10 +200,20 @@ def get_initial_transport_basis(
     term_a,
     term_b,
     term_c,
+    static_term,
     transport_dim,
 ):
     hamiltonian_0, _ = build_projected_hamiltonian(
-        0.0, t_total, delta_max, delta_min, steepness, width, term_a, term_b, term_c
+        0.0,
+        t_total,
+        delta_max,
+        delta_min,
+        steepness,
+        width,
+        term_a,
+        term_b,
+        term_c,
+        static_term=static_term,
     )
     _, evecs_0 = np.linalg.eigh(hamiltonian_0)
     return evecs_0[:, :transport_dim]
@@ -379,7 +448,7 @@ def build_argument_parser():
         "--projection-levels",
         type=int,
         nargs="+",
-        default=[8, 32, 56, 80, 512],
+        default=[8, 32, 56, 80],
         help="Projection dimensions to include in the cumulative projector.",
     )
     parser.add_argument(
@@ -425,7 +494,6 @@ def main():
     levels_to_include = args.levels_to_include
     results_output_path = args.output
     all_results = []
-    candidate_rankings = {}
 
     print("Retry projection scan configuration:")
     print(f"  U values: {interaction_u_values}")
@@ -447,10 +515,16 @@ def main():
 
         H_full = builder.full_system_hamiltonian()
         eigvals, eigvecs = np.linalg.eigh(H_full)
+        h_static_bc_full = builder.subsystem_hamiltonian("B") + builder.subsystem_hamiltonian("C")
 
         # These full-space junction operators do not depend on the cumulative
         # projection block, so build them once and only re-project inside the loop.
         operators = builder.get_operators()
+        (gamma_A1_full, gamma_A2_full), _, _ = get_basic_full_gammas(
+            levels_to_include=levels_to_include,
+            verbose=False,
+            specified_vals=specified_vals,
+        )
 
         B_inner = 3
         C_inner = 6
@@ -462,42 +536,29 @@ def main():
         for levels in projection_level_list:
             print("Working with projection level:", levels)
             P = get_projection_basis(eigvecs, levels)
-            (
-                (gamma_A1_full, gamma_A2_full),
-                (gamma_B1_full, gamma_B2_full),
-                (gamma_C1_full, gamma_C2_full),
-            ), candidate_data = get_full_gammas(
-                levels_to_include=levels_to_include,
-                verbose=verbose,
+            h_static_bc_projected = P.conj().T @ h_static_bc_full @ P
+            b_fit_result, c_fit_result = make_majoranas_for_B_and_C_with_projection_dim(
+                projection_dim=levels,
                 specified_vals=specified_vals,
                 projection_basis=P,
-                return_candidates=True,
+                component_levels=levels_to_include,
+                verbose=verbose,
             )
-            candidate_rankings[(u_value, levels)] = {
-                "A": {
-                    "x": candidate_metadata(candidate_data["A"]["x"]),
-                    "y": candidate_metadata(candidate_data["A"]["y"]),
-                },
-                "B": {
-                    "x": candidate_metadata(candidate_data["B"]["x"]),
-                    "y": candidate_metadata(candidate_data["B"]["y"]),
-                    "selected": candidate_metadata(candidate_data["B"]["selected"]),
-                },
-                "C": {
-                    "x": candidate_metadata(candidate_data["C"]["x"]),
-                    "y": candidate_metadata(candidate_data["C"]["y"]),
-                    "selected": candidate_metadata(candidate_data["C"]["selected"]),
-                },
-            }
-            # Keep the original Majorana labeling convention:
-            # gamma_B2 / gamma_C2 are the y-like operators.
-            best_b_candidate = candidate_rankings[(u_value, levels)]["B"]["y"]
-            best_c_candidate = candidate_rankings[(u_value, levels)]["C"]["y"]
+            # Keep the original retry labeling convention:
+            # gamma2 / gamma3 are the y-like fitted operators.
+            best_b_candidate = fit_result_metadata(b_fit_result, target_axis="minus")
+            best_c_candidate = fit_result_metadata(c_fit_result, target_axis="minus")
 
             gamma0 = normalize_projected_majorana(project_ideal_majoranas(gamma_A1_full, P), "gamma0")
             gamma1 = normalize_projected_majorana(project_ideal_majoranas(gamma_A2_full, P), "gamma1")
-            gamma2_ideal = normalize_projected_majorana(project_ideal_majoranas(gamma_B2_full, P), "gamma2_ideal")
-            gamma3_ideal = normalize_projected_majorana(project_ideal_majoranas(gamma_C2_full, P), "gamma3_ideal")
+            gamma2_ideal = normalize_projected_majorana(
+                b_fit_result["gamma_minus_projected"],
+                "gamma2_ideal",
+            )
+            gamma3_ideal = normalize_projected_majorana(
+                c_fit_result["gamma_minus_projected"],
+                "gamma3_ideal",
+            )
 
             gamma_b_phys_components = projected_majoranas(creB2, annB2, P)
             gamma_c_phys_components = projected_majoranas(creC2, annC2, P)
@@ -530,6 +591,7 @@ def main():
                 term_a=TA,
                 term_b=TB_ideal,
                 term_c=TC_ideal,
+                static_term=h_static_bc_projected,
                 n_points=n_points,
                 transport_dim=transport_dim,
                 verbose=verbose,
@@ -548,6 +610,7 @@ def main():
                 term_a=TA,
                 term_b=TB_phys,
                 term_c=TC_phys,
+                static_term=h_static_bc_projected,
                 n_points=n_points,
                 transport_dim=transport_dim,
                 verbose=verbose,
@@ -567,6 +630,7 @@ def main():
                 term_a=TA,
                 term_b=TB_ideal,
                 term_c=TC_ideal,
+                static_term=h_static_bc_projected,
                 transport_dim=transport_dim,
             )
             physical_basis = get_initial_transport_basis(
@@ -578,6 +642,7 @@ def main():
                 term_a=TA,
                 term_b=TB_phys,
                 term_c=TC_phys,
+                static_term=h_static_bc_projected,
                 transport_dim=transport_dim,
             )
 
@@ -614,8 +679,18 @@ def main():
             )
 
             print(f"Projection level: {levels}")
-            print(f"  best B candidate: {best_b_candidate}")
-            print(f"  best C candidate: {best_c_candidate}")
+            print(
+                "  best B fit:"
+                f" axis={best_b_candidate['target_axis']},"
+                f" score={best_b_candidate['score']:.4f},"
+                f" matrix_err={b_fit_result['matrix_error_minus']:.4e}"
+            )
+            print(
+                "  best C fit:"
+                f" axis={best_c_candidate['target_axis']},"
+                f" score={best_c_candidate['score']:.4f},"
+                f" matrix_err={c_fit_result['matrix_error_minus']:.4e}"
+            )
             print(f"  ideal operator action:    {format_operator_action(ideal_operator_action)}")
             print(
                 "  physical operator action in ideal basis:    "
