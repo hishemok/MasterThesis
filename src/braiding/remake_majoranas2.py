@@ -144,8 +144,7 @@ def fit_projected_operator(projected_basis, target_projected):
 
     return coefficients, fitted_projected
 
-def construct_majoranas_w_check( even_vec, odd_vec, P, cre, ann, system_name="A", JW_B=None, JW_C=None, component_levels=None, verbose=True,
-):
+def construct_majoranas_w_check( even_vec, odd_vec, P, cre, ann, system_name="A", JW_B=None, JW_C=None, component_levels=None, verbose=True):
     if system_name == "A":
         cre = cre[2]
         ann = ann[2]

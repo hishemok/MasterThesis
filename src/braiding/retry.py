@@ -67,6 +67,20 @@ def projected_majoranas(cdag, c, P):
 
     return A1, A2
 
+
+def select_majorana_direction(components, mode, theta=0.25 * np.pi):
+    gamma_plus, gamma_minus = components
+    if mode == "minus_only":
+        return gamma_minus
+    if mode == "plus_only":
+        return gamma_plus
+    if mode == "plus_minus":
+        return gamma_plus + gamma_minus
+    if mode == "rotated":
+        return np.cos(theta) * gamma_plus + np.sin(theta) * gamma_minus
+    raise ValueError(f"Unknown coupling mode {mode!r}.")
+
+
 def project_ideal_majoranas(gamma, P):
     projected_gamma = P.conj().T @ gamma @ P
     return projected_gamma
@@ -327,6 +341,10 @@ def build_result_row(
     u_value,
     projection_level,
     transport_dim,
+    ideal_coupling_mode,
+    ideal_coupling_theta,
+    physical_coupling_mode,
+    physical_coupling_theta,
     best_b_candidate,
     best_c_candidate,
     ideal_operator_action,
@@ -343,6 +361,10 @@ def build_result_row(
         "interaction_u": float(u_value),
         "projection_level": int(projection_level),
         "transport_dim": int(transport_dim),
+        "ideal_coupling_mode": ideal_coupling_mode,
+        "ideal_coupling_theta": float(ideal_coupling_theta),
+        "physical_coupling_mode": physical_coupling_mode,
+        "physical_coupling_theta": float(physical_coupling_theta),
         "ideal_target_gate_error": float(ideal_target_error),
         "ideal_target_gate_error_normalized": float(ideal_target_error / np.sqrt(transport_dim)),
         "physical_target_gate_error_in_ideal_basis": float(physical_target_error_ideal_basis),
@@ -379,6 +401,10 @@ def result_fieldnames():
         "interaction_u",
         "projection_level",
         "transport_dim",
+        "ideal_coupling_mode",
+        "ideal_coupling_theta",
+        "physical_coupling_mode",
+        "physical_coupling_theta",
         "ideal_target_gate_error",
         "ideal_target_gate_error_normalized",
         "physical_target_gate_error_in_ideal_basis",
@@ -464,6 +490,39 @@ def build_argument_parser():
         help="Number of time steps in each Kato evolution.",
     )
     parser.add_argument(
+        "--physical-coupling-mode",
+        choices=["minus_only", "plus_only", "plus_minus", "rotated"],
+        default="minus_only",
+        help=(
+            "Microscopic physical junction direction: projected i(c†-c), "
+            "projected (c†+c), their sum, or cos(theta)(c†+c)+sin(theta)i(c†-c)."
+        ),
+    )
+    parser.add_argument(
+        "--ideal-coupling-mode",
+        choices=["minus_only", "plus_only", "plus_minus", "rotated", "match_physical"],
+        default="minus_only",
+        help=(
+            "Ideal B/C Majorana direction. Use match_physical for sanity checks "
+            "where the ideal and microscopic physical junctions use the same direction."
+        ),
+    )
+    parser.add_argument(
+        "--physical-theta",
+        type=float,
+        default=0.25 * np.pi,
+        help="Rotation angle in radians used when --physical-coupling-mode=rotated.",
+    )
+    parser.add_argument(
+        "--ideal-theta",
+        type=float,
+        default=0.25 * np.pi,
+        help=(
+            "Rotation angle in radians used when --ideal-coupling-mode=rotated. "
+            "Ignored for match_physical, which uses --physical-theta."
+        ),
+    )
+    parser.add_argument(
         "--output",
         type=Path,
         default=Path(__file__).with_name("retry_projection_scan_results.txt"),
@@ -492,6 +551,14 @@ def main():
     interaction_u_values = args.u_values
     projection_level_list = args.projection_levels
     levels_to_include = args.levels_to_include
+    physical_coupling_mode = args.physical_coupling_mode
+    physical_coupling_theta = args.physical_theta
+    if args.ideal_coupling_mode == "match_physical":
+        ideal_coupling_mode = physical_coupling_mode
+        ideal_coupling_theta = physical_coupling_theta
+    else:
+        ideal_coupling_mode = args.ideal_coupling_mode
+        ideal_coupling_theta = args.ideal_theta
     results_output_path = args.output
     all_results = []
 
@@ -499,6 +566,12 @@ def main():
     print(f"  U values: {interaction_u_values}")
     print(f"  Projection dimensions: {projection_level_list}")
     print(f"  Majorana fit levels: {levels_to_include}")
+    print(f"  Ideal coupling mode: {ideal_coupling_mode}")
+    if ideal_coupling_mode == "rotated":
+        print(f"  Ideal coupling theta: {ideal_coupling_theta}")
+    print(f"  Physical coupling mode: {physical_coupling_mode}")
+    if physical_coupling_mode == "rotated":
+        print(f"  Physical coupling theta: {physical_coupling_theta}")
     print(f"  Time steps: {n_points}")
     print(f"  Output path: {results_output_path}")
 
@@ -551,26 +624,48 @@ def main():
 
             gamma0 = normalize_projected_majorana(project_ideal_majoranas(gamma_A1_full, P), "gamma0")
             gamma1 = normalize_projected_majorana(project_ideal_majoranas(gamma_A2_full, P), "gamma1")
-            gamma2_ideal = normalize_projected_majorana(
+            gamma_b_fit_components = (
+                b_fit_result["gamma_plus_projected"],
                 b_fit_result["gamma_minus_projected"],
+            )
+            gamma_c_fit_components = (
+                c_fit_result["gamma_plus_projected"],
+                c_fit_result["gamma_minus_projected"],
+            )
+            gamma2_ideal = normalize_projected_majorana(
+                select_majorana_direction(
+                    gamma_b_fit_components,
+                    ideal_coupling_mode,
+                    ideal_coupling_theta,
+                ),
                 "gamma2_ideal",
             )
             gamma3_ideal = normalize_projected_majorana(
-                c_fit_result["gamma_minus_projected"],
+                select_majorana_direction(
+                    gamma_c_fit_components,
+                    ideal_coupling_mode,
+                    ideal_coupling_theta,
+                ),
                 "gamma3_ideal",
             )
 
             gamma_b_phys_components = projected_majoranas(creB2, annB2, P)
             gamma_c_phys_components = projected_majoranas(creC2, annC2, P)
-            b_phys_index = 1
-            c_phys_index = 1
 
             gamma_2_phys = normalize_projected_majorana(
-                gamma_b_phys_components[b_phys_index],
+                select_majorana_direction(
+                    gamma_b_phys_components,
+                    physical_coupling_mode,
+                    physical_coupling_theta,
+                ),
                 "gamma_2_phys",
             )
             gamma_3_phys = normalize_projected_majorana(
-                gamma_c_phys_components[c_phys_index],
+                select_majorana_direction(
+                    gamma_c_phys_components,
+                    physical_coupling_mode,
+                    physical_coupling_theta,
+                ),
                 "gamma_3_phys",
             )
 
@@ -718,6 +813,10 @@ def main():
                 u_value=u_value,
                 projection_level=levels,
                 transport_dim=transport_dim,
+                ideal_coupling_mode=ideal_coupling_mode,
+                ideal_coupling_theta=ideal_coupling_theta,
+                physical_coupling_mode=physical_coupling_mode,
+                physical_coupling_theta=physical_coupling_theta,
                 best_b_candidate=best_b_candidate,
                 best_c_candidate=best_c_candidate,
                 ideal_operator_action=ideal_operator_action,

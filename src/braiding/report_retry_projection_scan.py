@@ -142,6 +142,16 @@ def rows_have_metric(rows, key):
     return all(key in row for row in rows)
 
 
+def channel_breakdown_uses_transport_metrics(grouped_rows):
+    rows = [row for group in grouped_rows.values() for row in group]
+    for channel_key, _ in CHANNEL_PANELS:
+        ideal_key = f"ideal_transport_single_exchange_{channel_key}_error_normalized"
+        physical_key = f"physical_transport_single_exchange_in_ideal_basis_{channel_key}_error_normalized"
+        if not rows_have_metric(rows, ideal_key) or not rows_have_metric(rows, physical_key):
+            return False
+    return True
+
+
 def apply_stem_suffix(path: Path, stem_suffix: str):
     if not stem_suffix:
         return path
@@ -185,13 +195,12 @@ def metric_value(row, key):
 
 def write_summary_table_tex(rows, output_path: Path):
     sorted_rows = sorted(rows, key=lambda row: (row["interaction_u"], row["projection_level"]))
-    direct_match_key = "physical_vs_ideal_target_gate_error_in_ideal_basis"
     lines = [
-        r"\begin{tabular}{ccccccccc}",
+        r"\begin{tabular}{cccccccc}",
         r"\hline",
         (
-            r"$U$ & $\dim P$ & Ideal gate & Phys.\ gate & Phys.\ gate vs.\ ideal & "
-            r"Phys.\ vs.\ ideal braid & Ideal exch. & Phys.\ exch. & Phys.\ exch.\ vs.\ ideal \\"
+            r"$U$ & $\dim P$ & $\dim T$ & Ideal gate & Phys.\ gate & "
+            r"Phys.\ vs.\ ideal & Transp.\ exch. & Phys.\ Maj. \\"
         ),
         r"\hline",
     ]
@@ -206,13 +215,17 @@ def write_summary_table_tex(rows, output_path: Path):
                 [
                     format_u_value(current_u),
                     str(row["projection_level"]),
-                    format_metric(row["ideal_target_gate_error"]),
-                    format_metric(row["physical_target_gate_error_in_physical_basis"]),
-                    format_metric(row["physical_target_gate_error_in_ideal_basis"]),
-                    format_metric(row[direct_match_key]) if direct_match_key in row else "--",
-                    format_metric(row["ideal_single_exchange_max_error"]),
-                    format_metric(row["physical_single_exchange_in_physical_basis_max_error"]),
-                    format_metric(row["physical_single_exchange_in_ideal_basis_max_error"]),
+                    str(row["transport_dim"]),
+                    format_metric(metric_value(row, "ideal_target_gate_error_normalized")),
+                    format_metric(metric_value(row, "physical_target_gate_error_in_physical_basis_normalized")),
+                    format_metric(metric_value(row, "physical_vs_ideal_target_gate_error_in_ideal_basis_normalized")),
+                    format_metric(
+                        metric_value(
+                            row,
+                            "physical_transport_single_exchange_in_ideal_basis_max_error_normalized",
+                        )
+                    ),
+                    format_metric(metric_value(row, "physical_majorana_algebra_max_square_error_normalized")),
                 ]
             )
             + r" \\"
@@ -244,21 +257,31 @@ def plot_series(axis, x_values, y_values, style, label, zorder=2):
 def plot_interaction_comparison(grouped_rows, output_path: Path):
     u_values = ordered_u_values(grouped_rows)
     projection_levels = projection_levels_from_rows(grouped_rows[u_values[0]])
+    use_transport_metrics = channel_breakdown_uses_transport_metrics(grouped_rows)
 
-    fig, axes = plt.subplots(1, 2, figsize=(10.2, 4.2), sharex=True)
+    exchange_keys = (
+        (
+            "ideal_transport_single_exchange_max_error_normalized",
+            "physical_transport_single_exchange_in_ideal_basis_max_error_normalized",
+            "Normalized transported exchange error",
+        )
+        if use_transport_metrics
+        else (
+            "ideal_single_exchange_max_error_normalized",
+            "physical_single_exchange_in_ideal_basis_max_error_normalized",
+            "Normalized max single-exchange error",
+        )
+    )
     metric_specs = (
         (
             "ideal_target_gate_error_normalized",
             "physical_target_gate_error_in_physical_basis_normalized",
             "Normalized target-gate error",
         ),
-        (
-            "ideal_single_exchange_max_error_normalized",
-            "physical_single_exchange_in_physical_basis_max_error_normalized",
-            "Normalized max single-exchange error",
-        ),
+        exchange_keys,
     )
 
+    fig, axes = plt.subplots(1, 2, figsize=(10.2, 4.2), sharex=True)
     for axis, (reference_key, physical_key, title) in zip(axes, metric_specs):
         for u_value in u_values:
             rows = grouped_rows[u_value]
@@ -341,19 +364,29 @@ def plot_interaction_comparison(grouped_rows, output_path: Path):
 def plot_basis_diagnostic(grouped_rows, output_path: Path):
     u_values = ordered_u_values(grouped_rows)
     projection_levels = projection_levels_from_rows(grouped_rows[u_values[0]])
+    use_transport_metrics = channel_breakdown_uses_transport_metrics(grouped_rows)
 
     fig, axes = plt.subplots(1, 2, figsize=(10.2, 4.2), sharex=True)
+    exchange_keys = (
+        (
+            "physical_transport_single_exchange_in_physical_basis_max_error_normalized",
+            "physical_transport_single_exchange_in_ideal_basis_max_error_normalized",
+            "Normalized transported physical exchange error",
+        )
+        if use_transport_metrics
+        else (
+            "physical_single_exchange_in_physical_basis_max_error_normalized",
+            "physical_single_exchange_in_ideal_basis_max_error_normalized",
+            "Normalized physical max single-exchange error",
+        )
+    )
     metric_specs = (
         (
             "physical_target_gate_error_in_physical_basis_normalized",
             "physical_target_gate_error_in_ideal_basis_normalized",
             "Normalized physical target-gate error",
         ),
-        (
-            "physical_single_exchange_in_physical_basis_max_error_normalized",
-            "physical_single_exchange_in_ideal_basis_max_error_normalized",
-            "Normalized physical max single-exchange error",
-        ),
+        exchange_keys,
     )
 
     for axis, (physical_key, ideal_key, title) in zip(axes, metric_specs):
@@ -503,13 +536,20 @@ def plot_direct_match_diagnostic(grouped_rows, output_path: Path):
 def plot_channel_breakdown(grouped_rows, output_path: Path):
     u_values = ordered_u_values(grouped_rows)
     projection_levels = projection_levels_from_rows(grouped_rows[u_values[0]])
+    use_transport_metrics = channel_breakdown_uses_transport_metrics(grouped_rows)
 
     fig, axes = plt.subplots(2, 2, figsize=(10.2, 7.6), sharex=True)
     axes = axes.ravel()
 
     for axis, (channel_key, channel_label) in zip(axes, CHANNEL_PANELS):
-        ideal_key = f"ideal_single_exchange_{channel_key}_error_normalized"
-        physical_key = f"physical_single_exchange_in_physical_basis_{channel_key}_error_normalized"
+        if use_transport_metrics:
+            ideal_key = f"ideal_transport_single_exchange_{channel_key}_error_normalized"
+            physical_key = (
+                f"physical_transport_single_exchange_in_ideal_basis_{channel_key}_error_normalized"
+            )
+        else:
+            ideal_key = f"ideal_single_exchange_{channel_key}_error_normalized"
+            physical_key = f"physical_single_exchange_in_ideal_basis_{channel_key}_error_normalized"
         for u_value in u_values:
             rows = grouped_rows[u_value]
             style = U_STYLES.get(u_value, {"color": "black", "marker": "o"})
@@ -543,8 +583,13 @@ def plot_channel_breakdown(grouped_rows, output_path: Path):
         axis.set_yscale("log")
         axis.grid(True, which="both", alpha=0.25)
 
-    axes[0].set_ylabel("Normalized single-exchange error")
-    axes[2].set_ylabel("Normalized single-exchange error")
+    ylabel = (
+        "Normalized transported-band exchange error"
+        if use_transport_metrics
+        else "Normalized single-exchange error"
+    )
+    axes[0].set_ylabel(ylabel)
+    axes[2].set_ylabel(ylabel)
     axes[2].set_xlabel(r"Projection dimension $\dim P$")
     axes[3].set_xlabel(r"Projection dimension $\dim P$")
 
@@ -568,7 +613,7 @@ def plot_channel_breakdown(grouped_rows, output_path: Path):
             color="#444444",
             linestyle="-",
             linewidth=2.0,
-            label="Physical braid",
+            label="Physical braid on ideal channels",
         ),
         Line2D(
             [0],
