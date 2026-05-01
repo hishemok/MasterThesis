@@ -273,6 +273,19 @@ def compare_to_target_gate(u_kato, transport_basis, gamma2, gamma3):
     return phase_aligned_error(u_subspace, target_subspace)
 
 
+def compare_target_gates(transport_basis, gamma2_left, gamma3_left, gamma2_right, gamma3_right):
+    target_left = expm(-0.25 * np.pi * (gamma2_left @ gamma3_left))
+    target_right = expm(-0.25 * np.pi * (gamma2_right @ gamma3_right))
+    target_left_subspace = transport_basis.conj().T @ target_left @ transport_basis
+    target_right_subspace = transport_basis.conj().T @ target_right @ transport_basis
+    return phase_aligned_error(target_left_subspace, target_right_subspace)
+
+
+def operator_mismatch_in_basis(transport_basis, left, right):
+    mismatch = transport_basis.conj().T @ (left - right) @ transport_basis
+    return np.linalg.norm(mismatch) / np.sqrt(transport_basis.shape[1])
+
+
 def compare_transport_unitaries(u_reference, u_test, transport_basis):
     u_reference_subspace = transport_basis.conj().T @ u_reference @ transport_basis
     u_test_subspace = transport_basis.conj().T @ u_test @ transport_basis
@@ -320,6 +333,18 @@ def result_fieldnames():
         "physical_target_gate_error_in_physical_basis_normalized",
         "physical_vs_ideal_target_gate_error_in_ideal_basis",
         "physical_vs_ideal_target_gate_error_in_ideal_basis_normalized",
+        "physical_target_gate_error_against_physical_target_in_ideal_basis",
+        "physical_target_gate_error_against_physical_target_in_ideal_basis_normalized",
+        "physical_target_gate_error_against_ideal_target_in_physical_basis",
+        "physical_target_gate_error_against_ideal_target_in_physical_basis_normalized",
+        "ideal_vs_physical_target_gate_error_in_ideal_basis",
+        "ideal_vs_physical_target_gate_error_in_ideal_basis_normalized",
+        "ideal_vs_physical_target_gate_error_in_physical_basis",
+        "ideal_vs_physical_target_gate_error_in_physical_basis_normalized",
+        "gamma2_ideal_vs_physical_error_in_ideal_basis_normalized",
+        "gamma3_ideal_vs_physical_error_in_ideal_basis_normalized",
+        "gamma2_ideal_vs_physical_error_in_physical_basis_normalized",
+        "gamma3_ideal_vs_physical_error_in_physical_basis_normalized",
     ]
     for prefix in (
         "ideal_single_exchange",
@@ -520,6 +545,52 @@ def run_one_case(u_value, projection_level):
         gamma2_phys,
         gamma3_phys,
     )
+    physical_target_error_physical_target_ideal_basis = compare_to_target_gate(
+        u_kato_phys,
+        ideal_basis,
+        gamma2_phys,
+        gamma3_phys,
+    )
+    physical_target_error_ideal_target_physical_basis = compare_to_target_gate(
+        u_kato_phys,
+        physical_basis,
+        gamma2,
+        gamma3,
+    )
+    ideal_vs_physical_target_error_ideal_basis = compare_target_gates(
+        ideal_basis,
+        gamma2,
+        gamma3,
+        gamma2_phys,
+        gamma3_phys,
+    )
+    ideal_vs_physical_target_error_physical_basis = compare_target_gates(
+        physical_basis,
+        gamma2,
+        gamma3,
+        gamma2_phys,
+        gamma3_phys,
+    )
+    gamma2_ideal_vs_physical_error_ideal_basis = operator_mismatch_in_basis(
+        ideal_basis,
+        gamma2,
+        gamma2_phys,
+    )
+    gamma3_ideal_vs_physical_error_ideal_basis = operator_mismatch_in_basis(
+        ideal_basis,
+        gamma3,
+        gamma3_phys,
+    )
+    gamma2_ideal_vs_physical_error_physical_basis = operator_mismatch_in_basis(
+        physical_basis,
+        gamma2,
+        gamma2_phys,
+    )
+    gamma3_ideal_vs_physical_error_physical_basis = operator_mismatch_in_basis(
+        physical_basis,
+        gamma3,
+        gamma3_phys,
+    )
     physical_vs_ideal_target_error_ideal_basis = compare_transport_unitaries(
         u_kato_ideal,
         u_kato_phys,
@@ -577,6 +648,38 @@ def run_one_case(u_value, projection_level):
         "physical_vs_ideal_target_gate_error_in_ideal_basis": float(physical_vs_ideal_target_error_ideal_basis),
         "physical_vs_ideal_target_gate_error_in_ideal_basis_normalized": float(
             physical_vs_ideal_target_error_ideal_basis / np.sqrt(transport_dim)
+        ),
+        "physical_target_gate_error_against_physical_target_in_ideal_basis": float(
+            physical_target_error_physical_target_ideal_basis
+        ),
+        "physical_target_gate_error_against_physical_target_in_ideal_basis_normalized": float(
+            physical_target_error_physical_target_ideal_basis / np.sqrt(transport_dim)
+        ),
+        "physical_target_gate_error_against_ideal_target_in_physical_basis": float(
+            physical_target_error_ideal_target_physical_basis
+        ),
+        "physical_target_gate_error_against_ideal_target_in_physical_basis_normalized": float(
+            physical_target_error_ideal_target_physical_basis / np.sqrt(transport_dim)
+        ),
+        "ideal_vs_physical_target_gate_error_in_ideal_basis": float(ideal_vs_physical_target_error_ideal_basis),
+        "ideal_vs_physical_target_gate_error_in_ideal_basis_normalized": float(
+            ideal_vs_physical_target_error_ideal_basis / np.sqrt(transport_dim)
+        ),
+        "ideal_vs_physical_target_gate_error_in_physical_basis": float(ideal_vs_physical_target_error_physical_basis),
+        "ideal_vs_physical_target_gate_error_in_physical_basis_normalized": float(
+            ideal_vs_physical_target_error_physical_basis / np.sqrt(transport_dim)
+        ),
+        "gamma2_ideal_vs_physical_error_in_ideal_basis_normalized": float(
+            gamma2_ideal_vs_physical_error_ideal_basis
+        ),
+        "gamma3_ideal_vs_physical_error_in_ideal_basis_normalized": float(
+            gamma3_ideal_vs_physical_error_ideal_basis
+        ),
+        "gamma2_ideal_vs_physical_error_in_physical_basis_normalized": float(
+            gamma2_ideal_vs_physical_error_physical_basis
+        ),
+        "gamma3_ideal_vs_physical_error_in_physical_basis_normalized": float(
+            gamma3_ideal_vs_physical_error_physical_basis
         ),
     }
     row.update(flatten_operator_action("ideal_single_exchange", ideal_operator_action, projection_level))

@@ -218,54 +218,38 @@ Table \ref{tab:braiding_local_projection} also explains why the local-site versi
 \subsection{Braiding in Higher Energy Levels}
 The previous braiding checks focused on the lowest projected manifold. To test how much of that agreement survives once excited sectors are retained, I repeated the braid diagnostics for projection dimensions $\dim P = 8, 32, 56, 80, 256,$ and $512$, and for interaction strengths $U=0$, $0.1$, and $2.0$. For each projected Hamiltonian I choose the transported band from the largest persistent spectral gap along the braid path. This separates the projection dimension, which controls how much Hilbert space is retained, from the transported dimension $\dim T$, which controls which isolated band is actually braided.
 
-The physical junction is taken to be the projected local minus operator, $i(c^\dagger-c)$, on the inner B and C sites. This is the local channel that overlaps with the participating Majoranas in the ground-state junction decomposition. I keep the ideal projected-Majorana braid as a control calculation, but the physically relevant diagnostics are the physical target-gate error, the physical-versus-ideal braid mismatch, the transported-band exchange error on the ideal Majorana channels, and the projected physical-Majorana algebra error.
+The physical junction is taken to be the projected local minus operator, $i(c^\dagger-c)$, on the inner B and C sites. A subtle point is that there are now two possible braid targets. The state-constructed target uses the many-body operators $\gamma_2$ and $\gamma_3$ obtained from the paired even and odd eigenstates, while the microscopic target uses the projected analytical Jordan--Wigner operators $\Gamma_2^P$ and $\Gamma_3^P$. Comparing the physical braid only with the state-constructed target can therefore mix two questions: whether the braid succeeds, and whether the state-constructed Majoranas coincide with the projected analytical Majoranas.
 
 \begin{table}[p]
   \centering
   \scriptsize
   \setlength{\tabcolsep}{4pt}
-  \resizebox{\textwidth}{!}{\input{generated/retry_projection_scan_summary_retry2_minus_only_extended.tex}}
-  \caption{Compact summary of the corrected higher-energy braid scan. All errors are normalized. The transported dimension $\dim T$ is selected from the spectral gap of the time-dependent projected Hamiltonian. ``Ideal gate'' is the internally consistent projected-Majorana control braid. ``Phys.\ gate'' uses the projected microscopic minus-channel junctions. ``Phys.\ vs.\ ideal'' compares the physical and ideal braid unitaries in the ideal transported band. ``Transp.\ exch.'' is the maximum transported-band exchange error of the physical braid on the ideal Majorana channels, and ``Phys.\ Maj.'' is the maximum normalized physical-Majorana square error.}
-  \label{tab:retry_projection_scan_summary}
+  \resizebox{\textwidth}{!}{\input{generated/retry2_target_diagnostic_summary_retry2_target_diagnostic_extended.tex}}
+  \caption{Target diagnostic for the corrected higher-energy braid scan with $\dim P=8,32,56,80,256,512$. All errors are normalized in the transported band. ``Phys.\ vs.\ $\gamma$ target'' compares the physical braid to $\exp(-\pi\gamma_2\gamma_3/4)$, where $\gamma_2$ and $\gamma_3$ are constructed from the paired eigenstates. ``Phys.\ vs.\ $\Gamma^P$ target'' compares the same physical braid to $\exp(-\pi\Gamma_2^P\Gamma_3^P/4)$, where $\Gamma_2^P$ and $\Gamma_3^P$ are projected analytical Jordan--Wigner Majoranas. ``Target mismatch'' directly compares these two target gates.}
+  \label{tab:retry2_target_diagnostic}
 \end{table}
 
-Table \ref{tab:retry_projection_scan_summary} gives the overall trend. The ideal control braid remains accurate for every interaction strength because it is generated from, and compared against, the same projected Majorana algebra. The physically meaningful columns show the expected interaction hierarchy instead: the noninteracting case remains good across the scan, the weakly interacting case is slightly worse but still close through the moderate projections, and the strongly interacting case is clearly separated by both the physical-versus-ideal mismatch and the transported exchange error.
+Table \ref{tab:retry2_target_diagnostic} shows that the apparent disagreement is dominated by the target mismatch. For $U=0$, the state target and projected analytical target differ only weakly through the moderate projections, and the physical braid matches the analytical target at the $10^{-6}$--$10^{-4}$ level. For $U=0.1$, the target mismatch grows from a few percent to order one at the largest projection. For $U=2$, the mismatch is already order one once excited sectors are included, which means that the state-constructed Majoranas and the projected microscopic Majoranas no longer describe the same braid channel.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=\textwidth]{figs/retry_projection_interaction_comparison_retry2_minus_only.pdf}
-  \caption{Interaction comparison for the corrected minus-channel projection scan, restricted to $\dim P \le 80$. The left panel shows the normalized target-gate error, while the right panel shows the transported-band exchange error on the ideal Majorana channels. The dashed ideal curves are control calculations and remain near the numerical integration floor. The physical curves show the expected separation: $U=0$ stays small, $U=0.1$ is slightly worse, and $U=2$ is strongly degraded once excited sectors enter.}
-  \label{fig:retry_projection_interaction_comparison_dim80}
+  \includegraphics[width=\textwidth]{figs/retry2_target_comparison_retry2_target_diagnostic_extended.pdf}
+  \caption{Comparison of the two target gates used to score the physical braid. The solid curves in the left panel compare the physical braid to the state-constructed target $\exp(-\pi\gamma_2\gamma_3/4)$, while the dashed curves compare it to the projected analytical target $\exp(-\pi\Gamma_2^P\Gamma_3^P/4)$. The right panel shows the direct mismatch between these two target gates. The hierarchy is clear: $U=0$ remains close, $U=0.1$ is intermediate, and $U=2$ separates strongly from the analytical Majorana description.}
+  \label{fig:retry2_target_comparison}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.7\textwidth]{figs/retry_projection_direct_match_diagnostic_retry2_minus_only.pdf}
-  \caption{Direct physical-versus-ideal braid mismatch for $\dim P \le 80$. This is the cleanest diagnostic of whether the microscopic minus-channel junction implements the same braid as the ideal projected-Majorana Hamiltonian. The weakly interacting case remains close to the noninteracting result, while the $U=2$ mismatch is already large at the first excited projections.}
-  \label{fig:retry_projection_direct_match_dim80}
+  \includegraphics[width=\textwidth]{figs/retry2_majorana_mismatch_retry2_target_diagnostic_extended.pdf}
+  \caption{Direct operator diagnostic behind the target mismatch. The left panel compares the state-constructed Majoranas with the projected analytical Majoranas inside the transported band. The B and C mismatches are equal by symmetry, so a single $\gamma_{2,3}-\Gamma_{2,3}^P$ curve is shown. The right panel shows the maximum square error of the projected analytical Majoranas. The strong-interaction case has both a large operator mismatch and a visibly degraded projected Majorana algebra once excited sectors are retained.}
+  \label{fig:retry2_majorana_mismatch}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=\textwidth]{figs/retry_projection_channel_breakdown_retry2_minus_only.pdf}
-  \caption{Transported-band channel-resolved exchange errors for $\dim P \le 80$. Unlike the earlier full-projection operator diagnostic, this plot evaluates $V^\dagger(U^\dagger\gamma_iU-\gamma_j)V$ inside the transported band $V$. The exchanged channels therefore agree with the target-gate diagnostics: $U=0$ remains close to the ideal exchange, $U=0.1$ gives an intermediate deviation, and $U=2$ fails primarily in the intended exchange channels.}
-  \label{fig:retry_projection_channel_breakdown_dim80}
+  \includegraphics[width=0.68\textwidth]{figs/retry2_target_mismatch_hierarchy_retry2_target_diagnostic_extended.pdf}
+  \caption{Interaction hierarchy extracted from the direct target mismatch. This is the most compact version of the diagnostic: noninteracting braids remain close to the analytical Majorana target, weak interactions produce a modest drift, and strong interactions produce an order-one separation between the state-constructed and microscopic braid targets.}
+  \label{fig:retry2_target_mismatch_hierarchy}
 \end{figure}
 
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=\textwidth]{figs/retry_projection_interaction_comparison_retry2_minus_only_extended.pdf}
-  \caption{The same interaction comparison extended to $\dim P = 256$ and $512$. The full-range plot documents the high-dimensional endpoints used in Table \ref{tab:retry_projection_scan_summary}. The noninteracting target-gate error remains small even at the largest projection sizes, but the physical-versus-ideal diagnostics in the companion plots reveal that high-dimensional projected spaces can still expose basis mismatch in the microscopic junction description.}
-  \label{fig:retry_projection_interaction_comparison_dim512}
-\end{figure}
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=\textwidth]{figs/retry_projection_channel_breakdown_retry2_minus_only_extended.pdf}
-  \caption{Transported-band channel-resolved exchange errors for the full $\dim P \le 512$ scan. The high-dimensional endpoints preserve the same qualitative hierarchy: the ideal control remains accurate, the weakly interacting case is intermediate, and the strongly interacting case has order-one exchange-channel mismatch. The extended scan is mainly a robustness check; the $\dim P \le 80$ window remains easier to interpret visually.}
-  \label{fig:retry_projection_channel_breakdown_dim512}
-\end{figure}
-
-Figures \ref{fig:retry_projection_interaction_comparison_dim80}--\ref{fig:retry_projection_channel_breakdown_dim80} are the most useful plots for interpreting the moderate-projection behaviour. They show that the apparent failures in the earlier full-space exchange diagnostic were caused by comparing operators outside the transported band. After restricting the exchange test to the same band used in the target-gate comparison, the channel breakdown and target-gate metrics tell the same story.
-
-Figures \ref{fig:retry_projection_interaction_comparison_dim512} and \ref{fig:retry_projection_channel_breakdown_dim512} extend the diagnostics to $\dim P=256$ and $512$. These endpoints are useful for documenting the full numerical scan, but the larger projected spaces also make the distinction between the ideal projected-Majorana control and the microscopic physical junction more visible. This is why the direct physical-versus-ideal mismatch is retained as a separate diagnostic rather than relying only on the physical target-gate error.
+Figures \ref{fig:retry2_target_comparison}--\ref{fig:retry2_target_mismatch_hierarchy} replace the earlier physical-versus-ideal exchange diagnostics as the main higher-energy braid test. The earlier ideal braid remained nearly perfect because its Hamiltonian and target were built from the same projected Majorana operators. The present diagnostic is less self-referential: it asks whether the microscopic projected operators $\Gamma_2^P$ and $\Gamma_3^P$ still represent the same exchange as the state-constructed many-body Majoranas. This gives the expected physical trend, with good agreement at $U=0$, partial degradation at $U=0.1$, and a clear breakdown at $U=2$.
