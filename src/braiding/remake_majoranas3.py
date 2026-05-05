@@ -255,7 +255,7 @@ def make_majoranas_for_B_and_C_with_projection_dim(projection_dim=8, specified_v
 if __name__ == "__main__":
     JW_A, JW_B, JW_C, h_a, h_b, h_c, h_full, h_full_eigvals, h_full_eigvecs, even_vec_A, odd_vec_A, even_vec_B, odd_vec_B, even_vec_C, odd_vec_C = get_stuff()
     cre, ann = get_operators()
-    P = get_projection_basis(h_full_eigvecs, 32)
+    P = get_projection_basis(h_full_eigvecs, 80)
    
     print("Constructing Majoranas for system B + check:")
     gamma_B_plus, check_B_plus = construct_majoranas_w_check(even_vec_B, odd_vec_B, P, cre, ann, system_name="B", JW_B=JW_B, JW_C=JW_C, verbose=True, tocheck="Plus")

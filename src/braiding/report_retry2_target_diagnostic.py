@@ -131,6 +131,22 @@ def plot_series(axis, rows, key, style, label, linestyle="-", markerface=None):
     )
 
 
+def plot_derived_series(axis, rows, value_getter, style, label, linestyle="-", markerface=None):
+    axis.plot(
+        [row["projection_level"] for row in rows],
+        [value_getter(row) for row in rows],
+        color=style["color"],
+        marker=style["marker"],
+        linestyle=linestyle,
+        linewidth=2.0,
+        markersize=6.0,
+        markerfacecolor=style["color"] if markerface is None else markerface,
+        markeredgecolor=style["color"],
+        markeredgewidth=1.1,
+        label=label,
+    )
+
+
 def format_projection_axis(axis, levels):
     axis.set_xscale("log", base=2)
     axis.xaxis.set_major_locator(FixedLocator(levels))
@@ -343,6 +359,98 @@ def plot_interaction_hierarchy(grouped, output_path: Path):
     save_figure(fig, output_path)
 
 
+def rows_up_to_projection(grouped, max_projection):
+    filtered = {}
+    for u_value, rows in grouped.items():
+        kept_rows = [row for row in rows if row["projection_level"] <= max_projection]
+        if kept_rows:
+            filtered[u_value] = kept_rows
+    if not filtered:
+        raise ValueError(f"No rows found with projection_level <= {max_projection}.")
+    return filtered
+
+
+def projection_levels_for_grouped(grouped):
+    return sorted({row["projection_level"] for rows in grouped.values() for row in rows})
+
+
+def plot_single_target_error(grouped, key, title, output_path: Path):
+    u_values = ordered_u_values(grouped)
+    levels = projection_levels_for_grouped(grouped)
+    fig, axis = plt.subplots(1, 1, figsize=(6.4, 4.3))
+
+    for u_value in u_values:
+        plot_series(axis, grouped[u_value], key, style_for_u(u_value), f"_nolegend_{u_value}")
+
+    axis.set_title(title)
+    axis.set_xlabel(r"Projection dimension $\dim P$")
+    axis.set_ylabel("Normalized Error")
+    format_projection_axis(axis, levels)
+    axis.set_yscale("log")
+    axis.grid(True, which="both", alpha=0.25)
+    add_u_legend(fig, u_values, ncol=3)
+    fig.tight_layout(rect=(0.0, 0.0, 1.0, 0.86))
+    save_figure(fig, output_path)
+
+
+def plot_target_error_difference(grouped, output_path: Path):
+    u_values = ordered_u_values(grouped)
+    levels = projection_levels_for_grouped(grouped)
+    state_key = "physical_target_gate_error_in_ideal_basis_normalized"
+    projected_key = "physical_target_gate_error_against_physical_target_in_ideal_basis_normalized"
+    fig, axis = plt.subplots(1, 1, figsize=(6.4, 4.3))
+
+    for u_value in u_values:
+        plot_derived_series(
+            axis,
+            grouped[u_value],
+            lambda row: row[state_key] - row[projected_key],
+            style_for_u(u_value),
+            f"_nolegend_{u_value}",
+        )
+
+    axis.set_title(r"State-target error minus $\Gamma^P$-target error")
+    axis.set_xlabel(r"Projection dimension $\dim P$")
+    axis.set_ylabel("Normalized Error Difference")
+    format_projection_axis(axis, levels)
+    axis.set_yscale("log")
+    axis.grid(True, which="both", alpha=0.25)
+    add_u_legend(fig, u_values, ncol=3)
+    fig.tight_layout(rect=(0.0, 0.0, 1.0, 0.86))
+    save_figure(fig, output_path)
+
+
+def plot_requested_target_error_breakouts(grouped, fig_dir: Path, stem_suffix: str):
+    specs = (
+        (80, "dim80"),
+        (512, "dim512"),
+    )
+    for max_projection, label in specs:
+        subset = rows_up_to_projection(grouped, max_projection)
+        plot_single_target_error(
+            subset,
+            "ideal_target_gate_error_normalized",
+            r"State-made braid error vs. state target $e^{-\pi\gamma_2\gamma_3/4}$",
+            apply_suffix(fig_dir / f"retry2_state_braid_state_target_error_{label}.pdf", stem_suffix),
+        )
+        plot_single_target_error(
+            subset,
+            "physical_target_gate_error_in_ideal_basis_normalized",
+            r"Physical braid error vs. state target $e^{-\pi\gamma_2\gamma_3/4}$",
+            apply_suffix(fig_dir / f"retry2_state_target_error_{label}.pdf", stem_suffix),
+        )
+        plot_single_target_error(
+            subset,
+            "physical_target_gate_error_against_physical_target_in_ideal_basis_normalized",
+            r"Physical braid error vs. projected target $e^{-\pi\Gamma_2^P\Gamma_3^P/4}$",
+            apply_suffix(fig_dir / f"retry2_projected_target_error_{label}.pdf", stem_suffix),
+        )
+        plot_target_error_difference(
+            subset,
+            apply_suffix(fig_dir / f"retry2_target_error_difference_{label}.pdf", stem_suffix),
+        )
+
+
 def main():
     args = build_argument_parser().parse_args()
     rows = parse_results(args.input)
@@ -364,6 +472,7 @@ def main():
         rows,
         apply_suffix(args.generated_dir / "retry2_target_diagnostic_summary.tex", args.stem_suffix),
     )
+    plot_requested_target_error_breakouts(grouped, args.fig_dir, args.stem_suffix)
 
 
 if __name__ == "__main__":
