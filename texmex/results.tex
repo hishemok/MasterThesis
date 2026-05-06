@@ -218,38 +218,52 @@ Table \ref{tab:braiding_local_projection} also explains why the local-site versi
 \subsection{Braiding in Higher Energy Levels}
 The previous braiding checks focused on the lowest projected manifold. To test how much of that agreement survives once excited sectors are retained, I repeated the braid diagnostics for projection dimensions $\dim P = 8, 32, 56, 80, 256,$ and $512$, and for interaction strengths $U=0$, $0.1$, and $2.0$. For each projected Hamiltonian I choose the transported band from the largest persistent spectral gap along the braid path. This separates the projection dimension, which controls how much Hilbert space is retained, from the transported dimension $\dim T$, which controls which isolated band is actually braided.
 
-The physical junction is taken to be the projected local minus operator, $i(c^\dagger-c)$, on the inner B and C sites. A subtle point is that there are now two possible braid targets. The state-constructed target uses the many-body operators $\gamma_2$ and $\gamma_3$ obtained from the paired even and odd eigenstates, while the microscopic target uses the projected analytical Jordan--Wigner operators $\Gamma_2^P$ and $\Gamma_3^P$. Comparing the physical braid only with the state-constructed target can therefore mix two questions: whether the braid succeeds, and whether the state-constructed Majoranas coincide with the projected analytical Majoranas.
+The physical junction is taken to be the projected local minus operator, $i(c^\dagger-c)$, on the inner B and C sites. A subtle point is that there are now two different effective braid constructions. In the first, which I call the energy-level braid, the operators are built from paired even and odd eigenstates of the subsystem Hamiltonians. In the second, which I call the local-operator braid, the junction is built from the projected microscopic operators $P i(c^\dagger-c)P$. The former tests whether the spectrum supports a clean exchange channel, while the latter tests whether that channel is accessed by the expected local microscopic coupling.
 
 \begin{table}[p]
   \centering
   \scriptsize
   \setlength{\tabcolsep}{4pt}
-  \resizebox{\textwidth}{!}{\input{generated/retry2_target_diagnostic_summary_retry2_target_diagnostic_extended.tex}}
-  \caption{Target diagnostic for the corrected higher-energy braid scan with $\dim P=8,32,56,80,256,512$. All errors are normalized in the transported band. ``Phys.\ vs.\ $\gamma$ target'' compares the physical braid to $\exp(-\pi\gamma_2\gamma_3/4)$, where $\gamma_2$ and $\gamma_3$ are constructed from the paired eigenstates. ``Phys.\ vs.\ $\Gamma^P$ target'' compares the same physical braid to $\exp(-\pi\Gamma_2^P\Gamma_3^P/4)$, where $\Gamma_2^P$ and $\Gamma_3^P$ are projected analytical Jordan--Wigner Majoranas. ``Target mismatch'' directly compares these two target gates.}
+  \resizebox{\textwidth}{!}{\input{generated/retry2_target_diagnostic_summary_retry2_remake4_diagonal_minus_extended.tex}}
+  \caption{Target diagnostic for the corrected higher-energy braid scan with $\dim P=8,32,56,80,256,512$. All errors are normalized in the transported band. ``Phys.\ vs.\ $\gamma$ target'' compares the local-operator braid to $\exp(-\pi\gamma_2\gamma_3/4)$, where $\gamma_2$ and $\gamma_3$ are constructed from diagonal even-odd energy-level pairs. ``Phys.\ vs.\ $\Gamma^P$ target'' compares the same braid to $\exp(-\pi\Gamma_2^P\Gamma_3^P/4)$, where $\Gamma_2^P$ and $\Gamma_3^P$ are projected local Majorana operators. ``Target mismatch'' directly compares these two effective target gates.}
   \label{tab:retry2_target_diagnostic}
 \end{table}
 
-Table \ref{tab:retry2_target_diagnostic} shows that the apparent disagreement is dominated by the target mismatch. For $U=0$, the state target and projected analytical target differ only weakly through the moderate projections, and the physical braid matches the analytical target at the $10^{-6}$--$10^{-4}$ level. For $U=0.1$, the target mismatch grows from a few percent to order one at the largest projection. For $U=2$, the mismatch is already order one once excited sectors are included, which means that the state-constructed Majoranas and the projected microscopic Majoranas no longer describe the same braid channel.
+Table \ref{tab:retry2_target_diagnostic} shows that the corrected diagonal energy-level construction gives a very clean braid target. The important comparison is therefore not simply whether the braid unitary is accurate, but which effective operator it is accurate with respect to. The energy-level construction is adapted to the many-body spectrum, while the local-operator construction is constrained to the projected microscopic endpoint operator.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=\textwidth]{figs/retry2_target_comparison_retry2_target_diagnostic_extended.pdf}
-  \caption{Comparison of the two target gates used to score the physical braid. The solid curves in the left panel compare the physical braid to the state-constructed target $\exp(-\pi\gamma_2\gamma_3/4)$, while the dashed curves compare it to the projected analytical target $\exp(-\pi\Gamma_2^P\Gamma_3^P/4)$. The right panel shows the direct mismatch between these two target gates. The hierarchy is clear: $U=0$ remains close, $U=0.1$ is intermediate, and $U=2$ separates strongly from the analytical Majorana description.}
-  \label{fig:retry2_target_comparison}
+  \includegraphics[width=0.9\textwidth]{figs/energy_levels_braid_error_80.pdf}
+  \caption{Energy-level braid error up to $\dim P=80$. The braid operators are constructed from diagonal even-odd energy-level pairs of the subsystem Hamiltonians and are compared with the corresponding energy-level target $\exp(-\pi\gamma_2\gamma_3/4)$. This diagnostic tests whether the retained many-body spectrum supports a clean effective exchange channel.}
+  \label{fig:energy_levels_braid_error_80}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=\textwidth]{figs/retry2_majorana_mismatch_retry2_target_diagnostic_extended.pdf}
-  \caption{Direct operator diagnostic behind the target mismatch. The left panel compares the state-constructed Majoranas with the projected analytical Majoranas inside the transported band. The B and C mismatches are equal by symmetry, so a single $\gamma_{2,3}-\Gamma_{2,3}^P$ curve is shown. The right panel shows the maximum square error of the projected analytical Majoranas. The strong-interaction case has both a large operator mismatch and a visibly degraded projected Majorana algebra once excited sectors are retained.}
-  \label{fig:retry2_majorana_mismatch}
+  \includegraphics[width=0.9\textwidth]{figs/local_braiding_op_dim_80.pdf}
+  \caption{Local-operator braid error up to $\dim P=80$. Here the braid is generated and judged using the projected local endpoint operators $P i(c^\dagger-c)P$. This is the more microscopic diagnostic, because it tests how well the exchange channel is accessed by a local physical coupling.}
+  \label{fig:local_braiding_op_dim_80}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.68\textwidth]{figs/retry2_target_mismatch_hierarchy_retry2_target_diagnostic_extended.pdf}
-  \caption{Interaction hierarchy extracted from the direct target mismatch. This is the most compact version of the diagnostic: noninteracting braids remain close to the analytical Majorana target, weak interactions produce a modest drift, and strong interactions produce an order-one separation between the state-constructed and microscopic braid targets.}
-  \label{fig:retry2_target_mismatch_hierarchy}
+  \includegraphics[width=0.9\textwidth]{figs/energy_levels_braid_error_512.pdf}
+  \caption{Energy-level braid error up to $\dim P=512$. Extending the projection dimension tests whether the same eigenstate-pair construction remains stable once higher-energy sectors are retained. The low non-interacting error shows that the energy-level construction continues to capture a clean exchange channel even in the full projected Hilbert space.}
+  \label{fig:energy_levels_braid_error_512}
 \end{figure}
 
-Figures \ref{fig:retry2_target_comparison}--\ref{fig:retry2_target_mismatch_hierarchy} replace the earlier physical-versus-ideal exchange diagnostics as the main higher-energy braid test. The earlier ideal braid remained nearly perfect because its Hamiltonian and target were built from the same projected Majorana operators. The present diagnostic is less self-referential: it asks whether the microscopic projected operators $\Gamma_2^P$ and $\Gamma_3^P$ still represent the same exchange as the state-constructed many-body Majoranas. This gives the expected physical trend, with good agreement at $U=0$, partial degradation at $U=0.1$, and a clear breakdown at $U=2$.
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figs/local_braiding_op_dim_512.pdf}
+  \caption{Local-operator braid error up to $\dim P=512$, evaluated against the projected local target $\exp(-\pi\Gamma_2^P\Gamma_3^P/4)$. The local-operator braid remains accurate, but it is generally less clean than the energy-level braid, indicating that the best effective exchange channel in the spectrum is not identical to the channel selected by the strictly local projected operator.}
+  \label{fig:local_braiding_op_dim_512}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figs/braid_error_512_elevels_w_analytical.pdf}
+  \caption{Energy-level braid error up to $\dim P=512$, with the analytical non-interacting sweet-spot braid included as a reference. The analytical curve is evaluated only at projection dimensions that complete exact degeneracy blocks. The close agreement confirms that the diagonal energy-level construction reproduces the expected non-interacting exchange channel when the projection is chosen consistently.}
+  \label{fig:braid_error_512_elevels_w_analytical}
+\end{figure}
+
+Figures \ref{fig:energy_levels_braid_error_80}--\ref{fig:braid_error_512_elevels_w_analytical} show the main distinction between the two braid constructions. The energy-level braid is the cleaner effective operation, because it is built directly from the paired eigenstates of the optimized Hamiltonians. The local-operator braid is more physically constrained, because it asks what is generated by the projected microscopic endpoint operator. The fact that the energy-level braid performs better should therefore be interpreted as evidence that the many-body spectrum contains a very clean exchange channel, not as automatic proof that the corresponding operator is perfectly localized. The local-operator results provide the complementary localization and implementability check.
