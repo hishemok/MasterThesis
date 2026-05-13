@@ -210,7 +210,7 @@ Together, these diagnostics provide the physical ingredients used later to build
 
 \subsection{Majorana Exchange and Braiding}
 Braiding is the operation that makes Majorana modes useful for topological quantum computation. The basic idea is to exchange two Majorana modes adiabatically so that the quantum state transforms according to their non-Abelian statistics. Because the transformation is tied to the topology of the exchange, rather than to the exact microscopic path, braiding offers a route to gates that are less sensitive to local control errors. Braiding in the right patterns, with the right systems, can lead to the implementation of useful quantum gates.{\color{red} SOURCE}. \\
-In a system of Poor mans majoranas, braiding does not come from physically moving the Majorana modes or any other physical pieces of the setup, but rather by tuning the parameters of the system in a way that mimics the effect of an exchange. What this does, is couple the Majorana modes in a way that produces the same unitary transformation on the low-energy subspace as a physical braid would. This is sometimes called ``measurement-only'' or ``parameter-tuning'' braiding, and it relies on the same underlying topological principles as physical braiding, but it is implemented through a sequence of parameter changes rather than through spatial motion.\\
+In a system of Poor Man's Majoranas, braiding does not come from physically moving the Majorana modes or any other physical pieces of the setup, but rather by tuning the parameters of the system in a way that mimics the effect of an exchange. What this does, is couple the Majorana modes in a way that produces the same unitary transformation on the low-energy subspace as a physical braid would. This is sometimes called ``measurement-only'' or ``parameter-tuning'' braiding, and it relies on the same underlying topological principles as physical braiding, but it is implemented through a sequence of parameter changes rather than through spatial motion.\\
 
 \paragraph{From Qubit Gates to Fermionic Operators\newline}
 In quantum computation, quantum gates are unitary operations that manipulate the state of qubits. Quantum gates, or quantum logic gates, are the building blocks of quantum circuits, the same way classical logic gates are for digital circuits. Unlike many classical logic gates, quantum logic gates are reversible, meaning that they can be undone by applying the inverse operation. This reversibility is a fundamental property of quantum mechanics and is essential for quantum computation.\\ \\ 
@@ -231,7 +231,7 @@ Z = \begin{pmatrix}
 \end{equation}
 The Pauli gates $(X, Y, Z)$ are fundamental single-qubit gates that correspond to rotations around the $x$, $y$, and $z$ axes of the Bloch sphere, respectively. They are also examples of involutory gates, meaning that applying them twice yields the identity operation (e.g., $X^2 = Y^2 = Z^2 = I$).\\ \\ 
 In order to replicate these quantum logic gates using Majorana modes, we need to understand how to express these gates in terms of fermionic operators. This is because the Majorana modes are described by fermionic operators, and we want to find a way to translate the abstract quantum gates into operations that can be implemented in a Majorana system. By expressing the Pauli gates in terms of fermionic creation and annihilation operators, we can identify how to manipulate the Majorana modes to achieve the desired quantum gate operations. This connection is crucial for implementing quantum computation using Majorana-based qubits.\\
-Lets start by introducing two quantum states $\ket{0}$ and $\ket{1}$, which we can simply represent as column vectors:
+Let us start by introducing two quantum states $\ket{0}$ and $\ket{1}$, which we can simply represent as column vectors:
 \begin{equation}
 \ket{0} = \begin{pmatrix}1 \\
 0
@@ -247,23 +247,28 @@ X\ket{0} &= \ket{1}, \quad X\ket{1} = \ket{0}, \\
 Y\ket{0} &= i\ket{1}, \quad Y\ket{1} = -i\ket{0}, \\
 Z\ket{0} &= \ket{0}, \quad Z\ket{1} = -\ket{1}.
 \end{align*}
+
+
 To put these operations in the context of fermionic systems, we can see that the $X$ gate corresponds to a bit-flip operation, or in other words, it annihilates the "0" state and creates the "1" state, and vice versa. The $Y$ gate also flips the states but introduces a phase factor of $i$ or $-i$, meaning it combines a bit-flip with a phase shift. The $Z$ gate, on the other hand, does not change the state but applies a phase of $-1$ to the $\ket{1}$ state while leaving the $\ket{0}$ state unchanged.\\ \\ 
 Putting these operations in the context of fermionic operators, we can express the Pauli gates in terms of creation and annihilation operators for a two-site system. For example, if we have fermionic operators $c_1$ and $c_2$ corresponding to two sites, we can write:
-\begin{align*}X &= c_1 ^{†} c_2 + c_2 ^{†} c_1, \\
+\begin{equation}
+\begin{aligned}X &= c_1 ^{†} c_2 + c_2 ^{†} c_1, \\
 Y &= -i(c_1 ^{†} c_2 - c_2 ^{†} c_1), \\
 Z &= c_1 ^{†} c_1 - c_2 ^{†} c_2.
-\end{align*}
+\end{aligned}
+\label{eq:pauli_gates_in_fermionic_modes}
+\end{equation}
 We can now see how easily the quantum logic gates can be transformed into fermionic language, which is the first step towards understanding how to implement these gates in a Majorana system. By expressing the gates in terms of fermionic operators, we can identify the necessary interactions and couplings in a Majorana-based setup that would allow us to perform the desired quantum gate operations. This is crucial for the development of Majorana-based quantum computation, as it provides a clear pathway for translating abstract quantum operations into physical manipulations of Majorana modes.\\
 
-\paragraph{Jordan-Wigner Transformation}
+\paragraph{Jordan-Wigner Transformation\newline}
 Jordan-Wigner transformation is a mathematical technique used to map spin operators to fermionic creation and annihilation operators. Proposed by Pascual Jordan and Eugene Wigner in 1928{\color{red}https://link.springer.com/article/10.1007/BF01331938}, where they originally introduced it to solve the one-dimensional spin-1/2 chain problem, but later was extended to two-dimensional systems and beyond. The transformation is particularly useful in the study of quantum many-body systems, as it allows for the analysis of spin systems using fermionic techniques.\\
-We are not going to introduce the Jordan-Wigner transformation because of its relevance to the Majorana systems, but rather because it provides a useful example of how to express quantum gates in terms of fermionic operators. The Jordan-Wigner transformation allows us to express the spin-1/2 Pauli operators in terms of fermionic creation and annihilation operators{\color{red}$https://futureofmatter.com/assets/fermions_and_jordan_wigner.pdf$}. For a chain of spin-1/2 particles, the transformation is given by:
+The Jordan-Wigner transformation is useful here because it lets us represent qubit or spin operators in terms of fermionic operators while preserving the correct anticommutation relations between different sites. This is not only a formal point: in the numerical braiding calculations, Majorana operators from different sites and subsystems must be embedded into a common Hilbert space with the correct fermionic algebra. The Jordan-Wigner strings provide this bookkeeping. The transformation allows us to express the spin-1/2 Pauli operators in terms of fermionic creation and annihilation operators{\color{red}$https://futureofmatter.com/assets/fermions_and_jordan_wigner.pdf$}. For a chain of spin-1/2 particles, the transformation is given by:
 \begin{align*}
 \sigma_j^+ &= \frac{1}{2}(\sigma_j^x + i\sigma_j^y) \equiv f_j ^{†}, \\
 \sigma_j^- &= \frac{1}{2}(\sigma_j^x - i\sigma_j^y) \equiv f_j, \\
 \sigma_j^z &= 2f_j ^{†} f_j - 1,
 \end{align*}
-Leaving us with the correct same-site fermionic relations, but operators on different sites commute instead of anticommute. To fix this, we take a achain of fermions, and define a new set of fermionic operators:
+Leaving us with the correct same-site fermionic relations, but operators on different sites commute instead of anticommute. To fix this, we take a chain of fermions, and define a new set of fermionic operators:
 \begin{align*}
   a_j^{†} &= e^{iπ∑_{k=1}^{j-1}f_k^{†}f_k } ⋅ f_j^{†} \\ 
   a_j &= e^{-iπ∑_{k=1}^{j-1}f_k^{†}f_k } ⋅ f_j, \\
@@ -281,55 +286,63 @@ The transformed spin operators now satisfy the correct fermionic anticommutation
 The Jordan-Wigner transformation is a powerful tool for analyzing spin systems using fermionic techniques, and it provides a clear example of how quantum gates can be expressed in terms of fermionic operators. By applying this transformation, we can gain insights into the behavior of spin systems and their connections to fermionic systems, which is essential for understanding the physics of Majorana modes and their applications in quantum computation.
 
 
-\paragraph{Pauli Matrices in the Majorana Representation}
-Using the Majorana representation from Eq.~\ref{eq:first_majorana_rep}, define four Majorana operators by
+\paragraph{Pauli Matrices in the Majorana Representation\newline}
+The reason for rewriting the Pauli operators in terms of Majorana bilinears is that braiding acts naturally on Majorana operators, while the gate implemented by the braid is usually compared with a Pauli operation on an encoded qubit. By expressing the Pauli gates in terms of Majorana bilinears, we can directly relate the physical operations performed on the Majorana modes to the abstract quantum gates that we want to implement. This connection is important to both understand and implement quantum gates in a Majorana-based quantum computing platform. We start by considering four Majorana operators, grouped into two ordinary fermions:
 \begin{align*}
-  c_1 &= (\gamma_0 + i \gamma_1)/2, \quad c_1 ^{†} = (\gamma_0 - i \gamma_1)/2, \\
-  c_2 &= (\gamma_2 + i \gamma_3)/2, \quad c_2 ^{†} = (\gamma_2 - i \gamma_3)/2.
+  c_1 &= \frac{1}{2}(\gamma_0 + i\gamma_1), \quad
+  c_1^\dagger = \frac{1}{2}(\gamma_0 - i\gamma_1), \\
+  c_2 &= \frac{1}{2}(\gamma_2 + i\gamma_3), \quad
+  c_2^\dagger = \frac{1}{2}(\gamma_2 - i\gamma_3).
 \end{align*}
-The Pauli operators can then be expressed as Majorana bilinears. In a fixed parity subspace, these simplify to
+These four Majorana operators $\gamma_0$, $\gamma_1$, $\gamma_2$, and $\gamma_3$ span a four-dimensional Hilbert space, which can be thought of as the state space of two fermionic modes. By fixing the total fermion parity, we can select a two-dimensional subspace that serves as the computational basis for a qubit. Within such a fixed-parity subspace, we can represent the Pauli operators as bilinears of the Majorana operators. Specifically, we can write:
 \begin{align*}
-  X &= \frac{i}{2} (\gamma_0\gamma_3 - \gamma_1\gamma_2) = i\gamma_0\gamma_3 = -i\gamma_1\gamma_2, \\
-  Y &= -\frac{i}{2} (\gamma_0\gamma_2 + \gamma_1\gamma_3) = -i \gamma_0\gamma_2 = -i \gamma_1\gamma_3, \\
-  Z &= \frac{i}{2} (\gamma_0\gamma_1 + \gamma_2\gamma_3) = i\gamma_0\gamma_1 = i\gamma_2\gamma_3.
+  X &= i\gamma_0\gamma_3 = -i\gamma_1\gamma_2, \\
+  Y &= -i\gamma_0\gamma_2 = -i\gamma_1\gamma_3, \\
+  Z &= i\gamma_0\gamma_1 = i\gamma_2\gamma_3.
 \end{align*}
-This is the key connection between qubit gates and Majorana couplings: turning on controlled bilinear couplings between Majoranas implements rotations in the encoded qubit space.\\
+These expressions can be derived by substituting the fermionic operators in Eq.~\ref{eq:pauli_gates_in_fermionic_modes} with the Majorana representation of the fermionic operators. The resulting bilinears of Majorana operators correspond to the Pauli gates acting on the encoded qubit.\\
+Thus, controlled Majorana couplings of the form \(i\gamma_i\gamma_j\) act as Pauli operations on the encoded qubit. This is the operator-level connection between Majorana braiding and gate implementation. {\color{red}https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.80.1083; https://arxiv.org/abs/1202.1293; https://scipost.org/SciPostPhys.3.3.021}
 
-\paragraph{Majorana Exchange Gates}
-The unitary operator associated with exchanging two Majoranas $\gamma_i$ and $\gamma_j$ should satisfy
+\paragraph{Majorana Exchange Gates\newline}
+An anticlockwise exchange of two Majoranas \(\gamma_i\) and \(\gamma_j\) is represented by the unitary
+\[
+B_{ij} = \exp\left(-\frac{\pi}{4}\gamma_i\gamma_j\right)
+       = \frac{1}{\sqrt{2}}(1-\gamma_i\gamma_j),
+\]
+up to orientation conventions and an overall phase. With this convention, the unitary acts on the Majorana operators as
 \begin{align*}
-B_{ij} \gamma_i B_{ij} ^{†} &= \gamma_j, \\
-B_{ij} \gamma_j B_{ij} ^{†} &= -\gamma_i, \\
-B_{ij} \gamma_k B_{ij} ^{†} &= \gamma_k \quad \text{for } k \neq i,j.
+B_{ij}\gamma_i B_{ij}^\dagger &= \gamma_j, \\
+B_{ij}\gamma_j B_{ij}^\dagger &= -\gamma_i, \\
+B_{ij}\gamma_k B_{ij}^\dagger &= \gamma_k, \quad k\neq i,j.
 \end{align*}
-The corresponding exchange operator can be written as
-\begin{equation}
-B_{ij} = \frac{i}{\sqrt{2}} (1 - \gamma_i \gamma_j), \quad B_{ij} ^{†} = \frac{1-i}{\sqrt{2}} (1 + \gamma_i \gamma_j).
-\end{equation}
-Squaring exchange operations gives transformations directly related to Pauli gates:
-\begin{align*}
-B_{12}^2 &= -i\gamma_1\gamma_2 = -X, \\
-B_{03}^2 &= i\gamma_0\gamma_3 = X, \\
-B_{02}^2 &= i\gamma_0\gamma_2 = -Y,\\
-B_{13}^2 &= i\gamma_1\gamma_3 = -Y,\\
-B_{01}^2 &= i\gamma_0\gamma_1 =  Z,\\
-B_{23}^2 &= i\gamma_2\gamma_3 =  -Z.
-\end{align*}
+The important point is that exchanges are generated by Majorana bilinears. Therefore, the same \(i\gamma_i\gamma_j\) operators that represent Pauli operations in the encoded qubit space also determine the target braid gates used later in this thesis. For example, squaring an exchange produces a parity-dependent bilinear operation,
+\[
+B_{ij}^2 = -\gamma_i\gamma_j,
+\]
+up to phase and orientation conventions. This is why the numerical braid unitary can be checked by comparing its action on the Majorana operators and by comparing its projected parity blocks with the expected target gate.  {\color{red}https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.80.1083; https://arxiv.org/abs/1202.1293}
 
+The remaining question is how to compute the unitary generated by an adiabatic coupling protocol, which is the role of Kato transport in the next section.
+\newpage
 \subsection{Projected Subspaces, Kato Transport and Braid Unitaries}
-\subsubsection{Kato Berry Phase}
+
+This subsection connects the high-level topological theory of braiding with the microscopic details of the PMM system. The goal is to understand how to compute the braid unitary generated by a time-dependent parameter protocol, and how to compare it with the ideal target gate. In these systems, braiding is not performed by physically moving particles through space, but rather by tuning Hamiltonian parameters in a way that mimics the effect of an exchange. \\ 
+An adiabatic parameter protocol defines a path in the space of Hamiltonians. If the relevant low-energy subspace remains isolated along this path, the geometric transport of that subspace gives the braid unitary. The Kato formulation provides a convenient way to compute this unitary without having to track individual eigenstates and their arbitrary phases. By projecting the dynamics onto the low-energy subspace defined by the Majorana-like states, we can extract the effective braid unitary and compare it with the ideal target gate expressed in terms of Majorana bilinears.\\
+
+\paragraph{Kato Transport in a Degenerate Subspace\newline}
 The Berry phase is a geometric phase acquired by a quantum state during adiabatic evolution around a closed loop in parameter space. For a non-degenerate eigenstate, the state returns to itself up to a phase. This phase has a dynamical part, which depends on the time scale and the energy of the state, and a geometric part, which depends only on the path in parameter space. The geometric contribution is the Berry phase.\\
 
 For a degenerate subspace, the situation is richer. The adiabatic evolution can mix states within the degenerate manifold, so the Berry phase becomes a matrix rather than a scalar phase. In this thesis, this non-Abelian Berry matrix is what determines the braid unitary acting on the Majorana qubit space.\\
 
-The Kato formulation provides a convenient way to compute this adiabatic transport. Instead of tracking individual eigenvectors and their phases, one works directly with the projector $P(t)$ onto the relevant low-energy subspace. The Kato evolution satisfies
-$$
-\partial_{t}U_t = i \left[P, \partial_{t}P\right]U_t, \qquad
+The Kato formulation provides a convenient way to compute this adiabatic transport. Instead of tracking individual eigenvectors and their phases, one works directly with the projector $P(t)$ onto the relevant low-energy subspace. In the convention used in the numerical implementation, the Kato evolution satisfies
+\[
+\partial_{t}U_t = \left[P, \partial_{t}P\right]U_t, \qquad
 U_0 = I.
-$$
-The final unitary $U_T$ is the non-Abelian Berry phase associated with the path. In numerical calculations, $P(t)$ is obtained by diagonalizing the Hamiltonian at each time step and constructing the projector onto the chosen low-energy manifold.\\
+\]
+{\color{red}https://journals.jps.jp/doi/epdf/10.1143/JPSJ.5.435}
+The final unitary $U_T$ is the geometric transport associated with the path in the chosen subspace. A full physical time evolution would also contain dynamical phases depending on the instantaneous energies and total protocol time. The Kato construction isolates the adiabatic geometric part, which is the component relevant for identifying the braid gate. In numerical calculations, $P(t)$ is obtained by diagonalizing the Hamiltonian at each time step and constructing the projector onto the chosen low-energy manifold.\\ \\ 
+This unitary matrix is the braid unitary generated by the parameter protocol. By comparing $U_T$ with the ideal target gate expressed in terms of Majorana bilinears, we can assess how well the parameter-tuning braid approximates the desired quantum gate operation. This comparison can be done both at the operator level, by checking how $U_T$ transforms the Majorana operators, and at the level of the projected parity blocks, by checking how $U_T$ acts on the encoded qubit states.\\
 
-\subsubsection{Effective Braiding Hamiltonian}
+\paragraph{Effective Braiding Hamiltonian\newline}
 As a reference model, assume that the system contains four Majorana modes $\gamma_0$, $\gamma_1$, $\gamma_2$, and $\gamma_3$ involved in the braid. A useful physical picture is a Y-junction made from three PMM subsystems, where one central Majorana is coupled sequentially to different neighboring Majoranas.\\
 \begin{figure}
   \centering
@@ -346,21 +359,59 @@ In Fig.~\ref{fig:6_majoranas}, the four Majoranas $\gamma_0$, $\gamma_1$, $\gamm
   \end{aligned}
   \label{eq:H_eff}
 \end{equation}
-where $\Delta_{ij}$ is a tunable coupling between Majoranas $\gamma_i$ and $\gamma_j$. By turning these couplings on and off in a controlled sequence, the system can implement an effective exchange operation.\\
+where $\Delta_{ij}$ is a tunable coupling between Majoranas $\gamma_i$ and $\gamma_j$. By turning these couplings on and off in a controlled sequence, the system can implement an effective exchange operation. This model is not meant to describe all microscopic details of the dot device directly. Instead, it serves as a reference model where the intended Majorana exchange can be tested without additional complications from the full interacting Hamiltonian.\\
 
+
+\paragraph{Projected Microscopic Junctions\newline}
 In a microscopic PMM device, the tunable quantities are not abstract Majorana bilinears, but physical hopping and pairing couplings between dots or subsystems. A junction between two PMM subsystems can be modeled by
 \begin{equation}
   H_{JuncAB} = t_{AB} (d_{A} ^{†} d_{B} + d_{B} ^{†} d_{A}) + \Delta_{AB} (d_{A} ^{†} d_{B} ^{†} + d_{B} d_{A}),
   \label{eq:junctionHamiltonian}
 \end{equation}
-which is the same type of elastic cotunneling and crossed-Andreev pairing structure appearing in the PMM Hamiltonian. This motivates comparing two related braid constructions: one built from ideal or energy-level Majorana operators, and one built from projected microscopic local operators.\\
+which is the same type of elastic cotunneling and crossed-Andreev pairing structure appearing in the PMM Hamiltonian. After such microscopic junction operators are projected into the retained low-energy subspace, they can be compared with the effective Majorana bilinears of Eq.~\ref{eq:H_eff}. This motivates comparing two related braid constructions: one built from ideal or energy-level Majorana operators, and one built from projected microscopic local operators.\\
 
-\subsubsection{Energy-Level and Local-Operator Braids}
-The energy-level construction starts from the parity-resolved eigenstates of each optimized subsystem. Even and odd states are paired by energy, and effective Majorana operators are formed from combinations such as
-$$
-\gamma_1 \sim \ket{o}\bra{e} + \ket{e}\bra{o}, \qquad
-\gamma_2 \sim i(\ket{o}\bra{e} - \ket{e}\bra{o}).
-$$
-This construction asks whether the spectrum itself supports a clean Majorana-like exchange channel.\\
+\paragraph{Energy-Level Versus Local-Operator Braids\newline}
+The central comparison in the braiding analysis is between two ways of replacing the ideal operators $\gamma_2$ and $\gamma_3$ in Eq.~\ref{eq:H_eff}. The effective Hamiltonian assumes that the Majorana operators are ideal and perfectly localized, while the optimized PMM system only provides approximate Majorana-like degrees of freedom. To test how close the microscopic system comes to the ideal exchange picture, we compare an energy-level construction with a local-operator construction.\\ \\ 
+In Majorana language, the target exchange operation used in this thesis is
+\begin{equation}
+  B_{\gamma_2\gamma_3} = \exp\left(-\frac{\pi}{4}\gamma_2\gamma_3\right).
+\end{equation}
+The resulting braid unitary is later compared with this target gate, both through its action on Majorana operators and through its projected parity-block representation.\\
 
-The local-operator construction instead begins with microscopic endpoint operators, such as local combinations of $c^\dagger$ and $c$, and projects them into the retained low-energy subspace. This construction asks whether the same exchange channel is actually accessed by physical local couplings in the device. The distinction between these two constructions is important in this thesis, because the optimized spectrum can support an effective Majorana algebra even when the projected local operators only approximate the ideal energy-level Majoranas.
+The local-operator braid is built from microscopic endpoint operators rather than from idealized Majorana operators. In principle, one can project either the real or imaginary local Majorana component, corresponding to $c^\dagger+c$ and $i(c^\dagger-c)$, respectively. In the calculations presented here, the physical braid uses the projected minus component, $P\,i(c^\dagger-c)\,P$, for the relevant B and C subsystem sites. After projection into an $N$-dimensional low-energy subspace, these operators are normalized and used as the effective braid channels that replace $\gamma_2$ and $\gamma_3$. The driven Hamiltonian therefore takes the schematic form
+\begin{equation}
+   \begin{aligned}
+    H_{\text{local}} = &\Delta_{01} i\gamma_0\gamma_1 + \\
+    &\Delta_{02} i\gamma_0 \Gamma_{B}^{P} + \\
+    &\Delta_{03} i\gamma_0 \Gamma_{C}^{P},
+  \end{aligned}
+\end{equation}
+with
+\begin{equation}
+  \Gamma_{B}^{P} \propto P\,i(c_B^\dagger-c_B)\,P,
+  \qquad
+  \Gamma_{C}^{P} \propto P\,i(c_C^\dagger-c_C)\,P.
+\end{equation}
+Here $P$ is constructed by diagonalizing the full Hamiltonian and selecting the $N$ lowest-energy eigenstates. The local-operator braid therefore tests whether the physically projected microscopic endpoint operators access the same exchange channel as the ideal target gate.\\ \\ 
+The energy-level construction starts from the optimized subsystem Hamiltonian. For clarity, this is the $n$-dot extension of the effective two-dot model \ref{eq:qdsqdh},
+\begin{equation}
+  H = \sum_{i}^n \epsilon_i n_i + ∑_{j}^{n-1} t_j (c_j ^{†} c_{j+1} + c_{j+1} ^{†} c_j) + ∑_{j}^{n-1} \Delta_j (c_j ^{†} c_{j+1} ^{†} + c_{j+1} c_j) + ∑_{j}^{n-1} U n_j n_{j+1},  
+  \label{eq:n_dot_hamiltonian}
+\end{equation}
+Diagonalizing this Hamiltonian \ref{eq:n_dot_hamiltonian}, we obtain the energy eigenstates, which can be classified by parity. By pairing even and odd states that are close in energy, we can construct effective Majorana operators as combinations of these parity partners. In its simplest form, this construction looks like:
+\begin{equation}
+  \begin{aligned}
+      \gamma_{+} &= \sum_{i}^{n} \left(\ket{e_i} \bra{o_i} + \ket{o_i} \bra{e_i}\right), \\
+      \gamma_{-} &= i\sum_{i}^{n} \left(\ket{e_i} \bra{o_i} - \ket{o_i} \bra{e_i}\right).
+    \end{aligned}
+    \label{eq:majorana_construction}
+\end{equation}
+Here $n$ is the number of even-odd energy pairs included in the construction {\color{red}https://arxiv.org/pdf/2510.20538}. For $n=1$, only the ground-state parity pair contributes. Larger values of $n$ retain more of the low-energy spectrum and allow the braid construction to be tested in enlarged projected spaces. The paired-state construction is designed to realize the Majorana algebra within the selected parity-pair subspace; after embedding and projection into the full retained low-energy space, the resulting operators are checked numerically for normalization and anticommutation errors.\\
+
+In the higher-energy analysis, the relevant projected Majorana channel is not assumed to be purely $\gamma_{+}$ or purely $\gamma_{-}$. Instead, the implementation constructs the accumulated projected $\gamma_{+}$ and $\gamma_{-}$ components from the chosen parity pairs, and then fits a global linear combination to the projected local reference operator:
+\begin{equation}
+  \gamma_{\text{fit}} = a\,\gamma_{+}^{P} + b\,\gamma_{-}^{P}.
+\end{equation}
+The coefficients $a$ and $b$ are chosen to minimize the mismatch with the projected microscopic local operator in the retained subspace. This fitting procedure can be interpreted as selecting the effective Majorana direction that best aligns the energy-level construction with the physically projected local channel.\\
+
+The comparison between these two constructions is one of the central checks in this thesis. If the energy-level and local-operator braids agree, then the optimized spectrum and the physical endpoint couplings select the same Majorana exchange channel. If they differ, the spectrum may still contain Majorana-like parity pairs, but the local microscopic operators do not access the ideal braid cleanly. This distinction is what allows the braiding analysis to go beyond asking whether Majorana-like states exist, and instead test whether they can be used to implement the intended exchange operation.
