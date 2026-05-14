@@ -1,0 +1,335 @@
+\documentclass[UKenglish, thumbmarks]{uiophdthesis}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc, url}  \urlstyle{sf}
+\usepackage{babel, csquotes, fancyvrb, graphicx, textcomp, uiomasterfp, varioref}
+%% \usepackage[backend=biber,style=numeric-comp]{biblatex}  %% No bibliography
+\usepackage[hidelinks, hypertexnames=false]{hyperref}
+
+\newcommand{\bsl}{\textbackslash}
+\newcommand{\dash}{\textthreequartersemdash}
+\newcommand{\p}[1]{\textsf{#1}}
+\newcommand{\pb}[1]{\textbf{\p{#1}}}
+\newcommand{\pcmd}[1]{\p{\bsl #1}}
+\newcommand{\popt}[1]{\p{[#1]}}
+\newcommand{\ppar}[1]{\p{\{#1\}}}
+\newcommand{\tighterlist}{\addtolength{\itemsep}{-1ex}}
+
+\title{Writing your PhD thesis}
+\subtitle{A guide to the \LaTeX{} document class \pb{uiophdthesis}}
+\author{Dag Langmyhr (\url{dag@ifi.uio.no})}
+
+\begin{document}
+\uiomasterfp[kind=Documentation, compact, nosp, colour=grey,
+  date=\today]
+
+\frontmatter
+\maketitle
+
+\begin{abstract}
+\LaTeX{} is an excellent tool for writing your PhD thesis, especially in
+combination with the bibliography tool Bib\LaTeX.
+
+The University of Oslo has defined guidelines\footnote{\label{guidelines}See
+  \url{https://www.uio.no/english/services/print/doctoral-thesis/index.html}.}
+for the PhD theses, and 
+the University of Oslo Library and the Department of Informatics have
+developed the document class \pb{uiophdthesis} in accordance with these
+guidelines. This documentation has been typeset using that class.
+\end{abstract}
+
+\tableofcontents
+
+\mainmatter
+\begin{uioseparatorpage}{Introduction\label{intro-part}}
+  What is the \pb{uiophdthesis} document class and how do I use it?
+\end{uioseparatorpage}
+
+\chapter{About the document class}
+The \p{uiophdthesis} class has the following features:
+\begin{itemize}
+\item The paper size is A4, which is what the printers require (see
+  the guidelines in footnote on page~\pageref{guidelines}).
+  The thesis will be photographically reduced to
+  81\,\% when printed.
+
+\item The font size is 12\,pt which will look all right in the reduced
+  print.
+
+\item You should not attempt to create any kind of cover page. This
+  will always be supplied by the printers.
+\end{itemize}
+
+\section{Document structure}
+The standard \LaTeX{} document structuring commands
+\begin{center}
+  \pcmd{chapter}, \pcmd{section}, \pcmd{subsection} and \pcmd{subsubsection}
+\end{center}
+can be used in your thesis.
+
+You should avoid using the \pcmd{part} command. If you want a
+separation page, you should rather use the \p{uioseparatorpage}
+environment:
+
+\begin{quote}
+  \pcmd{begin}\ppar{uioseparatorpage}\ppar{\emph{title}}\\
+  ~~~~ some text (if you need it)\\
+  \pcmd{end}\ppar{uioseparatorpage}
+\end{quote}
+For an example, see page~\pageref{intro-part}.
+
+\section{Included research papers\label{uiopaper}}
+Your thesis is likely to contain one or more research paper published
+in various journals. When you want to include such a research
+paper, you should use the command \textbf{\pcmd{uiopaper}}:
+\begin{quote}
+  \pcmd{uiopaper}\popt{\emph{options}}\ppar{\emph{title of paper}}
+\end{quote}
+The available options are:
+\begin{description}
+\item[\p{subtitle=\ppar{Any suitable subtitle}}] provides a subtitle
+  (if required).
+\item[\p{authors=\ppar{My Name\pcmd{and} Another Name\bsl\bsl\ affiliation}}] is
+  used when you want to name the author or authors.
+\item[\p{abstract=\ppar{This article describes \dots}}] provides
+  an abstract for the article (if you want one on the paper title
+  page).
+\item[\p{compact}] gives a more compact title page~\dash{}
+  this is particularly useful if you have a long
+  abstract. Page~\pageref{info-part} has a default header page, while
+  page~\pageref{part:example} uses the compact version.
+\item[\p{published=\ppar{Published in \emph{Journal of ABC}\bsl\bsl\ 
+      additional info}}] for any information on the publication of the
+  article. 
+\item[\p{info=\ppar{\dots}}] for any additional information.
+\item[\p{nochapter}] see Section~\vref{article-style}.
+\end{description}
+
+\subsection{Typesetting a research paper}
+If you have the \LaTeX{} source for the research paper, you can include it
+here, after the \pcmd{uiopaper} command.
+
+\subsubsection{Research papers in \emph{article} style\label{article-style}}
+Many research papers were originally written in the \p{article} style,
+and this style has no \pcmd{chapter} command. To make it easier to include
+these in the thesis, the \pcmd{uiopaper} command may be given as
+\begin{quote}
+  \p{\pcmd{uiopaper}[nochapter, \dots]\ppar{\emph{paper title}}}
+\end{quote}
+Then, the paper will be properly typeset with no \pcmd{chapter}
+commands but with \pcmd{section} as the highest structuring command.
+
+\subsection{Research paper published elsewhere}
+If you want to include the research paper exactly as it was typeset in
+some publication, you can import it from a \textsc{pdf} file using the
+command \textbf{\pcmd{uioincludepdf}} giving the \textsc{pdf} file as
+parameter.
+
+Page numbers can often be a problem when including full-page
+\textsc{pdf} files: they might overlap those of your thesis. To remedy
+this, you may supply \pcmd{uioincludepdf} with options to alter the
+position of page number of the thesis. (Those of the included paper are, of
+course, part of the \textsc{pdf} file and cannot be modified.)
+
+\medskip\noindent
+\p{\pcmd{uioincludepdf}\ppar{\emph{file name}}} --- move thesis
+  page numbers into the margin\\
+\p{\pcmd{uioincludepdf}[numbers=low]\ppar{\emph{file name}}} --- as
+  above, but lower\\
+\p{\pcmd{uioincludepdf}[numbers=none]\ppar{\emph{file name}}} ---
+  remove thesis page numbers
+
+\uiopaper[authors={My Name\and Your Name\\ The University of Oslo},
+    abstract={This ``paper'' provides instructions on how to use this
+      document class. It also describes the available document options.},
+    info={(This page is an example of a default header page for
+      published papers.)}]
+  {Practical information\label{info-part}}
+  
+\chapter{Installation}
+\section{On a Linux computer at Ifi}
+If you are processing your \LaTeX{} document on a stationary Linux
+computer at the University of Oslo, you need not worry about
+installing the \p{uiophdthesis} document class; it is already there.
+
+\section{On your personal computer\label{privat-pc}}
+To use this document class on your own computer (which may run Linux, MacOS
+or Windows) you must do the following:
+\begin{enumerate}
+\item Fetch
+  \url{https://www.mn.uio.no/ifi/tjenester/it/hjelp/latex/uiotheses.zip}. (Click
+  on this \textsc{url} to download the file.)
+  
+\item Unzip the files. You may place all the files in the same folder
+  as your \LaTeX{} source files.\footnote{If you know where \LaTeX{}
+    packages are kept on your computer, you 
+    can save them there to make them generally available. Remember to
+    refresh your file name database afterwards.}
+\end{enumerate}
+And that should be all.
+
+\section{Using Overleaf}
+If you are using Overleaf (see \url{https://www.overleaf.com}) to
+write your thesis, you must do the following:
+\begin{enumerate}
+\item Select ``New Project''.
+
+\item Under ``Institution Templates'', select ``University of Oslo''.
+
+\item Select ``UiO PhD thesis''.
+
+\item Select ``Open as Template''.
+\end{enumerate}
+Once this has been done, you may use the document class.
+
+\chapter{Using the document class}
+To use this document class, just start your \LaTeX{} file with
+\begin{quote}
+  \pcmd{documentclass[\emph{options}]}\ppar{uiophdthesis}
+\end{quote}
+
+\section{Document class options}
+
+\subsection{Fonts\label{font}}
+The default document font for \p{uiophdthesis} is the standard \LaTeX{} font
+{\fontfamily{lmr}\fontshape{it}\selectfont Computer Modern} in
+combination with \textsf{\textit{Helvetica}}.
+You may select a different font by using one of these
+options to \pcmd{documentclass}:
+\begin{description}\tighterlist
+\item[\p{font=garamond}] selects
+  {\fontfamily{mdugm}\fontshape{it}\selectfont Garamond} with
+  \textsf{\textit{Helvetica}}
+  
+\item[\p{font=noto}] selects
+  {\fontfamily{NotoSerif-LF}\fontshape{it}\selectfont Noto serif} with
+  {\fontfamily{NotoSans-TLF}\fontshape{sl}\selectfont Noto sans}
+
+\item[\p{font=times}] selects
+  {\fontfamily{ptm}\fontshape{it}\selectfont Times Roman} with
+  \textsf{\textit{Helvetica}}
+\end{description}
+
+\subsection{Option \p{thumbmarks}\label{lab:thumbmarks}}
+This option provides highly visible thumb marks on the front page for
+all papers included using the command \pcmd{uiopaper}
+(see Section~\vref{uiopaper}). Pages~\pageref{info-part} and
+\pageref{part:example} show such thumb marks.
+
+\subsection{Other document class options}
+All other options to \pcmd{documentclass} are passed on to
+the packages you use.
+
+\uiopaper[compact,
+    author={A Name\\ University of Somewhere},
+    abstract={This ``paper'' shows a suitable base text for a
+      \LaTeX{} file for a PhD thesis, and it describes the various
+      specifications used, line for line.},
+    info={(This page is an example of a compact header page
+      for published papers; see Section~\vref{lab:thumbmarks}.)}]
+  {An example\label{part:example}}
+\noindent
+The \p{uiophdthesis} package comes with a base file named
+\pb{uiophdthesis-base.tex} containing the basic layout of your thesis;
+see Figures~\vref{fig:base} and~\vref{fig:base2}.
+  The idea is that you make a copy of that
+  file, modify the specified texts, and then write your thesis.
+
+\begin{description}
+\item[Line 1:] The document class should be \pb{uiophdthesis}. You must
+  also specify the language of your thesis. Include option \pb{thumbmarks} if
+  you want thumbmarks; see Section~\vref{lab:thumbmarks}.  
+\item[Line 2:] UTF-8 is the most common character encoding in use
+  today, so, unless you specify otherwise in your text editor, you are
+  likely to get this encoding.
+\item[Line 3:] The \p{url} package provides the \pcmd{url}
+  command which is very useful for typesetting long internet
+  addresses. These should be set in a \textsf{sans serif} (``sf'') typeface
+  (rather than \texttt{teletype}). For an example, see
+  Section~\vref{privat-pc}.
+\item[Lines 4--8:] These packages should always be included:
+  \begin{description}
+  \item[\p{babel}] handles language adaption.
+  \item[\p{csquotes}] supports quote marks in various languages. This
+    package is required by \p{biblatex}; see below.
+  \item[\p{graphicx}] provides support for including illustrations.
+  \item[\p{textcomp}] adds many useful symbols.
+  \item[\p{varioref}] gives improved features for crossrefererencing.
+  \item[\p{biblatex}] loads Bib\LaTeX{} which handles
+    bibliographies.\footnote{\emph{Local guide to Bib\LaTeX} at
+      \url{https://www.mn.uio.no/ifi/tjenester/it/hjelp/latex/biblatex-guide.pdf}
+      is a simple introduction to creating your bibliography.}
+    The package options given here are recommended; they use the
+    numeric citation style favoured in natural science.
+  \item[\p{hyperref}] provides hyperlinks both internally and externally.
+  \item[\p{bookmark}] fixes some minor bugs in \p{hyperref}.
+  \end{description}
+
+\item[Lines 10--11:] You must always state a thesis title. You may also
+  provide a subtitle, but that is not mandatory.
+\item[Line 12:] Don't forget you own name! If there are several
+  authors, separate the names with an \pcmd{and}.
+
+\item [Line 14:] \pcmd{addbibresouce} specifies the name/s of your Bib\LaTeX{}
+  bibliography file/s.
+
+\item[Line 17:] \pcmd{frontmatter} specifies the start of the thesis front matter, i.e.,
+  abstract, table of contents~etc.
+\item[Line 18:] prints a title page. (This will appear after
+  the cover page so it is recommended.) Normally, just the title, subtitle and
+  author's name is printed, but you may use these options to
+  provide additional information:
+  \begin{description}
+  \item[\p{dept=\ppar{\emph{department name}}}] gives the name of the
+    department. 
+  \item[\p{fac=\ppar{\emph{faculty name}}}] gives the faculty name. 
+  \item[\p{info=\ppar{\emph{additional info}}}] provides additional information.
+  \item[\p{supervisor=\ppar{\emph{supervisor's name}}}] names the
+    supervisor. 
+  \item[\p{supervisors=\ppar{\emph{supervisor's name}\pcmd{and}
+        \emph{name}\pcmd{and} \emph{name}}}] gives the names of the
+    supervisors, if there are more than one.
+  \item[\p{year=\ppar{\emph{year}}}] indicates the year; it is only
+    required when the year is other than the current one.
+  \end{description}
+
+\item[Lines 27--29:] contains your abstract.
+\item[Lines 30--33:] contains your abstract in a different language,
+  for example in Norwegian. \textbf{A Norwegian abstract is mandatory
+    at the University of Oslo.} 
+\item[Lines 35--37:] produces your tables of content, figures and
+  tables, accordingly.
+\item[Lines 39--41:] is your preface.
+
+\item[Line 43:] shows the start of the main part of your thesis.
+\item[Line 44--46:] gives you a separation page.
+\item[Line 48--49:] are the standard structuring commands.
+\item[Line 51--59:] contains a research paper typeset as part of the thesis.
+\item[Line 61--62:] contains a different research paper avaible as a
+  \textsc{pdf} file. 
+\item[Line 64--67:] gives another separator page followed by some
+  text.
+\item[Line 71:] starts the back part containing appendices,
+  bibliography and such.
+\item[Line 72:] prints the bibliography created by Bib\LaTeX.
+\end{description}
+
+\begin{figure}[htp]
+  \VerbatimInput[fontsize=\footnotesize,frame=single,obeytabs,
+    label={\pb{uiophdthesis-base.tex}},numbers=left,lastline=41]{uiophdthesis-base.tex}
+  \caption{The file \p{uiophdthesis-base.tex} (part I)\label{fig:base}}
+\end{figure}
+
+\begin{figure}[htp]
+  \VerbatimInput[fontsize=\footnotesize,frame=single,obeytabs,
+    numbers=left,firstline=43]{uiophdthesis-base.tex}
+  \caption{The file \p{uiophdthesis-base.tex} (part II)\label{fig:base2}}
+\end{figure}
+
+\chapter{Two other examples}
+\begin{itemize}
+\item The file \url{uiophdthesis-guide.tex} shows the \LaTeX{} source
+code for this documentation.
+\item The file \url{uiophdthesis-demo.pdf} presents a demonstration
+  thesis showing both the \LaTeX{} code and the result.
+\end{itemize}
+\end{document}

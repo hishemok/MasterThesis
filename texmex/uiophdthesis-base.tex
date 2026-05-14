@@ -1,0 +1,73 @@
+\documentclass[UKenglish,thumbmarks]{uiophdthesis}   %% ... or USenglish
+\usepackage[utf8]{inputenc}                          %% ... or latin1
+\usepackage[T1]{url}\urlstyle{sf}
+\usepackage{babel, csquotes, graphicx, textcomp}
+\usepackage[nospace]{varioref}
+\usepackage[backend=biber,style=numeric-comp]{biblatex}
+\usepackage[hidelinks, hypertexnames=false]{hyperref}
+\usepackage{bookmark}
+
+\title{The title of my thesis}        %% ... or whatever
+\subtitle{A subtitle}                 %% ... or whatever
+\author{My Name}                      %% ... or whoever 
+
+\addbibresource{mybib.bib}            %% Your bibliography file
+
+\begin{document}
+\frontmatter{}
+\maketitle[
+  supervisor={A Supervisor},
+  %% supervisors={A Supervisor\and Another Supervisor}, %% if more than one
+  %% dept={Department of Something},  %% if you want to include it
+  %% fac={Faculty of Theory},         %% if you want to include it
+  %% info={Additional info},          %% if you need it
+  %% year={2099}                      %% unless current year
+]
+
+\begin{abstract}
+  Here come 3--6 sentences describing your thesis.
+\end{abstract}
+\begin{xabstract}[Sammendrag]               %% ... or Abstract or ...
+  Here comes the abstract in a different language.
+  Note that a Norwegian abstract is mandatory!
+\end{xabstract}
+
+\tableofcontents{}                          %%
+\listoffigures{}                            %% (omit if none)
+\listoftables{}                             %% (omit if none)
+
+\begin{preface}
+  Here comes your preface, including acknowledgments and thanks.
+\end{preface}
+
+\mainmatter{}
+\begin{uioseparatorpage}{Introduction}  %% ... Innledning or Innleiing
+  ... if you need a separator page
+\end{uioseparatorpage}
+
+\chapter{Background}                  %% ... or Bakgrunn
+\section{Xxx's work}                  %% ... or whatever
+
+\uiopaper[compact,                    %% (if you want a compact form)
+  %% subtitle={A subtitle},           %% (if you want a subtitle)
+  %% authors={My Name\and Your Name}, %% (name the authors; separate with \and)
+  %% published={Journal name},        %% (publishing info)
+  %% info={Additional info},          %% (any additional info)
+  %% abstract={Article abstract},     %% (if you need one)
+]{My first paper}                     %% Start another paper
+\chapter{Planning the project}        %% ... or ??
+Some text ...
+
+\uiopaper{My second paper}            %% ... or ??
+%% \uioincludepdf{mypaper2.pdf}       %% (PDF of a published paper)
+
+\begin{uioseparatorpage}{Conclusion}  %% ... or ?? (if any)
+  %% any information
+\end{uioseparatorpage}
+
+\chapter{Results}                     %% ... or ??
+Some text ...
+
+\backmatter{}
+\printbibliography{}
+\end{document}
