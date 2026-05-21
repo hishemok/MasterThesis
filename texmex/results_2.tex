@@ -1,0 +1,244 @@
+\chapter{Results}
+In this chapter, I will present the main numerical results of the thesis. The first part of the chapter will cover the optimized parameters found by the gradient-based optimization procedure, how these parameters depend on system size and interaction strength, whether the optimized Hamiltonians display Majorana-like spectral and what trends are observed in the local diagnostics. 
+The second part of the chapter will focus on the braiding results. The results are solely based on the optimized parameter configurations, after picking the best candidates from the optimization scheme. The braiding analysis is divided into two parts: first, I will compare the ideal four-Majorana braid, the projected microscopic junction braid, and the projected local-operator braid in the low-energy projected setting. This, along with the well known analytical non-interacting sweet spot braid, serves as a controlled reference calculation to test whether the optimized microscopic system reproduces the exchange behavior expected from the ideal effective model. Then, I will extend the braiding analysis to larger projected Hilbert spaces up to the full $2^9=512$ dimensional three-subsystem system. This tests how much of the agreement with the ideal reference survives once higher sectors are retained, and how the energy-level and local-operator braid constructions compare in larger projection spaces.
+\section{Optimized PMM Chains}
+The optimization was performed for several chain lengths $n$ and fixed interaction strengths $U$, with hopping amplitudes fixed to $t_i=1$. This makes it possible to compare how the optimizer changes the onsite energies $\epsilon_i$ and pairing amplitudes $\Delta_i$ as the interaction strength and system size are varied. The main purpose of this section is therefore to summarize the best parameter sets before applying the more detailed diagnostics in the following section.
+
+\subsection{Lowest-loss configurations}
+Table~\ref{tab:best_optimized_configs} summarizes the lowest-loss configuration found for each combination of system size $n$ and fixed interaction strength $U$. Since the hopping amplitudes were fixed to $t_i=1$ in these runs, only the optimized pairing amplitudes and onsite energies are listed. Empty entries indicate parameters that do not exist for that system size.
+
+\begin{table}[htbp]
+  \centering
+  \scriptsize
+  \setlength{\tabcolsep}{4pt}
+  \resizebox{\textwidth}{!}{
+  \begin{tabular}{cccccccccc}
+    \hline
+    $n$ & $U$ & Loss & $\Delta_1$ & $\Delta_2$ & $\Delta_3$ & $\epsilon_1$ & $\epsilon_2$ & $\epsilon_3$ & $\epsilon_4$ \\
+    \hline
+    2 & 0.0 & 5.657e-03 & 1.000 & -- & -- & -0.001 & 0.002 & -- & -- \\
+    2 & 0.1 & 2.617e-01 & 1.047 & -- & -- & -0.050 & -0.047 & -- & -- \\
+    2 & 0.5 & 1.083e+00 & 1.249 & -- & -- & -0.255 & -0.249 & -- & -- \\
+    2 & 1.0 & 1.940e+00 & 1.498 & -- & -- & -0.499 & -0.496 & -- & -- \\
+    2 & 2.0 & 3.203e+00 & 2.000 & -- & -- & -1.006 & -1.004 & -- & -- \\
+    2 & 5.0 & 4.004e+00 & 3.499 & -- & -- & -2.508 & -2.506 & -- & -- \\
+    \hline
+    3 & 0.0 & 3.442e-01 & 1.010 & 1.348 & -- & 0.019 & 1.774 & -0.466 & -- \\
+    3 & 0.1 & 5.603e-01 & 1.001 & 1.002 & -- & -0.101 & -0.607 & -0.003 & -- \\
+    3 & 0.5 & 9.359e-01 & 1.004 & 1.012 & -- & -0.046 & -0.889 & -0.454 & -- \\
+    3 & 1.0 & 1.452e+00 & 1.025 & 1.130 & -- & -0.195 & -1.530 & -0.802 & -- \\
+    3 & 2.0 & 2.326e+00 & 1.584 & 0.978 & -- & -1.511 & -3.077 & -0.484 & -- \\
+    3 & 5.0 & 3.142e+00 & 0.846 & 1.746 & -- & -4.814 & 1.009 & -0.184 & -- \\
+    \hline
+    4 & 0.0 & 3.161e-01 & 2.698 & 5.332 & 1.004 & -0.059 & -4.252 & 0.236 & -0.003 \\
+    4 & 0.1 & 4.840e-01 & 1.790 & 5.002 & 1.013 & 0.156 & 2.376 & -1.966 & -0.050 \\
+    4 & 0.5 & 1.006e+00 & 1.212 & 3.490 & 1.206 & -0.246 & -0.499 & -0.503 & -0.250 \\
+    4 & 1.0 & 5.670e-01 & 2.238 & 18.807 & 1.072 & -0.500 & -1.028 & -1.025 & -0.496 \\
+    4 & 2.0 & 1.824e+00 & 1.492 & 5.537 & 1.588 & -0.869 & 3.526 & -6.508 & -1.220 \\
+    4 & 5.0 & 2.600e+00 & 3.389 & 9.513 & 3.336 & -2.645 & 5.032 & -15.431 & -2.293 \\
+    \hline
+  \end{tabular}}
+  \caption{Lowest-loss optimized configurations extracted from \texttt{configuration.json} for each combination of system size $n$ and fixed interaction strength $U$.}
+  \label{tab:best_optimized_configs}
+\end{table}
+
+For the two-dot system, the optimizer reproduces the expected non-interacting sweet spot at $U=0$, where $\Delta_1\approx t_1=1$ and the onsite energies remain close to zero. As the interaction strength is increased, the optimized pairing amplitude grows above the fixed hopping scale, while the onsite energies move approximately toward $\epsilon_i\approx -U/2$. This indicates that the optimizer deforms the known two-dot sweet spot in a smooth and physically interpretable way.
+
+For the three-dot system, the weak- and intermediate-interaction configurations remain relatively close to the homogeneous pairing limit, with $\Delta_1\approx\Delta_2\approx 1$ for $U=0.1$ and $U=0.5$. At the same time, the middle-site energy becomes more negative than the edge-site energies. This suggests that the optimizer favors a differentiated central region even when the pairing amplitudes remain nearly uniform.
+
+The four-dot system shows the clearest sign that the optimization landscape becomes more complicated as the chain length increases. In several of the best configurations, the optimizer strongly enhances the central pairing amplitude while leaving the outer pairing amplitudes closer to unity. The optimized onsite energies also become highly inhomogeneous, particularly at stronger interactions. Taken together, these trends suggest that longer PMM chains do not simply reproduce the two-dot sweet spot, but instead require more structured inhomogeneous parameter profiles.
+
+\subsection{Representative optimized spectra}
+The two-dot spectra in Figs.~\ref{fig:2dot_schematicfirst} and~\ref{fig:2dot_schematicsecond} illustrate how the optimized spectrum changes as interactions are increased. At $U=0$, both parity pairs are degenerate, while at $U=0.1$ the excited pair begins to split. By $U=2.0$, the splitting is much more pronounced. This is consistent with the fact that the interacting two-dot system can retain a low-energy Majorana-like signature while failing to maintain full parity-pair degeneracy across the entire finite spectrum.
+
+\begin{figure}
+  \centering
+  \includegraphics[height=0.7\textwidth]{figs/2DotU0.png}
+  \includegraphics[height=0.7\textwidth]{figs/2DotU01.png}
+  \caption{Parity-resolved spectra after optimization for the two-dot system at $U=0$ and $U=0.1$. The optimized parameters are shown schematically below each spectrum.}
+  \label{fig:2dot_schematicfirst}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.7\textwidth]{figs/2DotU2.png}
+  \caption{Parity-resolved spectrum after optimization for the two-dot system at $U=2.0$. The optimized parameters are shown schematically below the spectrum.}
+  \label{fig:2dot_schematicsecond}
+\end{figure}
+
+The three-dot system at $U=0.1$ is especially important because it becomes the main candidate for the braiding analysis. Figure~\ref{fig:3DotU01} shows both the parity-resolved spectrum and the Majorana-polarization profile for this configuration. The parity pairs are nearly degenerate, and the Majorana polarization has the expected structure: strong edge weight with opposite signs on the two ends and strongly suppressed weight on the middle dot.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.6\textwidth]{figs/3DotU01.png}
+  \includegraphics[width=0.6\textwidth]{figs/3DotMP01.png}
+  \caption{Parity-resolved spectrum and Majorana-polarization profile for the optimized three-dot system at $U=0.1$. The left panel shows the optimized spectrum and parameters, while the right panel shows the Majorana polarization of the lowest even-odd pair.}
+  \label{fig:3DotU01}
+\end{figure}
+
+\section{Post-Optimization Diagnostics}
+The optimized parameters alone do not determine whether a configuration is useful for Majorana braiding. The next step is therefore to inspect the parity-resolved spectra, the low-energy gaps, the charge difference between parity partners, and the spatial Majorana-polarization profile. These diagnostics test whether the optimized states are not only low-loss numerical solutions, but also physically interpretable Majorana-like states.
+
+\subsection{Parity-resolved spectra and low-energy gaps}
+\begin{figure}
+  \centering
+  \includegraphics[width=0.95\textwidth]{figs/parity_summary_u0_u01_u2.pdf}
+  \caption{Parity-resolved spectra for the best optimized configurations at selected interaction strengths. Each panel corresponds to a different system size $n$, and energies are shifted so that the ground state is at zero.}
+  \label{fig:parity_summary}
+\end{figure}
+
+Figure~\ref{fig:parity_summary} compares the parity-resolved spectra for $n=2,3,$ and $4$ at selected interaction strengths. The non-interacting cases provide the cleanest spectra, as expected. For the two-dot system, the excited-state parity splitting becomes visible already at weak interaction and grows at stronger interaction. For the four-dot system, the weakly interacting cases still show good parity pairing, but the stronger-interaction case is less clean and develops a noticeable low-energy splitting.
+
+The three-dot system is the most stable across the interaction strengths shown. Even at stronger interaction, the optimizer finds configurations with reasonably well-paired parity sectors, although the gap structure becomes less favorable than in the weakly interacting case. This makes the three-dot system, especially at $U=0.1$, the most promising compromise between interaction, spectral degeneracy, and later braiding feasibility.
+
+\subsection{Local diagnostics and Majorana character}
+The parity-resolved spectrum shows whether the optimizer has found approximate even-odd degeneracy, but degeneracy alone is not enough to identify Majorana-like states. To test the spatial structure of the optimized states, I compare the site-resolved Majorana polarization and the local charge difference of the lowest even-odd pair. A convincing Majorana-like configuration should display opposite polarization on the two ends of the chain, weak polarization in the middle, and only a small charge difference between the even and odd states.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.95\textwidth]{figs/majorana_character_summary.pdf}
+  \caption{Local diagnostics for representative optimized configurations. The blue curve shows the Majorana polarization profile of the lowest even-odd pair, while the orange bars show the local charge difference $|\langle e | n_i | e \rangle - \langle o | n_i | o \rangle|$ on each site. The inset in each panel reports the ground-state splitting $\delta_0$, the low-energy gap $\Delta_{\mathrm{gap}}$, and the total charge difference $Q_0$.}
+  \label{fig:majorana_character_summary}
+\end{figure}
+
+\begin{table}
+  \centering
+  \small
+  \input{generated/majorana_character_summary.tex}
+  \caption{Summary of local diagnostics for the representative configurations shown in Fig.~\ref{fig:majorana_character_summary}. Here $\delta_0$ is the splitting of the lowest even-odd pair, $\Delta_{\mathrm{gap}}$ is the gap separating this pair from the next excited states, $Q_0$ is the total charge difference between the parity partners, $\overline{|M_{\mathrm{edge}}|}$ is the mean absolute Majorana polarization on the first and last sites, and $\max |M_{\mathrm{bulk}}|$ is the largest absolute polarization on the interior sites.}
+  \label{tab:majorana_character_summary}
+\end{table}
+
+Figure~\ref{fig:majorana_character_summary} compares the spatial profiles directly, while Table~\ref{tab:majorana_character_summary} summarizes the corresponding scalar diagnostics. For the two-dot system, the edge polarization is essentially ideal, with $\overline{|M_{\mathrm{edge}}|}\approx 1$ and no bulk contribution by construction. The total charge difference is also very small, $Q_0\approx 1.4\times 10^{-3}$, both at $U=0$ and at $U=0.1$. These two-dot cases are useful references, but because they have no interior sites they do not test suppression of Majorana weight in the bulk.
+
+The three-dot configuration at $U=0.1$ is the clearest interacting example of the expected Majorana pattern. The ground-state splitting is only $\delta_0=9.39\times 10^{-5}$, the excitation gap remains large, $\Delta_{\mathrm{gap}}=1.77$, and the bulk polarization is almost completely suppressed, with $\max |M_{\mathrm{bulk}}|=2.02\times 10^{-4}$. In contrast, the four-dot configuration at $U=0.1$ has comparably strong edge polarization, $\overline{|M_{\mathrm{edge}}|}\approx 0.986$, but the splitting increases to $\delta_0=4.23\times 10^{-3}$ and the bulk polarization rises to $\max |M_{\mathrm{bulk}}|=2.33\times 10^{-2}$.
+
+Taken together, these diagnostics show that different system sizes optimize different aspects of the Majorana criteria. The four-dot case performs well in terms of charge neutrality, while the three-dot case performs better in terms of spectral near-degeneracy and suppression of bulk Majorana weight. Since the braiding analysis requires a low-energy subspace that is both nearly degenerate and spatially well localized, the interacting three-dot system remains the most convincing candidate for the rest of the thesis.
+
+\section{Selection of Braiding Candidate}
+The braiding calculations are performed using the optimized three-dot configuration at $U=0.1$. This choice is based on the combined diagnostics above: the configuration has a small ground-state splitting, a large gap to the next states, a clear edge-localized Majorana-polarization profile, and strongly suppressed bulk polarization. The optimized parameters used for the braiding setup are
+\begin{equation}
+\Delta_1=1.001,\qquad
+\Delta_2=1.002,\qquad
+\epsilon_1=-0.101,\qquad
+\epsilon_2=-0.607,\qquad
+\epsilon_3=-0.003,
+\end{equation}
+with fixed hopping amplitudes $t_i=1$ and fixed interaction strength $U=0.1$.
+
+For a three-dot chain, the single-subsystem Hilbert space has dimension $2^3=8$. In the braiding geometry, three such subsystems are combined into a total Hilbert space of dimension $2^9=512$. This makes the three-dot system large enough to test braiding in nontrivial projected spaces, while still being small enough for exact diagonalization and systematic projection scans.
+
+\section{Braiding in Projected Majorana Models}
+Before studying large projection dimensions, it is useful to establish a controlled reference calculation. I first compare the ideal four-Majorana braid, the projected microscopic junction braid, and the projected local-operator braid in the low-energy projected setting. This tests whether the optimized microscopic system reproduces the exchange behavior expected from the ideal effective model.
+
+\subsection{Ideal four-Majorana reference}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figs/braiding_ideal_protocol.pdf}
+  \caption{Idealized four-Majorana braiding protocol. The top panel shows the instantaneous spectrum of the effective Hamiltonian during the braid, with all energies shifted so that the lowest state remains at zero. The bottom panel shows the three smooth pulse couplings that move the dominant Majorana pairing through the network.}
+  \label{fig:braiding_ideal_protocol}
+\end{figure}
+
+Figure~\ref{fig:braiding_ideal_protocol} shows the reference braid in the effective four-Majorana model. The three couplings are turned on sequentially, so that the dominant pairing is first between $\gamma_0$ and $\gamma_1$, then between $\gamma_0$ and $\gamma_2$, and finally between $\gamma_0$ and $\gamma_3$ before returning to the initial configuration. Throughout this cycle, the low-energy manifold remains essentially four-fold degenerate. The largest instantaneous splitting within the ground-state manifold is only $\max(E_3-E_0)=2.28\times 10^{-12}$, while the minimum gap to the excited states remains open at $\min(E_4-E_3)=1.414$.
+
+Using Kato transport, the resulting unitary reproduces the expected single-exchange action on the Majorana operators. The largest error in the transformations $\gamma_2\rightarrow-\gamma_3$ and $\gamma_3\rightarrow\gamma_2$ is $1.33\times 10^{-5}$. In the parity-resolved gate blocks, the odd and even $2\times2$ blocks agree with the target exchange gate to within $6.53\times 10^{-8}$, while the off-block leakage is only $1.02\times 10^{-11}$. The effective model therefore provides a clean benchmark for the more microscopic projected calculations.
+
+\subsection{Projected microscopic and local-operator braids}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figs/braiding_projected_protocol.pdf}
+  \caption{Braiding protocol after replacing the idealized couplings by projected microscopic junction operators. The spectral evolution remains almost identical to the effective-model benchmark, with a well-isolated low-energy manifold throughout the cycle.}
+  \label{fig:braiding_projected_protocol}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.95\textwidth]{figs/braiding_junction_decomposition.pdf}
+  \caption{Dominant Majorana-bilinear components of the projected microscopic junction operators. The AB junction is almost entirely $i\gamma_{A1}\gamma_{B2}$, while the AC junction is almost entirely $i\gamma_{A1}\gamma_{C2}$. All subleading bilinears are strongly suppressed.}
+  \label{fig:braiding_junction_decomposition}
+\end{figure}
+
+After replacing the hand-chosen couplings of the ideal model by projected microscopic junction operators, the braid remains close to the reference result. Figure~\ref{fig:braiding_projected_protocol} shows that the four-dimensional low-energy manifold is still well separated from higher states throughout the cycle. The maximum splitting inside the ground-state manifold increases only to $\max(E_3-E_0)=7.18\times 10^{-7}$, while the minimum gap remains large, $\min(E_4-E_3)=1.413$.
+
+The junction decomposition in Fig.~\ref{fig:braiding_junction_decomposition} explains why the projected microscopic braid agrees so well with the ideal reference. The projected AB coupling is dominated by the bilinear $i\gamma_{A1}\gamma_{B2}$ with coefficient $-0.999$, and the projected AC coupling is dominated by $i\gamma_{A1}\gamma_{C2}$ with the same coefficient. This identifies $\gamma_{B2}$ and $\gamma_{C2}$ as the Majoranas that participate in the microscopic braid, while $\gamma_{A1}$ acts as the shared Majorana through which the exchange is mediated.
+
+\begin{table}[htbp]
+  \centering
+  \scriptsize
+  \setlength{\tabcolsep}{4pt}
+  \resizebox{\textwidth}{!}{\input{generated/braiding_checks_comparison.tex}}
+  \caption{Comparison of the main braid diagnostics for the ideal effective model, the projected microscopic junction model, and the alternative projected local-operator model. Here $\max(E_3-E_0)$ measures the largest instantaneous splitting inside the four-dimensional low-energy manifold, $\min(E_4-E_3)$ is the minimum gap to the excited sector, ``Max 1x err.'' is the largest deviation in the expected single-exchange Majorana map, ``Leakage'' is the off-block norm in the parity basis, and the last two columns compare the odd and even parity blocks with the target exchange gate.}
+  \label{tab:braiding_checks_comparison}
+\end{table}
+
+\begin{table}[htbp]
+  \centering
+  \small
+  \input{generated/braiding_local_projection.tex}
+  \caption{Projected local-site operators used in the alternative braid model. The table shows that the $y$-type local operators on the first and last sites of subsystems B and C collapse onto the same low-energy Majorana channels, $\gamma_{B2}$ and $\gamma_{C2}$, up to an overall sign.}
+  \label{tab:braiding_local_projection}
+\end{table}
+
+\Cref{tab:braiding_checks_comparison} shows that the microscopic braid reproduces the ideal benchmark extremely well. The largest single-exchange error stays at $1.33\times 10^{-5}$ in all three models, and the odd and even parity blocks continue to match the target gate to approximately $6.54\times 10^{-8}$. The projected local-operator version produces the same conclusion, which makes it a useful consistency check rather than an independent competing protocol.
+
+\Cref{tab:braiding_local_projection} explains why the local-site version appears insensitive to whether the first or last site of subsystem B or C is used. After projection, both $\chi_{B1,y}$ and $\chi_{B2,y}$ reduce to $\gamma_{B2}$ up to opposite sign, and similarly both $\chi_{C1,y}$ and $\chi_{C2,y}$ reduce to $\gamma_{C2}$. The different microscopic site choices therefore feed into the same low-energy braid channel rather than producing genuinely different braiding operations.
+
+\section{Braiding in Larger Projection Spaces}
+The previous braiding checks focused on the lowest projected manifold. To test how much of that agreement survives once higher sectors are retained, I repeated the braid diagnostics for projection dimensions $\dim P=8,32,56,80,256,$ and $512$, and for interaction strengths $U=0$, $0.1$, and $2.0$. For each projected Hamiltonian, the transported band is chosen from the largest persistent spectral gap along the braid path. This separates the projection dimension, which controls how much Hilbert space is retained, from the transported dimension $\dim T$, which controls which isolated band is actually braided.
+
+There are two effective target constructions in this scan. In the energy-level braid, the Majorana operators are built from paired even and odd eigenstates of the subsystem Hamiltonians. In the local-operator braid, the relevant operators are the projected local endpoint operators $P i(c^\dagger-c)P$. The energy-level construction tests whether the many-body spectrum supports a clean exchange channel, while the local-operator construction tests whether that channel is accessed by a local microscopic coupling.
+
+\begin{table}[p]
+  \centering
+  \scriptsize
+  \setlength{\tabcolsep}{4pt}
+  \resizebox{\textwidth}{!}{\input{generated/retry2_target_diagnostic_summary_retry2_remake4_diagonal_minus_extended.tex}}
+  \caption{Target diagnostic for the corrected higher-energy braid scan with $\dim P=8,32,56,80,256,512$. All errors are normalized in the transported band. ``Phys.\ vs.\ $\gamma$ target'' compares the local-operator braid to $\exp(-\pi\gamma_2\gamma_3/4)$, where $\gamma_2$ and $\gamma_3$ are constructed from diagonal even-odd energy-level pairs. ``Phys.\ vs.\ $\Gamma^P$ target'' compares the same braid to $\exp(-\pi\Gamma_2^P\Gamma_3^P/4)$, where $\Gamma_2^P$ and $\Gamma_3^P$ are projected local Majorana operators. ``Target mismatch'' directly compares these two effective target gates.}
+  \label{tab:retry2_target_diagnostic}
+\end{table}
+
+\Cref{tab:retry2_target_diagnostic} shows that the corrected diagonal energy-level construction gives a very clean braid target. The important comparison is therefore not simply whether the braid unitary is accurate, but which effective operator it is accurate with respect to. The energy-level construction is adapted to the many-body spectrum, while the local-operator construction is constrained to the projected microscopic endpoint operator.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figs/energy_levels_braid_error_80.pdf}
+  \caption{Energy-level braid error up to $\dim P=80$. The braid operators are constructed from diagonal even-odd energy-level pairs of the subsystem Hamiltonians and are compared with the corresponding energy-level target $\exp(-\pi\gamma_2\gamma_3/4)$.}
+  \label{fig:energy_levels_braid_error_80}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figs/local_braiding_op_dim_80.pdf}
+  \caption{Local-operator braid error up to $\dim P=80$. Here the braid is generated and judged using the projected local endpoint operators $P i(c^\dagger-c)P$.}
+  \label{fig:local_braiding_op_dim_80}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figs/energy_levels_braid_error_512.pdf}
+  \caption{Energy-level braid error up to $\dim P=512$. Extending the projection dimension tests whether the same eigenstate-pair construction remains stable once higher-energy sectors are retained.}
+  \label{fig:energy_levels_braid_error_512}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figs/local_braiding_op_dim_512.pdf}
+  \caption{Local-operator braid error up to $\dim P=512$, evaluated against the projected local target $\exp(-\pi\Gamma_2^P\Gamma_3^P/4)$.}
+  \label{fig:local_braiding_op_dim_512}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figs/braid_error_512_elevels_w_analytical.pdf}
+  \caption{Energy-level braid error up to $\dim P=512$, with the analytical non-interacting sweet-spot braid included as a reference. The analytical curve is evaluated only at projection dimensions that complete exact degeneracy blocks.}
+  \label{fig:braid_error_512_elevels_w_analytical}
+\end{figure}
+
+\Cref{fig:energy_levels_braid_error_80,fig:local_braiding_op_dim_80,fig:energy_levels_braid_error_512,fig:local_braiding_op_dim_512,fig:braid_error_512_elevels_w_analytical} show the main distinction between the two braid constructions. The energy-level braid is the cleaner effective operation because it is built directly from paired eigenstates of the optimized Hamiltonians. The local-operator braid is more physically constrained because it asks what is generated by the projected microscopic endpoint operator. The fact that the energy-level braid performs better should therefore be interpreted as evidence that the many-body spectrum contains a clean exchange channel, not as automatic proof that the corresponding operator is perfectly local. The local-operator results provide the complementary localization and implementability check.
+
+\section{Summary of Main Findings}
+The optimization results show that the known two-dot sweet spot is recovered in the non-interacting limit, while interactions and larger chain lengths lead to increasingly inhomogeneous optimized parameter profiles. The post-optimization diagnostics identify the three-dot system at $U=0.1$ as the strongest interacting candidate, because it combines small ground-state splitting, a large low-energy gap, strong edge Majorana polarization, and strongly suppressed bulk polarization.
+
+The low-energy braiding results show that this optimized configuration reproduces the ideal Majorana exchange very accurately after projection. The projected microscopic junction operators are dominated by the intended Majorana bilinears, and the ideal, microscopic, and local-operator braid models give nearly identical gate-validation errors in the lowest projected manifold.
+
+The larger projection scans show that the distinction between energy-level and local-operator braiding becomes important beyond the lowest projected space. The energy-level construction identifies a clean exchange channel in the many-body spectrum, while the local-operator construction tests how well that channel is accessed by projected microscopic endpoint operators. This comparison is central to interpreting the higher-dimensional braid results.

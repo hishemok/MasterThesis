@@ -393,6 +393,22 @@ with
   \qquad
   \Gamma_{C}^{P} \propto P\,i(c_C^\dagger-c_C)\,P.
 \end{equation}
+
+{\color{red} Mention that it is physically meaningful to check both the \(X\) and \(Y\) local Majorana components.
+
+A local fermionic operator has two Majorana quadratures,
+
+\[
+\chi_x = c^\dagger + c,
+\qquad
+\chi_y = i(c^\dagger-c).
+\]
+Choosing only \(\chi_y\) assumes that the physically relevant Majorana is aligned with that quadrature. But in an interacting/projected low-energy system, the effective Majorana can be rotated in this local Majorana plane,
+
+\[
+\chi(\theta)=\cos\theta\,\chi_x+\sin\theta\,\chi_y.
+\]}
+
 Here $P$ is constructed by diagonalizing the full Hamiltonian and selecting the $N$ lowest-energy eigenstates. The local-operator braid therefore tests whether the physically projected microscopic endpoint operators access the same exchange channel as the ideal target gate.\\ \\ 
 The energy-level construction starts from the optimized subsystem Hamiltonian. For clarity, this is the $n$-dot extension of the effective two-dot model \ref{eq:qdsqdh},
 \begin{equation}
@@ -416,3 +432,4 @@ In the higher-energy analysis, the relevant projected Majorana channel is not as
 The coefficients $a$ and $b$ are chosen to minimize the mismatch with the projected microscopic local operator in the retained subspace. This fitting procedure can be interpreted as selecting the effective Majorana direction that best aligns the energy-level construction with the physically projected local channel.\\
 
 The comparison between these two constructions is one of the central checks in this thesis. If the energy-level and local-operator braids agree, then the optimized spectrum and the physical endpoint couplings select the same Majorana exchange channel. If they differ, the spectrum may still contain Majorana-like parity pairs, but the local microscopic operators do not access the ideal braid cleanly. This distinction is what allows the braiding analysis to go beyond asking whether Majorana-like states exist, and instead test whether they can be used to implement the intended exchange operation.
+odd
