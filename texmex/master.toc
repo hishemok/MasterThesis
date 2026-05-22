@@ -64,18 +64,18 @@
 \contentsline {subsection}{\numberline {3.6.6}Energy-level and projected-local targets}{44}{subsection.3.6.6}%
 \contentsline {chapter}{\numberline {4}Results}{45}{chapter.4}%
 \contentsline {section}{\numberline {4.1}Optimized PMM Chains}{45}{section.4.1}%
-\contentsline {subsection}{\numberline {4.1.1}Lowest-loss configurations}{45}{subsection.4.1.1}%
-\contentsline {subsection}{\numberline {4.1.2}Representative optimized spectra}{46}{subsection.4.1.2}%
-\contentsline {section}{\numberline {4.2}Post-Optimization Diagnostics}{49}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Parity-resolved spectra and low-energy gaps}{49}{subsection.4.2.1}%
-\contentsline {subsection}{\numberline {4.2.2}Local diagnostics and Majorana character}{49}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.1.1}Lowest-loss configurations}{46}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Representative optimized spectra}{47}{subsection.4.1.2}%
+\contentsline {section}{\numberline {4.2}Post-Optimization Diagnostics}{47}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Parity-resolved spectra and low-energy gaps}{47}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Local diagnostics and Majorana character}{47}{subsection.4.2.2}%
 \contentsline {section}{\numberline {4.3}Selection of Braiding Candidate}{52}{section.4.3}%
 \contentsline {section}{\numberline {4.4}Braiding in Projected Majorana Models}{53}{section.4.4}%
 \contentsline {subsection}{\numberline {4.4.1}Ideal four-Majorana reference}{53}{subsection.4.4.1}%
 \contentsline {subsection}{\numberline {4.4.2}Projected microscopic and local-operator braids}{53}{subsection.4.4.2}%
 \contentsline {section}{\numberline {4.5}Braiding in Larger Projection Spaces}{56}{section.4.5}%
 \contentsline {section}{\numberline {4.6}Summary of Main Findings}{60}{section.4.6}%
-\contentsline {chapter}{\numberline {5}Results}{61}{chapter.5}%
+\contentsline {chapter}{\numberline {5}Results OLD}{61}{chapter.5}%
 \contentsline {section}{\numberline {5.1}Parameter Optimization Results}{61}{section.5.1}%
 \contentsline {subsection}{\numberline {5.1.1}Dependence on interaction strength and system size}{61}{subsection.5.1.1}%
 \contentsline {subsection}{\numberline {5.1.2}Trends in the optimized parameters}{62}{subsection.5.1.2}%
