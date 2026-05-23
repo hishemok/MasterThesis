@@ -67,31 +67,17 @@
 \contentsline {subsection}{\numberline {4.1.1}Lowest-loss configurations}{46}{subsection.4.1.1}%
 \contentsline {subsection}{\numberline {4.1.2}Representative optimized spectra}{47}{subsection.4.1.2}%
 \contentsline {section}{\numberline {4.2}Post-Optimization Diagnostics}{47}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Parity-resolved spectra and low-energy gaps}{47}{subsection.4.2.1}%
-\contentsline {subsection}{\numberline {4.2.2}Local diagnostics and Majorana character}{47}{subsection.4.2.2}%
-\contentsline {section}{\numberline {4.3}Selection of Braiding Candidate}{52}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Braiding in Projected Majorana Models}{53}{section.4.4}%
-\contentsline {subsection}{\numberline {4.4.1}Ideal four-Majorana reference}{53}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.2.1}Parity-resolved spectra and low-energy gaps}{49}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Local diagnostics and Majorana character}{50}{subsection.4.2.2}%
+\contentsline {section}{\numberline {4.3}Selection of Braiding Candidate}{51}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Braiding in Projected Majorana Models}{51}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Ideal four-Majorana reference}{51}{subsection.4.4.1}%
 \contentsline {subsection}{\numberline {4.4.2}Projected microscopic and local-operator braids}{53}{subsection.4.4.2}%
-\contentsline {section}{\numberline {4.5}Braiding in Larger Projection Spaces}{56}{section.4.5}%
-\contentsline {section}{\numberline {4.6}Summary of Main Findings}{60}{section.4.6}%
-\contentsline {chapter}{\numberline {5}Results OLD}{61}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Parameter Optimization Results}{61}{section.5.1}%
-\contentsline {subsection}{\numberline {5.1.1}Dependence on interaction strength and system size}{61}{subsection.5.1.1}%
-\contentsline {subsection}{\numberline {5.1.2}Trends in the optimized parameters}{62}{subsection.5.1.2}%
-\contentsline {section}{\numberline {5.2}Post-Optimization Diagnostics}{67}{section.5.2}%
-\contentsline {subsection}{\numberline {5.2.1}Parity-resolved spectra and low-energy gaps}{68}{subsection.5.2.1}%
-\contentsline {subsection}{\numberline {5.2.2}Local diagnostics and Majorana character}{69}{subsection.5.2.2}%
-\contentsline {section}{\numberline {5.3}Braiding Results in the Effective Model}{71}{section.5.3}%
-\contentsline {subsection}{\numberline {5.3.1}Evolution of the effective spectrum}{73}{subsection.5.3.1}%
-\contentsline {subsection}{\numberline {5.3.2}Berry phase and ideal exchange behavior}{73}{subsection.5.3.2}%
-\contentsline {section}{\numberline {5.4}Braiding Results for Optimized Majorana Modes}{75}{section.5.4}%
-\contentsline {subsection}{\numberline {5.4.1}Projected microscopic braid}{75}{subsection.5.4.1}%
-\contentsline {subsection}{\numberline {5.4.2}Gate-validation checks}{76}{subsection.5.4.2}%
-\contentsline {section}{\numberline {5.5}Braiding in Higher Energy Levels}{77}{section.5.5}%
-\contentsline {chapter}{\numberline {6}Discussion}{83}{chapter.6}%
-\contentsline {section}{\numberline {6.1}What the optimized parameter profiles imply}{83}{section.6.1}%
-\contentsline {section}{\numberline {6.2}What the braiding results imply}{84}{section.6.2}%
-\contentsline {section}{\numberline {6.3}Limitations and outlook}{84}{section.6.3}%
-\contentsline {chapter}{\numberline {7}Conclusion}{87}{chapter.7}%
+\contentsline {section}{\numberline {4.5}Braiding in Larger Projection Spaces}{55}{section.4.5}%
+\contentsline {section}{\numberline {4.6}Summary of Main Findings}{55}{section.4.6}%
+\contentsline {chapter}{\numberline {5}Discussion}{61}{chapter.5}%
+\contentsline {section}{\numberline {5.1}What the optimized parameter profiles imply}{61}{section.5.1}%
+\contentsline {section}{\numberline {5.2}What the braiding results imply}{62}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Limitations and outlook}{62}{section.5.3}%
+\contentsline {chapter}{\numberline {6}Conclusion}{65}{chapter.6}%
 \contentsfinish 

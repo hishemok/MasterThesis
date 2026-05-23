@@ -1,11 +1,19 @@
 \chapter{Results}
-In this chapter, I will present the main numerical results of the thesis. The first part of the chapter will cover the optimized parameters found by the gradient-based optimization procedure, how these parameters depend on system size and interaction strength, whether the optimized Hamiltonians display Majorana-like spectral and what trends are observed in the local diagnostics. 
-The second part of the chapter will focus on the braiding results. The results are solely based on the optimized parameter configurations, after picking the best candidates from the optimization scheme. The braiding analysis is divided into two parts: first, I will compare the ideal four-Majorana braid, the projected microscopic junction braid, and the projected local-operator braid in the low-energy projected setting. This, along with the well known analytical non-interacting sweet spot braid, serves as a controlled reference calculation to test whether the optimized microscopic system reproduces the exchange behavior expected from the ideal effective model. Then, I will extend the braiding analysis to larger projected Hilbert spaces up to the full $2^9=512$ dimensional three-subsystem system. This tests how much of the agreement with the ideal reference survives once higher sectors are retained, and how the energy-level and local-operator braid constructions compare in larger projection spaces.
+This chapter presents the main numerical results of the thesis. The first part analyzes the optimized PMM chains obtained from the basin-hopping optimization procedure. The optimized parameters are compared across system sizes and interaction strengths, and the resulting Hamiltonians are evaluated using the spectral and local Majorana diagnostics introduced in the previous chapters.
+
+The second part focuses on braiding. Based on the post-optimization diagnostics, the most promising optimized configuration is selected as the building block for a three-subsystem braiding geometry. The braid analysis begins with a controlled low-energy comparison between the ideal four-Majorana model, the projected microscopic junction model, and the projected local-operator model. These calculations serve as benchmarks for whether the optimized microscopic system reproduces the exchange behavior expected from the effective Majorana description.
+
+The final part extends the braid analysis to larger projected Hilbert spaces, up to the full $2^9=512$ dimensional three-subsystem system. This tests how robust the low-energy agreement remains when higher sectors are retained, and clarifies the distinction between energy-level Majorana constructions and physically projected local-operator constructions.
+
+
 \section{Optimized PMM Chains}
-In this section, we will review the parameters found by the basin-hopping optimization procedure, and how these parameters depend on the system size $n$ and the fixed interaction strength $U$. As mentioned in the methods section, the optimization is performed for chain lengths $n=2,3,$ and $4$, and for interaction strengths $U=0,0.1,0.5,1.0,2.0,$ and $5.0$, with a fixed hopping amplitude $t_i=1$ for all $i$. The purpose of the fixed hopping amplitude was to make sure that the hopping amplitude $t_i$ and the pairing amplitude $Δ_i$ do not make the implication of the interaction strength vanish, by scaling the other parameters up. The fixed hopping amplitude also makes it easier to compare the optimized pairing amplitudes $\Delta_i$ across different interaction strengths and system sizes, since they are all measured relative to the same fixed scale. The main purpose of this section is therefore to summarize the best parameter sets before applying the more detailed diagnostics in the following section, and to identify any trends in the optimized parameters as the interaction strength and system size are varied.  
+
+This section summarizes the parameter configurations obtained from the basin-hopping optimization procedure and compares how they depend on chain length and interaction strength. The optimization was performed for chain lengths $n=2,3,$ and $4$, and for fixed interaction strengths $U=0,0.1,0.5,1.0,2.0,$ and $5.0$. In all cases, the hopping amplitudes were fixed to $t_i=1$, while the onsite energies $\epsilon_i$ and pairing amplitudes $\Delta_i$ were optimized.
+
+Fixing the hopping scale makes the optimized parameters easier to compare across system sizes and interaction strengths. It also prevents the optimizer from reducing the relative importance of interactions through a trivial global rescaling of the hopping and pairing amplitudes. The purpose of this section is therefore to identify the lowest-loss parameter sets and to extract the main trends in the optimized onsite and pairing profiles before applying the post-optimization diagnostics.
 
 \subsection{Lowest-loss configurations}
-Table~\ref{tab:best_optimized_configs} summarizes the lowest-loss configuration found for each combination of system size $n$ and fixed interaction strength $U$. Since the hopping amplitudes were fixed to $t_i=1$ in these runs, only the optimized pairing amplitudes and onsite energies are listed. Empty entries indicate parameters that do not exist for that system size.
+Table~\ref{tab:best_optimized_configs} summarizes the lowest-loss configuration found for each combination of chain length $n$ and fixed interaction strength $U$. Since the hopping amplitudes were fixed to $t_i=1$ in these runs, the table lists only the optimized pairing amplitudes and onsite energies. Empty entries correspond to parameters that are absent for shorter chains.
 
 \begin{table}[htbp]
   \centering
@@ -38,40 +46,47 @@ Table~\ref{tab:best_optimized_configs} summarizes the lowest-loss configuration 
     4 & 5.0 & 2.600e+00 & 3.389 & 9.513 & 3.336 & -2.645 & 5.032 & -15.431 & -2.293 \\
     \hline
   \end{tabular}}
-  \caption{Lowest-loss optimized configurations extracted from \texttt{configuration.json} for each combination of system size $n$ and fixed interaction strength $U$.}
+  \caption{Lowest-loss optimized configurations extracted from the optimization procedure for each combination of system size $n$ and fixed interaction strength $U$.}
   \label{tab:best_optimized_configs}
 \end{table}
 
-For the two-dot system, the optimizer reproduces the expected non-interacting sweet spot at $U=0$, where $\Delta_1\approx t_1=1$ and the onsite energies remain close to zero. As the interaction strength is increased, the optimized pairing amplitude grows above the fixed hopping scale, while the onsite energies move approximately toward $\epsilon_i\approx -U/2$. This indicates that the optimizer deforms the known two-dot sweet spot in a smooth and physically interpretable way.
 
-For the three-dot system, the weak- and intermediate-interaction configurations remain relatively close to the homogeneous pairing limit, with $\Delta_1\approx\Delta_2\approx 1$ for $U=0.1$ and $U=0.5$. At the same time, the middle-site energy becomes more negative than the edge-site energies. This suggests that the optimizer favors a differentiated central region even when the pairing amplitudes remain nearly uniform.
 
-The four-dot system shows the clearest sign that the optimization landscape becomes more complicated as the chain length increases. In several of the best configurations, the optimizer strongly enhances the central pairing amplitude while leaving the outer pairing amplitudes closer to unity. The optimized onsite energies also become highly inhomogeneous, particularly at stronger interactions. Taken together, these trends suggest that longer PMM chains do not simply reproduce the two-dot sweet spot, but instead require more structured inhomogeneous parameter profiles.
+The two-dot results provide a useful reference point. In the non-interacting case, the optimizer reproduces the expected sweet spot, with $\Delta_1 \approx t_1=1$ and onsite energies close to zero. As the interaction strength is increased, the optimized pairing amplitude grows above the fixed hopping scale, while the onsite energies move approximately toward $\epsilon_i \approx -U/2$. This indicates that the optimizer deforms the known two-dot solution in a smooth and physically interpretable way.
 
+At the same time, the loss increases substantially with interaction strength. This suggests that the interacting two-dot system becomes progressively less compatible with the full set of optimization criteria, even though the optimized parameters continue to follow the expected interacting trend. The table therefore motivates the more detailed spectral and local diagnostics presented below, rather than by itself establishing whether the optimized states have useful Majorana character.
+
+For the three-dot system, the weak- and intermediate-interaction configurations remain close to the homogeneous pairing limit, with $\Delta_1\approx\Delta_2\approx 1$ for $U=0.1$ and $U=0.5$. The onsite energies, however, become inhomogeneous, with the middle dot often shifted more strongly than the edge dots. This suggests that the optimizer uses the additional site to reshape the effective potential profile while keeping the pairing amplitudes near the hopping scale.
+
+The four-dot results show a more complex optimization landscape. Several of the lowest-loss configurations have strongly enhanced central pairing amplitudes, while the outer pairing amplitudes remain closer to unity. The onsite energies also become increasingly inhomogeneous, especially at larger interaction strengths. These trends indicate that longer PMM chains do not simply reproduce the two-dot sweet spot, but instead favor structured parameter profiles that depend sensitively on both $n$ and $U$.
+
+One recurring feature in the longer chains is that interior onsite energies are often shifted more strongly than the edge onsite energies. A possible interpretation is that the optimizer is creating an effective barrier in the interior of the chain, helping separate the Majorana-like modes toward the edges. This interpretation is tested more directly in the following sections through the parity-resolved spectra, charge diagnostics, and Majorana-polarization profiles.
 \subsection{Representative optimized spectra}
 The two-dot spectra in Figs.~\ref{fig:2dot_schematicfirst} and~\ref{fig:2dot_schematicsecond} illustrate how the optimized spectrum changes as interactions are increased. At $U=0$, both parity pairs are degenerate, while at $U=0.1$ the excited pair begins to split. By $U=2.0$, the splitting is much more pronounced. This is consistent with the fact that the interacting two-dot system can retain a low-energy Majorana-like signature while failing to maintain full parity-pair degeneracy across the entire finite spectrum.
 
-\begin{figure}
+\begin{figure}[!htbp]
   \centering
-  \includegraphics[height=0.7\textwidth]{figs/2DotU0.png}
-  \includegraphics[height=0.7\textwidth]{figs/2DotU01.png}
-  \caption{Parity-resolved spectra after optimization for the two-dot system at $U=0$ and $U=0.1$. The optimized parameters are shown schematically below each spectrum.}
+  \includegraphics[width=0.49\textwidth]{figs/2DotU0.pdf}
+  \hfill
+  \includegraphics[width=0.49\textwidth]{figs/2DotU01.pdf}
+  \caption{Parity-resolved spectra after optimization for the two-dot system at $U=0$ and $U=0.1$. Energies are shifted by the ground-state energy in each panel, and the optimized parameters are shown schematically below each spectrum.}
   \label{fig:2dot_schematicfirst}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[!htbp]
   \centering
-  \includegraphics[width=0.7\textwidth]{figs/2DotU2.png}
-  \caption{Parity-resolved spectrum after optimization for the two-dot system at $U=2.0$. The optimized parameters are shown schematically below the spectrum.}
+  \includegraphics[width=0.74\textwidth]{figs/2DotU2.pdf}
+  \caption{Parity-resolved spectrum after optimization for the two-dot system at $U=2.0$. Energies are shifted by the ground-state energy, and the optimized parameters are shown schematically below the spectrum.}
   \label{fig:2dot_schematicsecond}
 \end{figure}
 
 The three-dot system at $U=0.1$ is especially important because it becomes the main candidate for the braiding analysis. Figure~\ref{fig:3DotU01} shows both the parity-resolved spectrum and the Majorana-polarization profile for this configuration. The parity pairs are nearly degenerate, and the Majorana polarization has the expected structure: strong edge weight with opposite signs on the two ends and strongly suppressed weight on the middle dot.
 
-\begin{figure}
+\begin{figure}[!htbp]
   \centering
-  \includegraphics[width=0.6\textwidth]{figs/3DotU01.png}
-  \includegraphics[width=0.6\textwidth]{figs/3DotMP01.png}
+  \includegraphics[width=0.55\textwidth]{figs/3DotU01.pdf}
+  \hfill
+  \includegraphics[width=0.41\textwidth]{figs/3DotMP01.pdf}
   \caption{Parity-resolved spectrum and Majorana-polarization profile for the optimized three-dot system at $U=0.1$. The left panel shows the optimized spectrum and parameters, while the right panel shows the Majorana polarization of the lowest even-odd pair.}
   \label{fig:3DotU01}
 \end{figure}
