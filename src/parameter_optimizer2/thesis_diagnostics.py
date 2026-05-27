@@ -15,6 +15,7 @@ import matplotlib
 matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
+from matplotlib.patches import FancyBboxPatch
 import numpy as np
 import torch
 
@@ -180,42 +181,67 @@ def collect_records(config_file: Path, cases: list[CaseSpec]) -> list[Diagnostic
 
 def plot_majorana_profiles(records: list[DiagnosticsRecord], output: Path) -> None:
     style_matplotlib()
+    plt.rcParams.update(
+        {
+            "font.size": 10.5,
+            "axes.titlesize": 12.5,
+            "axes.labelsize": 11.5,
+            "xtick.labelsize": 10.5,
+            "ytick.labelsize": 10.5,
+            "legend.fontsize": 10.5,
+        }
+    )
 
     ncols = 2 if len(records) > 1 else 1
     nrows = math.ceil(len(records) / ncols)
     fig, axes = plt.subplots(
         nrows,
         ncols,
-        figsize=(5.4 * ncols, 3.5 * nrows),
-        constrained_layout=True,
+        figsize=(7.2 if ncols == 2 else 3.8, 2.75 * nrows + 0.45),
+        layout="constrained",
         squeeze=False,
     )
 
     mp_limit = max(max(abs(value) for value in record.mp_profile) for record in records)
     mp_limit = max(1.0, 1.1 * mp_limit)
+    charge_limit = 1.0
+    charge_ticks = [0.0, 0.5, 1.0]
 
     line_color = "#146C94"
     fill_color = "#8ECAE6"
     point_color = "#023047"
     charge_color = "#BC6C25"
 
-    for ax, record in zip(axes.flat, records):
+    for panel_index, (ax, record) in enumerate(zip(axes.flat, records)):
+        is_right_column = panel_index % ncols == ncols - 1
         x = np.arange(1, record.n + 1)
         mp = np.array(record.mp_profile)
         charge = np.array(record.site_charge_difference)
 
+        ax.set_zorder(2)
+        ax.patch.set_alpha(0.0)
         ax.axhline(0.0, color="#666666", linewidth=1.0, linestyle="--", zorder=1)
         ax.fill_between(x, 0, mp, color=fill_color, alpha=0.35, zorder=2)
         ax.plot(x, mp, color=line_color, linewidth=2.4, zorder=3)
         ax.scatter(x, mp, color=point_color, s=36, zorder=4)
 
         ax2 = ax.twinx()
-        ax2.bar(x, charge, width=0.28, color=charge_color, alpha=0.22, zorder=0)
-        ax2.set_ylim(0, max(0.02, 1.15 * max(charge.max(), 0.01)))
-        ax2.set_yticks([])
+        ax2.set_zorder(1)
+        ax2.bar(x, charge, width=0.26, color=charge_color, alpha=0.65, zorder=0)
+        ax2.set_ylim(0, charge_limit)
+        ax2.set_yticks(charge_ticks)
+        if is_right_column:
+            ax2.set_yticklabels([f"{tick:.3g}" for tick in charge_ticks])
+            ax2.tick_params(axis="y", colors=charge_color, labelsize=9.5, length=3)
+            ax2.set_ylabel(r"$q_i$", color=charge_color, labelpad=2)
+        else:
+            ax2.set_yticklabels([])
+            ax2.tick_params(axis="y", length=0)
         ax2.spines["top"].set_visible(False)
         ax2.spines["left"].set_visible(False)
-        ax2.spines["right"].set_color("#BBBBBB")
+        ax2.spines["right"].set_color(charge_color)
+        if not is_right_column:
+            ax2.spines["right"].set_visible(False)
 
         ax.set_title(get_case_title(record), fontweight="bold")
         ax.set_xticks(x)
@@ -224,21 +250,7 @@ def plot_majorana_profiles(records: list[DiagnosticsRecord], output: Path) -> No
         ax.set_ylim(-mp_limit, mp_limit)
         ax.grid(axis="y", alpha=0.22, linewidth=0.8)
 
-        stats_text = (
-            fr"$\delta_0={record.delta_0:.3g}$" "\n"
-            fr"$\Delta_{{\mathrm{{gap}}}}={record.low_energy_gap:.3g}$" "\n"
-            fr"$Q_0={record.charge_difference_0:.3g}$"
-        )
-        ax.text(
-            0.04,
-            0.96,
-            stats_text,
-            transform=ax.transAxes,
-            va="top",
-            ha="left",
-            fontsize=10,
-            bbox={"facecolor": "white", "edgecolor": "#DDDDDD", "boxstyle": "round,pad=0.3"},
-        )
+        add_stats_box(ax, record)
 
     for ax in axes.flat[len(records) :]:
         ax.axis("off")
@@ -247,17 +259,68 @@ def plot_majorana_profiles(records: list[DiagnosticsRecord], output: Path) -> No
         plt.Line2D([0], [0], color=line_color, lw=2.4, label="Lowest-pair Majorana polarization"),
         plt.Rectangle((0, 0), 1, 1, color=charge_color, alpha=0.22, label="Site charge difference"),
     ]
-    fig.legend(handles=legend_lines, loc="lower center", ncol=2, frameon=False, bbox_to_anchor=(0.5, -0.02))
-    fig.suptitle(
-        "Local diagnostics of representative optimized configurations",
-        fontsize=15,
-        fontweight="bold",
-        y=1.02,
-    )
+    fig.legend(handles=legend_lines, loc="outside lower center", ncol=2, frameon=False)
 
     output.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(output, bbox_inches="tight")
+    if output.suffix.lower() != ".png":
+        fig.savefig(output.with_suffix(".png"), bbox_inches="tight")
     plt.close(fig)
+
+
+def add_stats_box(ax: plt.Axes, record: DiagnosticsRecord) -> None:
+    box_x = 0.50
+    box_y = 0.72
+    box_width = 0.45
+    box_height = 0.22
+    box = FancyBboxPatch(
+        (box_x, box_y),
+        box_width,
+        box_height,
+        boxstyle="round,pad=0.018",
+        transform=ax.transAxes,
+        facecolor="white",
+        edgecolor="#DDDDDD",
+        linewidth=1.0,
+        zorder=6,
+    )
+    ax.add_patch(box)
+
+    label_text = "\n".join([r"$\delta_0$:", r"$\Delta_{\rm gap}$:", r"$Q_0$:"])
+    value_text = "\n".join(
+        [
+            format_stat(record.delta_0),
+            format_stat(record.low_energy_gap),
+            format_stat(record.charge_difference_0),
+        ]
+    )
+    y_center = box_y + 0.5 * box_height
+    ax.text(
+        box_x + 0.16,
+        y_center,
+        label_text,
+        transform=ax.transAxes,
+        ha="right",
+        va="center",
+        fontsize=9.2,
+        linespacing=1.22,
+        zorder=7,
+    )
+    ax.text(
+        box_x + box_width - 0.035,
+        y_center,
+        value_text,
+        transform=ax.transAxes,
+        ha="right",
+        va="center",
+        fontsize=9.2,
+        linespacing=1.22,
+        zorder=7,
+    )
+
+
+def format_stat(value: float) -> str:
+    return f"{value:.3g}".replace("e-0", "e-").replace("e+0", "e+")
 
 
 def write_summary_csv(records: list[DiagnosticsRecord], output: Path) -> None:

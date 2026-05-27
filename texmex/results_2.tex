@@ -61,8 +61,15 @@ For the three-dot system, the weak- and intermediate-interaction configurations 
 The four-dot results show a more complex optimization landscape. Several of the lowest-loss configurations have strongly enhanced central pairing amplitudes, while the outer pairing amplitudes remain closer to unity. The onsite energies also become increasingly inhomogeneous, especially at larger interaction strengths. These trends indicate that longer PMM chains do not simply reproduce the two-dot sweet spot, but instead favor structured parameter profiles that depend sensitively on both $n$ and $U$.
 
 One recurring feature in the longer chains is that interior onsite energies are often shifted more strongly than the edge onsite energies. A possible interpretation is that the optimizer is creating an effective barrier in the interior of the chain, helping separate the Majorana-like modes toward the edges. This interpretation is tested more directly in the following sections through the parity-resolved spectra, charge diagnostics, and Majorana-polarization profiles.
+
 \subsection{Representative optimized spectra}
-The two-dot spectra in Figs.~\ref{fig:2dot_schematicfirst} and~\ref{fig:2dot_schematicsecond} illustrate how the optimized spectrum changes as interactions are increased. At $U=0$, both parity pairs are degenerate, while at $U=0.1$ the excited pair begins to split. By $U=2.0$, the splitting is much more pronounced. This is consistent with the fact that the interacting two-dot system can retain a low-energy Majorana-like signature while failing to maintain full parity-pair degeneracy across the entire finite spectrum.
+The representative spectrums in Figs.~\ref{fig:2dot_schematicfirst}
+and~\ref{fig:2dot_schematicsecond} illustrate how interactions affect the
+optimized two-dot system. In the non-interacting case, both parity pairs are
+nearly degenerate, consistent with the expected two-dot sweet spot. When a weak
+interaction is introduced at $U=0.1$, the lowest parity pair remains close to
+degenerate, while the excited pair begins to show a visible splitting. At
+$U=2.0$, this excited-state splitting becomes much larger. Meaning that although the ground-state pair can retain a low-energy Majorana-like signature, it still does not maintain clean parity-pair degeneracy across the full finite spectrum.
 
 \begin{figure}[!htbp]
   \centering
@@ -79,8 +86,16 @@ The two-dot spectra in Figs.~\ref{fig:2dot_schematicfirst} and~\ref{fig:2dot_sch
   \caption{Parity-resolved spectrum after optimization for the two-dot system at $U=2.0$. Energies are shifted by the ground-state energy, and the optimized parameters are shown schematically below the spectrum.}
   \label{fig:2dot_schematicsecond}
 \end{figure}
+\newpage
 
-The three-dot system at $U=0.1$ is especially important because it becomes the main candidate for the braiding analysis. Figure~\ref{fig:3DotU01} shows both the parity-resolved spectrum and the Majorana-polarization profile for this configuration. The parity pairs are nearly degenerate, and the Majorana polarization has the expected structure: strong edge weight with opposite signs on the two ends and strongly suppressed weight on the middle dot.
+The optimized three-dot system at $U=0.1$ provides a more promising
+representative configuration. As shown in Fig.~\ref{fig:3DotU01}, the
+parity-resolved spectrum remains nearly paired, while the Majorana-polarization
+profile has the expected edge-localized structure. The polarization is large
+and opposite in sign on the two outer dots, and it is strongly suppressed on
+the middle dot. This combination of spectral pairing and spatial Majorana
+character motivates using this configuration as the main candidate for the
+braiding calculations below. Comparing the three-dot configuration for $U=0.1$ with the two-dot configuration for $U=0.1$ also illustrates how the additional site can help stabilize the Majorana-like features in the presence of interactions, by noticing the excited-states retaining a better energy degeneracy in the three-dot case than in the two-dot case, even though both configurations have similar ground-state splitting and similar optimized parameters. The additional site therefore provides more freedom to optimize the excited states, which is important for maintaining a clean low-energy manifold that can support braiding.
 
 \begin{figure}[!htbp]
   \centering
@@ -90,9 +105,10 @@ The three-dot system at $U=0.1$ is especially important because it becomes the m
   \caption{Parity-resolved spectrum and Majorana-polarization profile for the optimized three-dot system at $U=0.1$. The left panel shows the optimized spectrum and parameters, while the right panel shows the Majorana polarization of the lowest even-odd pair.}
   \label{fig:3DotU01}
 \end{figure}
+\newpage
 
 \section{Post-Optimization Diagnostics}
-The optimized parameters alone do not determine whether a configuration is useful for Majorana braiding. The next step is therefore to inspect the parity-resolved spectra, the low-energy gaps, the charge difference between parity partners, and the spatial Majorana-polarization profile. These diagnostics test whether the optimized states are not only low-loss numerical solutions, but also physically interpretable Majorana-like states.
+The optimized parameter values alone do not determine whether a configuration is useful for Majorana braiding. After optimization, the candidate Hamiltonians must therefore be tested through spectral and local diagnostics. The parity-resolved spectra and low-energy gaps show whether the optimizer has produced an isolated nearly degenerate low-energy manifold, while the charge difference and Majorana-polarization profile test whether this manifold has the expected non-local and edge-localized Majorana character.
 
 \subsection{Parity-resolved spectra and low-energy gaps}
 \begin{figure}
@@ -102,19 +118,24 @@ The optimized parameters alone do not determine whether a configuration is usefu
   \label{fig:parity_summary}
 \end{figure}
 
-Figure~\ref{fig:parity_summary} compares the parity-resolved spectra for $n=2,3,$ and $4$ at selected interaction strengths. The non-interacting cases provide the cleanest spectra, as expected. For the two-dot system, the excited-state parity splitting becomes visible already at weak interaction and grows at stronger interaction. For the four-dot system, the weakly interacting cases still show good parity pairing, but the stronger-interaction case is less clean and develops a noticeable low-energy splitting.
+Figure~\ref{fig:parity_summary} compares the parity-resolved spectra for $n=2,3,$ and $4$ at selected interaction strengths. A useful Majorana-like configuration should have a nearly degenerate lowest even-odd pair, together with a finite gap separating this pair from higher excited states. The dashed connectors in the figure indicate parity pairs that remain close in energy after optimization.
 
-The three-dot system is the most stable across the interaction strengths shown. Even at stronger interaction, the optimizer finds configurations with reasonably well-paired parity sectors, although the gap structure becomes less favorable than in the weakly interacting case. This makes the three-dot system, especially at $U=0.1$, the most promising compromise between interaction, spectral degeneracy, and later braiding feasibility.
+The non-interacting cases give the cleanest spectra, as expected. For the two-dot system, the parity pairing is nearly ideal at $U=0.0$, but the excited-state splitting becomes visible already at weak interaction and increases further at stronger interaction. This shows that the interacting two-dot system can retain a low-energy degeneracy while losing clean parity pairing across the full finite spectrum.
+
+The three-dot system is more stable across all interaction strengths shown, compared to both the two-dot and four-dot systems. For all three interaction strengths, $U=0.0$, $U=0.1$, and $U=2.0$, we can see that all energy levels are degenerate in pairs, up to a numerical threshold, with a decently large gap separating the energy levels into distinct energy sectors. The four-dot system, shows a promising structure for weak and no interactions, while we can clearly see that for stronger interactions $U=2.0$, the energy degeneracy falls apart. Most importantly, the ground state energies are no longer degenerate, and thus there is no longer a clear low-energy manifold that can support braiding. The three-dot system therefore appears to be the most robust candidate for maintaining a clean low-energy manifold across different interaction strengths, but in order to determine if it is possible to braid using the three-dot system in a weak interaction regime, we need to also check the local diagnostics and Majorana character.
 
 \subsection{Local diagnostics and Majorana character}
-The parity-resolved spectrum shows whether the optimizer has found approximate even-odd degeneracy, but degeneracy alone is not enough to identify Majorana-like states. To test the spatial structure of the optimized states, I compare the site-resolved Majorana polarization and the local charge difference of the lowest even-odd pair. A convincing Majorana-like configuration should display opposite polarization on the two ends of the chain, weak polarization in the middle, and only a small charge difference between the even and odd states.
+As discussed in the methodology chapter, Majorana-like states cannot be identified from spectral degeneracy alone. The parity-resolved spectra and low-energy gaps test whether the optimized Hamiltonian contains an isolated, nearly degenerate low-energy manifold. The present subsection examines the complementary local diagnostics: the Majorana-polarization profile and the local charge difference between the lowest even-odd parity partners.
+
+A convincing Majorana-like configuration should have opposite Majorana polarization on the two ends of the chain, with strongly suppressed polarization in the interior, as quantified by Eqs.~\ref{eq:method_edge_polarization} and~\ref{eq:method_bulk_polarization}. In addition, the even and odd parity partners should be locally difficult to distinguish. This is tested by the charge-difference diagnostic in Eq.~\ref{eq:method_charge_difference}; smaller values indicate that the parity information is less visible to local charge measurements.
 
 \begin{figure}
   \centering
   \includegraphics[width=0.95\textwidth]{figs/majorana_character_summary.pdf}
-  \caption{Local diagnostics for representative optimized configurations. The blue curve shows the Majorana polarization profile of the lowest even-odd pair, while the orange bars show the local charge difference $|\langle e | n_i | e \rangle - \langle o | n_i | o \rangle|$ on each site. The inset in each panel reports the ground-state splitting $\delta_0$, the low-energy gap $\Delta_{\mathrm{gap}}$, and the total charge difference $Q_0$.}
+  \caption{Local diagnostics for representative optimized configurations. The blue curve shows the Majorana-polarization profile of the lowest even-odd pair, while the orange bars, read against the $0$--$1$ right axis, show the local charge difference $q_i=|\langle e | n_i | e \rangle - \langle o | n_i | o \rangle|$ on each site. The inset in each panel reports the ground-state splitting $\delta_0$, the low-energy gap $\Delta_{\mathrm{gap}}$, and the total charge difference $Q_0$.}
   \label{fig:majorana_character_summary}
 \end{figure}
+\newpage
 
 \begin{table}
   \centering
@@ -126,9 +147,11 @@ The parity-resolved spectrum shows whether the optimizer has found approximate e
 
 Figure~\ref{fig:majorana_character_summary} compares the spatial profiles directly, while Table~\ref{tab:majorana_character_summary} summarizes the corresponding scalar diagnostics. For the two-dot system, the edge polarization is essentially ideal, with $\overline{|M_{\mathrm{edge}}|}\approx 1$ and no bulk contribution by construction. The total charge difference is also very small, $Q_0\approx 1.4\times 10^{-3}$, both at $U=0$ and at $U=0.1$. These two-dot cases are useful references, but because they have no interior sites they do not test suppression of Majorana weight in the bulk.
 
-The three-dot configuration at $U=0.1$ is the clearest interacting example of the expected Majorana pattern. The ground-state splitting is only $\delta_0=9.39\times 10^{-5}$, the excitation gap remains large, $\Delta_{\mathrm{gap}}=1.77$, and the bulk polarization is almost completely suppressed, with $\max |M_{\mathrm{bulk}}|=2.02\times 10^{-4}$. In contrast, the four-dot configuration at $U=0.1$ has comparably strong edge polarization, $\overline{|M_{\mathrm{edge}}|}\approx 0.986$, but the splitting increases to $\delta_0=4.23\times 10^{-3}$ and the bulk polarization rises to $\max |M_{\mathrm{bulk}}|=2.33\times 10^{-2}$.
+The three-dot configuration at $U=0.1$ gives the clearest interacting Majorana-polarization pattern. The ground-state splitting is only $\delta_0=9.39\times 10^{-5}$, the excitation gap remains large, $\Delta_{\mathrm{gap}}=1.77$, and the bulk polarization is almost completely suppressed, with $\max |M_{\mathrm{bulk}}|=2.02\times 10^{-4}$. Its charge difference, however, is larger than in the two-dot and four-dot reference cases, with $Q_0=0.0492$. This shows that the three-dot state is not ideal in every diagnostic, even though its spectral and polarization properties are the strongest.
 
-Taken together, these diagnostics show that different system sizes optimize different aspects of the Majorana criteria. The four-dot case performs well in terms of charge neutrality, while the three-dot case performs better in terms of spectral near-degeneracy and suppression of bulk Majorana weight. Since the braiding analysis requires a low-energy subspace that is both nearly degenerate and spatially well localized, the interacting three-dot system remains the most convincing candidate for the rest of the thesis.
+The four-dot configuration at $U=0.1$ shows the opposite tradeoff. It has a smaller charge difference, $Q_0=0.0070$, and comparably strong edge polarization, $\overline{|M_{\mathrm{edge}}|}\approx 0.986$. However, the ground-state splitting increases to $\delta_0=4.23\times 10^{-3}$ and the bulk polarization rises to $\max |M_{\mathrm{bulk}}|=2.33\times 10^{-2}$.
+
+Taken together, these diagnostics show that different system sizes optimize different aspects of the Majorana criteria. The four-dot case performs better in terms of local charge indistinguishability, while the three-dot case performs better in terms of spectral near-degeneracy and suppression of bulk Majorana weight. Since the braiding analysis requires a low-energy subspace that is both nearly degenerate and spatially well localized, the interacting three-dot system remains the most convincing candidate for the rest of the thesis.
 
 \section{Selection of Braiding Candidate}
 The braiding calculations are performed using the optimized three-dot configuration at $U=0.1$. This choice is based on the combined diagnostics above: the configuration has a small ground-state splitting, a large gap to the next states, a clear edge-localized Majorana-polarization profile, and strongly suppressed bulk polarization. The optimized parameters used for the braiding setup are
@@ -142,6 +165,7 @@ The braiding calculations are performed using the optimized three-dot configurat
 with fixed hopping amplitudes $t_i=1$ and fixed interaction strength $U=0.1$.
 
 For a three-dot chain, the single-subsystem Hilbert space has dimension $2^3=8$. In the braiding geometry, three such subsystems are combined into a total Hilbert space of dimension $2^9=512$. This makes the three-dot system large enough to test braiding in nontrivial projected spaces, while still being small enough for exact diagonalization and systematic projection scans.
+This configuration therefor provides a useful testing ground for exploring the implications of interactions and larger projection dimensions on the braiding behavior, while still being computationally lighter than larger systems. 
 
 \section{Braiding in Projected Majorana Models}
 Before studying large projection dimensions, it is useful to establish a controlled reference calculation. I first compare the ideal four-Majorana braid, the projected microscopic junction braid, and the projected local-operator braid in the low-energy projected setting. This tests whether the optimized microscopic system reproduces the exchange behavior expected from the ideal effective model.

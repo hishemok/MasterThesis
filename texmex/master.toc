@@ -66,15 +66,15 @@
 \contentsline {section}{\numberline {4.1}Optimized PMM Chains}{45}{section.4.1}%
 \contentsline {subsection}{\numberline {4.1.1}Lowest-loss configurations}{46}{subsection.4.1.1}%
 \contentsline {subsection}{\numberline {4.1.2}Representative optimized spectra}{47}{subsection.4.1.2}%
-\contentsline {section}{\numberline {4.2}Post-Optimization Diagnostics}{47}{section.4.2}%
+\contentsline {section}{\numberline {4.2}Post-Optimization Diagnostics}{49}{section.4.2}%
 \contentsline {subsection}{\numberline {4.2.1}Parity-resolved spectra and low-energy gaps}{49}{subsection.4.2.1}%
-\contentsline {subsection}{\numberline {4.2.2}Local diagnostics and Majorana character}{50}{subsection.4.2.2}%
-\contentsline {section}{\numberline {4.3}Selection of Braiding Candidate}{51}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Braiding in Projected Majorana Models}{51}{section.4.4}%
-\contentsline {subsection}{\numberline {4.4.1}Ideal four-Majorana reference}{51}{subsection.4.4.1}%
-\contentsline {subsection}{\numberline {4.4.2}Projected microscopic and local-operator braids}{53}{subsection.4.4.2}%
-\contentsline {section}{\numberline {4.5}Braiding in Larger Projection Spaces}{55}{section.4.5}%
-\contentsline {section}{\numberline {4.6}Summary of Main Findings}{55}{section.4.6}%
+\contentsline {subsection}{\numberline {4.2.2}Local diagnostics and Majorana character}{51}{subsection.4.2.2}%
+\contentsline {section}{\numberline {4.3}Selection of Braiding Candidate}{52}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Braiding in Projected Majorana Models}{53}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Ideal four-Majorana reference}{53}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}Projected microscopic and local-operator braids}{54}{subsection.4.4.2}%
+\contentsline {section}{\numberline {4.5}Braiding in Larger Projection Spaces}{56}{section.4.5}%
+\contentsline {section}{\numberline {4.6}Summary of Main Findings}{56}{section.4.6}%
 \contentsline {chapter}{\numberline {5}Discussion}{61}{chapter.5}%
 \contentsline {section}{\numberline {5.1}What the optimized parameter profiles imply}{61}{section.5.1}%
 \contentsline {section}{\numberline {5.2}What the braiding results imply}{62}{section.5.2}%
