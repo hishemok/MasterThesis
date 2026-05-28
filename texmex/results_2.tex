@@ -154,7 +154,9 @@ The four-dot configuration at $U=0.1$ shows the opposite tradeoff. It has a smal
 Taken together, these diagnostics show that different system sizes optimize different aspects of the Majorana criteria. The four-dot case performs better in terms of local charge indistinguishability, while the three-dot case performs better in terms of spectral near-degeneracy and suppression of bulk Majorana weight. Since the braiding analysis requires a low-energy subspace that is both nearly degenerate and spatially well localized, the interacting three-dot system remains the most convincing candidate for the rest of the thesis.
 
 \section{Selection of Braiding Candidate}
-The braiding calculations are performed using the optimized three-dot configuration at $U=0.1$. This choice is based on the combined diagnostics above: the configuration has a small ground-state splitting, a large gap to the next states, a clear edge-localized Majorana-polarization profile, and strongly suppressed bulk polarization. The optimized parameters used for the braiding setup are
+The braiding calculations are performed using the optimized three-dot configuration at $U=0.1$. This choice is based on the combined post-optimization diagnostics above. Although the four-dot configuration has a smaller local charge difference, the three-dot configuration has the most favorable combination of small ground-state splitting, large excitation gap, clear edge-localized Majorana-polarization profile, and strongly suppressed bulk polarization. Since the braiding analysis relies on a nearly degenerate and spatially localized low-energy subspace, the three-dot system is chosen as the main microscopic building block.
+
+The optimized parameters used for each three-dot subsystem are
 \begin{equation}
 \Delta_1=1.001,\qquad
 \Delta_2=1.002,\qquad
@@ -163,22 +165,28 @@ The braiding calculations are performed using the optimized three-dot configurat
 \epsilon_3=-0.003,
 \end{equation}
 with fixed hopping amplitudes $t_i=1$ and fixed interaction strength $U=0.1$.
-
-For a three-dot chain, the single-subsystem Hilbert space has dimension $2^3=8$. In the braiding geometry, three such subsystems are combined into a total Hilbert space of dimension $2^9=512$. This makes the three-dot system large enough to test braiding in nontrivial projected spaces, while still being small enough for exact diagonalization and systematic projection scans.
-This configuration therefor provides a useful testing ground for exploring the implications of interactions and larger projection dimensions on the braiding behavior, while still being computationally lighter than larger systems. 
+ 
+In the braiding geometry, three identical copies of this optimized three-dot chain are combined. Each subsystem has Hilbert-space dimension $2^3=8$, giving a total microscopic Hilbert space of dimension $2^9=512$. This system is large enough to test braiding beyond the lowest projected manifold, while still being small enough for exact diagonalization and systematic projection scans. The selected configuration therefore provides a useful setting for studying how interactions and larger projection dimensions affect the braiding behavior.
 
 \section{Braiding in Projected Majorana Models}
-Before studying large projection dimensions, it is useful to establish a controlled reference calculation. I first compare the ideal four-Majorana braid, the projected microscopic junction braid, and the projected local-operator braid in the low-energy projected setting. This tests whether the optimized microscopic system reproduces the exchange behavior expected from the ideal effective model.
+The optimized three-dot chain is now used as the microscopic building block for the braiding calculations. Before studying larger projection dimensions, I first establish a controlled low-energy benchmark by comparing three related braid models: the ideal four-Majorana reference model, the projected microscopic junction model, and the projected local-operator model. This comparison tests whether the optimized microscopic system reproduces the exchange behavior expected from the effective Majorana description.
+
+In the ideal reference model, the braid is generated directly by tunable Majorana bilinears built from the four Majorana operators defined in Eq.~\ref{eq:four_majoranas}. This isolates the braid protocol itself from microscopic details. In the projected microscopic model, these ideal bilinears are replaced by projected junction operators constructed from ordinary hopping and crossed-Andreev pairing terms between endpoint dots. For example, the $A$--$B$ junction is
+\begin{equation}
+  H^{\mathrm{junc}}_{AB} = -t_{\mathrm{j}}\left(c_A^\dagger c_B + c_B^\dagger c_A\right) + \Delta_{\mathrm{j}}\left(c_A c_B + c_B^\dagger c_A^\dagger\right),
+\end{equation}
+\noindent
+as introduced in Eq.~\ref{eq:juncHam}. After projection into the retained low-energy subspace, this operator gives the effective coupling $T_{AB}$ used in the driven braid Hamiltonian of Eq.~\ref{eq:brajunc}. The projected microscopic braid therefore tests whether physically motivated junction couplings reproduce the same exchange channel as the ideal Majorana model.
 
 \subsection{Ideal four-Majorana reference}
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.9\textwidth]{figs/braiding_ideal_protocol.pdf}
-  \caption{Idealized four-Majorana braiding protocol. The top panel shows the instantaneous spectrum of the effective Hamiltonian during the braid, with all energies shifted so that the lowest state remains at zero. The bottom panel shows the three smooth pulse couplings that move the dominant Majorana pairing through the network.}
+  \caption{Idealized four-Majorana braiding protocol. The top panel shows the instantaneous spectrum of the effective Hamiltonian during the braid, with all energies shifted so that the lowest state remains at zero. The bottom panel shows the three smooth pulse couplings that move the dominant Majorana coupling through the network.}
   \label{fig:braiding_ideal_protocol}
 \end{figure}
 
-Figure~\ref{fig:braiding_ideal_protocol} shows the reference braid in the effective four-Majorana model. The three couplings are turned on sequentially, so that the dominant pairing is first between $\gamma_0$ and $\gamma_1$, then between $\gamma_0$ and $\gamma_2$, and finally between $\gamma_0$ and $\gamma_3$ before returning to the initial configuration. Throughout this cycle, the low-energy manifold remains essentially four-fold degenerate. The largest instantaneous splitting within the ground-state manifold is only $\max(E_3-E_0)=2.28\times 10^{-12}$, while the minimum gap to the excited states remains open at $\min(E_4-E_3)=1.414$.
+Figure~\ref{fig:braiding_ideal_protocol} shows the reference braid generated by four active Majorana operators in the projected low-energy space. The three couplings are turned on sequentially, so that the dominant coupling is first between $\gamma_0$ and $\gamma_1$, then between $\gamma_0$ and $\gamma_2$, and finally between $\gamma_0$ and $\gamma_3$ before returning to the initial configuration. Throughout this cycle, the transported low-energy manifold remains essentially four-fold degenerate. The largest instantaneous splitting within this manifold is only $\max(E_3-E_0)=2.28\times 10^{-12}$, while the minimum gap to the excited states remains open at $\min(E_4-E_3)=1.414$.
 
 Using Kato transport, the resulting unitary reproduces the expected single-exchange action on the Majorana operators. The largest error in the transformations $\gamma_2\rightarrow-\gamma_3$ and $\gamma_3\rightarrow\gamma_2$ is $1.33\times 10^{-5}$. In the parity-resolved gate blocks, the odd and even $2\times2$ blocks agree with the target exchange gate to within $6.53\times 10^{-8}$, while the off-block leakage is only $1.02\times 10^{-11}$. The effective model therefore provides a clean benchmark for the more microscopic projected calculations.
 
@@ -197,9 +205,11 @@ Using Kato transport, the resulting unitary reproduces the expected single-excha
   \label{fig:braiding_junction_decomposition}
 \end{figure}
 
-After replacing the hand-chosen couplings of the ideal model by projected microscopic junction operators, the braid remains close to the reference result. Figure~\ref{fig:braiding_projected_protocol} shows that the four-dimensional low-energy manifold is still well separated from higher states throughout the cycle. The maximum splitting inside the ground-state manifold increases only to $\max(E_3-E_0)=7.18\times 10^{-7}$, while the minimum gap remains large, $\min(E_4-E_3)=1.413$.
+After replacing the ideal Majorana-bilinear couplings by projected microscopic junction operators, the braid remains close to the reference result. Figure~\ref{fig:braiding_projected_protocol} shows that the four-dimensional low-energy manifold is still well separated from higher states throughout the cycle. The maximum splitting inside this manifold increases only to $\max(E_3-E_0)=7.18\times 10^{-7}$, while the minimum gap remains large, $\min(E_4-E_3)=1.413$.
 
-The junction decomposition in Fig.~\ref{fig:braiding_junction_decomposition} explains why the projected microscopic braid agrees so well with the ideal reference. The projected AB coupling is dominated by the bilinear $i\gamma_{A1}\gamma_{B2}$ with coefficient $-0.999$, and the projected AC coupling is dominated by $i\gamma_{A1}\gamma_{C2}$ with the same coefficient. This identifies $\gamma_{B2}$ and $\gamma_{C2}$ as the Majoranas that participate in the microscopic braid, while $\gamma_{A1}$ acts as the shared Majorana through which the exchange is mediated.
+The junction decomposition in Fig.~\ref{fig:braiding_junction_decomposition} explains why the projected microscopic braid agrees so well with the ideal reference. The projected AB coupling is dominated by the bilinear $i\gamma_{A1}\gamma_{B2}$ with coefficient $-0.999$, and the projected AC coupling is dominated by $i\gamma_{A1}\gamma_{C2}$ with approximately the same coefficient. This identifies $\gamma_{B2}$ and $\gamma_{C2}$ as the Majoranas that participate in the microscopic braid, while $\gamma_{A1}$ acts as the shared Majorana through which the exchange is mediated.
+
+As an additional consistency check, I also compare with a projected local-operator braid. In this construction, the exchanged Majorana channels are obtained by projecting local endpoint Majorana operators rather than by projecting the full microscopic junction Hamiltonian. This tests whether the same low-energy exchange channel is accessed by local microscopic operators.
 
 \begin{table}[htbp]
   \centering
@@ -214,13 +224,13 @@ The junction decomposition in Fig.~\ref{fig:braiding_junction_decomposition} exp
   \centering
   \small
   \input{generated/braiding_local_projection.tex}
-  \caption{Projected local-site operators used in the alternative braid model. The table shows that the $y$-type local operators on the first and last sites of subsystems B and C collapse onto the same low-energy Majorana channels, $\gamma_{B2}$ and $\gamma_{C2}$, up to an overall sign.}
+  \caption{Projected local-site operators used in the alternative braid model. The table shows that the $y$-type local operators on the first and last sites of subsystems B and C project onto the same low-energy Majorana channels, $\gamma_{B2}$ and $\gamma_{C2}$, up to an overall sign.}
   \label{tab:braiding_local_projection}
 \end{table}
 
 \Cref{tab:braiding_checks_comparison} shows that the microscopic braid reproduces the ideal benchmark extremely well. The largest single-exchange error stays at $1.33\times 10^{-5}$ in all three models, and the odd and even parity blocks continue to match the target gate to approximately $6.54\times 10^{-8}$. The projected local-operator version produces the same conclusion, which makes it a useful consistency check rather than an independent competing protocol.
 
-\Cref{tab:braiding_local_projection} explains why the local-site version appears insensitive to whether the first or last site of subsystem B or C is used. After projection, both $\chi_{B1,y}$ and $\chi_{B2,y}$ reduce to $\gamma_{B2}$ up to opposite sign, and similarly both $\chi_{C1,y}$ and $\chi_{C2,y}$ reduce to $\gamma_{C2}$. The different microscopic site choices therefore feed into the same low-energy braid channel rather than producing genuinely different braiding operations.
+\Cref{tab:braiding_local_projection} explains why the local-operator version appears insensitive to whether the first or last site of subsystem B or C is used. After projection, both $\chi_{B1,y}$ and $\chi_{B2,y}$ reduce to $\gamma_{B2}$ up to opposite sign, and similarly both $\chi_{C1,y}$ and $\chi_{C2,y}$ reduce to $\gamma_{C2}$. The different microscopic site choices therefore feed into the same low-energy braid channel rather than producing genuinely different braiding operations.
 
 \section{Braiding in Larger Projection Spaces}
 The previous braiding checks focused on the lowest projected manifold. To test how much of that agreement survives once higher sectors are retained, I repeated the braid diagnostics for projection dimensions $\dim P=8,32,56,80,256,$ and $512$, and for interaction strengths $U=0$, $0.1$, and $2.0$. For each projected Hamiltonian, the transported band is chosen from the largest persistent spectral gap along the braid path. This separates the projection dimension, which controls how much Hilbert space is retained, from the transported dimension $\dim T$, which controls which isolated band is actually braided.

@@ -423,22 +423,3 @@ if __name__ == "__main__":
     check_four_exchanges(U_kato, gamma_list)
     check_parity_resolved_gate(U_kato, ground_data["V0"], parity_projected, γ2, γ3)
 
-"""
-
-If i have 3 QD-SC-QD-SC-QD chains, I get 6 Majoranas: γ_A1, γ_A2, γ_B1, γ_B2, γ_C1, γ_C2, 2 from each chain. In the code i have called  them γ_A1-> γ0, γ_A2-> γ1, γ_B1-> γ2, γ_C1-> γ3.
-Since my current function build_hamiltonian is actually a sweet spot hamiltonian that works as long as i have clean majoranas (as far as i understood my superisor), I need some way of checking wether any "unwanted" majoranas are present in the braiding protocol, or if they are left out as intended and we really do have a clean braid.
-You have suggested a explicit Junction Hamiltonian that found out which majoranas are working and wether or not the junctions are connecting what we want, and in braiding_model_ad.py I think we found out that things are all right. The code suggested that they use γ_B2 and γ_C2 as the "braiding" Majoranas.
-What I wanted to do in braiding_model_ad2.py is combine what we found in the braiding_model_ad.py file with a more realistic version my supervisor asked me to do. He told me that the Hamiltonian could be changed from:
-H(t) = Δ1(t) iγ0γ1 + Δ2(t) iγ0γ2 + Δ3(t) iγ0γ3
-to something like:
-H(t) = Δ1(t) iγ0γ1 + Δ2(t) P γ0(c†_B + c_B)P + Δ3(t) P γ0 i(c†_C + c_C)P
-Where P is my current V_ref (GS projector)
-But it seems to me that when i do 
-H(t) = Δ1(t) iγ0γ1 + Δ2(t) P γ0(c†_B + c_B)P + Δ3(t) P γ0 i(c†_C + c_C)P
-It doesnt matter which c_B operator i use, if its the one for the first or the last dot. 
-If i use:
-c†_B1 + c_B1 with c†_C1 + c_C1 I get the same results as when i use c†_B2 + c_B2 with c†_C2 + c_C2.
-Or even if i mix and match and use c†_B1 + c_B1 with c†_C2 + c_C2 or the other way around, i get the same results.
-This is a bit surprising to me, because i thought that the specific choice of c_B and c_C would matter, since they correspond to different Majoranas. Like we found in braiding_model_ad.py. Is there something wrong with the way I am implementing the Hamiltonian or is there something else I am missing that explains this apparent insensitivity to the choice of c_B and c_C? 
-
-"""

@@ -289,12 +289,15 @@ The Jordan-Wigner transformation is a powerful tool for analyzing spin systems u
 
 \subsection{Pauli Matrices in the Majorana Representation\newline}
 The reason for rewriting the Pauli operators in terms of Majorana bilinears is that braiding acts naturally on Majorana operators, while the gate implemented by the braid is usually compared with a Pauli operation on an encoded qubit. By expressing the Pauli gates in terms of Majorana bilinears, we can directly relate the physical operations performed on the Majorana modes to the abstract quantum gates that we want to implement. This connection is important to both understand and implement quantum gates in a Majorana-based quantum computing platform. We start by considering four Majorana operators, grouped into two ordinary fermions:
-\begin{align*}
+\begin{equation}
+\begin{aligned}
   c_1 &= \frac{1}{2}(\gamma_0 + i\gamma_1), \quad
   c_1^\dagger = \frac{1}{2}(\gamma_0 - i\gamma_1), \\
   c_2 &= \frac{1}{2}(\gamma_2 + i\gamma_3), \quad
   c_2^\dagger = \frac{1}{2}(\gamma_2 - i\gamma_3).
-\end{align*}
+\end{aligned}
+\label{eq:four_majoranas}
+\end{equation}
 These four Majorana operators $\gamma_0$, $\gamma_1$, $\gamma_2$, and $\gamma_3$ span a four-dimensional Hilbert space, which can be thought of as the state space of two fermionic modes. By fixing the total fermion parity, we can select a two-dimensional subspace that serves as the computational basis for a qubit. Within such a fixed-parity subspace, we can represent the Pauli operators as bilinears of the Majorana operators. Specifically, we can write:
 \begin{align*}
   X &= i\gamma_0\gamma_3 = -i\gamma_1\gamma_2, \\
