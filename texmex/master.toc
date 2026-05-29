@@ -74,10 +74,10 @@
 \contentsline {subsection}{\numberline {4.4.1}Ideal four-Majorana reference}{53}{subsection.4.4.1}%
 \contentsline {subsection}{\numberline {4.4.2}Projected microscopic and local-operator braids}{55}{subsection.4.4.2}%
 \contentsline {section}{\numberline {4.5}Braiding in Larger Projection Spaces}{57}{section.4.5}%
-\contentsline {section}{\numberline {4.6}Summary of Main Findings}{57}{section.4.6}%
-\contentsline {chapter}{\numberline {5}Discussion}{63}{chapter.5}%
-\contentsline {section}{\numberline {5.1}What the optimized parameter profiles imply}{63}{section.5.1}%
-\contentsline {section}{\numberline {5.2}What the braiding results imply}{64}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Limitations and outlook}{64}{section.5.3}%
-\contentsline {chapter}{\numberline {6}Conclusion}{67}{chapter.6}%
+\contentsline {section}{\numberline {4.6}Summary of Main Findings}{63}{section.4.6}%
+\contentsline {chapter}{\numberline {5}Discussion}{65}{chapter.5}%
+\contentsline {section}{\numberline {5.1}What the optimized parameter profiles imply}{65}{section.5.1}%
+\contentsline {section}{\numberline {5.2}What the braiding results imply}{66}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Limitations and outlook}{66}{section.5.3}%
+\contentsline {chapter}{\numberline {6}Conclusion}{69}{chapter.6}%
 \contentsfinish 
