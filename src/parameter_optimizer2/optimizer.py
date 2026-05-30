@@ -61,7 +61,8 @@ def optimize_with_restarts(model,
     else:
         basin_theta_np = None
 
-    for r in range(restarts):
+    num_runs = max(1, restarts)
+    for r in range(num_runs):
         # --- starting point ---
         theta0 = model.get_tensor().detach().cpu().numpy()
 
@@ -69,9 +70,9 @@ def optimize_with_restarts(model,
         if basin_theta_np is not None:
             theta0 = basin_theta_np.copy()
 
-        # perturb
-        perturb = (np.random.rand(theta0.size) - 0.5) * 2.0 * restart_perturb_scale
-        theta0 = theta0 + perturb
+        if restarts > 0:
+            perturb = (np.random.rand(theta0.size) - 0.5) * 2.0 * restart_perturb_scale
+            theta0 = theta0 + perturb
 
         # convert back to tensor
         initial_theta = torch.tensor(theta0, dtype=torch.float64, device=model.device)
@@ -94,7 +95,7 @@ def optimize_with_restarts(model,
             best_theta = final_theta.detach().cpu().numpy().copy()
 
         if verbose:
-            print(f"Restart {r+1}/{restarts}: loss = {final_loss:.6f}")
+            print(f"Restart {r+1}/{num_runs}: loss = {final_loss:.6f}")
 
     if verbose:
         print("\nBest restart loss =", best_loss)
@@ -116,21 +117,24 @@ def basin_hopping_optimize(
     """
     Basin-hopping using optimize_with_restarts.
     """
-    theta = model.get_tensor().detach().clone()
-    best_theta = theta.clone()
+    current_theta = model.get_tensor().detach().clone()
+    best_theta = current_theta.clone()
     P = parity_operator_torch(model.n)
 
-    param_dict = model.tensor_to_dict(theta)
-    H = model.build(param_dict)
-    best_loss = model.loss(H, P).item()
+    adjusted = model.adjust_tensor(current_theta)
+    param_dict = model.tensor_to_dict(adjusted)
+    phys_params = model.get_physical_parameters(param_dict)
+    H = model.build(phys_params)
+    current_loss = model.loss(H, P).item()
+    best_loss = current_loss
 
     if verbose:
         print(f"Initial basin loss: {best_loss:.6e}")
 
     for step in range(steps):
         # Hop in parameter space
-        hop = hop_size * torch.randn_like(theta)
-        trial_theta = (theta + hop).detach().clone()
+        hop = hop_size * torch.randn_like(current_theta)
+        trial_theta = (current_theta + hop).detach().clone()
 
         # Run local optimization with restarts
         trial_best_theta, trial_best_loss = optimize_with_restarts(
@@ -144,13 +148,15 @@ def basin_hopping_optimize(
         )
 
         # Metropolis acceptance
-        dL = trial_best_loss - best_loss
+        dL = trial_best_loss - current_loss
         if dL < 0 or np.random.rand() < np.exp(-dL / T):
-            theta = torch.tensor(trial_best_theta, dtype=torch.float64, device=model.device)
-            best_theta = theta.clone()
-            best_loss = trial_best_loss
+            current_theta = torch.tensor(trial_best_theta, dtype=torch.float64, device=model.device)
+            current_loss = trial_best_loss
+            if trial_best_loss < best_loss:
+                best_theta = current_theta.clone()
+                best_loss = trial_best_loss
             if verbose:
-                print(f"[Step {step:3d}] ACCEPTED → Loss: {best_loss:.6e}")
+                print(f"[Step {step:3d}] ACCEPTED → Loss: {current_loss:.6e} (best: {best_loss:.6e})")
         else:
             if verbose:
                 print(f"[Step {step:3d}] Rejected (trial: {trial_best_loss:.6e})")

@@ -76,8 +76,8 @@
 \contentsline {section}{\numberline {4.5}Braiding in Larger Projection Spaces}{57}{section.4.5}%
 \contentsline {section}{\numberline {4.6}Summary of Main Findings}{63}{section.4.6}%
 \contentsline {chapter}{\numberline {5}Discussion}{65}{chapter.5}%
-\contentsline {section}{\numberline {5.1}What the optimized parameter profiles imply}{65}{section.5.1}%
-\contentsline {section}{\numberline {5.2}What the braiding results imply}{66}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Limitations and outlook}{66}{section.5.3}%
+\contentsline {section}{\numberline {5.1}Parameter Optimization Scheme}{65}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Braiding Analysis}{66}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Limitations and outlook}{67}{section.5.3}%
 \contentsline {chapter}{\numberline {6}Conclusion}{69}{chapter.6}%
 \contentsfinish 

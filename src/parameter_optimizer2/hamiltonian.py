@@ -25,6 +25,8 @@ class HamiltonianModel:
         self.cre_t = [to_torch(m, self.device) for m in self.cre]
         self.ann_t = [to_torch(m, self.device) for m in self.ann]
         self.num_t = [to_torch(m, self.device) for m in self.num]
+        self.gamma1_t = [cd + c for cd, c in zip(self.cre_t, self.ann_t)]
+        self.gamma2_t = [1j * (cd - c) for cd, c in zip(self.cre_t, self.ann_t)]
     
     def default_param_configs(self):
         return {
@@ -274,12 +276,37 @@ class HamiltonianModel:
 
         for key in ['t', 'U', 'eps', 'Delta']:
             print(f"{key} = {phys_params[key].cpu().numpy()}")
+
+    def charge_difference(self, even_vecs, odd_vecs):
+        charge_diff = torch.tensor(0.0, dtype=torch.float64, device=self.device)
+        for n_i in self.num_t:
+            even_expect = torch.sum(torch.conj(even_vecs) * (n_i @ even_vecs), dim=0)
+            odd_expect = torch.sum(torch.conj(odd_vecs) * (n_i @ odd_vecs), dim=0)
+            charge_diff = charge_diff + torch.sum(torch.abs(even_expect - odd_expect)).to(torch.float64)
+        return charge_diff
+
+    def majorana_polarization_penalty(self, even_vecs, odd_vecs):
+        mp = torch.zeros((even_vecs.shape[1], self.n), dtype=torch.complex128, device=self.device)
+
+        for j, (gamma1, gamma2) in enumerate(zip(self.gamma1_t, self.gamma2_t)):
+            term1 = torch.sum(torch.conj(odd_vecs) * (gamma1 @ even_vecs), dim=0)
+            term2 = torch.sum(torch.conj(odd_vecs) * (gamma2 @ even_vecs), dim=0)
+            mp[:, j] = term1**2 + term2**2
+
+        target_mp = torch.zeros_like(mp)
+        target_mp[:, 0] = 1.0
+        target_mp[:, -1] = -1.0
+
+        penalty_pos = torch.abs(torch.sum((mp - target_mp)**2))
+        penalty_neg = torch.abs(torch.sum((mp + target_mp)**2))
+
+        return torch.min(penalty_pos, penalty_neg)
     
     def loss(self, H, P, weight_max=3, weight_min=0.1, gap_threshold=0.5):
         """
         Loss function
         """
-        from measurements import calculate_parities, charge_difference_torch, MP_Penalty
+        from measurements import calculate_parities
         evals, evecs = torch.linalg.eigh(H)
         even_states, odd_states, even_vecs, odd_vecs = calculate_parities(evals, evecs, P)
 
@@ -306,9 +333,9 @@ class HamiltonianModel:
         gap_penalties = torch.nn.functional.softplus(gap_threshold - worst_gaps)
         penalty_array[n_elements:] = w[n_elements:] * gap_penalties
 
-        charge_diff = charge_difference_torch(even_vecs, odd_vecs, self.n)
+        charge_diff = self.charge_difference(even_vecs, odd_vecs)
 
-        MP_penalty = MP_Penalty(even_vecs, odd_vecs, self.n)
+        MP_penalty = self.majorana_polarization_penalty(even_vecs, odd_vecs)
 
         total_loss = torch.sum(penalty_array) + charge_diff + MP_penalty
 
