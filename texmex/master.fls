@@ -481,9 +481,6 @@ INPUT /usr/share/texmf-dist/fonts/tfm/adobe/helvetic/phvb8t.tfm
 INPUT ./uio-fp-segl.pdf
 INPUT ./uio-fp-segl.pdf
 INPUT /usr/share/texmf-dist/fonts/tfm/adobe/helvetic/phvr8t.tfm
-INPUT ./background.jpg
-INPUT ./background.jpg
-INPUT ./background.jpg
 OUTPUT master.xdv
 INPUT /usr/share/texmf-dist/fonts/tfm/adobe/helvetic/phvr8t.tfm
 INPUT ./master.toc
