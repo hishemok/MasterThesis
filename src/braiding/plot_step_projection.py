@@ -12,6 +12,7 @@ linestyles = ["-", "--", "-."]
 
 plt.figure(figsize=(10, 6))
 
+
 plt.title("Braiding Error vs Sector Groups for Different U Values (Local Projection)", fontsize=24)
 
 length = 0
@@ -28,6 +29,7 @@ local_dict={
             "std": 0,
             "ground_state_overlap": 0}
 }
+
 
 
 for i,filename in enumerate(filenames):
@@ -53,6 +55,7 @@ for i,filename in enumerate(filenames):
         length = len(fidelities_local)
 
 ticks = np.arange(0, length, 1)
+t1 = fidelities_local
 
 plt.xlabel("Sector Groups", fontsize=18)
 plt.ylabel("Fidelity", fontsize=18)
@@ -184,10 +187,10 @@ for i,filename in enumerate(filenames):
         times = []
         fidelities_ideal = []
         for line in lines[1:]:
-            time, dim, static, Bfit, Cfit, overlap = line.split()
+            time, dim, static, Bfit, Cfit, Boff_error, Coff_error, overlap = line.split()
             times.append(float(time))
             fidelities_ideal.append(float(overlap))
-        
+        #Group	Basis Dimension	Static Term Norm	B Fit Error	C Fit Error	B Offblock Error	C Offblock Error	Unitary Overlap
         # plt.plot(times, fidelities_ideal, label=f"U={U_value} (Ideal)")
         local_dict[U_value] = {
             "mean": 1- np.mean(fidelities_ideal),
@@ -200,9 +203,19 @@ for i,filename in enumerate(filenames):
         length = len(fidelities_ideal)
 
 ticks = np.arange(0, length, 1)
-
+t2 = fidelities_ideal
 plt.xlabel("Sector Groups", fontsize=18)
 plt.ylabel("Fidelity", fontsize=18)
+plt.xticks(ticks, fontsize=14)
+plt.yticks(fontsize=14)
+plt.yscale("log")
+plt.legend()
+plt.show()
+
+
+plt.plot(np.array(t2)-np.array(t1), linewidth=2.5, label="Local - Ideal")
+plt.xlabel("Sector Groups", fontsize=18)
+plt.ylabel("Fidelity Difference", fontsize=18)
 plt.xticks(ticks, fontsize=14)
 plt.yticks(fontsize=14)
 plt.yscale("log")
