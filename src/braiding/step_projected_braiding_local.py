@@ -350,110 +350,119 @@ def phase_aligned_error(U, V):
     return np.linalg.norm(U - np.exp(1j * phase) * V) / np.sqrt(U.shape[0])
 
 if __name__ == "__main__":
+    for uval in (0.0, 0.1, 0.5, 1.0, 2.0):
+        print(f"\n\n=== Running scan for U={uval} ===")
+        specified_vals = {"U": [uval]}
+        mode = "minus_only"  # Options: "minus_only", "plus_only", "plus_minus"
+        B_INNER_SITE = 3
+        C_INNER_SITE = 6
 
-    specified_vals = {"U": [0.0]}
-    mode = "minus_only"  # Options: "minus_only", "plus_only", "plus_minus"
-    B_INNER_SITE = 3
-    C_INNER_SITE = 6
-
-    builder = BraidingHamiltonianBuilder(
-        n_sites=3,
-        dupes=3,
-        specified_vals=specified_vals,
-        config_path=default_config_path(),
-    )
-    h_full = builder.full_system_hamiltonian()
-    eigvals, eigvecs = np.linalg.eigh(h_full)
-    operators = builder.get_operators()
-
-
-    (gamma_A1_full, gamma_A2_full), (gamma_B1_full, gamma_B2_full), (gamma_C1_full, gamma_C2_full) = get_majoranas_JW(levels_to_include=4, specified_vals=specified_vals)
-
-
-    ops = precompute_operators(n=3, dup=3)
-    full_parity = parity_op(ops, sites=9)
-    even_energies, odd_energies, even_vecs, odd_vecs, even_idxs, odd_idxs = even_odd_splitter(eigvecs, eigvals, full_parity)
-    print(even_energies)
-
-    groups = find_close_groups(even_energies, odd_energies, even_idxs, odd_idxs)
-    bases = find_group_bases(groups, eigvecs)
-    projected_majorana_groups = project_majoranas(bases, gamma_A1_full, gamma_A2_full, gamma_B1_full, gamma_B2_full, gamma_C1_full, gamma_C2_full)
-    local_majorana_groups = project_local_majoranas(bases, operators, mode=mode)
-    majorana_checks(projected_majorana_groups)
-
-
-
-    T_total = 1.0
-    Delta_max = 1.0
-    Delta_min = 0.0
-    Width = T_total / 3
-    S = 20 / Width
-
-    ideal_target_results = {
-        "minus_only": {},
-        "plus_only": {},
-        "plus_minus": {},
-        "minus_plus": {}
-    }
-
-
-    local_target_results = {}
-    for idx in range(0, len(projected_majorana_groups)):
-        U_kato, initial_basis, static_term = evolve_system(300, projected_majorana_groups, local_majorana_groups, idx=idx)
-        B_coeffs, B_fit_overlap, B_fit_error, C_coeffs, C_fit_overlap, C_fit_error = get_local_majorana_fit(
-            projected_majorana_groups,
-            local_majorana_groups,
-            idx,
+        builder = BraidingHamiltonianBuilder(
+            n_sites=3,
+            dupes=3,
+            specified_vals=specified_vals,
+            config_path=default_config_path(),
         )
-        
-        U_ideal_target_minus = get_ideal_target_unitary(projected_majorana_groups, idx=idx, mode="minus_only")
-        U_ideal_target_plus = get_ideal_target_unitary(projected_majorana_groups, idx=idx, mode="plus_only")
-        U_ideal_target_plus_minus = get_ideal_target_unitary(projected_majorana_groups, idx=idx, mode="plus_minus")
-        U_ideal_target_minus_plus = get_ideal_target_unitary(projected_majorana_groups, idx=idx, mode="minus_plus")
-        U_local_target = get_local_target_unitary(local_majorana_groups, idx=idx)
-
-        U_kato_sub = initial_basis.conj().T @ U_kato @ initial_basis
-        U_ideal_target_minus_sub = initial_basis.conj().T @ U_ideal_target_minus @ initial_basis
-        U_ideal_target_plus_sub = initial_basis.conj().T @ U_ideal_target_plus @ initial_basis
-        U_ideal_target_plus_minus_sub = initial_basis.conj().T @ U_ideal_target_plus_minus @ initial_basis
-        U_ideal_target_minus_plus_sub = initial_basis.conj().T @ U_ideal_target_minus_plus @ initial_basis
-        U_local_target_sub = initial_basis.conj().T @ U_local_target @ initial_basis
-
-        ideal_target_results["minus_only"][idx] = unitary_overlap(U_kato_sub, U_ideal_target_minus_sub)
-        ideal_target_results["plus_only"][idx] = unitary_overlap(U_kato_sub, U_ideal_target_plus_sub)
-        ideal_target_results["plus_minus"][idx] = unitary_overlap(U_kato_sub, U_ideal_target_plus_minus_sub)
-        ideal_target_results["minus_plus"][idx] = unitary_overlap(U_kato_sub, U_ideal_target_minus_plus_sub)
-        local_target_results[idx] = unitary_overlap(U_kato_sub, U_local_target_sub)
+        h_full = builder.full_system_hamiltonian()
+        eigvals, eigvecs = np.linalg.eigh(h_full)
+        operators = builder.get_operators()
 
 
-        print(
-            f"local target overlap = {local_target_results[idx]:.10f}\n"
-            f"Group {idx}: ideal target overlap = {ideal_target_results['minus_only'][idx]:.10f},\n "
-            f"ideal target plus_only overlap = {ideal_target_results['plus_only'][idx]:.10f},\n "
-            f"ideal target plus_minus overlap = {ideal_target_results['plus_minus'][idx]:.10f}, \n"
-            f"ideal target minus_plus overlap = {ideal_target_results['minus_plus'][idx]:.10f}\n"
-            f"B local fit in [B1, B2]: overlap = {B_fit_overlap:.10f}, error = {B_fit_error:.3e}, coeffs = {format_coeffs(B_coeffs)}\n"
-            f"C local fit in [C1, C2]: overlap = {C_fit_overlap:.10f}, error = {C_fit_error:.3e}, coeffs = {format_coeffs(C_coeffs)}"
-        )
-
-    print("Local-operator overlap results for all groups:")
-    for idx in local_target_results:
-            print(f"local target = {local_target_results[idx]:.10f}")
-            for mode in ideal_target_results:
-                print(f"Group {idx}: ideal target {mode}: {ideal_target_results[mode][idx]:.10f}")
-        
+        (gamma_A1_full, gamma_A2_full), (gamma_B1_full, gamma_B2_full), (gamma_C1_full, gamma_C2_full) = get_majoranas_JW(levels_to_include=4, specified_vals=specified_vals)
 
 
-    # #Write results to file
-    # cwd_path = Path.cwd()
-    # results_path = cwd_path / f"braiding_results_step_projected_braiding_local_U={specified_vals['U'][0]}.txt"
+        ops = precompute_operators(n=3, dup=3)
+        full_parity = parity_op(ops, sites=9)
+        even_energies, odd_energies, even_vecs, odd_vecs, even_idxs, odd_idxs = even_odd_splitter(eigvecs, eigvals, full_parity)
+        print(even_energies)
 
-    # with open(results_path, "w") as f:
-    #     f.write("Group\tIdeal Target Overlap\tLocal Target Overlap\n")
-    #     for idx in ideal_target_results:
-    #         f.write(
-    #             f"{idx}\t{ideal_target_results[idx]:.10f}\t{local_target_results[idx]:.10f}\n"
-    #         )
+        groups = find_close_groups(even_energies, odd_energies, even_idxs, odd_idxs)
+        bases = find_group_bases(groups, eigvecs)
+        projected_majorana_groups = project_majoranas(bases, gamma_A1_full, gamma_A2_full, gamma_B1_full, gamma_B2_full, gamma_C1_full, gamma_C2_full)
+        local_majorana_groups = project_local_majoranas(bases, operators, mode=mode)
+        majorana_checks(projected_majorana_groups)
 
 
-    # # plot_projected_hamiltonian_levels(3, t=0.0)
+
+        T_total = 1.0
+        Delta_max = 1.0
+        Delta_min = 0.0
+        Width = T_total / 3
+        S = 20 / Width
+
+        ideal_target_results = {
+            "minus_only": {},
+            "plus_only": {},
+            "plus_minus": {},
+            "minus_plus": {}
+        }
+
+
+        local_target_results = {}
+        for idx in range(0, len(projected_majorana_groups)):
+            U_kato, initial_basis, static_term = evolve_system(300, projected_majorana_groups, local_majorana_groups, idx=idx)
+            B_coeffs, B_fit_overlap, B_fit_error, C_coeffs, C_fit_overlap, C_fit_error = get_local_majorana_fit(
+                projected_majorana_groups,
+                local_majorana_groups,
+                idx,
+            )
+            
+            U_ideal_target_minus = get_ideal_target_unitary(projected_majorana_groups, idx=idx, mode="minus_only")
+            U_ideal_target_plus = get_ideal_target_unitary(projected_majorana_groups, idx=idx, mode="plus_only")
+            U_ideal_target_plus_minus = get_ideal_target_unitary(projected_majorana_groups, idx=idx, mode="plus_minus")
+            U_ideal_target_minus_plus = get_ideal_target_unitary(projected_majorana_groups, idx=idx, mode="minus_plus")
+            U_local_target = get_local_target_unitary(local_majorana_groups, idx=idx)
+
+            U_kato_sub = initial_basis.conj().T @ U_kato @ initial_basis
+            U_ideal_target_minus_sub = initial_basis.conj().T @ U_ideal_target_minus @ initial_basis
+            U_ideal_target_plus_sub = initial_basis.conj().T @ U_ideal_target_plus @ initial_basis
+            U_ideal_target_plus_minus_sub = initial_basis.conj().T @ U_ideal_target_plus_minus @ initial_basis
+            U_ideal_target_minus_plus_sub = initial_basis.conj().T @ U_ideal_target_minus_plus @ initial_basis
+            U_local_target_sub = initial_basis.conj().T @ U_local_target @ initial_basis
+
+            ideal_target_results["minus_only"][idx] = unitary_overlap(U_kato_sub, U_ideal_target_minus_sub)
+            ideal_target_results["plus_only"][idx] = unitary_overlap(U_kato_sub, U_ideal_target_plus_sub)
+            ideal_target_results["plus_minus"][idx] = unitary_overlap(U_kato_sub, U_ideal_target_plus_minus_sub)
+            ideal_target_results["minus_plus"][idx] = unitary_overlap(U_kato_sub, U_ideal_target_minus_plus_sub)
+            local_target_results[idx] = unitary_overlap(U_kato_sub, U_local_target_sub)
+
+
+            print(
+                f"local target overlap = {local_target_results[idx]:.10f}\n"
+                f"Group {idx}: ideal target overlap = {ideal_target_results['minus_only'][idx]:.10f},\n "
+                f"ideal target plus_only overlap = {ideal_target_results['plus_only'][idx]:.10f},\n "
+                f"ideal target plus_minus overlap = {ideal_target_results['plus_minus'][idx]:.10f}, \n"
+                f"ideal target minus_plus overlap = {ideal_target_results['minus_plus'][idx]:.10f}\n"
+                f"B local fit in [B1, B2]: overlap = {B_fit_overlap:.10f}, error = {B_fit_error:.3e}, coeffs = {format_coeffs(B_coeffs)}\n"
+                f"C local fit in [C1, C2]: overlap = {C_fit_overlap:.10f}, error = {C_fit_error:.3e}, coeffs = {format_coeffs(C_coeffs)}"
+            )
+
+        print("Local-operator overlap results for all groups:")
+        for idx in local_target_results:
+                print(f"local target = {local_target_results[idx]:.10f}")
+                for mode in ideal_target_results:
+                    print(f"Group {idx}: ideal target {mode}: {ideal_target_results[mode][idx]:.10f}")
+            
+
+
+        #Write results to file
+        cwd_path = Path.cwd()
+        results_path = cwd_path / f"braiding_results_step_projected_braiding_local_U={specified_vals['U'][0]}.txt"
+
+        with open(results_path, "w") as f:
+            f.write(
+                "Group\tIdeal Minus\tIdeal Plus\tIdeal Plus-Minus\t"
+                "Ideal Minus-Plus\tLocal Target Overlap\n"
+            )
+            for idx in local_target_results:
+                f.write(
+                    f"{idx}\t"
+                    f"{ideal_target_results['minus_only'][idx]:.10f}\t"
+                    f"{ideal_target_results['plus_only'][idx]:.10f}\t"
+                    f"{ideal_target_results['plus_minus'][idx]:.10f}\t"
+                    f"{ideal_target_results['minus_plus'][idx]:.10f}\t"
+                    f"{local_target_results[idx]:.10f}\n"
+                )
+
+
+        # plot_projected_hamiltonian_levels(3, t=0.0)

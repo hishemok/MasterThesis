@@ -4,7 +4,12 @@ import numpy as np
 from scipy.linalg import expm
 from tqdm import tqdm
 
-from block_match_tools import build_full_label_operator,build_pair_label_operator,fit_blockwise_to_majorana_pair,format_blocks,hermitian_part,split_group_by_label_operator
+from block_match_tools2 import (
+    find_blocks,
+    fit_blockwise_to_majorana_pair,
+    format_blocks,
+    hermitian_part,
+)
 from braiding_model import delta_pulse
 from get_mzm_JW import get_full_gammas as get_majoranas_JW
 from get_mzm_JW import precompute_operators
@@ -12,7 +17,6 @@ from hamiltonian_builder import BraidingHamiltonianBuilder, default_config_path
 from step_projected_braiding_local import even_odd_splitter,find_close_groups,find_group_bases,parity_op,project_majoranas
 
 from extended_projection_braiding import normalize_projected_majorana
-
 
 N_SITES = 3
 DUPES = 3
@@ -164,25 +168,8 @@ def build_sector_data(U_value, mode="minus_only"):
     projected_majorana_groups = project_majoranas(bases,gamma_A1,gamma_A2,gamma_B1,gamma_B2,gamma_C1,gamma_C2)
     local_majorana_groups = project_local_majoranas(bases, operators, mode=mode)
 
-    label_operator, label_base = build_label_operator(specified_vals)
-
-    return {"h_full": h_full,"bases": bases,"projected_majoranas": projected_majorana_groups,"local_majoranas": local_majorana_groups,"label_operator": label_operator,"label_base": label_base,"gamma_B": (gamma_B1, gamma_B2),"gamma_C": (gamma_C1, gamma_C2),
+    return {"h_full": h_full,"bases": bases,"projected_majoranas": projected_majorana_groups,"local_majoranas": local_majorana_groups,"gamma_B": (gamma_B1, gamma_B2),"gamma_C": (gamma_C1, gamma_C2),"specified_vals": specified_vals,
     }
-
-
-def build_label_operator(specified_vals):
-    builder_sub = BraidingHamiltonianBuilder(
-        n_sites=N_SITES,
-        dupes=1,
-        specified_vals=specified_vals,
-        config_path=default_config_path(),
-    )
-    h_sub = builder_sub.full_system_hamiltonian()
-    sub_ops = precompute_operators(n=N_SITES, dup=1)
-    sub_parity = parity_op(sub_ops, sites=N_SITES)
-
-    single_label_operator, n_labels = build_pair_label_operator(h_sub,sub_parity,levels_to_include=LEVELS_TO_INCLUDE) 
-    return build_full_label_operator(single_label_operator,n_labels,n_subsystems=DUPES)
 
 
 def fit_local_majoranas_to_ideal(data):
@@ -190,14 +177,16 @@ def fit_local_majoranas_to_ideal(data):
     local_majoranas = data["local_majoranas"]
     gamma_B1, gamma_B2 = data["gamma_B"]
     gamma_C1, gamma_C2 = data["gamma_C"]
-    label_operator = data["label_operator"]
-    label_base = data["label_base"]
 
     fitted_majoranas = []
     reports = []
 
     for idx, basis in enumerate(bases):
-        blocks = split_group_by_label_operator(basis,label_operator,label_base,n_subsystems=DUPES,
+        blocks = find_blocks(
+            basis,
+            specified_vals=data["specified_vals"],
+            levels=LEVELS_TO_INCLUDE,
+            n_subsystems=DUPES,
         )
         B_local, C_local = local_majoranas[idx]
 
@@ -218,7 +207,7 @@ def fit_local_majoranas_to_ideal(data):
     return fitted_majoranas, reports
 
 
-def run_matched_operator_scan(U_values=(0.0, 0.1, 2.0), n_steps=301, write_results=True):
+def run_matched_operator_scan(U_values=(0.0,0.1, 0.5, 1.0, 2.0), n_steps=301, write_results=True):
     for U_value in U_values:
         print(f"\nProcessing U={U_value}")
         data = build_sector_data(U_value)
