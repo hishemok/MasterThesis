@@ -46,38 +46,39 @@
 \contentsline {section}{\numberline {3.4}Effective Majorana Operator Construction}{36}{section.3.4}%
 \contentsline {subsection}{\numberline {3.4.1}Energy-level Majoranas from parity pairs}{36}{subsection.3.4.1}%
 \contentsline {subsection}{\numberline {3.4.2}Embedding into the three-subsystem Hilbert space}{37}{subsection.3.4.2}%
-\contentsline {subsection}{\numberline {3.4.3}Projection to the retained low-energy space}{37}{subsection.3.4.3}%
+\contentsline {subsection}{\numberline {3.4.3}Projection to the retained space}{37}{subsection.3.4.3}%
 \contentsline {subsection}{\numberline {3.4.4}Projected local components}{37}{subsection.3.4.4}%
 \contentsline {subsection}{\numberline {3.4.5}Normalization and algebra checks}{38}{subsection.3.4.5}%
 \contentsline {section}{\numberline {3.5}Braiding Models and Pulse Protocol}{38}{section.3.5}%
 \contentsline {subsection}{\numberline {3.5.1}Three-subsystem geometry}{38}{subsection.3.5.1}%
-\contentsline {subsection}{\numberline {3.5.2}Ideal four-Majorana model}{38}{subsection.3.5.2}%
+\contentsline {subsection}{\numberline {3.5.2}Ideal four-Majorana model}{39}{subsection.3.5.2}%
 \contentsline {subsection}{\numberline {3.5.3}Projected microscopic junction model}{39}{subsection.3.5.3}%
 \contentsline {subsection}{\numberline {3.5.4}Projected local-operator model}{39}{subsection.3.5.4}%
-\contentsline {subsection}{\numberline {3.5.5}Pulse sequence}{39}{subsection.3.5.5}%
+\contentsline {subsection}{\numberline {3.5.5}Block-matched local-operator model}{40}{subsection.3.5.5}%
+\contentsline {subsection}{\numberline {3.5.6}Pulse sequence}{40}{subsection.3.5.6}%
 \contentsline {section}{\numberline {3.6}Kato Transport and Braid Validation}{40}{section.3.6}%
-\contentsline {subsection}{\numberline {3.6.1}Choice of transported subspace}{40}{subsection.3.6.1}%
-\contentsline {subsection}{\numberline {3.6.2}Numerical Kato transport}{40}{subsection.3.6.2}%
+\contentsline {subsection}{\numberline {3.6.1}Transported bands used in the calculations}{41}{subsection.3.6.1}%
+\contentsline {subsection}{\numberline {3.6.2}Numerical Kato transport}{41}{subsection.3.6.2}%
 \contentsline {subsection}{\numberline {3.6.3}Target exchange gate}{41}{subsection.3.6.3}%
-\contentsline {subsection}{\numberline {3.6.4}Operator-action checks}{41}{subsection.3.6.4}%
+\contentsline {subsection}{\numberline {3.6.4}Operator-action checks}{42}{subsection.3.6.4}%
 \contentsline {subsection}{\numberline {3.6.5}Parity-resolved gate checks}{42}{subsection.3.6.5}%
 \contentsline {subsection}{\numberline {3.6.6}Energy-level and projected-local targets}{42}{subsection.3.6.6}%
-\contentsline {chapter}{\numberline {4}Results}{43}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Optimized PMM Chains}{43}{section.4.1}%
-\contentsline {subsection}{\numberline {4.1.1}Lowest-loss configurations}{44}{subsection.4.1.1}%
-\contentsline {subsection}{\numberline {4.1.2}Representative optimized spectra}{45}{subsection.4.1.2}%
-\contentsline {section}{\numberline {4.2}Post-Optimization Diagnostics}{47}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Parity-resolved spectra and low-energy gaps}{47}{subsection.4.2.1}%
-\contentsline {subsection}{\numberline {4.2.2}Local diagnostics and Majorana character}{49}{subsection.4.2.2}%
-\contentsline {section}{\numberline {4.3}Selection of Braiding Candidate}{50}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Braiding in Projected Majorana Models}{51}{section.4.4}%
-\contentsline {subsection}{\numberline {4.4.1}Ideal four-Majorana reference}{51}{subsection.4.4.1}%
-\contentsline {subsection}{\numberline {4.4.2}Projected microscopic and local-operator braids}{53}{subsection.4.4.2}%
-\contentsline {section}{\numberline {4.5}Braiding in Larger Projection Spaces}{55}{section.4.5}%
-\contentsline {section}{\numberline {4.6}Summary of Main Findings}{61}{section.4.6}%
-\contentsline {chapter}{\numberline {5}Discussion}{63}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Parameter Optimization Scheme}{63}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Braiding Analysis}{64}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Limitations and Outlook}{65}{section.5.3}%
-\contentsline {chapter}{\numberline {6}Conclusion}{67}{chapter.6}%
+\contentsline {chapter}{\numberline {4}Results}{45}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Optimized PMM Chains}{45}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Lowest-loss configurations}{46}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Representative optimized spectra}{47}{subsection.4.1.2}%
+\contentsline {section}{\numberline {4.2}Post-Optimization Diagnostics}{49}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Parity-resolved spectra and low-energy gaps}{49}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Local diagnostics and Majorana character}{51}{subsection.4.2.2}%
+\contentsline {section}{\numberline {4.3}Selection of Braiding Candidate}{52}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Braiding in Projected Majorana Models}{53}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Ideal four-Majorana reference}{53}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}Projected microscopic and local-operator braids}{55}{subsection.4.4.2}%
+\contentsline {section}{\numberline {4.5}Braiding in Multiple Energy Sectors}{57}{section.4.5}%
+\contentsline {section}{\numberline {4.6}Summary of Main Findings}{62}{section.4.6}%
+\contentsline {chapter}{\numberline {5}Discussion}{67}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Parameter Optimization Scheme}{67}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Braiding Analysis}{68}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Limitations and Outlook}{69}{section.5.3}%
+\contentsline {chapter}{\numberline {6}Conclusion}{71}{chapter.6}%
 \contentsfinish 

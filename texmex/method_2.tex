@@ -264,9 +264,9 @@ For two-dot systems there are no interior sites, so the bulk contribution is set
 \subsection{Selection for braiding calculations}
 The post-optimization diagnostics provide the bridge between the optimization results and the braiding part of the thesis. The parity-resolved spectra identify whether the optimized chain has a low-energy manifold suitable for projection. The charge and Majorana-polarization diagnostics then test whether this manifold has the expected non-local and edge-localized structure.
 
-Although Majorana physics is often discussed in terms of the lowest parity pair, the optimization used here was deliberately applied to the full parity-resolved spectrum of the finite many-body Hamiltonian. This choice was motivated by the later braiding analysis, where projected spaces of increasing dimension, up to the full $2^9=512$ dimensional three-subsystem Hilbert space, are tested. The goal was therefore not only to obtain a clean ground-state Majorana signature, but also to find parameter sets whose parity pairing, excitation gaps, charge structure, and Majorana-polarization properties remain well behaved beyond the lowest states.
+Although Majorana physics is often discussed in terms of the lowest parity pair, the optimization used here was deliberately applied to the full parity-resolved spectrum of the finite many-body Hamiltonian. This choice was motivated by the later sector-resolved braiding analysis, where each identified energy sector of the full three-subsystem Hamiltonian is projected and tested independently. The goal was therefore not only to obtain a clean ground-state Majorana signature, but also to find parameter sets whose parity pairing, excitation gaps, charge structure, and Majorana-polarization properties remain well behaved beyond the lowest states.
 
-The post-optimization diagnostics therefore serve two purposes. First, they identify whether the lowest parity pair has the expected Majorana-like structure. Second, they indicate whether the optimized configuration remains suitable when larger projected subspaces are retained in the braiding calculations. Configurations that satisfy both requirements are selected as candidates for the effective Majorana construction described next.
+The post-optimization diagnostics therefore serve two purposes. First, they identify whether the lowest parity pair has the expected Majorana-like structure. Second, they indicate whether the optimized configuration remains suitable when higher energy sectors are tested in the braiding calculations. Configurations that satisfy both requirements are selected as candidates for the effective Majorana construction described next.
 
 \section{Effective Majorana Operator Construction}
 % 3.4 Effective Majorana Operator Construction
@@ -323,13 +323,13 @@ and
 \end{equation}
 where $JW_A$ is the Jordan-Wigner string over subsystem $A$, and $JW_{AB}$ is the corresponding string over subsystems $A$ and $B$. These strings are essential because the subsystem Majoranas must anticommute as fermionic operators after they are placed in the same Hilbert space.
 
-\subsection{Projection to the retained low-energy space}
-The full three-subsystem Hamiltonian is diagonalized, and a projection basis $V$ is formed from the lowest $d_P$ eigenvectors. Here $d_P$ is the chosen projection dimension. Any full-space operator $O$ is then represented in the retained space by
+\subsection{Projection to the retained space}
+The full three-subsystem Hamiltonian is diagonalized, and a projection basis $V$ is formed from a selected set of eigenvectors. In the low-energy benchmark, $V$ contains the eigenvectors of the retained lowest-energy manifold. In the sector-resolved scans, a separate basis $V_i$ is instead formed from all eigenvectors belonging to energy sector $i$. Any full-space operator $O$ is then represented in the selected space by
 \begin{equation}
 O_P = V^\dagger O V .
 \label{eq:method_operator_projection}
 \end{equation}
-This projection is applied to the embedded Majorana operators before they are used in the projected braid models. The same projection basis is also used when projecting microscopic junction operators later, so that all operators act on the same retained low-energy Hilbert space.
+This projection is applied to the embedded Majorana operators before they are used in the projected braid models. The same projection basis is also used for all other operators in a given calculation, so that the energy-level Majoranas, local operators, static Hamiltonian, and driven braid terms act in the same retained space.
 
 \subsection{Projected local components}
 In addition to the energy-level construction in Eq.~\ref{eq:method_energy_level_majoranas}, the code also constructs projected local Majorana components from the microscopic fermion operators on the relevant subsystem sites,
@@ -338,15 +338,27 @@ In addition to the energy-level construction in Eq.~\ref{eq:method_energy_level_
 \qquad
 \Gamma_{-,P}=V^\dagger i(c^\dagger-c)V .
 \end{equation}
-These projected local components provide a more microscopic reference for the Majorana operator at a chosen end of a subsystem. In the implementation, the energy-level operators are compared with these projected local components by minimizing a matrix-norm mismatch. When both components are allowed, the fitted operator has the form
+These projected local components provide a more microscopic reference for the Majorana operator at a chosen end of a subsystem. The direct projected local-operator model uses the normalized minus component $\Gamma_{-,P}$. When this operator is compared with the corresponding energy-level Majorana, only an overall sign is allowed,
 \begin{equation}
-\gamma_{\mathrm{fit}}
+s_{\mathrm{opt}}
 =
-a\,\gamma_{+}^{(m)}
-+
-b\,\gamma_{-}^{(m)},
+\underset{s\in\{-1,+1\}}{\operatorname{argmin}}
+\left\|
+\Gamma_{-,P}-s\gamma_{-}^{P}
+\right\|_F .
 \end{equation}
-where the coefficients $a$ and $b$ are chosen from a least-squares fit in the projected operator space. This step is used to quantify how well the energy-level Majorana extracted from parity pairs matches the local microscopic Majorana component used in the projected-local braid comparison.
+This sign alignment is used only to compare the two operator constructions; it does not allow the local operator to rotate into a different energy-level Majorana direction.
+
+For higher-dimensional energy sectors, a single overall sign is generally insufficient. Degenerate sectors contain several independent blocks associated with different combinations of subsystem energy-level labels. A label operator is therefore constructed from the paired eigenstates of each subsystem and projected into the selected sector. Diagonalizing this projected label operator decomposes the sector into labelled blocks. Within each block $r$, the projected local operator is fitted independently to the two available energy-level Majorana components,
+\begin{equation}
+\Gamma_{-,P}^{(r)}
+\approx
+a_r\gamma_{+,P}^{(r)}
++
+b_r\gamma_{-,P}^{(r)} .
+\label{eq:method_block_matched_majorana}
+\end{equation}
+The coefficients $a_r$ and $b_r$ are continuous least-squares coefficients and are allowed to differ between blocks. The fitted blocks are then reassembled into a block-matched local operator on the full selected sector. This construction tests whether the local operator can be represented by the energy-level Majorana pair after the independent degenerate blocks have been identified. The detailed construction of the label operator and the resulting block structure is presented together with the sector-resolved analysis.
 
 \subsection{Normalization and algebra checks}
 After projection, the Majorana operators are no longer assumed to satisfy the ideal algebra exactly. The projected operators are therefore checked numerically before being used in the braid. The diagnostics test Hermiticity, normalization,
@@ -358,7 +370,7 @@ and mutual anticommutation,
 \{\gamma_i,\gamma_j\}\approx 0
 \qquad (i\neq j).
 \end{equation}
-The matrix mismatch between the fitted energy-level operator and the projected local component is also stored. These checks are important because the later braid errors should not be interpreted only as failures of the pulse protocol: they can also reflect imperfect Majorana operators after projection.
+The matrix mismatch between the direct projected local component and the block-matched operator is also stored. These checks are important because the later braid errors should not be interpreted only as failures of the pulse protocol: they can also reflect imperfect Majorana operators after projection.
 
 
 \section{Braiding Models and Pulse Protocol}
@@ -373,7 +385,7 @@ The braiding calculations use the optimized PMM chains as building blocks for a 
 \subsection{Three-subsystem geometry}
 The junction consists of three optimized PMM subsystems, labelled $A$, $B$, and $C$. Subsystem $A$ acts as the reference arm and supplies two Majorana operators, denoted $\gamma_0$ and $\gamma_1$. The Majorana operators to be exchanged are associated with subsystems $B$ and $C$, and are denoted $\gamma_2$ and $\gamma_3$. In this notation, the intended exchange is generated by moving the coupling of $\gamma_0$ from $\gamma_1$ to $\gamma_2$, then to $\gamma_3$, and finally back to $\gamma_1$.
 
-All braiding models are built in the projected Hilbert space introduced in Sec.~3.4. The projection dimension determines how many low-energy states of the full three-subsystem Hamiltonian are retained. Within this common projected space, different choices of coupling operators can be compared directly.
+All braiding models are built in the projected Hilbert space introduced in Sec.~3.4. The projection basis determines which states of the full three-subsystem Hamiltonian are retained. Within this common projected space, different choices of coupling operators can be compared directly.
 
 In the projection scans, the driven braid terms can also be supplemented by the projected static Hamiltonian of the uncoupled subsystem background,
 \begin{equation}
@@ -449,6 +461,9 @@ H_{\mathrm{loc}}(t)
 \end{equation}
 This model is useful because it sits between the ideal and fully microscopic descriptions. The projected microscopic model first projects the full junction operator, while the projected local-operator model first projects local Majorana components and then forms bilinears from them. It therefore keeps a clear Majorana-bilinear form, but the operators being coupled are obtained from projected local fermionic operators rather than only from energy-level parity pairs.
 
+\subsection{Block-matched local-operator model}
+The sector-resolved scans also use a block-matched local-operator model. It has the same bilinear form as Eq.~\ref{eq:method_local_operator_braid}, but replaces the direct projected local operators by the block-matched operators defined in Eq.~\ref{eq:method_block_matched_majorana}. The labelled blocks are fitted independently and then reassembled before the braid Hamiltonian is constructed. This model tests whether resolving the internal degeneracy structure of a sector improves the braid generated from the local channel.
+
 \subsection{Pulse sequence}
 The same pulse sequence is used for each braid model. To avoid confusing the braid amplitudes with the superconducting pairing parameters $\Delta_i$, the time-dependent braid couplings are denoted by $\lambda_i(t)$. The coupling envelope is a smooth pulse constructed from two sigmoid functions,
 \begin{equation}
@@ -483,7 +498,7 @@ At each time step, the Hamiltonian for the chosen model is assembled from the sa
 \section{Kato Transport and Braid Validation}
 % 3.6 Kato Transport and Braid Validation
 %   - numerical Kato propagation
-%   - choice of transported subspace
+%   - transported bands used in the calculations
 %   - target exchange gate
 %   - operator-action checks:
 %     gamma_2 -> -gamma_3,
@@ -491,19 +506,17 @@ At each time step, the Hamiltonian for the chosen model is assembled from the sa
 %   - parity-block leakage
 %   - odd/even target-gate errors
 %   - energy-level target vs projected-local target
-After a braid Hamiltonian has been defined, the remaining task is to compute the unitary generated by the adiabatic path and to check whether it implements the desired Majorana exchange. The calculation is performed in the projected Hilbert space, but the transported subspace can be smaller than the full projection space. This section describes how that transported subspace is selected, how the Kato evolution is computed, and which diagnostics are used to compare the resulting unitary with the target braid.
+After a braid Hamiltonian has been defined, the remaining task is to compute the unitary generated by the adiabatic path and to check whether it implements the desired Majorana exchange. The calculation is performed in the projected Hilbert space, but the transported subspace can be smaller than the full projection space. This section describes the transported bands used in the calculations, how the Kato evolution is computed, and which diagnostics are used to compare the resulting unitary with the target braid.
 
-\subsection{Choice of transported subspace}
-For a given projected Hamiltonian $H(t)$, the instantaneous spectrum is sampled along the braid path. Candidate transported dimensions are tested by looking at the minimum spectral gap above each candidate band throughout the protocol. If the transported dimension is $d_T$, the relevant gap is
+\subsection{Transported bands used in the calculations}
+In the low-energy benchmark, the transported subspace is the isolated four-dimensional lowest-energy manifold. Its gap to the remaining projected states is monitored throughout the braid path.
+
+In the sector-resolved scans, each energy sector is projected and tested independently. Activating the braid Hamiltonian splits the initially degenerate sector into a lower and an upper band of equal dimension. The Kato calculation transports the lower band, so that for a sector projection of dimension $d_{P_i}$ the transported dimension is fixed to
 \begin{equation}
-\Delta_T
-=
-\min_t
-\left[
-E_{d_T}(t)-E_{d_T-1}(t)
-\right],
+d_{T_i}=\frac{d_{P_i}}{2}.
+\label{eq:method_sector_transport_dimension}
 \end{equation}
-where the eigenvalues are ordered increasingly and the index convention starts at zero. The numerical procedure selects the candidate $d_T$ with the largest persistent gap. This choice avoids fixing the transported manifold by hand when the projection dimension is increased, and instead follows the most clearly isolated low-energy band available in the chosen projected model.
+The spectral gap between these two bands is monitored along the path. The existence of this isolated lower band makes the transport well defined, while the final target comparison determines whether the transported unitary actually performs the intended exchange.
 
 \subsection{Numerical Kato transport}
 The braid path is discretized into time points $t_0,\ldots,t_N$. At each time step, the Hamiltonian is diagonalized and the projector onto the transported band is constructed,

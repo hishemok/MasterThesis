@@ -13,18 +13,139 @@ from pathlib import Path
 
 
 
-#plot mister
-def plot_energy_levels(even_energies, odd_energies, title='Energy levels colored by parity'):
+def get_energy_group_ticks(even_energies, odd_energies, energy_tol=1e-2):
+    group_energies = []
+    group_sizes = []
+    used = np.zeros(min(len(even_energies), len(odd_energies)), dtype=bool)
+
+    for i in range(len(used)):
+        if used[i]:
+            continue
+
+        group = []
+        for j in range(i, len(used)):
+            if (
+                np.isclose(even_energies[i], even_energies[j], atol=energy_tol)
+                and np.isclose(odd_energies[i], odd_energies[j], atol=energy_tol)
+            ):
+                used[j] = True
+                group.extend((even_energies[j], odd_energies[j]))
+
+        group_energies.append(np.mean(group))
+        group_sizes.append(len(group))
+
+    return group_energies, group_sizes
+
+
+def save_energy_level_figure(fig, output_path):
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(output_path.with_suffix(".pdf"), bbox_inches="tight", pad_inches=0.08)
+    fig.savefig(output_path.with_suffix(".png"), bbox_inches="tight", pad_inches=0.08, dpi=220)
+
+
+def spread_group_label_positions(group_energies, y_limits, min_gap_fraction=0.026):
+    lower, upper = y_limits
+    padding = 0.015 * (upper - lower)
+    lower += padding
+    upper -= padding
+    min_gap = min_gap_fraction * (upper - lower)
+    positions = np.array(group_energies, dtype=float)
+
+    for i in range(1, len(positions)):
+        positions[i] = max(positions[i], positions[i - 1] + min_gap)
+
+    if positions[-1] > upper:
+        positions -= positions[-1] - upper
+    for i in range(len(positions) - 2, -1, -1):
+        positions[i] = min(positions[i], positions[i + 1] - min_gap)
+    if positions[0] < lower:
+        positions += lower - positions[0]
+
+    return positions
+
+
+def plot_energy_levels(
+    even_energies,
+    odd_energies,
+    title="Energy levels colored by parity",
+    output_path=None,
+    show=True,
+    figsize=(7.2, 6.4),
+    degeneracy_tol=1e-2,
+):
     xmin_even,xmax_even = 0,1
     xmin_odd,xmax_odd = 2,3
-    plt.figure(figsize=(10, 6))
-    plt.hlines(even_energies, xmin_even, xmax_even, color='blue', label='Even parity energies')
-    plt.hlines(odd_energies, xmin_odd, xmax_odd, color='orange', label='Odd parity energies')
-    plt.xlabel('State index')
-    plt.ylabel('Energy')
-    plt.title(title)
-    plt.legend()
-    plt.show()
+    lw1 = 3.0
+    fig, energy_axis = plt.subplots(figsize=figsize)
+    energy_axis.hlines(even_energies, xmin_even, xmax_even, color='navy', label='Even parity energies', linewidth=lw1)
+    energy_axis.hlines(odd_energies, xmin_odd, xmax_odd, color='firebrick', label='Odd parity energies', linewidth=lw1)
+
+    degeneracy_label = "Degenerate parity pair"
+    for even_energy, odd_energy in zip(even_energies, odd_energies):
+        if np.isclose(even_energy, odd_energy, atol=degeneracy_tol, rtol=0.0):
+            energy_axis.plot(
+                [xmax_even, xmin_odd],
+                [even_energy, odd_energy],
+                color="gray",
+                linestyle="--",
+                linewidth=1.5,
+                label=degeneracy_label,
+            )
+            degeneracy_label = None
+
+    energy_axis.set_xlabel('Parity sector', fontsize=18)
+    energy_axis.set_ylabel('Energy', fontsize=18)
+    energy_axis.set_xticks([0.5, 2.5], ['Even', 'Odd'], fontsize=14)
+    energy_axis.tick_params(axis="y", labelsize=14)
+    energy_axis.set_title(title, fontsize=18, pad=38)
+    energy_axis.legend(
+        loc="lower center",
+        bbox_to_anchor=(0.5, 1.01),
+        ncol=3,
+        frameon=False,
+        fontsize=9,
+    )
+
+    group_energies, group_sizes = get_energy_group_ticks(even_energies, odd_energies)
+    group_label_positions = spread_group_label_positions(group_energies, energy_axis.get_ylim())
+    right_edge = energy_axis.get_xlim()[1]
+    for group_energy, label_position in zip(group_energies, group_label_positions):
+        if not np.isclose(group_energy, label_position):
+            energy_axis.plot(
+                [xmax_odd, right_edge],
+                [group_energy, label_position],
+                color="dimgray",
+                linewidth=0.7,
+                alpha=0.65,
+                clip_on=False,
+            )
+
+    group_size_axis = energy_axis.twinx()
+    group_size_axis.set_ylim(energy_axis.get_ylim())
+    group_size_axis.set_yticks(group_label_positions)
+    group_size_axis.set_yticklabels(group_sizes, fontsize=12)
+    group_size_color = "dimgray"
+
+    group_size_axis.set_ylabel(
+        "Group size",
+        fontsize=18,
+        color=group_size_color,
+    )
+    group_size_axis.tick_params(
+        axis="y",
+        labelsize=12,
+        colors=group_size_color,
+    )
+    group_size_axis.spines["right"].set_color(group_size_color)
+
+    fig.tight_layout()
+    if output_path is not None:
+        save_energy_level_figure(fig, output_path)
+    if show:
+        plt.show()
+    else:
+        plt.close(fig)
 
 def split_evals_by_parity(evals, evecs, parity, parity_tol=1e-3, energy_tol=1e-8):
     even_energies = []
@@ -55,9 +176,24 @@ def split_evals_by_parity(evals, evecs, parity, parity_tol=1e-3, energy_tol=1e-8
 
     return np.array(even_energies), np.array(odd_energies)
 
-def plot_energy_levels_from_evals(evals, evecs, parity, title='Energy levels colored by parity'):
+def plot_energy_levels_from_evals(
+    evals,
+    evecs,
+    parity,
+    title="Energy levels colored by parity",
+    output_path=None,
+    show=True,
+    figsize=(7.2, 6.4),
+):
     even_energies, odd_energies = split_evals_by_parity(evals, evecs, parity)
-    plot_energy_levels(even_energies, odd_energies, title=title)
+    plot_energy_levels(
+        even_energies,
+        odd_energies,
+        title=title,
+        output_path=output_path,
+        show=show,
+        figsize=figsize,
+    )
     return even_energies, odd_energies
 
 def even_odd_splitter(eigvecs, eigvals, subsys_parity):
@@ -239,13 +375,21 @@ def build_projected_hamiltonian(t, term_a, term_b, term_c, static_term=None):
         hamiltonian = hamiltonian + static_term
     return hamiltonian, (delta_1, delta_2, delta_3)
 
-def plot_projected_hamiltonian_levels(idx, t=0.0):
+def plot_projected_hamiltonian_levels(idx, t=0.0, title=None, output_path=None, show=True):
     TA, TB, TC = get_braiding_terms(projected_majorana_groups, local_majorana_groups, idx)
     hamiltonian, deltas = build_projected_hamiltonian(t, TA, TB, TC)
     evals, evecs = np.linalg.eigh(hamiltonian)
     parity_projected = bases[idx].conj().T @ full_parity @ bases[idx]
-    title = f"Group {idx} projected Hamiltonian at t={t:.3f}"
-    return plot_energy_levels_from_evals(evals, evecs, parity_projected, title=title)
+    if title is None:
+        title = f"Group {idx} projected Hamiltonian at t={t:.3f}"
+    return plot_energy_levels_from_evals(
+        evals,
+        evecs,
+        parity_projected,
+        title=title,
+        output_path=output_path,
+        show=show,
+    )
 
 def evolve_system(n_steps, projected_majoranas, local_majoranas, idx):
     TA, TB, TC = get_braiding_terms(projected_majoranas, local_majoranas, idx)
@@ -261,6 +405,9 @@ def evolve_system(n_steps, projected_majoranas, local_majoranas, idx):
     U_kato = np.eye(TA.shape[0], dtype=complex)
     H_t, deltas = build_projected_hamiltonian(0, TA, TB, TC, static_term=static_term)
     evals, evecs = np.linalg.eigh(H_t)
+
+    plot_projected_hamiltonian_levels(idx, t=0.0)
+    exit()
 
 
     initial_basis = evecs[:, :transport_dim]
@@ -349,6 +496,86 @@ def phase_aligned_error(U, V):
     phase = 0.0 if np.isclose(abs(overlap), 0.0) else np.angle(overlap)
     return np.linalg.norm(U - np.exp(1j * phase) * V) / np.sqrt(U.shape[0])
 
+
+def generate_thesis_energy_level_figures(
+    output_dir=None,
+    u_values=(0.0, 0.1, 0.5, 1.0, 2.0),
+):
+    global T_total, Delta_max, Delta_min, Width, S
+
+    if output_dir is None:
+        output_dir = Path(__file__).resolve().parents[2] / "texmex" / "figs"
+    output_dir = Path(output_dir)
+
+    T_total = 1.0
+    Delta_max = 1.0
+    Delta_min = 0.0
+    Width = T_total / 3
+    S = 20 / Width
+
+    for u_value in u_values:
+        print(f"Generating energy-level figures for U={u_value:g}")
+        specified_vals = {"U": [u_value]}
+        builder = BraidingHamiltonianBuilder(
+            n_sites=3,
+            dupes=3,
+            specified_vals=specified_vals,
+            config_path=default_config_path(),
+        )
+        hamiltonian_full = builder.full_system_hamiltonian()
+        eigvals, eigvecs = np.linalg.eigh(hamiltonian_full)
+        operators = builder.get_operators()
+        parity_full = parity_op(operators, sites=9)
+        u_slug = str(u_value).replace(".", "p")
+
+        plot_energy_levels_from_evals(
+            eigvals,
+            eigvecs,
+            parity_full,
+            title=fr"Full-system spectrum, $U={u_value:g}$",
+            output_path=output_dir / f"full_system_spectrum_U_{u_slug}",
+            show=False,
+            figsize=(7.2, 8.0),
+        )
+
+        gamma_groups = get_majoranas_JW(
+            levels_to_include=4,
+            specified_vals=specified_vals,
+        )
+        (gamma_A1, gamma_A2), (gamma_B1, gamma_B2), (gamma_C1, gamma_C2) = gamma_groups
+        even_energies, odd_energies, _, _, even_idxs, odd_idxs = even_odd_splitter(
+            eigvecs,
+            eigvals,
+            parity_full,
+        )
+        groups_for_u = find_close_groups(even_energies, odd_energies, even_idxs, odd_idxs)
+        bases_for_u = find_group_bases(groups_for_u, eigvecs)
+        projected_majoranas_for_u = project_majoranas(
+            bases_for_u,
+            gamma_A1,
+            gamma_A2,
+            gamma_B1,
+            gamma_B2,
+            gamma_C1,
+            gamma_C2,
+        )
+        local_majoranas_for_u = project_local_majoranas(bases_for_u, operators)
+
+        TA, TB, TC = get_braiding_terms(projected_majoranas_for_u, local_majoranas_for_u, idx=0)
+        projected_hamiltonian, _ = build_projected_hamiltonian(0.0, TA, TB, TC)
+        projected_evals, projected_evecs = np.linalg.eigh(projected_hamiltonian)
+        projected_parity = bases_for_u[0].conj().T @ parity_full @ bases_for_u[0]
+        plot_energy_levels_from_evals(
+            projected_evals,
+            projected_evecs,
+            projected_parity,
+            title=fr"Projected ground-group spectrum, $U={u_value:g}$",
+            output_path=output_dir / f"projected_ground_group_spectrum_U_{u_slug}",
+            show=False,
+            figsize=(7.2, 6.4),
+        )
+
+
 if __name__ == "__main__":
     for uval in (0.0, 0.1, 0.5, 1.0, 2.0):
         print(f"\n\n=== Running scan for U={uval} ===")
@@ -367,6 +594,8 @@ if __name__ == "__main__":
         eigvals, eigvecs = np.linalg.eigh(h_full)
         operators = builder.get_operators()
 
+        plot_energy_levels_from_evals(eigvals, eigvecs, parity_op(operators, sites=9), title=f"Full Hamiltonian Energy Levels for U={uval}")
+        exit()
 
         (gamma_A1_full, gamma_A2_full), (gamma_B1_full, gamma_B2_full), (gamma_C1_full, gamma_C2_full) = get_majoranas_JW(levels_to_include=4, specified_vals=specified_vals)
 
