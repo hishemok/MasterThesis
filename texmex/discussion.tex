@@ -29,6 +29,27 @@ The energy-level Majorana baseline is stable for most tested interaction strengt
 
 The direct and block-matched local-operator constructions show a stronger dependence of their self-target errors on both interaction strength and sector. The $U=0.5$ case, which remains in the low-deviation regime for the energy-level Majorana baseline, moves into the intermediate-deviation regime for both local constructions. The ground-state sector is nevertheless among the lower-error sectors in most cases. Within the self-target comparison used here, the block-matched local-operator braid gives almost the same deviations as the direct local-operator braid. Resolving the internal block structure therefore does not by itself remove the observed self-target sensitivity, although this comparison does not establish how either local construction agrees with the energy-level target.
 
+The block-dependent exchange orientations also have consequences for quantum computation. In the successful low-interaction cases, where the fitted coefficient products have magnitude close to one, opposite exchange orientations correspond to $\sqrt{Z}$ and $\sqrt{Z}^{\dagger}$. These gates differ by a relative phase rather than an irrelevant global phase:
+\begin{equation}
+  \sqrt{Z}:
+  \phi \mapsto \phi + \frac{\pi}{2},
+  \qquad
+  \sqrt{Z}^{\dagger}:
+  \phi \mapsto \phi - \frac{\pi}{2}.
+\end{equation}
+They therefore rotate a logical qubit in opposite directions around the Bloch-sphere $z$-axis and can produce distinguishable outcomes in later interference measurements. If computation is restricted to one known block, its exchange orientation can be tracked and incorporated into the logical gate convention. However, a coherent state occupying blocks with different orientations experiences a block-dependent logical operation:
+\begin{equation}
+  \begin{aligned}
+    U_{\mathrm{braid}} &= U_1 \oplus U_2 \oplus U_3, \\
+    \ket{\Psi} &= a\ket{\psi_1} + b\ket{\psi_2} + c\ket{\psi_3}, \\
+    U_{\mathrm{braid}}\ket{\Psi}
+    &= aU_1\ket{\psi_1} + bU_2\ket{\psi_2} + cU_3\ket{\psi_3}.
+  \end{aligned}
+\end{equation}
+If the block label is unobserved, this can appear as dephasing of the logical qubit. Reliable computation across a larger energy sector would therefore require control of the occupied block, tracking of its exchange orientation, or a protocol producing a uniform orientation across all relevant blocks.
+
+The main implication is that, particularly in the low-interaction configurations, the projected local operators can be represented essentially exactly within the energy-level Majorana basis. However, their block-dependent exchange orientations mean that this operator-level agreement does not guarantee one uniform logical operation across an entire higher-dimensional sector. Predictable braiding across such a sector therefore requires knowledge or control of the occupied block.
+
 
 \section{Limitations and Outlook}
 

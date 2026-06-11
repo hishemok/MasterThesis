@@ -201,13 +201,13 @@ def fit_local_majoranas_to_ideal(data):
         fitted_majoranas.append((B_fit.fit, C_fit.fit))
         reports.append((B_fit, C_fit))
 
-        print(f"Group {idx:02d}: dim={basis.shape[1]:3d}, "f"blocks=[{format_blocks(blocks)}], "f"B error={B_fit.error:.3e}, C error={C_fit.error:.3e}, "f"B offblock={B_fit.offblock_error:.3e}, C offblock={C_fit.offblock_error:.3e}"
+        print(f"Group {idx:02d}: dim={basis.shape[1]:3d}, "f"blocks=[{format_blocks(blocks)}], "f"B error={B_fit.error:.3e}, C error={C_fit.error:.3e}, "f"B offblock={B_fit.offblock_error:.3e}, C offblock={C_fit.offblock_error:.3e}, B coeffs={np.round(B_fit.coeffs, 2)}, C coeffs={np.round(C_fit.coeffs, 2)}"
         )
 
     return fitted_majoranas, reports
 
 
-def run_matched_operator_scan(U_values=(0.0,0.1, 0.5, 1.0, 2.0), n_steps=301, write_results=True):
+def run_matched_operator_scan(U_values=(0.0,0.1, 0.5, 1.0, 2.0), n_steps=300, write_results=True):
     for U_value in U_values:
         print(f"\nProcessing U={U_value}")
         data = build_sector_data(U_value)
@@ -215,15 +215,22 @@ def run_matched_operator_scan(U_values=(0.0,0.1, 0.5, 1.0, 2.0), n_steps=301, wr
 
         results = {}
         for idx, _ in enumerate(data["projected_majoranas"]):
-            U_kato, _, static_term = evolve_system(n_steps,data["projected_majoranas"],fitted_majoranas,idx,data["bases"],data["h_full"],
+            U_kato, initial_basis, static_term = evolve_system(n_steps,data["projected_majoranas"],fitted_majoranas,idx,data["bases"],data["h_full"],
             )
             B_fit, C_fit = fitted_majoranas[idx]
             U_target = target_unitary(B_fit, C_fit)
             B_report, C_report = fit_reports[idx]
 
-            overlap = unitary_overlap(U_kato, U_target)
+
+            U_kato_sub = initial_basis.conj().T @ U_kato @ initial_basis
+            U_target_sub = initial_basis.conj().T @ U_target @ initial_basis
+
+            B_coeffs = B_report.coeffs
+            C_coeffs = C_report.coeffs
+
+            overlap = unitary_overlap(U_kato_sub, U_target_sub)
             print(f"Group {idx:02d}: matched target overlap={overlap:.10f}")
-            results[idx] = {"basis_dimension": data["bases"][idx].shape[1],"static_term_norm": np.linalg.norm(static_term),"B_fit_error": B_report.error,"C_fit_error": C_report.error,"B_offblock_error": B_report.offblock_error,"C_offblock_error": C_report.offblock_error,"overlap": overlap,
+            results[idx] = {"basis_dimension": data["bases"][idx].shape[1],"static_term_norm": np.linalg.norm(static_term),"B_fit_error": B_report.error,"C_fit_error": C_report.error,"B_offblock_error": B_report.offblock_error,"C_offblock_error": C_report.offblock_error, "B_coeffs": np.round(B_coeffs, 2), "C_coeffs": np.round(C_coeffs, 2), "overlap": overlap,
             }
 
         if write_results:
@@ -235,10 +242,10 @@ def write_results_file(U_value, results):
     with open(output_file, "w") as file:
         file.write(
             "Group\tBasis Dimension\tStatic Term Norm\t"
-            "B Fit Error\tC Fit Error\tB Offblock Error\tC Offblock Error\tUnitary Overlap\n"
+            "B Fit Error\tC Fit Error\tB Offblock Error\tC Offblock Error\tB Coeffs\tC Coeffs\tUnitary Overlap\n"
         )
         for idx, result in results.items():
-            file.write(f"{idx}\t"f"{result['basis_dimension']}\t"f"{result['static_term_norm']:.10f}\t"f"{result['B_fit_error']:.10e}\t"f"{result['C_fit_error']:.10e}\t"f"{result['B_offblock_error']:.10e}\t"f"{result['C_offblock_error']:.10e}\t"f"{result['overlap']:.10f}\n"
+            file.write(f"{idx}\t"f"{result['basis_dimension']}\t"f"{result['static_term_norm']:.10f}\t"f"{result['B_fit_error']:.10e}\t"f"{result['C_fit_error']:.10e}\t"f"{result['B_offblock_error']:.10e}\t"f"{result['C_offblock_error']:.10e} \t"f"{result['B_coeffs']}\t"f"{result['C_coeffs']}\t"f"{result['overlap']:.10f}\n"
             )
 
 

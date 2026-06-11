@@ -75,10 +75,11 @@
 \contentsline {subsection}{\numberline {4.4.1}Ideal four-Majorana reference}{53}{subsection.4.4.1}%
 \contentsline {subsection}{\numberline {4.4.2}Projected microscopic and local-operator braids}{55}{subsection.4.4.2}%
 \contentsline {section}{\numberline {4.5}Braiding in Multiple Energy Sectors}{57}{section.4.5}%
-\contentsline {section}{\numberline {4.6}Summary of Main Findings}{62}{section.4.6}%
-\contentsline {chapter}{\numberline {5}Discussion}{67}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Parameter Optimization Scheme}{67}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Braiding Analysis}{68}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Limitations and Outlook}{69}{section.5.3}%
-\contentsline {chapter}{\numberline {6}Conclusion}{71}{chapter.6}%
+\contentsline {section}{\numberline {4.6}Summary of Main Findings}{66}{section.4.6}%
+\contentsline {chapter}{\numberline {5}Discussion}{69}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Parameter Optimization Scheme}{69}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Braiding Analysis}{70}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Limitations and Outlook}{72}{section.5.3}%
+\contentsline {chapter}{\numberline {6}Conclusion}{73}{chapter.6}%
+\contentsline {chapter}{\numberline {A}Block-Matched Coefficients}{75}{appendix.A}%
 \contentsfinish 

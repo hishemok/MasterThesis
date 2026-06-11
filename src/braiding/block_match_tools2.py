@@ -20,6 +20,7 @@ class BlockwiseFit:
     error: float
     offblock_error: float
     block_fits: list[PairFit]
+    coeffs: list[np.ndarray]
 
 
 def hermitian_part(matrix):
@@ -205,6 +206,7 @@ def fit_blockwise_to_majorana_pair(local_operator, gamma1, gamma2, blocks):
 
     block_fits = []
     local_blocks = []
+    coeffs = []
     for _, vectors in blocks:
         local_block = vectors.conj().T @ local_operator @ vectors
         gamma1_block = vectors.conj().T @ gamma1 @ vectors
@@ -214,6 +216,7 @@ def fit_blockwise_to_majorana_pair(local_operator, gamma1, gamma2, blocks):
         block_fits.append(
             fit_to_majorana_pair(local_block, gamma1_block, gamma2_block)
         )
+        coeffs.append(block_fits[-1].coeffs)
 
     fit = hermitian_part(
         rotation @ block_diag([result.fit for result in block_fits]) @ rotation.conj().T
@@ -227,6 +230,7 @@ def fit_blockwise_to_majorana_pair(local_operator, gamma1, gamma2, blocks):
         error=relative_error(fit, local_operator),
         offblock_error=relative_error(block_part, local_operator),
         block_fits=block_fits,
+        coeffs=coeffs
     )
 
 

@@ -273,11 +273,11 @@ The first scan provides an energy-level Majorana baseline, starting with the gro
   \caption{Self-target braid errors for the energy-level Majorana baseline across different energy sectors and interaction strengths $U=0.0$, $U=0.1$, $U=0.5$, $U=1.0$, and $U=2.0$. The figure is split into three deviation regimes: a) $U=1.0$, b) $U=2.0$, and c) $U=0.0$, $U=0.1$, and $U=0.5$. The energy-level construction supports accurate braiding across all sectors for the non-interacting and weakly interacting configurations, while the $U=1.0$ configuration shows strong sector-dependent failures.}
   \label{fig:ideal_operator_interaction_regimes}
 \end{figure}
-\Cref{fig:ideal_operator_interaction_regimes} displays the energy-level Majorana baseline. Here the $\gamma$ operators are created directly from the paired eigenstates by the construction $\gamma=\ket{e}\bra{o}+\mathrm{h.c.}$ before being projected into each sector and placed in the braid Hamiltonian. The high-deviation panel shows that the $U=1.0$ configuration is strongly sector dependent: some sectors remain accurate, while others have errors of order $10^{-1}$. The $U=2.0$ results are much more stable across sectors and generally lie around $10^{-6}$. For $U=0.0$, $U=0.1$, and $U=0.5$, the errors remain below the $10^{-6}$ threshold across all sectors. The unusually poor and irregular $U=1.0$ result, despite the stronger $U=2.0$ configuration performing well in this baseline, shows that interaction strength alone does not explain the ordering of the selected configurations.
+\Cref{fig:ideal_operator_interaction_regimes} displays the energy-level Majorana baseline. Here the $\gamma$ operators are created directly from the paired eigenstates by the construction $\gamma=\ket{e}\bra{o}+\mathrm{h.c.}$ before being projected into each sector and placed in the braid Hamiltonian. The high-deviation panel shows that the $U=1.0$ configuration is strongly sector dependent: some sectors remain accurate, while others have errors of order $10^{-1}$. The $U=2.0$ results are much more stable across sectors and generally lie around $10^{-6}$. For $U=0.0$, $U=0.1$, and $U=0.5$, the errors remain below the $10^{-6}$ threshold across all sectors. The unusually poor and irregular $U=1.0$ result, despite the stronger $U=2.0$ configuration performing well in this baseline, shows that interaction strength alone does not necessarily  explain the ordering of the selected configurations.
 
 
 
-Since the low-energy junction decomposition identifies $\gamma_{B2}$ and $\gamma_{C2}$ as the active exchange channels, the direct projected local-operator model uses the endpoint operators $\Gamma_{B,i}=P_i\,i(c_B^\dagger-c_B)P_i$ and $\Gamma_{C,i}=P_i\,i(c_C^\dagger-c_C)P_i$. When these local operators are compared with $\gamma_{B2}$ and $\gamma_{C2}$, only an overall plus or minus sign is allowed; the direct local operators are not rotated into a different linear combination of energy-level Majoranas.
+Since the low-energy junction decomposition identifies $\gamma_{B2}$ and $\gamma_{C2}$ as the active exchange channels, the direct projected local-operator model uses the endpoint operators $\Gamma_{B,i}=P_i\,i(c_B^\dagger-c_B)P_i$ and $\Gamma_{C,i}=P_i\,i(c_C^\dagger-c_C)P_i$. When these local operators are compared with $\gamma_{B2}$ and $\gamma_{C2}$, only an overall plus or minus sign is allowed, meaning the direct local operators are not rotated into a different linear combination of energy-level Majoranas.
 
 \begin{figure}[htbp]
   \centering
@@ -290,7 +290,7 @@ Since the low-energy junction decomposition identifies $\gamma_{B2}$ and $\gamma
 
 During the scans, each energy sector was found to decompose into blocks whose dimensions are multiples of the eight-dimensional three-subsystem ground sector. For example, a $24$-dimensional sector contains three independent $8\times8$ blocks, as illustrated in \cref{fig:24x24box,fig:24x24maj}. A single overall sign cannot generally align the projected local operator with the energy-level Majorana across all of these blocks at once.
 
-To account for this structure, the block-matching procedure described in \cref{eq:method_block_matched_majorana} first identifies the independent blocks using subsystem energy-level labels. Within each block, the projected local operator is fitted independently to a continuous linear combination of the two available energy-level Majorana components. The independently fitted blocks are then reassembled into one operator on the full sector.
+To account for this structure, we use a block-matching procedure whose full construction will be described in {\color{red}the appendix [ADD REFERENCE]}. The procedure first identifies the independent blocks using subsystem energy-level labels. Within each block, the projected local operator is fitted independently to a continuous linear combination of the two available energy-level Majorana components. The independently fitted blocks are then reassembled into one operator on the full sector. The diagrams below provide a short visual summary of this decomposition.
 
 \input{label_mats}
 
@@ -303,6 +303,69 @@ With this method in mind, we ran a final scan using the block-matched local oper
   \label{fig:matched_operator_interaction_regimes}
 \end{figure}
 
+\Cref{fig:matched_operator_interaction_regimes} shows that the block-matched construction retains the same overall self-target error regimes as the direct projected local-operator model. The $U=0.0$ and $U=0.1$ configurations remain accurate across the tested sectors, while the deviations increase at $U=0.5$ and become larger and more sector dependent for $U=1.0$ and $U=2.0$. Resolving and independently fitting the internal blocks therefore does not by itself remove the sensitivity observed in the local-operator construction.
+
+The resulting blockwise coefficients are reported in \cref{tab:matched_operator_coefficients}. The numerical fitting errors remain between approximately $10^{-15}$ and $10^{-13}$ across all tested interaction strengths, showing that the block-matched operators reproduce the projected local operators essentially exactly. The fitted operator within each block:
+$$
+Γ_{r,local} = a_r \gamma_{r1} + b_r \gamma_{r2}
+$$
+finds the coefficients $a_r$ and $b_r$ that best match the projected local operator within block $r$. The first-component coefficients $a_r$ are all strongly suppressed. The local endpoint operators therefor remain aligned with the intended second Majorana component, rather than rotating into a micture of the two components. For $U=0.0$ and $U=0.1$, these coefficients are close to $\pm 1$ across all blocks. Small departures become visible at $U=0.5$, while $U=1.0$ and $U=2.0$ show larger block-dependent variations in magnitude.
+
+The coefficient table also reveals that different blocks within the same sector can select different relative exchange orientations. Since the first-component coefficients vanish at the saved precision, the fitted operators in block $r$ can be written as
+\begin{equation}
+  \Gamma_{B,\mathrm{fit}}^{(r)}
+  =
+  b_{B,r}\gamma_{B2}^{(r)},
+  \qquad
+  \Gamma_{C,\mathrm{fit}}^{(r)}
+  =
+  b_{C,r}\gamma_{C2}^{(r)},
+\end{equation}
+where $\gamma_{B2}^{(r)}$ and $\gamma_{C2}^{(r)}$ are the corresponding energy-level Majorana blocks. The fitted target unitary within this block is then
+\begin{equation}
+  \begin{aligned}
+    U_r
+    &=
+    \exp\left[
+      -\frac{\pi}{4}
+      b_{B,r}b_{C,r}
+      \gamma_{B2}^{(r)}\gamma_{C2}^{(r)}
+    \right] \\
+    &=
+    \exp\left[
+      -s_r\alpha_r\frac{\pi}{4}
+      \gamma_{B2}^{(r)}\gamma_{C2}^{(r)}
+    \right],
+    \qquad
+    s_r=\operatorname{sgn}(b_{B,r}b_{C,r}),
+    \quad
+    \alpha_r=\left|b_{B,r}b_{C,r}\right|.
+  \end{aligned}
+\end{equation}
+The sign $s_r$ determines the exchange orientation relative to the fixed energy-level convention, while the magnitude $\alpha_r$ determines the rotation angle generated within the block. When $\alpha_r\approx1$ and the projected operators satisfy the ideal Majorana algebra, the two orientations reduce up to a global phase and in the corresponding occupation basis, to
+\begin{equation}
+  s_r=+1:
+  \quad
+  U_r\sim
+  \begin{pmatrix}
+    1 & 0\\
+    0 & i
+  \end{pmatrix}
+  =
+  \sqrt{Z},
+  \qquad
+  s_r=-1:
+  \quad
+  U_r\sim
+  \begin{pmatrix}
+    1 & 0\\
+    0 & -i
+  \end{pmatrix}
+  =
+  \sqrt{Z}^{\dagger}.
+\end{equation}
+Consequently, a sector containing both signs does not implement one uniform exchange orientation relative to the energy-level convention. Instead, its fitted target is a direct sum of block-dependent exchange orientations. The individual signs depend on the chosen Majorana sign convention, but their blockwise pattern records how the projected local channels are oriented relative to the fixed energy-level construction.
+
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.9\textwidth]{figs/step_projection_mean_comparison.pdf}
@@ -312,17 +375,19 @@ With this method in mind, we ran a final scan using the block-matched local oper
 \end{figure}
 \Cref{fig:mean_braid_errors} summarizes the sector-resolved self-target errors for the projected local-operator model, the block-matched local-operator model, and the energy-level Majorana baseline. For each interaction strength, the bar shows the unweighted mean across the identified sectors, the white diamond marks the ground-sector error, and the black bar shows the sector-to-sector standard deviation. Within these respective target comparisons, the $U=0.1$ and $U=0.0$ configurations have the lowest mean deviations. At $U=0.5$, the local-operator constructions show a noticeable increase in their mean errors, while the energy-level Majorana baseline remains accurate. The worst and most sector-dependent performance occurs at $U=1.0$, while $U=2.0$ is accurate in the energy-level baseline but less accurate in both local-operator constructions.
 
-
+\newpage
 \section{Summary of Main Findings}
 
 The optimization study shows that the PMM chains recover the expected limits while also producing nontrivial interacting configurations. For the non-interacting two-dot system, the optimizer reproduces the known sweet spot, with nearly degenerate parity pairs and edge-localized Majorana polarization. For longer chains, the optimized parameters become increasingly inhomogeneous. In particular, the interior onsite energies are often shifted more strongly than the edge onsite energies. This interior detuning is correlated with favorable edge-localization diagnostics, but a controlled parameter scan would be needed to determine whether it directly suppresses bulk Majorana weight.
 
 The post-optimization diagnostics identify the three-dot system at $U=0.1$ as the strongest interacting braiding candidate. This configuration combines a small ground-state splitting, a large excitation gap, strong opposite-sign edge Majorana polarization, and strongly suppressed bulk polarization. The four-dot system gives a smaller charge difference in the representative weakly interacting case, but it also shows larger ground-state splitting and stronger bulk polarization. Among the tested configurations, the three-dot system therefore provides the best overall compromise between spectral degeneracy and spatial localization. It also decreases the computational cost of the sector-resolved braiding calculations compared with the four-dot system.
 
-The low-energy braiding calculations validate this choice. After projection to the lowest manifold, the optimized three-dot building block reproduces the ideal four-Majorana exchange with high accuracy. The projected microscopic junction operators are dominated by the intended Majorana bilinears, and the ideal four-Majorana reference model, the projected microscopic junction model, and the projected local-operator model give nearly identical braid diagnostics in the lowest projected space. This shows that the optimized interacting PMM system can realize the expected Majorana exchange at low energies.
+The low-energy braiding calculations validate this choice. After projection to the lowest manifold, the optimized three-dot building block reproduces the ideal four-Majorana exchange with high accuracy. The projected microscopic junction operators are dominated by the intended Majorana bilinears, and the ideal four-Majorana reference model, the projected microscopic junction model, and the projected local-operator model give nearly identical braid diagnostics in the lowest projected space. This shows that the optimized interacting PMM system can realize the expected Majorana exchange within the controlled low-energy projected model.
 
 Within their respective target comparisons, the sector-resolved scans show accurate braiding across all identified energy sectors for the non-interacting and weakly interacting configurations. The energy-level Majorana baseline remains stable for $U=0.0$, $U=0.1$, $U=0.5$, and $U=2.0$, while the selected $U=1.0$ configuration shows large variations between sectors. The direct and block-matched local-operator models are more sensitive in their self-target errors: these errors increase already at $U=0.5$, and both $U=1.0$ and $U=2.0$ contain less accurate sectors.
 
-Within the self-target comparison used in these scans, block matching does not substantially change the braid deviations relative to the direct projected local-operator model. Resolving the internal blocks therefore does not by itself remove the sensitivity seen in the local construction. The especially poor and irregular $U=1.0$ result should not be interpreted as evidence that $U=t=1$ is generally worse for braiding than $U=2t$. Since every interaction strength uses a separately optimized parameter set, the selected $U=1.0$ configuration may represent a poorer local minimum of the optimization landscape.
+The block-matching analysis shows that the projected local operators can be represented essentially exactly within the energy-level Majorana basis. Within each block, the local endpoint operator remains aligned with the intended second Majorana component, while its magnitude and sign can vary between blocks. The relative signs of the two exchanged operators determine whether a block follows the same or opposite exchange orientation relative to the fixed energy-level convention. A sector containing both orientations therefore does not implement one uniform logical exchange across all its internal blocks. Despite resolving this structure, block matching does not substantially change the self-target braid deviations relative to the direct projected local-operator model.
+
+The especially poor and irregular $U=1.0$ result should not be interpreted as evidence that $U=t=1$ is generally worse for braiding than $U=2t$. Since every interaction strength uses a separately optimized parameter set, the selected $U=1.0$ configuration may represent a poorer local minimum of the optimization landscape.
 
 For configurations that support a stable exchange channel, the self-target braid accuracy is relatively insensitive to the chosen energy sector. However, the strongly sector-dependent $U=1.0$ result shows that this behavior is not guaranteed and depends on the selected optimized configuration. The differing sector dependence of the energy-level and local constructions motivates a common-target comparison before drawing conclusions about how accurately a projected local channel accesses the energy-level exchange.

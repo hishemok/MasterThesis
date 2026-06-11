@@ -128,163 +128,198 @@
       \verb https://topocondmat.org/index.html
       \endverb
     \endentry
-    \entry{BCS}{article}{}{}
-      \name{author}{3}{}{%
-        {{hash=616cd76a955b1fcb011fefbf1af91880}{%
-           family={Bardeen},
+    \entry{dvirRealizationMinimalKitaev2023}{article}{}{}
+      \name{author}{17}{}{%
+        {{hash=9b6dc779b59cf5972aed262c3c83263b}{%
+           family={Dvir},
+           familyi={D\bibinitperiod},
+           given={Tom},
+           giveni={T\bibinitperiod}}}%
+        {{hash=61c83935c5db8545f0d25d074f8e34d1}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Guanzhong},
+           giveni={G\bibinitperiod}}}%
+        {{useprefix=true,hash=79420ddb7ec30ead70dfc049ec33a227}{%
+           family={Loo},
+           familyi={L\bibinitperiod},
+           given={Nick},
+           giveni={N\bibinitperiod},
+           prefix={van},
+           prefixi={v\bibinitperiod}}}%
+        {{hash=f8d2ae867a1d4a9b78aea9d5c609961f}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Chun-Xiao},
+           giveni={C\bibinithyphendelim X\bibinitperiod}}}%
+        {{hash=34ef6615873a2673ca341e2d9a26ae2f}{%
+           family={Mazur},
+           familyi={M\bibinitperiod},
+           given={Grzegorz\bibnamedelima P.},
+           giveni={G\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=21abc76003e08e75782ca400433d4647}{%
+           family={Bordin},
            familyi={B\bibinitperiod},
-           given={J.},
-           giveni={J\bibinitperiod}}}%
-        {{hash=818261d37b65922f250ddf289897eb6c}{%
-           family={Cooper},
-           familyi={C\bibinitperiod},
-           given={L.\bibnamedelimi N.},
-           giveni={L\bibinitperiod\bibinitdelim N\bibinitperiod}}}%
-        {{hash=c2af9bb5b241e45f3afcb0f87b9e1540}{%
-           family={Schrieffer},
-           familyi={S\bibinitperiod},
-           given={J.\bibnamedelimi R.},
-           giveni={J\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
-      }
-      \strng{namehash}{c30a83010c772bf453b99545802834fb}
-      \strng{fullhash}{c30a83010c772bf453b99545802834fb}
-      \strng{fullhashraw}{c30a83010c772bf453b99545802834fb}
-      \strng{bibnamehash}{c30a83010c772bf453b99545802834fb}
-      \strng{authorbibnamehash}{c30a83010c772bf453b99545802834fb}
-      \strng{authornamehash}{c30a83010c772bf453b99545802834fb}
-      \strng{authorfullhash}{c30a83010c772bf453b99545802834fb}
-      \strng{authorfullhashraw}{c30a83010c772bf453b99545802834fb}
-      \field{sortinit}{B}
-      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{Physical Review}
-      \field{number}{5}
-      \field{title}{Theory of Superconductivity}
-      \field{volume}{108}
-      \field{year}{1957}
-      \field{pages}{1175\bibrangedash 1204}
-      \range{pages}{30}
-      \verb{doi}
-      \verb 10.1070/1063-7869/44/10S/S29
-      \endverb
-    \endentry
-    \entry{Cambridge_MBPhysics}{book}{}{}
-      \name{author}{1}{}{%
-        {{hash=c7f06bf5220bb86c8e795161ca5fb529}{%
-           family={Coleman},
-           familyi={C\bibinitperiod},
-           given={P.},
-           giveni={P\bibinitperiod}}}%
+           given={Alberto},
+           giveni={A\bibinitperiod}}}%
+        {{useprefix=true,hash=d1f1e31289afa16aaa0076f725d0509b}{%
+           family={Haaf},
+           familyi={H\bibinitperiod},
+           given={Sebastiaan\bibnamedelimb L.\bibnamedelimi D.},
+           giveni={S\bibinitperiod\bibinitdelim L\bibinitperiod\bibinitdelim D\bibinitperiod},
+           prefix={ten},
+           prefixi={t\bibinitperiod}}}%
+        {{hash=98e63d31969f67bb35323034e35e18b1}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Ji-Yin},
+           giveni={J\bibinithyphendelim Y\bibinitperiod}}}%
+        {{useprefix=true,hash=ec16ae293996a1afe5653b4188ea4393}{%
+           family={Driel},
+           familyi={D\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod},
+           prefix={van},
+           prefixi={v\bibinitperiod}}}%
+        {{hash=17662ff05bb13864df81b0f4961ba381}{%
+           family={Zatelli},
+           familyi={Z\bibinitperiod},
+           given={Francesco},
+           giveni={F\bibinitperiod}}}%
+        {{hash=09e1a64c667557dd7866bc4e66d193ce}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Xiang},
+           giveni={X\bibinitperiod}}}%
+        {{hash=8dcacb1acd79b09fd67dc1517fec5436}{%
+           family={Malinowski},
+           familyi={M\bibinitperiod},
+           given={Filip\bibnamedelima K.},
+           giveni={F\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+        {{hash=0990a7ee9e24978d09009ae1873dc507}{%
+           family={Gazibegovic},
+           familyi={G\bibinitperiod},
+           given={Sasa},
+           giveni={S\bibinitperiod}}}%
+        {{hash=3a85ba48e54b137fafe78e0c44615f03}{%
+           family={Badawy},
+           familyi={B\bibinitperiod},
+           given={Ghada},
+           giveni={G\bibinitperiod}}}%
+        {{hash=6ae9ef9cc88ac14b7cb56f941d8ec78d}{%
+           family={Bakkers},
+           familyi={B\bibinitperiod},
+           given={Erik\bibnamedelimb P.\bibnamedelimi A.\bibnamedelimi M.},
+           giveni={E\bibinitperiod\bibinitdelim P\bibinitperiod\bibinitdelim A\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=77854efdfdf328947f7a9ffdf286f9f1}{%
+           family={Wimmer},
+           familyi={W\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod}}}%
+        {{hash=03a77ab643b4639a383e3788ad7a3751}{%
+           family={Kouwenhoven},
+           familyi={K\bibinitperiod},
+           given={Leo\bibnamedelima P.},
+           giveni={L\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
       }
       \list{publisher}{1}{%
-        {Cambridge University Press}%
+        {Nature Publishing Group}%
       }
-      \strng{namehash}{c7f06bf5220bb86c8e795161ca5fb529}
-      \strng{fullhash}{c7f06bf5220bb86c8e795161ca5fb529}
-      \strng{fullhashraw}{c7f06bf5220bb86c8e795161ca5fb529}
-      \strng{bibnamehash}{c7f06bf5220bb86c8e795161ca5fb529}
-      \strng{authorbibnamehash}{c7f06bf5220bb86c8e795161ca5fb529}
-      \strng{authornamehash}{c7f06bf5220bb86c8e795161ca5fb529}
-      \strng{authorfullhash}{c7f06bf5220bb86c8e795161ca5fb529}
-      \strng{authorfullhashraw}{c7f06bf5220bb86c8e795161ca5fb529}
-      \field{sortinit}{C}
-      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \strng{namehash}{2120491e48ca35b6ad97af873caea7dd}
+      \strng{fullhash}{0b19b39084398444befe6ee563a00d97}
+      \strng{fullhashraw}{0b19b39084398444befe6ee563a00d97}
+      \strng{bibnamehash}{2120491e48ca35b6ad97af873caea7dd}
+      \strng{authorbibnamehash}{2120491e48ca35b6ad97af873caea7dd}
+      \strng{authornamehash}{2120491e48ca35b6ad97af873caea7dd}
+      \strng{authorfullhash}{0b19b39084398444befe6ee563a00d97}
+      \strng{authorfullhashraw}{0b19b39084398444befe6ee563a00d97}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{isbn}{9781139020916}
-      \field{title}{Introduction to Many-Body Physics}
-      \field{year}{2015}
-    \endentry
-    \entry{Physics_libretexts_2025}{misc}{}{}
-      \name{author}{1}{}{%
-        {{hash=958fd1d1699cbc3a1e96692dbf30b72e}{%
-           family={OpenStax},
-           familyi={O\bibinitperiod}}}%
-      }
-      \strng{namehash}{958fd1d1699cbc3a1e96692dbf30b72e}
-      \strng{fullhash}{958fd1d1699cbc3a1e96692dbf30b72e}
-      \strng{fullhashraw}{958fd1d1699cbc3a1e96692dbf30b72e}
-      \strng{bibnamehash}{958fd1d1699cbc3a1e96692dbf30b72e}
-      \strng{authorbibnamehash}{958fd1d1699cbc3a1e96692dbf30b72e}
-      \strng{authornamehash}{958fd1d1699cbc3a1e96692dbf30b72e}
-      \strng{authorfullhash}{958fd1d1699cbc3a1e96692dbf30b72e}
-      \strng{authorfullhashraw}{958fd1d1699cbc3a1e96692dbf30b72e}
-      \field{sortinit}{O}
-      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{note}{Accessed: 2025-10-23}
-      \field{title}{9.9: Superconductivity}
+      \field{abstract}{Majorana bound states constitute one of the simplest examples of emergent non-Abelian excitations in condensed matter physics. A toy model proposed by Kitaev shows that such states can arise at the ends of a spinless p-wave superconducting chain1. Practical proposals for its realization2,3 require coupling neighbouring quantum dots (QDs) in a chain through both electron tunnelling and crossed Andreev reflection4. Although both processes have been observed in semiconducting nanowires and carbon nanotubes5–8, crossed-Andreev interaction was neither easily tunable nor strong enough to induce coherent hybridization of dot states. Here we demonstrate the simultaneous presence of all necessary ingredients for an artificial Kitaev chain: two spin-polarized QDs in an InSb nanowire strongly coupled by both elastic co-tunnelling (ECT) and crossed Andreev reflection (CAR). We fine-tune this system to a sweet spot where a pair of poor man’s Majorana states is predicted to appear. At this sweet spot, the transport characteristics satisfy the theoretical predictions for such a system, including pairwise correlation, zero charge and stability against local perturbations. Although the simple system presented here can be scaled to simulate a full Kitaev chain with an emergent topological order, it can also be used imminently to explore relevant physics related to non-Abelian anyons.}
+      \field{issn}{1476-4687}
+      \field{journaltitle}{Nature}
+      \field{langid}{english}
+      \field{month}{2}
+      \field{number}{7948}
+      \field{title}{Realization of a Minimal {{Kitaev}} Chain in Coupled Quantum Dots}
+      \field{urlday}{14}
+      \field{urlmonth}{5}
+      \field{urlyear}{2026}
+      \field{volume}{614}
+      \field{year}{2023}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{445\bibrangedash 450}
+      \range{pages}{6}
+      \verb{doi}
+      \verb 10.1038/s41586-022-05585-1
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/QCZLDLDP/Dvir et al. - 2023 - Realization of a minimal Kitaev chain in coupled quantum dots.pdf
+      \endverb
       \verb{urlraw}
-      \verb https://phys.libretexts.org/Bookshelves/University_Physics/University_Physics_(OpenStax)/University_Physics_III_-_Optics_and_Modern_Physics_(OpenStax)/09%3A_Condensed_Matter_Physics/9.09%3A_Superconductivity
+      \verb https://www.nature.com/articles/s41586-022-05585-1
       \endverb
       \verb{url}
-      \verb https://phys.libretexts.org/Bookshelves/University_Physics/University_Physics_(OpenStax)/University_Physics_III_-_Optics_and_Modern_Physics_(OpenStax)/09%3A_Condensed_Matter_Physics/9.09%3A_Superconductivity
+      \verb https://www.nature.com/articles/s41586-022-05585-1
       \endverb
+      \keyw{Quantum dots,Superconducting properties and materials}
     \endentry
-    \entry{Lund1}{article}{}{}
-      \name{author}{1}{}{%
-        {{hash=5a110d4a505030f4cf0334a7fbf8d01f}{%
-           family={Samuelsen},
-           familyi={S\bibinitperiod},
-           given={W.},
-           giveni={W\bibinitperiod}}}%
-      }
-      \strng{namehash}{5a110d4a505030f4cf0334a7fbf8d01f}
-      \strng{fullhash}{5a110d4a505030f4cf0334a7fbf8d01f}
-      \strng{fullhashraw}{5a110d4a505030f4cf0334a7fbf8d01f}
-      \strng{bibnamehash}{5a110d4a505030f4cf0334a7fbf8d01f}
-      \strng{authorbibnamehash}{5a110d4a505030f4cf0334a7fbf8d01f}
-      \strng{authornamehash}{5a110d4a505030f4cf0334a7fbf8d01f}
-      \strng{authorfullhash}{5a110d4a505030f4cf0334a7fbf8d01f}
-      \strng{authorfullhashraw}{5a110d4a505030f4cf0334a7fbf8d01f}
-      \field{sortinit}{S}
-      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{LUP student papers}
-      \field{number}{1}
-      \field{title}{Majorana bound states in chains of interacting quantum dots}
-      \field{volume}{1}
-      \field{year}{2023}
-      \field{pages}{1\bibrangedash 17}
-      \range{pages}{17}
-    \endentry
-    \entry{VikMar}{article}{}{}
+    \entry{leijnseParityQubitsPoor2012}{article}{}{}
       \name{author}{2}{}{%
-        {{hash=18a852b6d591882bb35cf7f17f66d8f7}{%
-           family={Svensson},
-           familyi={S\bibinitperiod},
-           given={V.},
-           giveni={V\bibinitperiod}}}%
-        {{hash=3cce9d98df9cbfc214bbaa4ca307906f}{%
+        {{hash=d2b85c29f3de1b35b56c5d85bb89684c}{%
            family={Leijnse},
            familyi={L\bibinitperiod},
-           given={M.},
+           given={Martin},
            giveni={M\bibinitperiod}}}%
+        {{hash=533d63e82c5527c01b821ca32839ab68}{%
+           family={Flensberg},
+           familyi={F\bibinitperiod},
+           given={Karsten},
+           giveni={K\bibinitperiod}}}%
       }
-      \strng{namehash}{e4f812181fde601fbb22fe6b83706720}
-      \strng{fullhash}{e4f812181fde601fbb22fe6b83706720}
-      \strng{fullhashraw}{e4f812181fde601fbb22fe6b83706720}
-      \strng{bibnamehash}{e4f812181fde601fbb22fe6b83706720}
-      \strng{authorbibnamehash}{e4f812181fde601fbb22fe6b83706720}
-      \strng{authornamehash}{e4f812181fde601fbb22fe6b83706720}
-      \strng{authorfullhash}{e4f812181fde601fbb22fe6b83706720}
-      \strng{authorfullhashraw}{e4f812181fde601fbb22fe6b83706720}
-      \field{sortinit}{S}
-      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \strng{namehash}{f20e726625c11d076faeb8480928be2b}
+      \strng{fullhash}{f20e726625c11d076faeb8480928be2b}
+      \strng{fullhashraw}{f20e726625c11d076faeb8480928be2b}
+      \strng{bibnamehash}{f20e726625c11d076faeb8480928be2b}
+      \strng{authorbibnamehash}{f20e726625c11d076faeb8480928be2b}
+      \strng{authornamehash}{f20e726625c11d076faeb8480928be2b}
+      \strng{authorfullhash}{f20e726625c11d076faeb8480928be2b}
+      \strng{authorfullhashraw}{f20e726625c11d076faeb8480928be2b}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{journaltitle}{Arxiv preprint arXiv:2310.03536}
-      \field{number}{1}
-      \field{title}{Quantum-dot-based Kitaev chains: Majorana quality measures and scaling with increasing chain length}
-      \field{volume}{1}
-      \field{year}{2024}
-      \field{pages}{1\bibrangedash 11}
-      \range{pages}{11}
+      \field{day}{23}
+      \field{issn}{1098-0121, 1550-235X}
+      \field{journaltitle}{Physical Review B}
+      \field{langid}{english}
+      \field{month}{10}
+      \field{number}{13}
+      \field{shortjournal}{Phys. Rev. B}
+      \field{title}{Parity Qubits and Poor Man's {{Majorana}} Bound States in Double Quantum Dots}
+      \field{urlday}{14}
+      \field{urlmonth}{5}
+      \field{urlyear}{2026}
+      \field{volume}{86}
+      \field{year}{2012}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{134528}
+      \range{pages}{1}
       \verb{doi}
-      \verb https://doi.org/10.1103/PhysRevB.110.155436
+      \verb 10.1103/PhysRevB.86.134528
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/TNURY683/Leijnse and Flensberg - 2012 - Parity qubits and poor man's Majorana bound states in double quantum dots.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://link.aps.org/doi/10.1103/PhysRevB.86.134528
+      \endverb
+      \verb{url}
+      \verb https://link.aps.org/doi/10.1103/PhysRevB.86.134528
       \endverb
     \endentry
   \enddatalist

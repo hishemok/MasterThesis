@@ -203,26 +203,26 @@ def plot_sector_regimes(results, title, output_name, high_u, intermediate_u, low
     fig.savefig(output_path.with_suffix(".pdf"), bbox_inches="tight", pad_inches=0.08)
     fig.savefig(output_path.with_suffix(".png"), bbox_inches="tight", pad_inches=0.08, dpi=220)
     plt.close(fig)
-
+    # plt.show()
 
 names = ["0.0", "0.1", "0.5", "1.0", "2.0"]
 
-plot_sector_regimes(
-    ideal_dict,
-    "Energy-Level Majorana Baseline Braid Target Deviation",
-    "ideal_operator_interaction_regimes",
-    high_u=["1.0"],
-    intermediate_u=["2.0"],
-    low_u=["0.5", "0.1", "0.0"],
-)
-plot_sector_regimes(
-    local_dict,
-    "Projected Local-Operator Braid Target Deviation",
-    "projected_operator_interaction_regimes",
-    high_u=["1.0", "2.0"],
-    intermediate_u=["0.5"],
-    low_u=["0.1", "0.0"],
-)
+# plot_sector_regimes(
+#     ideal_dict,
+#     "Energy-Level Majorana Baseline Braid Target Deviation",
+#     "ideal_operator_interaction_regimes",
+#     high_u=["1.0"],
+#     intermediate_u=["2.0"],
+#     low_u=["0.5", "0.1", "0.0"],
+# )
+# plot_sector_regimes(
+#     local_dict,
+#     "Projected Local-Operator Braid Target Deviation",
+#     "projected_operator_interaction_regimes",
+#     high_u=["1.0", "2.0"],
+#     intermediate_u=["0.5"],
+#     low_u=["0.1", "0.0"],
+# )
 plot_sector_regimes(
     matched_dict,
     "Block-Matched Local-Operator Braid Target Deviation",
