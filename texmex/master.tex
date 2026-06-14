@@ -22,8 +22,7 @@
 \usepackage{subcaption}  % in the preamble
 \usepackage{textgreek}
 \usepackage{xcolor}
-\usepackage[style=numeric]{biblatex}
-\addbibresource{/home/Hishem/repos/Special_curriculum/tex/refrences.bib}
+\usepackage[backend=biber,style=numeric-comp]{biblatex}
 \usepackage[english]{babel}
 \usepackage[capitalise]{cleveref}
 \usepackage{booktabs}
@@ -31,9 +30,9 @@
 \usepackage{pdflscape}
 \usepackage{array}
 
- \addbibresource{refs.bib}
- \title{Topological Quantum Computing}
- \subtitle{Exploring Majorana Zero Modes or something subtitley}
+\addbibresource{refs.bib}
+ \title{Numerical Optimization and Braiding of Poor Man's Majorana Chains}
+ \subtitle{Interactions, Projected Exchange, and Higher-Energy Sectors}
 
  \author{Hishem Kløvnes}
 
@@ -42,7 +41,14 @@
 
 
 \begin{abstract}
-\lipsum[1-2]
+Poor Man's Majorana (PMM) models provide a compact and tunable platform for quantum computation, but their finite size and sensitivity to interactions make it difficult to identify useful parameter regimes. This thesis investigates whether interacting quantum-dot chains can be numerically optimized to exhibit favorable Majorana-like properties and whether the resulting configurations support the expected Majorana exchange within projected braiding models.
+
+Spinless two-, three-, and four-dot PMM chains are studied at fixed hopping and interaction strengths. The onsite energies and pairing amplitudes are optimized using a customized loss function that combines typical Majorana diagnostics. Selected configurations are then used as building blocks for a three-subsystem braiding geometry. The resulting geometric braid unitaries are computed using Kato transport and compared across ideal Majorana, projected microscopic-junction, energy-level, projected local-operator, and block-matched local-operator constructions.
+
+The optimization reproduces the known non-interacting two-dot sweet spot and finds increasingly inhomogeneous parameter profiles for longer chains. Among the tested interacting configurations, the three-dot system at $\frac{U}{t} = 0.1$ provides a strong overall balance of spectral near-degeneracy, excitation gap, edge-localized Majorana polarization, and suppressed bulk polarization. Within its lowest projected manifold, the projected microscopic junction braid reproduces the expected Majorana exchange with high accuracy. Sector-resolved self-target scans remain accurate across the tested sectors for the non-interacting and weakly interacting configurations, while the selected stronger-interaction local-operator constructions show greater sector dependence.
+
+
+The block-matching analysis shows that projected local operators can be represented essentially exactly within the energy-level Majorana basis. However, different internal blocks of the same higher-dimensional energy sector can follow opposite exchange orientations. A complete higher-dimensional sector therefore does not necessarily implement one uniform logical gate. These results demonstrate useful Majorana-like exchange within controlled finite projected models, while also showing that extending braiding beyond a known low-energy block requires control of the occupied block and a common-target comparison between local and energy-level exchange channels.
 \end{abstract}
 \tableofcontents
 \newpage
@@ -68,9 +74,6 @@
 \printbibliography{}
 
 \end{document}
-
-
-
 
 
 

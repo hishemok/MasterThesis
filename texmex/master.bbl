@@ -19,113 +19,561 @@
 
 \refsection{0}
   \datalist[entry]{nty/global//global/global/global}
-    \entry{Qtech}{book}{}{}
-      \name{author}{4}{}{%
-        {{hash=6f2f2bc0df6953b04c09c9810222fe3b}{%
+    \entry{aguadoNewTrendsPlatforms2024}{book}{}{}
+      \name{editor}{4}{}{%
+        {{hash=ec73f9877c5c0c154961d287f6596b4c}{%
            family={Aguado},
            familyi={A\bibinitperiod},
-           given={R.},
+           given={Ramón},
            giveni={R\bibinitperiod}}}%
-        {{hash=ae4570682a5924b8b2fdd3508e7098b6}{%
+        {{hash=f0f7cb746e8e8b13e5cc8e3711f31b6c}{%
            family={Citro},
            familyi={C\bibinitperiod},
-           given={R.},
+           given={Roberta},
            giveni={R\bibinitperiod}}}%
-        {{hash=18881d349f79a53870a10bc0b7a19a6b}{%
+        {{hash=bb70d7fd7235ae3a7ea0481b921e220e}{%
            family={Lewenstein},
            familyi={L\bibinitperiod},
-           given={M.},
+           given={Maciej},
            giveni={M\bibinitperiod}}}%
-        {{hash=69159be6d974e4000e283861f1f7d194}{%
+        {{hash=5f1ef179696ed763f48fccb30b7fbd7c}{%
            family={Stern},
            familyi={S\bibinitperiod},
-           given={M.},
+           given={Michael},
            giveni={M\bibinitperiod}}}%
       }
-      \list{publisher}{1}{%
-        {Springer}%
+      \list{location}{1}{%
+        {Cham}%
       }
-      \strng{namehash}{217d2df1af6d085e5e57c1e8ef0d0bf9}
-      \strng{fullhash}{da01b6ca2c6f2fbe3eb74b7fa5500147}
-      \strng{fullhashraw}{da01b6ca2c6f2fbe3eb74b7fa5500147}
-      \strng{bibnamehash}{217d2df1af6d085e5e57c1e8ef0d0bf9}
-      \strng{authorbibnamehash}{217d2df1af6d085e5e57c1e8ef0d0bf9}
-      \strng{authornamehash}{217d2df1af6d085e5e57c1e8ef0d0bf9}
-      \strng{authorfullhash}{da01b6ca2c6f2fbe3eb74b7fa5500147}
-      \strng{authorfullhashraw}{da01b6ca2c6f2fbe3eb74b7fa5500147}
+      \list{publisher}{1}{%
+        {Springer Nature Switzerland}%
+      }
+      \strng{namehash}{e26a5aa2c0a612853a55901b2cb8560b}
+      \strng{fullhash}{abaa473bf5ba8f954d729916e5c13ccc}
+      \strng{fullhashraw}{abaa473bf5ba8f954d729916e5c13ccc}
+      \strng{bibnamehash}{e26a5aa2c0a612853a55901b2cb8560b}
+      \strng{editorbibnamehash}{e26a5aa2c0a612853a55901b2cb8560b}
+      \strng{editornamehash}{e26a5aa2c0a612853a55901b2cb8560b}
+      \strng{editorfullhash}{abaa473bf5ba8f954d729916e5c13ccc}
+      \strng{editorfullhashraw}{abaa473bf5ba8f954d729916e5c13ccc}
       \field{sortinit}{A}
       \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
-      \field{labelnamesource}{author}
+      \field{labelnamesource}{editor}
       \field{labeltitlesource}{title}
-      \field{isbn}{978-3-031-55656-2}
-      \field{title}{New Trends and Platforms for Quantum Technologies}
+      \field{isbn}{978-3-031-55656-2 978-3-031-55657-9}
+      \field{langid}{english}
+      \field{series}{Lecture {{Notes}} in {{Physics}}}
+      \field{title}{New {{Trends}} and {{Platforms}} for {{Quantum Technologies}}}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{1025}
       \field{year}{2024}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{doi}
+      \verb 10.1007/978-3-031-55657-9
+      \endverb
+      \verb{urlraw}
+      \verb https://link.springer.com/10.1007/978-3-031-55657-9
+      \endverb
+      \verb{url}
+      \verb https://link.springer.com/10.1007/978-3-031-55657-9
+      \endverb
     \endentry
-    \entry{Topocondmat}{misc}{}{}
-      \name{author}{8}{}{%
-        {{hash=4d7d0caf4eaf65927c8fa717cb35910b}{%
+    \entry{topocondmatKitaevChain}{online}{}{}
+      \name{author}{3}{}{%
+        {{hash=f623151951d90e6bdff4ebec5e4051a9}{%
            family={Akhmerov},
            familyi={A\bibinitperiod},
-           given={A.},
+           given={Anton},
            giveni={A\bibinitperiod}}}%
-        {{hash=17a435d423aa0cc715634f06987109c7}{%
+        {{hash=d4958939292e89e94b09f9916e3fad61}{%
            family={Sau},
            familyi={S\bibinitperiod},
-           given={J.},
+           given={Jay},
            giveni={J\bibinitperiod}}}%
-        {{hash=c5e5222d9cc65f77f36793497dcc79af}{%
+        {{hash=3b1b391c69d79ab29c0aee719fec9af0}{%
            family={Heck},
            familyi={H\bibinitperiod},
-           given={B.},
+           given={Bernard},
            giveni={B\bibinitperiod},
            prefix={van},
            prefixi={v\bibinitperiod}}}%
-        {{hash=da81b18df069f062e1070816e1070300}{%
-           family={Rubbert},
-           familyi={R\bibinitperiod},
-           given={S.},
-           giveni={S\bibinitperiod}}}%
-        {{hash=18fd13cbc1e1b653a9b25410a0b62618}{%
-           family={Skolasinski},
-           familyi={S\bibinitperiod},
-           given={R.},
-           giveni={R\bibinitperiod}}}%
-        {{hash=df529e73a458a52b171e3c489ff53a71}{%
-           family={Nijholt},
-           familyi={N\bibinitperiod},
-           given={B.},
-           giveni={B\bibinitperiod}}}%
-        {{hash=daadc896ce67ef6344dc1888eacc415c}{%
-           family={Muhammad},
-           familyi={M\bibinitperiod},
-           given={I.},
-           giveni={I\bibinitperiod}}}%
-        {{hash=36dc85557fb2e25716cb4ea63141f663}{%
-           family={Rosdahl},
-           familyi={R\bibinitperiod},
-           given={T.\bibnamedelimi O.},
-           giveni={T\bibinitperiod\bibinitdelim O\bibinitperiod}}}%
       }
-      \strng{namehash}{24ca8f34ff9992464c060453e1618972}
-      \strng{fullhash}{359de0d39a74a79dc33c19a4fb1fdc14}
-      \strng{fullhashraw}{359de0d39a74a79dc33c19a4fb1fdc14}
-      \strng{bibnamehash}{24ca8f34ff9992464c060453e1618972}
-      \strng{authorbibnamehash}{24ca8f34ff9992464c060453e1618972}
-      \strng{authornamehash}{24ca8f34ff9992464c060453e1618972}
-      \strng{authorfullhash}{359de0d39a74a79dc33c19a4fb1fdc14}
-      \strng{authorfullhashraw}{359de0d39a74a79dc33c19a4fb1fdc14}
+      \list{organization}{1}{%
+        {Topology in Condensed Matter}%
+      }
+      \strng{namehash}{fba84477dc3f985827bec57cd7d80df5}
+      \strng{fullhash}{fba84477dc3f985827bec57cd7d80df5}
+      \strng{fullhashraw}{fba84477dc3f985827bec57cd7d80df5}
+      \strng{bibnamehash}{fba84477dc3f985827bec57cd7d80df5}
+      \strng{authorbibnamehash}{fba84477dc3f985827bec57cd7d80df5}
+      \strng{authornamehash}{fba84477dc3f985827bec57cd7d80df5}
+      \strng{authorfullhash}{fba84477dc3f985827bec57cd7d80df5}
+      \strng{authorfullhashraw}{fba84477dc3f985827bec57cd7d80df5}
       \field{sortinit}{A}
       \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{note}{Accessed: 2025-10-23}
-      \field{title}{Online course on topology in condensed matter}
-      \field{year}{2024}
+      \field{note}{Course material licensed under CC BY-SA 4.0}
+      \field{title}{Bulk-Edge Correspondence in the Kitaev Chain}
+      \field{urlday}{14}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{urldateera}{ce}
       \verb{urlraw}
-      \verb https://topocondmat.org/index.html
+      \verb https://topocondmat.org/w1-topointro/d-1/
       \endverb
       \verb{url}
-      \verb https://topocondmat.org/index.html
+      \verb https://topocondmat.org/w1-topointro/d-1/
+      \endverb
+    \endentry
+    \entry{aliceaNewDirectionsPursuit2012a}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=6324a9f51bb50d2d158aef9f6ab76692}{%
+           family={Alicea},
+           familyi={A\bibinitperiod},
+           given={Jason},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {arXiv}%
+      }
+      \strng{namehash}{6324a9f51bb50d2d158aef9f6ab76692}
+      \strng{fullhash}{6324a9f51bb50d2d158aef9f6ab76692}
+      \strng{fullhashraw}{6324a9f51bb50d2d158aef9f6ab76692}
+      \strng{bibnamehash}{6324a9f51bb50d2d158aef9f6ab76692}
+      \strng{authorbibnamehash}{6324a9f51bb50d2d158aef9f6ab76692}
+      \strng{authornamehash}{6324a9f51bb50d2d158aef9f6ab76692}
+      \strng{authorfullhash}{6324a9f51bb50d2d158aef9f6ab76692}
+      \strng{authorfullhashraw}{6324a9f51bb50d2d158aef9f6ab76692}
+      \field{extraname}{1}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The 1937 theoretical discovery of Majorana fermions--whose defining property is that they are their own anti-particles--has since impacted diverse problems ranging from neutrino physics and dark matter searches to the fractional quantum Hall effect and superconductivity. Despite this long history the unambiguous observation of Majorana fermions nevertheless remains an outstanding goal. This review article highlights recent advances in the condensed matter search for Majorana that have led many in the field to believe that this quest may soon bear fruit. We begin by introducing in some detail exotic `topological' one- and two-dimensional superconductors that support Majorana fermions at their boundaries and at vortices. We then turn to one of the key insights that arose during the past few years; namely, that it is possible to `engineer' such exotic superconductors in the laboratory by forming appropriate heterostructures with ordinary s-wave superconductors. Numerous proposals of this type are discussed, based on diverse materials such as topological insulators, conventional semiconductors, ferromagnetic metals, and many others. The all-important question of how one experimentally detects Majorana fermions in these setups is then addressed. We focus on three classes of measurements that provide smoking-gun Majorana signatures: tunneling, Josephson effects, and interferometry. Finally, we discuss the most remarkable properties of condensed matter Majorana fermions--the non-Abelian exchange statistics that they generate and their associated potential for quantum computation.}
+      \field{title}{New Directions in the Pursuit of {{Majorana}} Fermions in Solid State Systems}
+      \field{urlday}{14}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{version}{1}
+      \field{year}{2012}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{doi}
+      \verb 10.48550/ARXIV.1202.1293
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/1202.1293
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/1202.1293
+      \endverb
+      \keyw{FOS: Physical sciences,Strongly Correlated Electrons (cond-mat.str-el),Superconductivity (cond-mat.supr-con)}
+    \endentry
+    \entry{aliceaNewDirectionsPursuit2012}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=6324a9f51bb50d2d158aef9f6ab76692}{%
+           family={Alicea},
+           familyi={A\bibinitperiod},
+           given={Jason},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{6324a9f51bb50d2d158aef9f6ab76692}
+      \strng{fullhash}{6324a9f51bb50d2d158aef9f6ab76692}
+      \strng{fullhashraw}{6324a9f51bb50d2d158aef9f6ab76692}
+      \strng{bibnamehash}{6324a9f51bb50d2d158aef9f6ab76692}
+      \strng{authorbibnamehash}{6324a9f51bb50d2d158aef9f6ab76692}
+      \strng{authornamehash}{6324a9f51bb50d2d158aef9f6ab76692}
+      \strng{authorfullhash}{6324a9f51bb50d2d158aef9f6ab76692}
+      \strng{authorfullhashraw}{6324a9f51bb50d2d158aef9f6ab76692}
+      \field{extraname}{2}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The 1937 theoretical discovery of Majorana fermions--whose defining property is that they are their own anti-particles--has since impacted diverse problems ranging from neutrino physics and dark matter searches to the fractional quantum Hall effect and superconductivity. Despite this long history the unambiguous observation of Majorana fermions nevertheless remains an outstanding goal. This review article highlights recent advances in the condensed matter search for Majorana that have led many in the field to believe that this quest may soon bear fruit. We begin by introducing in some detail exotic `topological' one- and two-dimensional superconductors that support Majorana fermions at their boundaries and at vortices. We then turn to one of the key insights that arose during the past few years; namely, that it is possible to `engineer' such exotic superconductors in the laboratory by forming appropriate heterostructures with ordinary s-wave superconductors. Numerous proposals of this type are discussed, based on diverse materials such as topological insulators, conventional semiconductors, ferromagnetic metals, and many others. The all-important question of how one experimentally detects Majorana fermions in these setups is then addressed. We focus on three classes of measurements that provide smoking-gun Majorana signatures: tunneling, Josephson effects, and interferometry. Finally, we discuss the most remarkable properties of condensed matter Majorana fermions--the non-Abelian exchange statistics that they generate and their associated potential for quantum computation.}
+      \field{day}{1}
+      \field{eprintclass}{cond-mat.supr-con}
+      \field{eprinttype}{arXiv}
+      \field{issn}{0034-4885, 1361-6633}
+      \field{journaltitle}{Reports on Progress in Physics}
+      \field{month}{7}
+      \field{number}{7}
+      \field{shortjournal}{Rep. Prog. Phys.}
+      \field{title}{New Directions in the Pursuit of {{Majorana}} Fermions in Solid State Systems}
+      \field{urlday}{14}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{75}
+      \field{year}{2012}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{076501}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1088/0034-4885/75/7/076501
+      \endverb
+      \verb{eprint}
+      \verb 1202.1293
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/8GAKPIY8/Alicea - 2012 - New directions in the pursuit of Majorana fermions in solid state systems.pdf
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/1202.1293
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/1202.1293
+      \endverb
+      \keyw{Condensed Matter - Strongly Correlated Electrons,Condensed Matter - Superconductivity}
+    \endentry
+    \entry{ayukaryanaQuestHopeMajorana2021}{inproceedings}{}{}
+      \name{author}{3}{}{%
+        {{hash=c1fbd9f3bc348fe0647450f921ca66c8}{%
+           family={Ayukaryana},
+           familyi={A\bibinitperiod},
+           given={Nur\bibnamedelima R.},
+           giveni={N\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=2d99bac7138096df2c6b8fc536733bb9}{%
+           family={Fauzi},
+           familyi={F\bibinitperiod},
+           given={Mohammad\bibnamedelima H.},
+           giveni={M\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+        {{hash=b66893cb724ca4fc4fa681b0630a89d3}{%
+           family={Hasdeo},
+           familyi={H\bibinitperiod},
+           given={Eddwi\bibnamedelima H.},
+           giveni={E\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Tangerang Selatan, Indonesia}%
+      }
+      \strng{namehash}{2444c4886fd59ea31bbedd39a55eacf1}
+      \strng{fullhash}{2444c4886fd59ea31bbedd39a55eacf1}
+      \strng{fullhashraw}{2444c4886fd59ea31bbedd39a55eacf1}
+      \strng{bibnamehash}{2444c4886fd59ea31bbedd39a55eacf1}
+      \strng{authorbibnamehash}{2444c4886fd59ea31bbedd39a55eacf1}
+      \strng{authornamehash}{2444c4886fd59ea31bbedd39a55eacf1}
+      \strng{authorfullhash}{2444c4886fd59ea31bbedd39a55eacf1}
+      \strng{authorfullhashraw}{2444c4886fd59ea31bbedd39a55eacf1}
+      \field{extraname}{1}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{eventtitle}{{{PROCEEDINGS OF THE 4TH INTERNATIONAL SEMINAR ON METALLURGY AND MATERIALS}} ({{ISMM2020}}): {{Accelerating Research}} and {{Innovation}} on {{Metallurgy}} and {{Materials}} for {{Inclusive}} and {{Sustainable Industry}}}
+      \field{shorttitle}{The Quest and Hope of {{Majorana}} Zero Modes in Topological Superconductor for Fault-Tolerant Quantum Computing}
+      \field{title}{The Quest and Hope of {{Majorana}} Zero Modes in Topological Superconductor for Fault-Tolerant Quantum Computing: {{An}} Introductory Overview}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{year}{2021}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{020007}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1063/5.0059974
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/WFSXCL6L/Ayukaryana et al. - 2021 - The quest and hope of Majorana zero modes in topological superconductor for fault-tolerant quantum c.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://pubs.aip.org/aip/acp/article/783518
+      \endverb
+      \verb{url}
+      \verb https://pubs.aip.org/aip/acp/article/783518
+      \endverb
+    \endentry
+    \entry{ayukaryanaQuestHopeMajorana2021a}{inproceedings}{}{}
+      \name{author}{3}{}{%
+        {{hash=c1fbd9f3bc348fe0647450f921ca66c8}{%
+           family={Ayukaryana},
+           familyi={A\bibinitperiod},
+           given={Nur\bibnamedelima R.},
+           giveni={N\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=2d99bac7138096df2c6b8fc536733bb9}{%
+           family={Fauzi},
+           familyi={F\bibinitperiod},
+           given={Mohammad\bibnamedelima H.},
+           giveni={M\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+        {{hash=b66893cb724ca4fc4fa681b0630a89d3}{%
+           family={Hasdeo},
+           familyi={H\bibinitperiod},
+           given={Eddwi\bibnamedelima H.},
+           giveni={E\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Tangerang Selatan, Indonesia}%
+      }
+      \strng{namehash}{2444c4886fd59ea31bbedd39a55eacf1}
+      \strng{fullhash}{2444c4886fd59ea31bbedd39a55eacf1}
+      \strng{fullhashraw}{2444c4886fd59ea31bbedd39a55eacf1}
+      \strng{bibnamehash}{2444c4886fd59ea31bbedd39a55eacf1}
+      \strng{authorbibnamehash}{2444c4886fd59ea31bbedd39a55eacf1}
+      \strng{authornamehash}{2444c4886fd59ea31bbedd39a55eacf1}
+      \strng{authorfullhash}{2444c4886fd59ea31bbedd39a55eacf1}
+      \strng{authorfullhashraw}{2444c4886fd59ea31bbedd39a55eacf1}
+      \field{extraname}{2}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{eventtitle}{{{PROCEEDINGS OF THE 4TH INTERNATIONAL SEMINAR ON METALLURGY AND MATERIALS}} ({{ISMM2020}}): {{Accelerating Research}} and {{Innovation}} on {{Metallurgy}} and {{Materials}} for {{Inclusive}} and {{Sustainable Industry}}}
+      \field{shorttitle}{The Quest and Hope of {{Majorana}} Zero Modes in Topological Superconductor for Fault-Tolerant Quantum Computing}
+      \field{title}{The Quest and Hope of {{Majorana}} Zero Modes in Topological Superconductor for Fault-Tolerant Quantum Computing: {{An}} Introductory Overview}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{year}{2021}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{020007}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1063/5.0059974
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/42H8G3MP/Ayukaryana et al. - 2021 - The quest and hope of Majorana zero modes in topological superconductor for fault-tolerant quantum c.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://pubs.aip.org/aip/acp/article/783518
+      \endverb
+      \verb{url}
+      \verb https://pubs.aip.org/aip/acp/article/783518
+      \endverb
+    \endentry
+    \entry{brouwerEnterMajoranaFermion2012}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=61915b99f91280d38daf1536182bc515}{%
+           family={Brouwer},
+           familyi={B\bibinitperiod},
+           given={Piet\bibnamedelima W.},
+           giveni={P\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+      }
+      \strng{namehash}{61915b99f91280d38daf1536182bc515}
+      \strng{fullhash}{61915b99f91280d38daf1536182bc515}
+      \strng{fullhashraw}{61915b99f91280d38daf1536182bc515}
+      \strng{bibnamehash}{61915b99f91280d38daf1536182bc515}
+      \strng{authorbibnamehash}{61915b99f91280d38daf1536182bc515}
+      \strng{authornamehash}{61915b99f91280d38daf1536182bc515}
+      \strng{authorfullhash}{61915b99f91280d38daf1536182bc515}
+      \strng{authorfullhashraw}{61915b99f91280d38daf1536182bc515}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Electrical measurements on a semiconductor–superconductor hybrid structure reveal the signature of this long-predicted exotic particle. , All known fundamental particles are either bosons or fermions. Fermions are subject to the Pauli principle, which forbids two particles being in the same quantum state; bosons, by contrast, tend to bunch together in the same state. The same rule applies to the excitations of most solid-state systems, such as metals and semiconductors, which can be classified as fermionic or bosonic. However, sometimes excitations—quasiparticles—of a fundamentally different type emerge that resemble particles that hitherto have been considered only as a mathematical possibility. On page 1003 of this issue, Mourik et al. ( 1 ) report on a superconducting nanostructure that harbors such an exotic quasiparticle, a “Majorana bound state,” an excitation that can best be described as half a fermion. The Majorana bound state is named after the Italian physicist Ettore Majorana, who proposed an equation describing a fermionic particle with a real-valued wave function ( 2 ). In contrast to the standard (Dirac) fermion, which has a complex wave function, a particle with a real-valued wave function is equal to its own antiparticle. No fundamental particles are known to be Majorana fermions, although there are speculations that the neutrino is one ( 3 ). The reported bound state is a localized version of Majorana's fermion.}
+      \field{day}{25}
+      \field{issn}{0036-8075, 1095-9203}
+      \field{journaltitle}{Science}
+      \field{langid}{english}
+      \field{month}{5}
+      \field{number}{6084}
+      \field{shortjournal}{Science}
+      \field{title}{Enter the {{Majorana Fermion}}}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{336}
+      \field{year}{2012}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{989\bibrangedash 990}
+      \range{pages}{2}
+      \verb{doi}
+      \verb 10.1126/science.1223302
+      \endverb
+      \verb{urlraw}
+      \verb https://www.science.org/doi/10.1126/science.1223302
+      \endverb
+      \verb{url}
+      \verb https://www.science.org/doi/10.1126/science.1223302
+      \endverb
+    \endentry
+    \entry{castagnoliNotionsSymmetryComputational1993}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=fefd2ca3844912fa73824eca0e388ba5}{%
+           family={Castagnoli},
+           familyi={C\bibinitperiod},
+           given={G.},
+           giveni={G\bibinitperiod}}}%
+        {{hash=4659c8eca776d19a34abd86c2ebc71b1}{%
+           family={Rasetti},
+           familyi={R\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{dc97de108c57207c62de43708c831701}
+      \strng{fullhash}{dc97de108c57207c62de43708c831701}
+      \strng{fullhashraw}{dc97de108c57207c62de43708c831701}
+      \strng{bibnamehash}{dc97de108c57207c62de43708c831701}
+      \strng{authorbibnamehash}{dc97de108c57207c62de43708c831701}
+      \strng{authornamehash}{dc97de108c57207c62de43708c831701}
+      \strng{authorfullhash}{dc97de108c57207c62de43708c831701}
+      \strng{authorfullhashraw}{dc97de108c57207c62de43708c831701}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0020-7748, 1572-9575}
+      \field{journaltitle}{International Journal of Theoretical Physics}
+      \field{langid}{english}
+      \field{month}{12}
+      \field{number}{12}
+      \field{shortjournal}{Int J Theor Phys}
+      \field{title}{The Notions of Symmetry and Computational Feedback in the Paradigm of Steady, Simultaneous Quantum Computation}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{32}
+      \field{year}{1993}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{2335\bibrangedash 2347}
+      \range{pages}{13}
+      \verb{doi}
+      \verb 10.1007/BF00673003
+      \endverb
+      \verb{urlraw}
+      \verb http://link.springer.com/10.1007/BF00673003
+      \endverb
+      \verb{url}
+      \verb http://link.springer.com/10.1007/BF00673003
+      \endverb
+    \endentry
+    \entry{dvirRealizationMinimalKitaev2023a}{article}{}{}
+      \name{author}{17}{}{%
+        {{hash=9b6dc779b59cf5972aed262c3c83263b}{%
+           family={Dvir},
+           familyi={D\bibinitperiod},
+           given={Tom},
+           giveni={T\bibinitperiod}}}%
+        {{hash=61c83935c5db8545f0d25d074f8e34d1}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Guanzhong},
+           giveni={G\bibinitperiod}}}%
+        {{hash=98204f6c5d4e04ca389aa45aac1789a6}{%
+           family={Van\bibnamedelima Loo},
+           familyi={V\bibinitperiod\bibinitdelim L\bibinitperiod},
+           given={Nick},
+           giveni={N\bibinitperiod}}}%
+        {{hash=f8d2ae867a1d4a9b78aea9d5c609961f}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Chun-Xiao},
+           giveni={C\bibinithyphendelim X\bibinitperiod}}}%
+        {{hash=34ef6615873a2673ca341e2d9a26ae2f}{%
+           family={Mazur},
+           familyi={M\bibinitperiod},
+           given={Grzegorz\bibnamedelima P.},
+           giveni={G\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=21abc76003e08e75782ca400433d4647}{%
+           family={Bordin},
+           familyi={B\bibinitperiod},
+           given={Alberto},
+           giveni={A\bibinitperiod}}}%
+        {{hash=d72c869f3c91bf5844ff9fa7bd04f814}{%
+           family={Ten\bibnamedelima Haaf},
+           familyi={T\bibinitperiod\bibinitdelim H\bibinitperiod},
+           given={Sebastiaan\bibnamedelimb L.\bibnamedelimi D.},
+           giveni={S\bibinitperiod\bibinitdelim L\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{hash=98e63d31969f67bb35323034e35e18b1}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Ji-Yin},
+           giveni={J\bibinithyphendelim Y\bibinitperiod}}}%
+        {{hash=1f2e9d49070625723fcc96d6907b37a6}{%
+           family={Van\bibnamedelima Driel},
+           familyi={V\bibinitperiod\bibinitdelim D\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod}}}%
+        {{hash=17662ff05bb13864df81b0f4961ba381}{%
+           family={Zatelli},
+           familyi={Z\bibinitperiod},
+           given={Francesco},
+           giveni={F\bibinitperiod}}}%
+        {{hash=09e1a64c667557dd7866bc4e66d193ce}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Xiang},
+           giveni={X\bibinitperiod}}}%
+        {{hash=8dcacb1acd79b09fd67dc1517fec5436}{%
+           family={Malinowski},
+           familyi={M\bibinitperiod},
+           given={Filip\bibnamedelima K.},
+           giveni={F\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+        {{hash=0990a7ee9e24978d09009ae1873dc507}{%
+           family={Gazibegovic},
+           familyi={G\bibinitperiod},
+           given={Sasa},
+           giveni={S\bibinitperiod}}}%
+        {{hash=3a85ba48e54b137fafe78e0c44615f03}{%
+           family={Badawy},
+           familyi={B\bibinitperiod},
+           given={Ghada},
+           giveni={G\bibinitperiod}}}%
+        {{hash=6ae9ef9cc88ac14b7cb56f941d8ec78d}{%
+           family={Bakkers},
+           familyi={B\bibinitperiod},
+           given={Erik\bibnamedelimb P.\bibnamedelimi A.\bibnamedelimi M.},
+           giveni={E\bibinitperiod\bibinitdelim P\bibinitperiod\bibinitdelim A\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=77854efdfdf328947f7a9ffdf286f9f1}{%
+           family={Wimmer},
+           familyi={W\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod}}}%
+        {{hash=03a77ab643b4639a383e3788ad7a3751}{%
+           family={Kouwenhoven},
+           familyi={K\bibinitperiod},
+           given={Leo\bibnamedelima P.},
+           giveni={L\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+      }
+      \strng{namehash}{2120491e48ca35b6ad97af873caea7dd}
+      \strng{fullhash}{7a63f3480eecb0646984ef0f9fb9bad1}
+      \strng{fullhashraw}{7a63f3480eecb0646984ef0f9fb9bad1}
+      \strng{bibnamehash}{2120491e48ca35b6ad97af873caea7dd}
+      \strng{authorbibnamehash}{2120491e48ca35b6ad97af873caea7dd}
+      \strng{authornamehash}{2120491e48ca35b6ad97af873caea7dd}
+      \strng{authorfullhash}{7a63f3480eecb0646984ef0f9fb9bad1}
+      \strng{authorfullhashraw}{7a63f3480eecb0646984ef0f9fb9bad1}
+      \field{extraname}{1}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{16}
+      \field{issn}{0028-0836, 1476-4687}
+      \field{journaltitle}{Nature}
+      \field{langid}{english}
+      \field{month}{2}
+      \field{number}{7948}
+      \field{shortjournal}{Nature}
+      \field{title}{Realization of a Minimal {{Kitaev}} Chain in Coupled Quantum Dots}
+      \field{urlday}{14}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{614}
+      \field{year}{2023}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{445\bibrangedash 450}
+      \range{pages}{6}
+      \verb{doi}
+      \verb 10.1038/s41586-022-05585-1
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/JPF3TSKJ/Dvir et al. - 2023 - Realization of a minimal Kitaev chain in coupled quantum dots.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.nature.com/articles/s41586-022-05585-1
+      \endverb
+      \verb{url}
+      \verb https://www.nature.com/articles/s41586-022-05585-1
       \endverb
     \endentry
     \entry{dvirRealizationMinimalKitaev2023}{article}{}{}
@@ -233,6 +681,7 @@
       \strng{authornamehash}{2120491e48ca35b6ad97af873caea7dd}
       \strng{authorfullhash}{0b19b39084398444befe6ee563a00d97}
       \strng{authorfullhashraw}{0b19b39084398444befe6ee563a00d97}
+      \field{extraname}{2}
       \field{sortinit}{D}
       \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
       \field{labelnamesource}{author}
@@ -267,6 +716,508 @@
       \endverb
       \keyw{Quantum dots,Superconducting properties and materials}
     \endentry
+    \entry{harleObservingBraidingTopological2023}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=ce90452583d428632e28bc5fdad0d853}{%
+           family={Harle},
+           familyi={H\bibinitperiod},
+           given={Nikhil},
+           giveni={N\bibinitperiod}}}%
+        {{hash=e52b76d0b10fa410ed4148eb85193db6}{%
+           family={Shtanko},
+           familyi={S\bibinitperiod},
+           given={Oles},
+           giveni={O\bibinitperiod}}}%
+        {{hash=b3cb54bfda0cd8c21125765a3b5c488d}{%
+           family={Movassagh},
+           familyi={M\bibinitperiod},
+           given={Ramis},
+           giveni={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{decb6a46016135107b1a5c6193b23cea}
+      \strng{fullhash}{decb6a46016135107b1a5c6193b23cea}
+      \strng{fullhashraw}{decb6a46016135107b1a5c6193b23cea}
+      \strng{bibnamehash}{decb6a46016135107b1a5c6193b23cea}
+      \strng{authorbibnamehash}{decb6a46016135107b1a5c6193b23cea}
+      \strng{authornamehash}{decb6a46016135107b1a5c6193b23cea}
+      \strng{authorfullhash}{decb6a46016135107b1a5c6193b23cea}
+      \strng{authorfullhashraw}{decb6a46016135107b1a5c6193b23cea}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Abstract Electrons are indivisible elementary particles, yet paradoxically a collection of them can act as a fraction of a single electron, exhibiting exotic and useful properties. One such collective excitation, known as a topological Majorana mode, is naturally stable against perturbations, such as unwanted local noise, and can thereby robustly store quantum information. As such, Majorana modes serve as the basic primitive of topological quantum computing, providing resilience to errors. However, their demonstration on quantum hardware has remained elusive. Here, we demonstrate a verifiable identification and braiding of topological Majorana modes using a superconducting quantum processor as a quantum simulator. By simulating fermions on a one-dimensional lattice subject to a periodic drive, we confirm the existence of Majorana modes localized at the edges, and distinguish them from other trivial modes. To simulate a basic logical operation of topological quantum computing known as braiding, we propose a non-adiabatic technique, whose implementation reveals correct braiding statistics in our experiments. This work could further be used to study topological models of matter using circuit-based simulations, and shows that long-sought quantum phenomena can be realized by anyone in cloud-run quantum simulations, whereby accelerating fundamental discoveries in quantum science and technology.}
+      \field{day}{21}
+      \field{issn}{2041-1723}
+      \field{journaltitle}{Nature Communications}
+      \field{langid}{english}
+      \field{month}{4}
+      \field{number}{1}
+      \field{shortjournal}{Nat Commun}
+      \field{title}{Observing and Braiding Topological {{Majorana}} Modes on Programmable Quantum Simulators}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{14}
+      \field{year}{2023}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{2286}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1038/s41467-023-37725-0
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/TKHQG6KV/Harle et al. - 2023 - Observing and braiding topological Majorana modes on programmable quantum simulators.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.nature.com/articles/s41467-023-37725-0
+      \endverb
+      \verb{url}
+      \verb https://www.nature.com/articles/s41467-023-37725-0
+      \endverb
+    \endentry
+    \entry{hidalgo-sacotoTwoIdenticalOnedimensional2025}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=e8215695ea1bdc49c6a6ac0e664cc819}{%
+           family={Hidalgo-Sacoto},
+           familyi={H\bibinithyphendelim S\bibinitperiod},
+           given={Raúl},
+           giveni={R\bibinitperiod}}}%
+        {{hash=1359609a04355e144ef623eb596c33e5}{%
+           family={Busch},
+           familyi={B\bibinitperiod},
+           given={Thomas},
+           giveni={T\bibinitperiod}}}%
+        {{hash=98468cae4e25c4a38366af83a1abfbe9}{%
+           family={Blume},
+           familyi={B\bibinitperiod},
+           given={D.},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{cbdac215a68648dc944546b761cba369}
+      \strng{fullhash}{cbdac215a68648dc944546b761cba369}
+      \strng{fullhashraw}{cbdac215a68648dc944546b761cba369}
+      \strng{bibnamehash}{cbdac215a68648dc944546b761cba369}
+      \strng{authorbibnamehash}{cbdac215a68648dc944546b761cba369}
+      \strng{authornamehash}{cbdac215a68648dc944546b761cba369}
+      \strng{authorfullhash}{cbdac215a68648dc944546b761cba369}
+      \strng{authorfullhashraw}{cbdac215a68648dc944546b761cba369}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{day}{11}
+      \field{issn}{2469-9926, 2469-9934}
+      \field{journaltitle}{Physical Review A}
+      \field{langid}{english}
+      \field{month}{12}
+      \field{number}{6}
+      \field{shortjournal}{Phys. Rev. A}
+      \field{shorttitle}{Two Identical One-Dimensional Anyons with Zero-Range Interactions}
+      \field{title}{Two Identical One-Dimensional Anyons with Zero-Range Interactions: {{Exchange}} Statistics, Scattering Theory, and Anyon-Anyon Mapping}
+      \field{urlday}{14}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{112}
+      \field{year}{2025}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{063310}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1103/h2vs-ll9d
+      \endverb
+      \verb{urlraw}
+      \verb https://link.aps.org/doi/10.1103/h2vs-ll9d
+      \endverb
+      \verb{url}
+      \verb https://link.aps.org/doi/10.1103/h2vs-ll9d
+      \endverb
+    \endentry
+    \entry{jordanBerPaulischeQuivalenzverbot1928}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=40ae7753d523c197cc915f02665378ef}{%
+           family={Jordan},
+           familyi={J\bibinitperiod},
+           given={P.},
+           giveni={P\bibinitperiod}}}%
+        {{hash=0f65f64e6050b36184863dbf3ec857c1}{%
+           family={Wigner},
+           familyi={W\bibinitperiod},
+           given={E.},
+           giveni={E\bibinitperiod}}}%
+      }
+      \strng{namehash}{9e1c4953beb1f5ddc0e4965ab47a6d93}
+      \strng{fullhash}{9e1c4953beb1f5ddc0e4965ab47a6d93}
+      \strng{fullhashraw}{9e1c4953beb1f5ddc0e4965ab47a6d93}
+      \strng{bibnamehash}{9e1c4953beb1f5ddc0e4965ab47a6d93}
+      \strng{authorbibnamehash}{9e1c4953beb1f5ddc0e4965ab47a6d93}
+      \strng{authornamehash}{9e1c4953beb1f5ddc0e4965ab47a6d93}
+      \strng{authorfullhash}{9e1c4953beb1f5ddc0e4965ab47a6d93}
+      \strng{authorfullhashraw}{9e1c4953beb1f5ddc0e4965ab47a6d93}
+      \field{sortinit}{J}
+      \field{sortinithash}{b2f54a9081ace9966a7cb9413811edb4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1434-6001, 1434-601X}
+      \field{journaltitle}{Zeitschrift for Physik}
+      \field{langid}{ngerman}
+      \field{month}{9}
+      \field{number}{9--10}
+      \field{shortjournal}{Z. Physik}
+      \field{title}{Uber das Paulische Aquivalenzverbot}
+      \field{urlday}{14}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{47}
+      \field{year}{1928}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{631\bibrangedash 651}
+      \range{pages}{21}
+      \verb{doi}
+      \verb 10.1007/BF01331938
+      \endverb
+      \verb{urlraw}
+      \verb http://link.springer.com/10.1007/BF01331938
+      \endverb
+      \verb{url}
+      \verb http://link.springer.com/10.1007/BF01331938
+      \endverb
+    \endentry
+    \entry{katoAdiabaticTheoremQuantum1950}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=de2df565ad24725681a931fe6bd95efd}{%
+           family={Kato},
+           familyi={K\bibinitperiod},
+           given={Tosio},
+           giveni={T\bibinitperiod}}}%
+      }
+      \strng{namehash}{de2df565ad24725681a931fe6bd95efd}
+      \strng{fullhash}{de2df565ad24725681a931fe6bd95efd}
+      \strng{fullhashraw}{de2df565ad24725681a931fe6bd95efd}
+      \strng{bibnamehash}{de2df565ad24725681a931fe6bd95efd}
+      \strng{authorbibnamehash}{de2df565ad24725681a931fe6bd95efd}
+      \strng{authornamehash}{de2df565ad24725681a931fe6bd95efd}
+      \strng{authorfullhash}{de2df565ad24725681a931fe6bd95efd}
+      \strng{authorfullhashraw}{de2df565ad24725681a931fe6bd95efd}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{15}
+      \field{issn}{0031-9015, 1347-4073}
+      \field{journaltitle}{Journal of the Physical Society of Japan}
+      \field{langid}{english}
+      \field{month}{11}
+      \field{number}{6}
+      \field{shortjournal}{J. Phys. Soc. Jpn.}
+      \field{title}{On the {{Adiabatic Theorem}} of {{Quantum Mechanics}}}
+      \field{urlday}{14}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{5}
+      \field{year}{1950}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{435\bibrangedash 439}
+      \range{pages}{5}
+      \verb{doi}
+      \verb 10.1143/JPSJ.5.435
+      \endverb
+      \verb{urlraw}
+      \verb http://journals.jps.jp/doi/10.1143/JPSJ.5.435
+      \endverb
+      \verb{url}
+      \verb http://journals.jps.jp/doi/10.1143/JPSJ.5.435
+      \endverb
+    \endentry
+    \entry{kitaevUnpairedMajoranaFermions2001}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=59949d44a3903dfabb88bff3220ff2e0}{%
+           family={Kitaev},
+           familyi={K\bibinitperiod},
+           given={Alexei},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{59949d44a3903dfabb88bff3220ff2e0}
+      \strng{fullhash}{59949d44a3903dfabb88bff3220ff2e0}
+      \strng{fullhashraw}{59949d44a3903dfabb88bff3220ff2e0}
+      \strng{bibnamehash}{59949d44a3903dfabb88bff3220ff2e0}
+      \strng{authorbibnamehash}{59949d44a3903dfabb88bff3220ff2e0}
+      \strng{authornamehash}{59949d44a3903dfabb88bff3220ff2e0}
+      \strng{authorfullhash}{59949d44a3903dfabb88bff3220ff2e0}
+      \strng{authorfullhashraw}{59949d44a3903dfabb88bff3220ff2e0}
+      \field{extraname}{1}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Certain one-dimensional Fermi systems have an energy gap in the bulk spectrum while boundary states are described by one Majorana operator per boundary point. A finite system of length \$L\$ possesses two ground states with an energy difference proportional to \$\textbackslash exp(-L/l\_0)\$ and different fermionic parities. Such systems can be used as qubits since they are intrinsically immune to decoherence. The property of a system to have boundary Majorana fermions is expressed as a condition on the bulk electron spectrum. The condition is satisfied in the presence of an arbitrary small energy gap induced by proximity of a 3-dimensional p-wave superconductor, provided that the normal spectrum has an odd number of Fermi points in each half of the Brillouin zone (each spin component counts separately).}
+      \field{day}{1}
+      \field{eprinttype}{arXiv}
+      \field{issn}{1468-4780}
+      \field{issue}{10S}
+      \field{journaltitle}{Physics-Uspekhi}
+      \field{month}{10}
+      \field{shortjournal}{Phys.-Usp.}
+      \field{title}{Unpaired {{Majorana}} Fermions in Quantum Wires}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{44}
+      \field{year}{2001}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{131\bibrangedash 136}
+      \range{pages}{6}
+      \verb{doi}
+      \verb 10.1070/1063-7869/44/10S/S29
+      \endverb
+      \verb{eprint}
+      \verb cond-mat/0010440
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/WNZQLPZR/Kitaev - 2001 - Unpaired Majorana fermions in quantum wires.pdf;/home/Hishem/Zotero/storage/MS2BZCN2/0010440.html
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/cond-mat/0010440
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/cond-mat/0010440
+      \endverb
+      \keyw{Condensed Matter - Mesoscale and Nanoscale Physics,Quantum Physics}
+    \endentry
+    \entry{kitaevUnpairedMajoranaFermions2001a}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=59949d44a3903dfabb88bff3220ff2e0}{%
+           family={Kitaev},
+           familyi={K\bibinitperiod},
+           given={Alexei},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{59949d44a3903dfabb88bff3220ff2e0}
+      \strng{fullhash}{59949d44a3903dfabb88bff3220ff2e0}
+      \strng{fullhashraw}{59949d44a3903dfabb88bff3220ff2e0}
+      \strng{bibnamehash}{59949d44a3903dfabb88bff3220ff2e0}
+      \strng{authorbibnamehash}{59949d44a3903dfabb88bff3220ff2e0}
+      \strng{authornamehash}{59949d44a3903dfabb88bff3220ff2e0}
+      \strng{authorfullhash}{59949d44a3903dfabb88bff3220ff2e0}
+      \strng{authorfullhashraw}{59949d44a3903dfabb88bff3220ff2e0}
+      \field{extraname}{2}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Certain one-dimensional Fermi systems have an energy gap in the bulk spectrum while boundary states are described by one Majorana operator per boundary point. A finite system of length \$L\$ possesses two ground states with an energy difference proportional to \$\textbackslash exp(-L/l\_0)\$ and different fermionic parities. Such systems can be used as qubits since they are intrinsically immune to decoherence. The property of a system to have boundary Majorana fermions is expressed as a condition on the bulk electron spectrum. The condition is satisfied in the presence of an arbitrary small energy gap induced by proximity of a 3-dimensional p-wave superconductor, provided that the normal spectrum has an odd number of Fermi points in each half of the Brillouin zone (each spin component counts separately).}
+      \field{day}{1}
+      \field{eprinttype}{arXiv}
+      \field{issn}{1468-4780}
+      \field{issue}{10S}
+      \field{journaltitle}{Physics-Uspekhi}
+      \field{month}{10}
+      \field{shortjournal}{Phys.-Usp.}
+      \field{title}{Unpaired {{Majorana}} Fermions in Quantum Wires}
+      \field{urlday}{14}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{44}
+      \field{year}{2001}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{131\bibrangedash 136}
+      \range{pages}{6}
+      \verb{doi}
+      \verb 10.1070/1063-7869/44/10S/S29
+      \endverb
+      \verb{eprint}
+      \verb cond-mat/0010440
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/2N2FGRPC/Kitaev - 2001 - Unpaired Majorana fermions in quantum wires.pdf;/home/Hishem/Zotero/storage/RJD7W5LM/0010440.html
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/cond-mat/0010440
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/cond-mat/0010440
+      \endverb
+      \keyw{Condensed Matter - Mesoscale and Nanoscale Physics,Quantum Physics}
+    \endentry
+    \entry{lahtinenShortIntroductionTopological2017}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=82a094f117de2ab00a8b1ca445e39700}{%
+           family={Lahtinen},
+           familyi={L\bibinitperiod},
+           given={Ville},
+           giveni={V\bibinitperiod}}}%
+        {{hash=b90339d1bfee56317e05865435cfaa96}{%
+           family={Pachos},
+           familyi={P\bibinitperiod},
+           given={Jiannis},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{6bdc99dccea131b65912f9ef9153ba84}
+      \strng{fullhash}{6bdc99dccea131b65912f9ef9153ba84}
+      \strng{fullhashraw}{6bdc99dccea131b65912f9ef9153ba84}
+      \strng{bibnamehash}{6bdc99dccea131b65912f9ef9153ba84}
+      \strng{authorbibnamehash}{6bdc99dccea131b65912f9ef9153ba84}
+      \strng{authornamehash}{6bdc99dccea131b65912f9ef9153ba84}
+      \strng{authorfullhash}{6bdc99dccea131b65912f9ef9153ba84}
+      \strng{authorfullhashraw}{6bdc99dccea131b65912f9ef9153ba84}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{This review presents an entry-level introduction to topological quantum computation -- quantum computing with anyons. We introduce anyons at the system-independent level of anyon models and discuss the key concepts of protected fusion spaces and statistical quantum evolutions for encoding and processing quantum information. Both the encoding and the processing are inherently resilient against errors due to their topological nature, thus promising to overcome one of the main obstacles for the realisation of quantum computers. We outline the general steps of topological quantum computation, as well as discuss various challenges faced by it. We also review the literature on condensed matter systems where anyons can emerge. Finally, the appearance of anyons and employing them for quantum computation is demonstrated in the context of a simple microscopic model -- the topological superconducting nanowire -- that describes the low-energy physics of several experimentally relevant settings. This model supports localised Majorana zero modes that are the simplest and the experimentally most tractable types of anyons that are needed to perform topological quantum computation.}
+      \field{day}{9}
+      \field{issn}{2542-4653}
+      \field{journaltitle}{SciPost Physics}
+      \field{month}{9}
+      \field{number}{3}
+      \field{shortjournal}{SciPost Phys.}
+      \field{title}{A {{Short Introduction}} to {{Topological Quantum Computation}}}
+      \field{urlday}{14}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{3}
+      \field{year}{2017}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{021}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.21468/SciPostPhys.3.3.021
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/AD3GEDAH/Lahtinen and Pachos - 2017 - A Short Introduction to Topological Quantum Computation.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://scipost.org/10.21468/SciPostPhys.3.3.021
+      \endverb
+      \verb{url}
+      \verb https://scipost.org/10.21468/SciPostPhys.3.3.021
+      \endverb
+    \endentry
+    \entry{leijnseParityQubitsPoor2012a}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=d2b85c29f3de1b35b56c5d85bb89684c}{%
+           family={Leijnse},
+           familyi={L\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod}}}%
+        {{hash=533d63e82c5527c01b821ca32839ab68}{%
+           family={Flensberg},
+           familyi={F\bibinitperiod},
+           given={Karsten},
+           giveni={K\bibinitperiod}}}%
+      }
+      \strng{namehash}{f20e726625c11d076faeb8480928be2b}
+      \strng{fullhash}{f20e726625c11d076faeb8480928be2b}
+      \strng{fullhashraw}{f20e726625c11d076faeb8480928be2b}
+      \strng{bibnamehash}{f20e726625c11d076faeb8480928be2b}
+      \strng{authorbibnamehash}{f20e726625c11d076faeb8480928be2b}
+      \strng{authornamehash}{f20e726625c11d076faeb8480928be2b}
+      \strng{authorfullhash}{f20e726625c11d076faeb8480928be2b}
+      \strng{authorfullhashraw}{f20e726625c11d076faeb8480928be2b}
+      \field{extraname}{1}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We study a double quantum dot connected via a common superconducting lead and show that this system can be tuned to host one Majorana bound state (MBS) on each dot. We call them "poor man's Majorana bound states" since they are not topologically protected, but otherwise share the properties of MBS formed in topological superconductors. We describe the conditions for the existence of the two spatially separated MBS, which include breaking of spin degeneracy in the two dots, with the spins polarized in different directions. Therefore, we propose to use a magnetic field configuration where the field directions on the two dot form an angle. By control of this angle the cross Andreev reflection and the tunnel amplitudes can be tuned to be approximately equal, which is a requirement for the formation of the MBS. We show that the fermionic state encoded in the two Majoranas constitutes a parity qubit, which is non-local and can only be measured by probing both dots simultaneously. Using a many-particle basis for the MBS, we discuss the role of interactions and show that inter-dot interactions always lift the degeneracy. We also show how the MBS can be probed by transport measurements and discuss how the combination of several such double dot systems allows for entanglement of parity qubits and measurement of their dephasing times.}
+      \field{day}{23}
+      \field{eprintclass}{cond-mat.mes-hall}
+      \field{eprinttype}{arXiv}
+      \field{issn}{1098-0121, 1550-235X}
+      \field{journaltitle}{Physical Review B}
+      \field{month}{10}
+      \field{number}{13}
+      \field{shortjournal}{Phys. Rev. B}
+      \field{title}{Parity Qubits and Poor Man's {{Majorana}} Bound States in Double Quantum Dots}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{86}
+      \field{year}{2012}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{134528}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1103/PhysRevB.86.134528
+      \endverb
+      \verb{eprint}
+      \verb 1207.4299
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/H8F3SZAA/Leijnse and Flensberg - 2012 - Parity qubits and poor man's Majorana bound states in double quantum dots.pdf;/home/Hishem/Zotero/storage/3NWX5HN8/1207.html
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/1207.4299
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/1207.4299
+      \endverb
+      \keyw{Condensed Matter - Mesoscale and Nanoscale Physics,Condensed Matter - Superconductivity,Quantum Physics}
+    \endentry
+    \entry{leijnseParityQubitsPoor2012b}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=d2b85c29f3de1b35b56c5d85bb89684c}{%
+           family={Leijnse},
+           familyi={L\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod}}}%
+        {{hash=533d63e82c5527c01b821ca32839ab68}{%
+           family={Flensberg},
+           familyi={F\bibinitperiod},
+           given={Karsten},
+           giveni={K\bibinitperiod}}}%
+      }
+      \strng{namehash}{f20e726625c11d076faeb8480928be2b}
+      \strng{fullhash}{f20e726625c11d076faeb8480928be2b}
+      \strng{fullhashraw}{f20e726625c11d076faeb8480928be2b}
+      \strng{bibnamehash}{f20e726625c11d076faeb8480928be2b}
+      \strng{authorbibnamehash}{f20e726625c11d076faeb8480928be2b}
+      \strng{authornamehash}{f20e726625c11d076faeb8480928be2b}
+      \strng{authorfullhash}{f20e726625c11d076faeb8480928be2b}
+      \strng{authorfullhashraw}{f20e726625c11d076faeb8480928be2b}
+      \field{extraname}{2}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{23}
+      \field{issn}{1098-0121, 1550-235X}
+      \field{journaltitle}{Physical Review B}
+      \field{langid}{english}
+      \field{month}{10}
+      \field{number}{13}
+      \field{shortjournal}{Phys. Rev. B}
+      \field{title}{Parity Qubits and Poor Man's {{Majorana}} Bound States in Double Quantum Dots}
+      \field{urlday}{14}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{86}
+      \field{year}{2012}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{134528}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1103/PhysRevB.86.134528
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/LJZ5Z9T2/Leijnse and Flensberg - 2012 - Parity qubits and poor man's Majorana bound states in double quantum dots.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://link.aps.org/doi/10.1103/PhysRevB.86.134528
+      \endverb
+      \verb{url}
+      \verb https://link.aps.org/doi/10.1103/PhysRevB.86.134528
+      \endverb
+    \endentry
     \entry{leijnseParityQubitsPoor2012}{article}{}{}
       \name{author}{2}{}{%
         {{hash=d2b85c29f3de1b35b56c5d85bb89684c}{%
@@ -288,6 +1239,7 @@
       \strng{authornamehash}{f20e726625c11d076faeb8480928be2b}
       \strng{authorfullhash}{f20e726625c11d076faeb8480928be2b}
       \strng{authorfullhashraw}{f20e726625c11d076faeb8480928be2b}
+      \field{extraname}{3}
       \field{sortinit}{L}
       \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
       \field{labelnamesource}{author}
@@ -320,6 +1272,1074 @@
       \endverb
       \verb{url}
       \verb https://link.aps.org/doi/10.1103/PhysRevB.86.134528
+      \endverb
+    \endentry
+    \entry{lianTopologicalQuantumComputation2018}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=229bb8528e15f5219d283bfc062c5c23}{%
+           family={Lian},
+           familyi={L\bibinitperiod},
+           given={Biao},
+           giveni={B\bibinitperiod}}}%
+        {{hash=d78bfdbe005d2d92931d0ebea338d804}{%
+           family={Sun},
+           familyi={S\bibinitperiod},
+           given={Xiao-Qi},
+           giveni={X\bibinithyphendelim Q\bibinitperiod}}}%
+        {{hash=de44a36fb8c53cc03308e8b50cc4ccb9}{%
+           family={Vaezi},
+           familyi={V\bibinitperiod},
+           given={Abolhassan},
+           giveni={A\bibinitperiod}}}%
+        {{hash=7590f816b469f3b799af95bbe5747030}{%
+           family={Qi},
+           familyi={Q\bibinitperiod},
+           given={Xiao-Liang},
+           giveni={X\bibinithyphendelim L\bibinitperiod}}}%
+        {{hash=d2849f809d69cc70fbb11eccca48e6e9}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Shou-Cheng},
+           giveni={S\bibinithyphendelim C\bibinitperiod}}}%
+      }
+      \strng{namehash}{b5ec7a16000f9344159bc61e2a23f298}
+      \strng{fullhash}{9d9a8394cc998fe9888fcdb3ad7fded6}
+      \strng{fullhashraw}{9d9a8394cc998fe9888fcdb3ad7fded6}
+      \strng{bibnamehash}{b5ec7a16000f9344159bc61e2a23f298}
+      \strng{authorbibnamehash}{b5ec7a16000f9344159bc61e2a23f298}
+      \strng{authornamehash}{b5ec7a16000f9344159bc61e2a23f298}
+      \strng{authorfullhash}{9d9a8394cc998fe9888fcdb3ad7fded6}
+      \strng{authorfullhashraw}{9d9a8394cc998fe9888fcdb3ad7fded6}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Significance We propose a platform of quantum computation using the chiral Majorana fermions on the edges of topological materials. The quantum gates are naturally accomplished by the propagation of chiral Majorana fermions. If realized, its computation speed can be 1 0 3 faster than the currently existing quantum computation schemes. , The chiral Majorana fermion is a massless self-conjugate fermion which can arise as the edge state of certain 2D topological matters. It has been theoretically predicted and experimentally observed in a hybrid device of a quantum anomalous Hall insulator and a conventional superconductor. Its closely related cousin, the Majorana zero mode in the bulk of the corresponding topological matter, is known to be applicable in topological quantum computations. Here we show that the propagation of chiral Majorana fermions leads to the same unitary transformation as that in the braiding of Majorana zero modes and propose a platform to perform quantum computation with chiral Majorana fermions. A Corbino ring junction of the hybrid device can use quantum coherent chiral Majorana fermions to implement the Hadamard gate and the phase gate, and the junction conductance yields a natural readout for the qubit state.}
+      \field{day}{23}
+      \field{issn}{0027-8424, 1091-6490}
+      \field{journaltitle}{Proceedings of the National Academy of Sciences}
+      \field{langid}{english}
+      \field{month}{10}
+      \field{number}{43}
+      \field{shortjournal}{Proc. Natl. Acad. Sci. U.S.A.}
+      \field{title}{Topological Quantum Computation Based on Chiral {{Majorana}} Fermions}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{115}
+      \field{year}{2018}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{10938\bibrangedash 10942}
+      \range{pages}{5}
+      \verb{doi}
+      \verb 10.1073/pnas.1810003115
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/YLQKM7HQ/Lian et al. - 2018 - Topological quantum computation based on chiral Majorana fermions.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://pnas.org/doi/full/10.1073/pnas.1810003115
+      \endverb
+      \verb{url}
+      \verb https://pnas.org/doi/full/10.1073/pnas.1810003115
+      \endverb
+    \endentry
+    \entry{majoranaTeoriaSimmetricaDellelettrone1937}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=aaadf7ff4ae686b63f5713ce905b654c}{%
+           family={Majorana},
+           familyi={M\bibinitperiod},
+           given={Ettore},
+           giveni={E\bibinitperiod}}}%
+      }
+      \strng{namehash}{aaadf7ff4ae686b63f5713ce905b654c}
+      \strng{fullhash}{aaadf7ff4ae686b63f5713ce905b654c}
+      \strng{fullhashraw}{aaadf7ff4ae686b63f5713ce905b654c}
+      \strng{bibnamehash}{aaadf7ff4ae686b63f5713ce905b654c}
+      \strng{authorbibnamehash}{aaadf7ff4ae686b63f5713ce905b654c}
+      \strng{authornamehash}{aaadf7ff4ae686b63f5713ce905b654c}
+      \strng{authorfullhash}{aaadf7ff4ae686b63f5713ce905b654c}
+      \strng{authorfullhashraw}{aaadf7ff4ae686b63f5713ce905b654c}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0029-6341, 1827-6121}
+      \field{journaltitle}{Il Nuovo Cimento}
+      \field{langid}{italian}
+      \field{month}{4}
+      \field{number}{4}
+      \field{shortjournal}{Nuovo Cim}
+      \field{title}{Teoria simmetrica dell’elettrone e del positrone}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{14}
+      \field{year}{1937}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{171\bibrangedash 184}
+      \range{pages}{14}
+      \verb{doi}
+      \verb 10.1007/BF02961314
+      \endverb
+      \verb{urlraw}
+      \verb http://link.springer.com/10.1007/BF02961314
+      \endverb
+      \verb{url}
+      \verb http://link.springer.com/10.1007/BF02961314
+      \endverb
+    \endentry
+    \entry{mourikSignaturesMajoranaFermions2012}{article}{}{}
+      \name{author}{6}{}{%
+        {{hash=6ba0a5fd53ea1af862469b348fe77ed4}{%
+           family={Mourik},
+           familyi={M\bibinitperiod},
+           given={V.},
+           giveni={V\bibinitperiod}}}%
+        {{hash=f4f1fd84109113f1e8f0e70f7babe8dd}{%
+           family={Zuo},
+           familyi={Z\bibinitperiod},
+           given={K.},
+           giveni={K\bibinitperiod}}}%
+        {{hash=10f4e96a05ff408c09a2cb73d330494a}{%
+           family={Frolov},
+           familyi={F\bibinitperiod},
+           given={S.\bibnamedelimi M.},
+           giveni={S\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=d47cb25b2a8387b0378138eb109929c1}{%
+           family={Plissard},
+           familyi={P\bibinitperiod},
+           given={S.\bibnamedelimi R.},
+           giveni={S\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=8a0099b14c6dfadee2b19cb8a14dc4fd}{%
+           family={Bakkers},
+           familyi={B\bibinitperiod},
+           given={E.\bibnamedelimi P.\bibnamedelimi A.\bibnamedelimi M.},
+           giveni={E\bibinitperiod\bibinitdelim P\bibinitperiod\bibinitdelim A\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=e1c7a509c799280c6a9de329476d0c91}{%
+           family={Kouwenhoven},
+           familyi={K\bibinitperiod},
+           given={L.\bibnamedelimi P.},
+           giveni={L\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+      }
+      \strng{namehash}{9a3fa981dc8c76634e2fe484853e0717}
+      \strng{fullhash}{78cca6908298e9e88df67bcc1e4af636}
+      \strng{fullhashraw}{78cca6908298e9e88df67bcc1e4af636}
+      \strng{bibnamehash}{9a3fa981dc8c76634e2fe484853e0717}
+      \strng{authorbibnamehash}{9a3fa981dc8c76634e2fe484853e0717}
+      \strng{authornamehash}{9a3fa981dc8c76634e2fe484853e0717}
+      \strng{authorfullhash}{78cca6908298e9e88df67bcc1e4af636}
+      \strng{authorfullhashraw}{78cca6908298e9e88df67bcc1e4af636}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Majoranas Arrive When a negatively charged electron meets a positron—its positively charged antiparticle—they annihilate each other in a flash of gamma rays. A Majorana fermion, on the other hand, is a neutral particle, which is its own antiparticle. No sightings of a Majorana have been reported in the elementary particle world, but recently they have been proposed to exist in solid-state systems and suggested to be of interest as a quantum computing platform. Mourik et al. (p. 1003 , published online 12 April; see the cover; see the Perspective by Brouwer ) set up a semiconductor nanowire contacted on each end by a normal and a superconducting electrode that revealed evidence of Majorana fermions. , Theoretically predicted particles that double as their own antiparticles emerge in a superconductor-coupled indium antimonide nanowire. , Majorana fermions are particles identical to their own antiparticles. They have been theoretically predicted to exist in topological superconductors. Here, we report electrical measurements on indium antimonide nanowires contacted with one normal (gold) and one superconducting (niobium titanium nitride) electrode. Gate voltages vary electron density and define a tunnel barrier between normal and superconducting contacts. In the presence of magnetic fields on the order of 100 millitesla, we observe bound, midgap states at zero bias voltage. These bound states remain fixed to zero bias, even when magnetic fields and gate voltages are changed over considerable ranges. Our observations support the hypothesis of Majorana fermions in nanowires coupled to superconductors.}
+      \field{day}{25}
+      \field{issn}{0036-8075, 1095-9203}
+      \field{journaltitle}{Science}
+      \field{langid}{english}
+      \field{month}{5}
+      \field{number}{6084}
+      \field{shortjournal}{Science}
+      \field{title}{Signatures of {{Majorana Fermions}} in {{Hybrid Superconductor-Semiconductor Nanowire Devices}}}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{336}
+      \field{year}{2012}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{1003\bibrangedash 1007}
+      \range{pages}{5}
+      \verb{doi}
+      \verb 10.1126/science.1222360
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/6QNJV9NY/Mourik et al. - 2012 - Signatures of Majorana Fermions in Hybrid Superconductor-Semiconductor Nanowire Devices.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.science.org/doi/10.1126/science.1222360
+      \endverb
+      \verb{url}
+      \verb https://www.science.org/doi/10.1126/science.1222360
+      \endverb
+    \endentry
+    \entry{najjarMilestoneEvidenceAnyons2020}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=14aad33d0729d52c2cf4c9197f5d7aaf}{%
+           family={Najjar},
+           familyi={N\bibinitperiod},
+           given={Dana},
+           giveni={D\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Quanta Magazine}%
+      }
+      \strng{namehash}{14aad33d0729d52c2cf4c9197f5d7aaf}
+      \strng{fullhash}{14aad33d0729d52c2cf4c9197f5d7aaf}
+      \strng{fullhashraw}{14aad33d0729d52c2cf4c9197f5d7aaf}
+      \strng{bibnamehash}{14aad33d0729d52c2cf4c9197f5d7aaf}
+      \strng{authorbibnamehash}{14aad33d0729d52c2cf4c9197f5d7aaf}
+      \strng{authornamehash}{14aad33d0729d52c2cf4c9197f5d7aaf}
+      \strng{authorfullhash}{14aad33d0729d52c2cf4c9197f5d7aaf}
+      \strng{authorfullhashraw}{14aad33d0729d52c2cf4c9197f5d7aaf}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{12}
+      \field{month}{5}
+      \field{note}{Illustration by 5W Infographics}
+      \field{title}{Milestone Evidence for Anyons, a Third Kingdom of Particles}
+      \field{urlday}{14}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{year}{2020}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://www.quantamagazine.org/milestone-evidence-for-anyons-a-third-kingdom-of-particles-20200512/
+      \endverb
+      \verb{url}
+      \verb https://www.quantamagazine.org/milestone-evidence-for-anyons-a-third-kingdom-of-particles-20200512/
+      \endverb
+    \endentry
+    \entry{narozhnyMajoranaFermionsNonuniform2017}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=a54b52c646f10d477c6d72d7b5400eb3}{%
+           family={Narozhny},
+           familyi={N\bibinitperiod},
+           given={Boris},
+           giveni={B\bibinitperiod}}}%
+      }
+      \strng{namehash}{a54b52c646f10d477c6d72d7b5400eb3}
+      \strng{fullhash}{a54b52c646f10d477c6d72d7b5400eb3}
+      \strng{fullhashraw}{a54b52c646f10d477c6d72d7b5400eb3}
+      \strng{bibnamehash}{a54b52c646f10d477c6d72d7b5400eb3}
+      \strng{authorbibnamehash}{a54b52c646f10d477c6d72d7b5400eb3}
+      \strng{authornamehash}{a54b52c646f10d477c6d72d7b5400eb3}
+      \strng{authorfullhash}{a54b52c646f10d477c6d72d7b5400eb3}
+      \strng{authorfullhashraw}{a54b52c646f10d477c6d72d7b5400eb3}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Abstract A quantum computer based on Majorana qubits would contain a large number of zero-energy Majorana states. This system can be modelled as a connected network of the Ising-Kitaev chains alternating the “trivial” and “topological” regions, with the zero-energy Majorana fermions localized at their interfaces. The low-energy sector of the theory describing such a network can be formulated in terms of leading-order couplings between the Majorana zero modes. I consider a minimal model exhibiting effective couplings between four Majorana zero modes – the nonuniform Ising-Kitaev chain, containing two “topological” regions separated by a “trivial” region. Solving the model exactly, I show that for generic values of the model parameters the four zero modes are localized at the four interface points of the chain. In the special case where additional inversion symmetry is present, the Majorana zero modes are “delocalized” between two interface points. In both cases, the low-energy sector of the theory can be formulated in terms of the localized Majorana fermions, but the couplings between some of them are independent of their respective separations: the exact solution does not support the “nearest-neighbor” form of the effective low-energy Hamiltonian.}
+      \field{day}{3}
+      \field{issn}{2045-2322}
+      \field{journaltitle}{Scientific Reports}
+      \field{langid}{english}
+      \field{month}{5}
+      \field{number}{1}
+      \field{shortjournal}{Sci Rep}
+      \field{shorttitle}{Majorana Fermions in the Nonuniform {{Ising-Kitaev}} Chain}
+      \field{title}{Majorana Fermions in the Nonuniform {{Ising-Kitaev}} Chain: Exact Solution}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{7}
+      \field{year}{2017}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{1447}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1038/s41598-017-01413-z
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/84PFEZU9/Narozhny - 2017 - Majorana fermions in the nonuniform Ising-Kitaev chain exact solution.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.nature.com/articles/s41598-017-01413-z
+      \endverb
+      \verb{url}
+      \verb https://www.nature.com/articles/s41598-017-01413-z
+      \endverb
+    \endentry
+    \entry{nayakNonAbelianAnyonsTopological2008}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=dd56b3b91c286d5829b2538b9863d017}{%
+           family={Nayak},
+           familyi={N\bibinitperiod},
+           given={Chetan},
+           giveni={C\bibinitperiod}}}%
+        {{hash=8129c2a9c928bf3c21cf74dd4cf4f79c}{%
+           family={Simon},
+           familyi={S\bibinitperiod},
+           given={Steven\bibnamedelima H.},
+           giveni={S\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+        {{hash=35caeb62dec2a811e2bdb475824dfcba}{%
+           family={Stern},
+           familyi={S\bibinitperiod},
+           given={Ady},
+           giveni={A\bibinitperiod}}}%
+        {{hash=2209635e71ebe540c155f110135f46be}{%
+           family={Freedman},
+           familyi={F\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod}}}%
+        {{hash=0850ad71b34e8d6fa3687767990eddc7}{%
+           family={Das\bibnamedelima Sarma},
+           familyi={D\bibinitperiod\bibinitdelim S\bibinitperiod},
+           given={Sankar},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{92a7a96b72cf6ad0f62d43ce0e4e9f6b}
+      \strng{fullhash}{1d9d98430721396f23fe3685704c4394}
+      \strng{fullhashraw}{1d9d98430721396f23fe3685704c4394}
+      \strng{bibnamehash}{92a7a96b72cf6ad0f62d43ce0e4e9f6b}
+      \strng{authorbibnamehash}{92a7a96b72cf6ad0f62d43ce0e4e9f6b}
+      \strng{authornamehash}{92a7a96b72cf6ad0f62d43ce0e4e9f6b}
+      \strng{authorfullhash}{1d9d98430721396f23fe3685704c4394}
+      \strng{authorfullhashraw}{1d9d98430721396f23fe3685704c4394}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{12}
+      \field{issn}{0034-6861, 1539-0756}
+      \field{journaltitle}{Reviews of Modern Physics}
+      \field{langid}{english}
+      \field{month}{9}
+      \field{number}{3}
+      \field{shortjournal}{Rev. Mod. Phys.}
+      \field{title}{Non-{{Abelian}} Anyons and Topological Quantum Computation}
+      \field{urlday}{14}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{80}
+      \field{year}{2008}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{1083\bibrangedash 1159}
+      \range{pages}{77}
+      \verb{doi}
+      \verb 10.1103/RevModPhys.80.1083
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/A36UNCIL/Nayak et al. - 2008 - Non-Abelian anyons and topological quantum computation.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://link.aps.org/doi/10.1103/RevModPhys.80.1083
+      \endverb
+      \verb{url}
+      \verb https://link.aps.org/doi/10.1103/RevModPhys.80.1083
+      \endverb
+    \endentry
+    \entry{nielsen2005fermionic}{article}{}{}
+      \true{moreauthor}
+      \true{morelabelname}
+      \name{author}{1}{}{%
+        {{hash=afe17482fc813e497188aee3b3783879}{%
+           family={Nielsen},
+           familyi={N\bibinitperiod},
+           given={Michael\bibnamedelima A},
+           giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \strng{namehash}{cdedef143df4d7f70c81437d6ea26114}
+      \strng{fullhash}{cdedef143df4d7f70c81437d6ea26114}
+      \strng{fullhashraw}{cdedef143df4d7f70c81437d6ea26114}
+      \strng{bibnamehash}{cdedef143df4d7f70c81437d6ea26114}
+      \strng{authorbibnamehash}{cdedef143df4d7f70c81437d6ea26114}
+      \strng{authornamehash}{cdedef143df4d7f70c81437d6ea26114}
+      \strng{authorfullhash}{cdedef143df4d7f70c81437d6ea26114}
+      \strng{authorfullhashraw}{cdedef143df4d7f70c81437d6ea26114}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{School of Physical Sciences The University of Queensland}
+      \field{title}{The Fermionic canonical commutation relations and the Jordan-Wigner transform}
+      \field{volume}{59}
+      \field{year}{2005}
+      \field{pages}{75}
+      \range{pages}{1}
+    \endentry
+    \entry{samuelsonQuantifyingRobustnessLocality2026}{article}{}{}
+      \name{author}{7}{}{%
+        {{hash=a98bf4c101a9cac0636603147a370e52}{%
+           family={Samuelson},
+           familyi={S\bibinitperiod},
+           given={William},
+           giveni={W\bibinitperiod}}}%
+        {{hash=fd9fa247f6922b737b39ab343039ec72}{%
+           family={Luna},
+           familyi={L\bibinitperiod},
+           given={Juan\bibnamedelimb Daniel\bibnamedelima Torres},
+           giveni={J\bibinitperiod\bibinitdelim D\bibinitperiod\bibinitdelim T\bibinitperiod}}}%
+        {{hash=284b6764c0be5834213fa8a66c94d3eb}{%
+           family={Miles},
+           familyi={M\bibinitperiod},
+           given={Sebastian},
+           giveni={S\bibinitperiod}}}%
+        {{hash=57dc7638e3c285a4b3e3eea7d00e77bf}{%
+           family={Bozkurt},
+           familyi={B\bibinitperiod},
+           given={A.\bibnamedelimi Mert},
+           giveni={A\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=d2b85c29f3de1b35b56c5d85bb89684c}{%
+           family={Leijnse},
+           familyi={L\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod}}}%
+        {{hash=77854efdfdf328947f7a9ffdf286f9f1}{%
+           family={Wimmer},
+           familyi={W\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod}}}%
+        {{hash=f14dfde437509f61bb57c02859b2393f}{%
+           family={Svensson},
+           familyi={S\bibinitperiod},
+           given={Viktor},
+           giveni={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{7655f12168ceb7cc5353802106c64ade}
+      \strng{fullhash}{2416bf2e03e2feb110483a98f0ad3071}
+      \strng{fullhashraw}{2416bf2e03e2feb110483a98f0ad3071}
+      \strng{bibnamehash}{7655f12168ceb7cc5353802106c64ade}
+      \strng{authorbibnamehash}{7655f12168ceb7cc5353802106c64ade}
+      \strng{authornamehash}{7655f12168ceb7cc5353802106c64ade}
+      \strng{authorfullhash}{2416bf2e03e2feb110483a98f0ad3071}
+      \strng{authorfullhashraw}{2416bf2e03e2feb110483a98f0ad3071}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Protecting qubits from perturbations is a central challenge in quantum computing. Topological superconductors with separated Majorana bound states (MBSs) provide a strong form of protection that only depends on the locality of perturbations. While the link between MBS separation, robust degeneracy, and protected braiding is well understood in non-interacting systems, recent experimental progress in short quantum-dot-based Kitaev chains highlights the need to establish these connections rigorously for interacting systems. We do this by defining MBSs from many-body ground states and show how their locality constrains their coupling to an environment. This, in turn, quantifies the protection of the energy degeneracy and the feasibility of non-abelian braiding.}
+      \field{day}{28}
+      \field{eprintclass}{cond-mat.mes-hall}
+      \field{eprinttype}{arXiv}
+      \field{issn}{2691-3399}
+      \field{journaltitle}{PRX Quantum}
+      \field{month}{5}
+      \field{number}{2}
+      \field{shortjournal}{PRX Quantum}
+      \field{title}{Quantifying Robustness and Locality of {{Majorana}} Bound States in Interacting Systems}
+      \field{urlday}{14}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{7}
+      \field{year}{2026}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{020341}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1103/pw51-tnsz
+      \endverb
+      \verb{eprint}
+      \verb 2510.20538
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/P4236UQA/Samuelson et al. - 2026 - Quantifying robustness and locality of Majorana bound states in interacting systems.pdf;/home/Hishem/Zotero/storage/27KG95FX/2510.html
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/2510.20538
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/2510.20538
+      \endverb
+      \keyw{Condensed Matter - Mesoscale and Nanoscale Physics,Quantum Physics}
+    \endentry
+    \entry{sanchesRevisitingPoorMans2026a}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=f770873d87bda7f3b3c33ca677773dd4}{%
+           family={Sanches},
+           familyi={S\bibinitperiod},
+           given={J\bibnamedelima E},
+           giveni={J\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=fd9e66859396062a94cd95dc9dfe6c52}{%
+           family={Sobreira},
+           familyi={S\bibinitperiod},
+           given={T\bibnamedelima M},
+           giveni={T\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=c6b4e8ccfddfca5eb4fce9f839362a45}{%
+           family={Ricco},
+           familyi={R\bibinitperiod},
+           given={L\bibnamedelima S},
+           giveni={L\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=e7207c5e77b9125b7123880ffd32c38b}{%
+           family={Figueira},
+           familyi={F\bibinitperiod},
+           given={M\bibnamedelima S},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=7f8701567d011d33c0d1663603af8a17}{%
+           family={Seridonio},
+           familyi={S\bibinitperiod},
+           given={A\bibnamedelima C},
+           giveni={A\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+      }
+      \strng{namehash}{4606688bc64bfdb1dee5524548849341}
+      \strng{fullhash}{34268201881d4f53d7845a4ade9e14ea}
+      \strng{fullhashraw}{34268201881d4f53d7845a4ade9e14ea}
+      \strng{bibnamehash}{4606688bc64bfdb1dee5524548849341}
+      \strng{authorbibnamehash}{4606688bc64bfdb1dee5524548849341}
+      \strng{authornamehash}{4606688bc64bfdb1dee5524548849341}
+      \strng{authorfullhash}{34268201881d4f53d7845a4ade9e14ea}
+      \strng{authorfullhashraw}{34268201881d4f53d7845a4ade9e14ea}
+      \field{extraname}{1}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Abstract We give a review on Poor Man’s Majorana (PMM) modes, which are theoretically established in the minimal Kitaev chain implementation consisting of two grounded, spinless quantum dots (QDs) operating at the sweet spot condition, where electron cotunneling and crossed Andreev reflection amplitudes achieve precise balance. Particularly, we systematically review, within the Green’s functions theoretical framework, the PMM hybridization dynamics under spin–exchange perturbations proposed by some of us in Sanches et al 2025 J. Phys.: Condens. Matter 37 205601, which demonstrates a characteristic spatial delocalization when subjected to an exchange coupling J mediated by a quantum spin S . This spin–exchange induced PMM spillover effect provides a spectroscopic protocol for determining the quantum statistics of S through the emergent multi-level structure in the proximal QD’s density of states. Our principal theoretical result establishes that the exchange interaction generates 2 S + 2 ( 2 S + 1 ) satellite states symmetrically distributed about the zero-bias anomaly, serving as a definitive signature of bosonic (fermionic) spin statistics. As novelty, we demonstrate that multi-terminal environmental coupling induces significant suppression of the spin–exchange spillover mechanism. Under constrained variations of J , this effectively localizes the perturbed PMM within its host QD, preventing spatial hybridization with adjacent site. The absence of topological protection in this minimal Kitaev realization is strategically leveraged to: (i) develop a novel spectroscopic technique for quantum spin characterization through PMM hybridization signatures; (ii) propose the ‘environmentally induced protection’, an engineered dissipative spectral stabilization for PMMs against exchange fluctuations in multi-terminal architectures.}
+      \field{day}{16}
+      \field{issn}{0953-8984, 1361-648X}
+      \field{journaltitle}{Journal of Physics: Condensed Matter}
+      \field{month}{1}
+      \field{number}{2}
+      \field{shortjournal}{J. Phys.: Condens. Matter}
+      \field{shorttitle}{Revisiting the {{Poor Man}}’s {{Majoranas}}}
+      \field{title}{Revisiting the {{Poor Man}}’s {{Majoranas}}: The Spin–Exchange Induced Spillover Effect}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{38}
+      \field{year}{2026}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{023001}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1088/1361-648X/ae2f13
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/Z6B2KM9B/Sanches et al. - 2026 - Revisiting the Poor Man’s Majoranas the spin–exchange induced spillover effect.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://iopscience.iop.org/article/10.1088/1361-648X/ae2f13
+      \endverb
+      \verb{url}
+      \verb https://iopscience.iop.org/article/10.1088/1361-648X/ae2f13
+      \endverb
+    \endentry
+    \entry{sanchesRevisitingPoorMans2026}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=f770873d87bda7f3b3c33ca677773dd4}{%
+           family={Sanches},
+           familyi={S\bibinitperiod},
+           given={J\bibnamedelima E},
+           giveni={J\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=fd9e66859396062a94cd95dc9dfe6c52}{%
+           family={Sobreira},
+           familyi={S\bibinitperiod},
+           given={T\bibnamedelima M},
+           giveni={T\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=c6b4e8ccfddfca5eb4fce9f839362a45}{%
+           family={Ricco},
+           familyi={R\bibinitperiod},
+           given={L\bibnamedelima S},
+           giveni={L\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=e7207c5e77b9125b7123880ffd32c38b}{%
+           family={Figueira},
+           familyi={F\bibinitperiod},
+           given={M\bibnamedelima S},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=7f8701567d011d33c0d1663603af8a17}{%
+           family={Seridonio},
+           familyi={S\bibinitperiod},
+           given={A\bibnamedelima C},
+           giveni={A\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+      }
+      \strng{namehash}{4606688bc64bfdb1dee5524548849341}
+      \strng{fullhash}{34268201881d4f53d7845a4ade9e14ea}
+      \strng{fullhashraw}{34268201881d4f53d7845a4ade9e14ea}
+      \strng{bibnamehash}{4606688bc64bfdb1dee5524548849341}
+      \strng{authorbibnamehash}{4606688bc64bfdb1dee5524548849341}
+      \strng{authornamehash}{4606688bc64bfdb1dee5524548849341}
+      \strng{authorfullhash}{34268201881d4f53d7845a4ade9e14ea}
+      \strng{authorfullhashraw}{34268201881d4f53d7845a4ade9e14ea}
+      \field{extraname}{2}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Abstract We give a review on Poor Man’s Majorana (PMM) modes, which are theoretically established in the minimal Kitaev chain implementation consisting of two grounded, spinless quantum dots (QDs) operating at the sweet spot condition, where electron cotunneling and crossed Andreev reflection amplitudes achieve precise balance. Particularly, we systematically review, within the Green’s functions theoretical framework, the PMM hybridization dynamics under spin–exchange perturbations proposed by some of us in Sanches et al 2025 J. Phys.: Condens. Matter 37 205601, which demonstrates a characteristic spatial delocalization when subjected to an exchange coupling J mediated by a quantum spin S . This spin–exchange induced PMM spillover effect provides a spectroscopic protocol for determining the quantum statistics of S through the emergent multi-level structure in the proximal QD’s density of states. Our principal theoretical result establishes that the exchange interaction generates 2 S + 2 ( 2 S + 1 ) satellite states symmetrically distributed about the zero-bias anomaly, serving as a definitive signature of bosonic (fermionic) spin statistics. As novelty, we demonstrate that multi-terminal environmental coupling induces significant suppression of the spin–exchange spillover mechanism. Under constrained variations of J , this effectively localizes the perturbed PMM within its host QD, preventing spatial hybridization with adjacent site. The absence of topological protection in this minimal Kitaev realization is strategically leveraged to: (i) develop a novel spectroscopic technique for quantum spin characterization through PMM hybridization signatures; (ii) propose the ‘environmentally induced protection’, an engineered dissipative spectral stabilization for PMMs against exchange fluctuations in multi-terminal architectures.}
+      \field{day}{16}
+      \field{issn}{0953-8984, 1361-648X}
+      \field{journaltitle}{Journal of Physics: Condensed Matter}
+      \field{month}{1}
+      \field{number}{2}
+      \field{shortjournal}{J. Phys.: Condens. Matter}
+      \field{shorttitle}{Revisiting the {{Poor Man}}’s {{Majoranas}}}
+      \field{title}{Revisiting the {{Poor Man}}’s {{Majoranas}}: The Spin–Exchange Induced Spillover Effect}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{38}
+      \field{year}{2026}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{023001}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1088/1361-648X/ae2f13
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/5YLEK68A/Sanches et al. - 2026 - Revisiting the Poor Man’s Majoranas the spin–exchange induced spillover effect.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://iopscience.iop.org/article/10.1088/1361-648X/ae2f13
+      \endverb
+      \verb{url}
+      \verb https://iopscience.iop.org/article/10.1088/1361-648X/ae2f13
+      \endverb
+    \endentry
+    \entry{sarmaMajoranaZeroModes2015a}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=e07a6db89e13158227f53a065505b411}{%
+           family={Sarma},
+           familyi={S\bibinitperiod},
+           given={Sankar\bibnamedelima Das},
+           giveni={S\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{hash=2209635e71ebe540c155f110135f46be}{%
+           family={Freedman},
+           familyi={F\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod}}}%
+        {{hash=dd56b3b91c286d5829b2538b9863d017}{%
+           family={Nayak},
+           familyi={N\bibinitperiod},
+           given={Chetan},
+           giveni={C\bibinitperiod}}}%
+      }
+      \strng{namehash}{c684b964f56bf78950e602c622e1d4a3}
+      \strng{fullhash}{c684b964f56bf78950e602c622e1d4a3}
+      \strng{fullhashraw}{c684b964f56bf78950e602c622e1d4a3}
+      \strng{bibnamehash}{c684b964f56bf78950e602c622e1d4a3}
+      \strng{authorbibnamehash}{c684b964f56bf78950e602c622e1d4a3}
+      \strng{authornamehash}{c684b964f56bf78950e602c622e1d4a3}
+      \strng{authorfullhash}{c684b964f56bf78950e602c622e1d4a3}
+      \strng{authorfullhashraw}{c684b964f56bf78950e602c622e1d4a3}
+      \field{extraname}{1}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Abstract We provide a current perspective on the rapidly developing field of Majorana zero modes (MZMs) in solid-state systems. We emphasise the theoretical prediction, experimental realisation and potential use of MZMs in future information processing devices through braiding-based topological quantum computation (TQC). Well-separated MZMs should manifest non-Abelian braiding statistics suitable for unitary gate operations for TQC. Recent experimental work, following earlier theoretical predictions, has shown specific signatures consistent with the existence of Majorana modes localised at the ends of semiconductor nanowires in the presence of superconducting proximity effect. We discuss the experimental findings and their theoretical analyses, and provide a perspective on the extent to which the observations indicate the existence of anyonic MZMs in solid-state systems. We also discuss fractional quantum Hall systems (the 5/2 state), which have been extensively studied in the context of non-Abelian anyons and TQC. We describe proposed schemes for carrying out braiding with MZMs as well as the necessary steps for implementing TQC.}
+      \field{day}{27}
+      \field{issn}{2056-6387}
+      \field{journaltitle}{npj Quantum Information}
+      \field{langid}{english}
+      \field{month}{10}
+      \field{number}{1}
+      \field{shortjournal}{npj Quantum Inf}
+      \field{title}{Majorana Zero Modes and Topological Quantum Computation}
+      \field{urlday}{14}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{1}
+      \field{year}{2015}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{15001}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1038/npjqi.2015.1
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/BBBGLZMN/Sarma et al. - 2015 - Majorana zero modes and topological quantum computation.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.nature.com/articles/npjqi20151
+      \endverb
+      \verb{url}
+      \verb https://www.nature.com/articles/npjqi20151
+      \endverb
+    \endentry
+    \entry{sarmaMajoranaZeroModes2015}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=e07a6db89e13158227f53a065505b411}{%
+           family={Sarma},
+           familyi={S\bibinitperiod},
+           given={Sankar\bibnamedelima Das},
+           giveni={S\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{hash=2209635e71ebe540c155f110135f46be}{%
+           family={Freedman},
+           familyi={F\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod}}}%
+        {{hash=dd56b3b91c286d5829b2538b9863d017}{%
+           family={Nayak},
+           familyi={N\bibinitperiod},
+           given={Chetan},
+           giveni={C\bibinitperiod}}}%
+      }
+      \strng{namehash}{c684b964f56bf78950e602c622e1d4a3}
+      \strng{fullhash}{c684b964f56bf78950e602c622e1d4a3}
+      \strng{fullhashraw}{c684b964f56bf78950e602c622e1d4a3}
+      \strng{bibnamehash}{c684b964f56bf78950e602c622e1d4a3}
+      \strng{authorbibnamehash}{c684b964f56bf78950e602c622e1d4a3}
+      \strng{authornamehash}{c684b964f56bf78950e602c622e1d4a3}
+      \strng{authorfullhash}{c684b964f56bf78950e602c622e1d4a3}
+      \strng{authorfullhashraw}{c684b964f56bf78950e602c622e1d4a3}
+      \field{extraname}{2}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Abstract We provide a current perspective on the rapidly developing field of Majorana zero modes (MZMs) in solid-state systems. We emphasise the theoretical prediction, experimental realisation and potential use of MZMs in future information processing devices through braiding-based topological quantum computation (TQC). Well-separated MZMs should manifest non-Abelian braiding statistics suitable for unitary gate operations for TQC. Recent experimental work, following earlier theoretical predictions, has shown specific signatures consistent with the existence of Majorana modes localised at the ends of semiconductor nanowires in the presence of superconducting proximity effect. We discuss the experimental findings and their theoretical analyses, and provide a perspective on the extent to which the observations indicate the existence of anyonic MZMs in solid-state systems. We also discuss fractional quantum Hall systems (the 5/2 state), which have been extensively studied in the context of non-Abelian anyons and TQC. We describe proposed schemes for carrying out braiding with MZMs as well as the necessary steps for implementing TQC.}
+      \field{day}{27}
+      \field{issn}{2056-6387}
+      \field{journaltitle}{npj Quantum Information}
+      \field{langid}{english}
+      \field{month}{10}
+      \field{number}{1}
+      \field{shortjournal}{npj Quantum Inf}
+      \field{title}{Majorana Zero Modes and Topological Quantum Computation}
+      \field{urlday}{14}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{1}
+      \field{year}{2015}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{15001}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1038/npjqi.2015.1
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/9FM9MCU3/Sarma et al. - 2015 - Majorana zero modes and topological quantum computation.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.nature.com/articles/npjqi20151
+      \endverb
+      \verb{url}
+      \verb https://www.nature.com/articles/npjqi20151
+      \endverb
+    \endentry
+    \entry{sauRealizingRobustPractical2012}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=619998778202a22aebbe5d7548405d7e}{%
+           family={Sau},
+           familyi={S\bibinitperiod},
+           given={Jay\bibnamedelima D.},
+           giveni={J\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{hash=ff9d608a68ace1cee75ed606fc3c4602}{%
+           family={Sarma},
+           familyi={S\bibinitperiod},
+           given={S.\bibnamedelimi Das},
+           giveni={S\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \strng{namehash}{3b06f2b9ef30fd53b1b46bcb6dca7f23}
+      \strng{fullhash}{3b06f2b9ef30fd53b1b46bcb6dca7f23}
+      \strng{fullhashraw}{3b06f2b9ef30fd53b1b46bcb6dca7f23}
+      \strng{bibnamehash}{3b06f2b9ef30fd53b1b46bcb6dca7f23}
+      \strng{authorbibnamehash}{3b06f2b9ef30fd53b1b46bcb6dca7f23}
+      \strng{authornamehash}{3b06f2b9ef30fd53b1b46bcb6dca7f23}
+      \strng{authorfullhash}{3b06f2b9ef30fd53b1b46bcb6dca7f23}
+      \strng{authorfullhashraw}{3b06f2b9ef30fd53b1b46bcb6dca7f23}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{17}
+      \field{issn}{2041-1723}
+      \field{journaltitle}{Nature Communications}
+      \field{langid}{english}
+      \field{month}{7}
+      \field{number}{1}
+      \field{shortjournal}{Nat Commun}
+      \field{title}{Realizing a Robust Practical {{Majorana}} Chain in a Quantum-Dot-Superconductor Linear Array}
+      \field{urlday}{14}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{3}
+      \field{year}{2012}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{964}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1038/ncomms1966
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/NMBE6YUZ/Sau and Sarma - 2012 - Realizing a robust practical Majorana chain in a quantum-dot-superconductor linear array.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.nature.com/articles/ncomms1966
+      \endverb
+      \verb{url}
+      \verb https://www.nature.com/articles/ncomms1966
+      \endverb
+    \endentry
+    \entry{shtengelHomeAnyon2007}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=ed5eca021f59986cc40cdabd5df3e722}{%
+           family={Shtengel},
+           familyi={S\bibinitperiod},
+           given={Kirill},
+           giveni={K\bibinitperiod}}}%
+      }
+      \strng{namehash}{ed5eca021f59986cc40cdabd5df3e722}
+      \strng{fullhash}{ed5eca021f59986cc40cdabd5df3e722}
+      \strng{fullhashraw}{ed5eca021f59986cc40cdabd5df3e722}
+      \strng{bibnamehash}{ed5eca021f59986cc40cdabd5df3e722}
+      \strng{authorbibnamehash}{ed5eca021f59986cc40cdabd5df3e722}
+      \strng{authornamehash}{ed5eca021f59986cc40cdabd5df3e722}
+      \strng{authorfullhash}{ed5eca021f59986cc40cdabd5df3e722}
+      \strng{authorfullhashraw}{ed5eca021f59986cc40cdabd5df3e722}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1745-2473, 1745-2481}
+      \field{journaltitle}{Nature Physics}
+      \field{langid}{english}
+      \field{month}{11}
+      \field{number}{11}
+      \field{shortjournal}{Nature Phys}
+      \field{title}{A Home for Anyon?}
+      \field{urlday}{14}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{3}
+      \field{year}{2007}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{763\bibrangedash 763}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1038/nphys767
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/XZ2PMA2A/Shtengel - 2007 - A home for anyon.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.nature.com/articles/nphys767
+      \endverb
+      \verb{url}
+      \verb https://www.nature.com/articles/nphys767
+      \endverb
+    \endentry
+    \entry{svenssonQuantumDotBased2024}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=f14dfde437509f61bb57c02859b2393f}{%
+           family={Svensson},
+           familyi={S\bibinitperiod},
+           given={Viktor},
+           giveni={V\bibinitperiod}}}%
+        {{hash=d2b85c29f3de1b35b56c5d85bb89684c}{%
+           family={Leijnse},
+           familyi={L\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{4e65737b05213355b4f95223f7a6c1ff}
+      \strng{fullhash}{4e65737b05213355b4f95223f7a6c1ff}
+      \strng{fullhashraw}{4e65737b05213355b4f95223f7a6c1ff}
+      \strng{bibnamehash}{4e65737b05213355b4f95223f7a6c1ff}
+      \strng{authorbibnamehash}{4e65737b05213355b4f95223f7a6c1ff}
+      \strng{authornamehash}{4e65737b05213355b4f95223f7a6c1ff}
+      \strng{authorfullhash}{4e65737b05213355b4f95223f7a6c1ff}
+      \strng{authorfullhashraw}{4e65737b05213355b4f95223f7a6c1ff}
+      \field{extraname}{1}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Realizing Majorana bound states (MBSs) in short, well-controllable chains of coupled quantum dots sidesteps the problem of disorder but requires finetuning and does not give the true topological protection inherent to long chains. Here, we introduce a quality measure that is also applicable in the presence of strong electron-electron interactions and that quantifies the closeness to topological protection of finetuned MBSs in short quantum dot chains. We call this measure local distinguishability (LD) because it puts a bound to the degree an arbitrary local measurement can distinguish between two states. We study the LD for quantum dot chains of different length. The three-dot chain is studied in detail, and we find that it may not always be an improvement over the two-dot case, a fact that can be understood within an effective model derived from perturbation theory. For longer chains, the LD vanishes exponentially, signaling a transition to a topological phase with two ground states that cannot be distinguished by any local measurement. Published by the American Physical Society 2024}
+      \field{day}{25}
+      \field{issn}{2469-9950, 2469-9969}
+      \field{journaltitle}{Physical Review B}
+      \field{langid}{english}
+      \field{month}{10}
+      \field{number}{15}
+      \field{shortjournal}{Phys. Rev. B}
+      \field{shorttitle}{Quantum Dot Based {{Kitaev}} Chains}
+      \field{title}{Quantum Dot Based {{Kitaev}} Chains: {{Majorana}} Quality Measures and Scaling with Increasing Chain Length}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{110}
+      \field{year}{2024}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{155436}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1103/PhysRevB.110.155436
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/CEILV258/Svensson and Leijnse - 2024 - Quantum dot based Kitaev chains Majorana quality measures and scaling with increasing chain length.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://link.aps.org/doi/10.1103/PhysRevB.110.155436
+      \endverb
+      \verb{url}
+      \verb https://link.aps.org/doi/10.1103/PhysRevB.110.155436
+      \endverb
+    \endentry
+    \entry{svenssonQuantumDotBased2024a}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=f14dfde437509f61bb57c02859b2393f}{%
+           family={Svensson},
+           familyi={S\bibinitperiod},
+           given={Viktor},
+           giveni={V\bibinitperiod}}}%
+        {{hash=d2b85c29f3de1b35b56c5d85bb89684c}{%
+           family={Leijnse},
+           familyi={L\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{4e65737b05213355b4f95223f7a6c1ff}
+      \strng{fullhash}{4e65737b05213355b4f95223f7a6c1ff}
+      \strng{fullhashraw}{4e65737b05213355b4f95223f7a6c1ff}
+      \strng{bibnamehash}{4e65737b05213355b4f95223f7a6c1ff}
+      \strng{authorbibnamehash}{4e65737b05213355b4f95223f7a6c1ff}
+      \strng{authornamehash}{4e65737b05213355b4f95223f7a6c1ff}
+      \strng{authorfullhash}{4e65737b05213355b4f95223f7a6c1ff}
+      \strng{authorfullhashraw}{4e65737b05213355b4f95223f7a6c1ff}
+      \field{extraname}{2}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Realizing Majorana bound states (MBSs) in short, well-controllable chains of coupled quantum dots sidesteps the problem of disorder but requires finetuning and does not give the true topological protection inherent to long chains. Here, we introduce a quality measure that is also applicable in the presence of strong electron-electron interactions and that quantifies the closeness to topological protection of finetuned MBSs in short quantum dot chains. We call this measure local distinguishability (LD) because it puts a bound to the degree an arbitrary local measurement can distinguish between two states. We study the LD for quantum dot chains of different length. The three-dot chain is studied in detail, and we find that it may not always be an improvement over the two-dot case, a fact that can be understood within an effective model derived from perturbation theory. For longer chains, the LD vanishes exponentially, signaling a transition to a topological phase with two ground states that cannot be distinguished by any local measurement. Published by the American Physical Society 2024}
+      \field{day}{25}
+      \field{issn}{2469-9950, 2469-9969}
+      \field{journaltitle}{Physical Review B}
+      \field{langid}{english}
+      \field{month}{10}
+      \field{number}{15}
+      \field{shortjournal}{Phys. Rev. B}
+      \field{shorttitle}{Quantum Dot Based {{Kitaev}} Chains}
+      \field{title}{Quantum Dot Based {{Kitaev}} Chains: {{Majorana}} Quality Measures and Scaling with Increasing Chain Length}
+      \field{urlday}{14}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{110}
+      \field{year}{2024}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{155436}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1103/PhysRevB.110.155436
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/J39JBSYH/Svensson and Leijnse - 2024 - Quantum dot based Kitaev chains Majorana quality measures and scaling with increasing chain length.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://link.aps.org/doi/10.1103/PhysRevB.110.155436
+      \endverb
+      \verb{url}
+      \verb https://link.aps.org/doi/10.1103/PhysRevB.110.155436
+      \endverb
+    \endentry
+    \entry{zhangPoorMansMajorana2026}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=c7bb8ec33635584bc1362f76e67793de}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Zhi-Lei},
+           giveni={Z\bibinithyphendelim L\bibinitperiod}}}%
+        {{hash=05d4c0a853c3ddc9d39755d60d19cf25}{%
+           family={Qiao},
+           familyi={Q\bibinitperiod},
+           given={Guo-Jian},
+           giveni={G\bibinithyphendelim J\bibinitperiod}}}%
+        {{hash=1d822388597d94384e214fbc621904da}{%
+           family={Sun},
+           familyi={S\bibinitperiod},
+           given={C.\bibnamedelimi P.},
+           giveni={C\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+      }
+      \strng{namehash}{156d742587e97b96ceea23bdc85d46df}
+      \strng{fullhash}{156d742587e97b96ceea23bdc85d46df}
+      \strng{fullhashraw}{156d742587e97b96ceea23bdc85d46df}
+      \strng{bibnamehash}{156d742587e97b96ceea23bdc85d46df}
+      \strng{authorbibnamehash}{156d742587e97b96ceea23bdc85d46df}
+      \strng{authornamehash}{156d742587e97b96ceea23bdc85d46df}
+      \strng{authorfullhash}{156d742587e97b96ceea23bdc85d46df}
+      \strng{authorfullhashraw}{156d742587e97b96ceea23bdc85d46df}
+      \field{sortinit}{Z}
+      \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{15}
+      \field{issn}{2469-9950, 2469-9969}
+      \field{journaltitle}{Physical Review B}
+      \field{langid}{english}
+      \field{month}{5}
+      \field{number}{19}
+      \field{shortjournal}{Phys. Rev. B}
+      \field{title}{Poor Man's {{Majorana}} Modes in Two Quantum Dots Dressed by Superconducting Quasiexcitations}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{113}
+      \field{year}{2026}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{195416}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1103/qp5g-942h
+      \endverb
+      \verb{urlraw}
+      \verb https://link.aps.org/doi/10.1103/qp5g-942h
+      \endverb
+      \verb{url}
+      \verb https://link.aps.org/doi/10.1103/qp5g-942h
+      \endverb
+    \endentry
+    \entry{MajoranaFeiMiZiYuTuoBuLiangZiJiSuan2017}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=27d8d2ca1cf1d343f8be5125409d5a2b}{%
+           family={Zhu},
+           familyi={Z\bibinitperiod},
+           given={Guoyi},
+           giveni={G\bibinitperiod}}}%
+        {{hash=84e523d1d7e255cf290308caa5bb49d8}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Ruirui},
+           giveni={R\bibinitperiod}}}%
+        {{hash=6d56391b80b7ae08ea50a8e35b80f9ea}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Guangming},
+           giveni={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{edf433c9d7bc12b15190dc7b42e309cb}
+      \strng{fullhash}{edf433c9d7bc12b15190dc7b42e309cb}
+      \strng{fullhashraw}{edf433c9d7bc12b15190dc7b42e309cb}
+      \strng{bibnamehash}{edf433c9d7bc12b15190dc7b42e309cb}
+      \strng{authorbibnamehash}{edf433c9d7bc12b15190dc7b42e309cb}
+      \strng{authornamehash}{edf433c9d7bc12b15190dc7b42e309cb}
+      \strng{authorfullhash}{edf433c9d7bc12b15190dc7b42e309cb}
+      \strng{authorfullhashraw}{edf433c9d7bc12b15190dc7b42e309cb}
+      \field{sortinit}{Z}
+      \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{1937年，Majorana发现Dirac所提出的相对论性协变的电子波动方程，在另一个表象下所得到解可以描述不带电荷的费米子，具有与Dirac费米子不同的性质。在基本粒子领域，对这种Majorana费米子的寻找至今一直在进行中；而在凝聚态物理领域，对拓扑超导体和分数量子霍尔态的研究，人们已经发现了与Majorana费米子有相同行为的准粒子。特别是在二维拓扑超导体系中出现的涡旋元激发包含了零能量的Majorana准粒子，它们在交换操作下表现出非阿贝尔的统计性质，因而有望借以实现拓扑量子计算。文章系统地介绍了凝聚态物质系统中获得Majorana费米子的理论模型和物理实现，并进一步介绍了与之相关的拓扑量子计算的实现方法。;In 1937, Majorana noticed that in a different representation the relativistic wave equation for electrons proposed by Dirac has a solution describing chargeless neutral fermions,which have completely different properties from Dirac fermions. In particle physics, the search for such Majorana fermions is still being pursued, while in condensed matter physics it has already been found that certain kinds of quasiparticles in the low-energy excitations of topological superconductors and fractional quantum Hall effects share a similar behavior to Majorana fermions.In particular, the vortex excitations in two-dimensional topological superconductors include zero-energy Majorana fermion modes, which exhibit non-abelian anyonic statistical properties under exchange operations, leading to the possibility of topological quantum computation. In this article we will review the physical models and realization of Majorana fermions, and then discuss the corresponding implementation of topological quantum computation.}
+      \field{journaltitle}{Physics}
+      \field{number}{3}
+      \field{title}{Majorana Fermions and Topological Quantum Computation}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{46}
+      \field{year}{2017}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{154}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.7693/wl20170303
+      \endverb
+      \verb{urlraw}
+      \verb http://www.wuli.ac.cn/CN/10.7693/wl20170303
+      \endverb
+      \verb{url}
+      \verb http://www.wuli.ac.cn/CN/10.7693/wl20170303
       \endverb
     \endentry
   \enddatalist

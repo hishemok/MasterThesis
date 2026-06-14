@@ -1,3 +1,134 @@
+\chapter{Block Labeling Method}
+\label{app:block_label_method}
+The higher-dimensional energy sectors can contain several independent
+subspaces associated with different combinations of subsystem energy levels.
+This is especially clear in the non-interacting and weakly interacting
+configurations, where a \(24\)-dimensional sector commonly decomposes into
+three \(8\)-dimensional blocks and a \(72\)-dimensional sector into nine such
+blocks. The \(24\)-dimensional example is illustrated in
+\cref{fig:24x24box,fig:24x24maj}. At stronger interaction strengths, an energy
+sector may intersect only part of one of these blocks, so neither the sector
+dimension nor every labelled block is necessarily a multiple of eight.
+
+The blocks are identified from the energy levels of the three individual
+subsystems. For a single three-dot subsystem, the four even-parity
+eigenstates are paired with the four odd-parity eigenstates by nearest energy.
+For pair \(\ell\), define the projector
+\begin{equation}
+  Q_{\ell}
+  =
+  \ket{e_{\ell}}\bra{e_{\ell}}
+  +
+  \ket{o_{\ell}}\bra{o_{\ell}},
+  \qquad
+  \ell=0,1,2,3.
+\end{equation}
+The single-subsystem label operator is then
+\begin{equation}
+  L_{\mathrm{single}}
+  =
+  \sum_{\ell=0}^{3} \ell Q_{\ell}.
+\end{equation}
+Its eigenvalue records which even--odd energy pair a state belongs to without
+distinguishing the two parity states within that pair.
+
+To label the three-subsystem product states, \(L_{\mathrm{single}}\) is
+embedded separately on subsystems \(A\), \(B\), and \(C\):
+\begin{equation}
+  \begin{aligned}
+    L_A &= L_{\mathrm{single}}\otimes I\otimes I,\\
+    L_B &= I\otimes L_{\mathrm{single}}\otimes I,\\
+    L_C &= I\otimes I\otimes L_{\mathrm{single}}.
+  \end{aligned}
+\end{equation}
+These operators are combined using a positional label,
+\begin{equation}
+  L_{\mathrm{full}}
+  =
+  L_A + B L_B + B^2 L_C,
+  \qquad B=5.
+\end{equation}
+Because \(B\) is larger than the greatest single-subsystem label, each
+eigenvalue
+\begin{equation}
+  \lambda(\ell_A,\ell_B,\ell_C)
+  =
+  \ell_A+B\ell_B+B^2\ell_C
+\end{equation}
+uniquely identifies the tuple \((\ell_A,\ell_B,\ell_C)\). In the full Hilbert
+space, each tuple spans the eight product states obtained by independently
+choosing even or odd parity in the three subsystems.
+
+Let \(V_g\) contain an orthonormal basis for energy sector \(g\). The full
+label operator is projected into this sector as
+\begin{equation}
+  L_g
+  =
+  V_g^{\dagger}L_{\mathrm{full}}V_g.
+\end{equation}
+Diagonalizing \(L_g\),
+\begin{equation}
+  L_g w_i=\lambda_i w_i,
+\end{equation}
+groups the sector basis vectors by their encoded subsystem labels. Vectors
+with the same eigenvalue are collected in a block basis \(W_r\). For an
+operator \(O_g\) already projected into sector \(g\), its restriction to block
+\(r\) is
+\begin{equation}
+  O_g^{(r)}
+  =
+  W_r^{\dagger}O_g W_r.
+\end{equation}
+
+Within each labelled block, the projected local endpoint operator is fitted
+independently to the two corresponding energy-level Majorana components, as
+defined in \cref{eq:method_block_matched_majorana}. The fitted blocks are then
+reassembled into an operator on the complete sector. The label construction
+only identifies the independent blocks; it does not impose the Majorana
+algebra, which is checked separately after projection.
+In well defined cases, the block-matched operator is simply a signed version of the energy-level Majorana operator, but for stronger interacting systems, the block-matched operator can deviate. Numerical results for the block-matched coefficients are reported in \cref{app:matched_operator_coefficients}.
+
+\chapter{Energy Sectors}
+\label{app:energy_sectors}
+The figures below are displaying the full system energy spectrum and the ground state energy splitting after Hamiltonian initiation for the three identical three dot systems at each of the tested interaction strengths. The system configuration and optimization results are reported in \cref{tab:best_optimized_configs}. The leftmost Y-axis of the figures are a measure of the energy of the system. The rightmost Y-axis of the figures show the count of states within each energy sector. The figures are split into even and odd subspaces, with a dashed line in between to indicate the degeneracy of the systems.
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figs/full_system_spectrum_U_0p0.pdf}
+    \includegraphics[width=0.5\textwidth]{figs/projected_ground_group_spectrum_U_0p0.pdf}
+    \caption{Energy spectra and ground state splitting after Hamiltonian initiation. System configuration and optimization results are reported in \cref{tab:best_optimized_configs}. These figures are for mode $U=0.0$, for the three identical three dot systems. }
+    \label{fig:energy_sectors_U0}
+\end{figure}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figs/full_system_spectrum_U_0p1.pdf}
+    \includegraphics[width=0.5\textwidth]{figs/projected_ground_group_spectrum_U_0p1.pdf}
+    \caption{Energy spectra and ground state splitting after Hamiltonian initiation. System configuration and optimization results are reported in \cref{tab:best_optimized_configs}. These figures are for mode $U=0.1$, for the three identical three dot systems. }
+    \label{fig:energy_sectors_U01}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figs/full_system_spectrum_U_0p5.pdf}
+    \includegraphics[width=0.5\textwidth]{figs/projected_ground_group_spectrum_U_0p5.pdf}
+    \caption{Energy spectra and ground state splitting after Hamiltonian initiation. System configuration and optimization results are reported in \cref{tab:best_optimized_configs}. These figures are for mode $U=0.5$, for the three identical three dot systems. }
+    \label{fig:energy_sectors_U05}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figs/full_system_spectrum_U_1p0.pdf}
+    \includegraphics[width=0.5\textwidth]{figs/projected_ground_group_spectrum_U_1p0.pdf}
+    \caption{Energy spectra and ground state splitting after Hamiltonian initiation. System configuration and optimization results are reported in \cref{tab:best_optimized_configs}. These figures are for mode $U=1.0$, for the three identical three dot systems. }
+    \label{fig:energy_sectors_U1}
+\end{figure}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figs/full_system_spectrum_U_2p0.pdf}
+    \includegraphics[width=0.5\textwidth]{figs/projected_ground_group_spectrum_U_2p0.pdf}
+    \caption{Energy spectra and ground state splitting after Hamiltonian initiation. System configuration and optimization results are reported in \cref{tab:best_optimized_configs}. These figures are for mode $U=2.0$, for the three identical three dot systems. }
+    \label{fig:energy_sectors_U2}
+\end{figure}
+
 \chapter{Block-Matched Coefficients}
 \label{app:matched_operator_coefficients}
 
