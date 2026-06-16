@@ -107,6 +107,7 @@ The first loss contribution penalizes energy splitting between even- and odd-par
 \begin{equation}
 \delta_k = \left|E_k^{(e)}-E_k^{(o)}\right|.
 \end{equation}
+{\color{red}  For non-interacting theories, this step shouldnt be necessary, but explain why}
 These splittings are weighted more strongly at low energy, because the ground-state degeneracy is the most important Majorana signature. In the implementation, the weights decrease from a maximum value for the lowest parity pair to a smaller value for higher levels. The degeneracy contribution therefore has the schematic form
 \begin{equation}
 \mathcal{L}_{\mathrm{deg}}
@@ -137,7 +138,7 @@ Small gaps are penalized using a smooth threshold function,
 \Delta_{\mathrm{target}}-\Delta_k
 \right),
 \end{equation}
-where $\Delta_{\mathrm{target}}$ is the desired minimum gap scale. This term favors spectra where the relevant parity-paired states are not only close to each other, but also isolated from the rest of the spectrum.
+where $\Delta_{\mathrm{target}}$ is the desired minimum gap scale, and the softplus function is defined as $\mathrm{softplus}(x) = \log(1 + e^x)$\cite{NIPS2000_44968aec}. This term favors spectra where the relevant parity-paired states are not only close to each other, but also isolated from the rest of the spectrum.
 
 \subsection{Charge and Majorana-polarization terms}
 The loss also includes local diagnostics that test whether the parity partners resemble Majorana states rather than accidental degeneracies. The charge penalty measures how differently the even and odd partners occupy each site,
@@ -156,45 +157,60 @@ A small value means that the parity partners have similar local charge distribut
 The Majorana-polarization penalty compares the site-resolved Majorana-polarization profile with the expected edge-localized pattern. In the target configuration, the polarization is concentrated on the two ends of the chain with opposite sign, while the bulk sites carry little weight. Numerically, the penalty is evaluated from matrix elements of local Majorana operators between the even and odd parity partners. The sign of the target pattern is allowed to flip, since exchanging the labels of the two Majorana components changes the overall sign but not the physical localization pattern.
 
 \subsection{Total normalized loss}
-The full loss is a weighted sum of the spectral and local contributions. In the implementation, the degeneracy and gap terms are first collected into a single weighted spectral penalty array, after which the charge and Majorana-polarization penalties are added. Written in terms of the contributions above, the loss has the schematic form
+The full loss is a weighted sum of the spectral and local contributions. In the implementation, the degeneracy and gap terms are first collected into a single weighted spectral penalty array, after which the charge and Majorana-polarization penalties are added. Written schematically, the implemented loss is
 \begin{equation}
 \mathcal{L}
 =
 \frac{
-\mathcal{L}_{\mathrm{deg}}
-+\mathcal{L}_{\mathrm{gap}}
-+\mathcal{L}_{Q}
-+\mathcal{L}_{\mathrm{MP}}
+ω_{\mathrm{deg}}\mathcal{L}_{\mathrm{deg}}
++
+ω_{\mathrm{gap}}\mathcal{L}_{\mathrm{gap}}
++
+\mathcal{L}_{Q}
++
+\mathcal{L}_{\mathrm{MP}}
 }{
 \overline{|E|}+\eta
 },
 \end{equation}
-where $\overline{|E|}$ is the mean absolute energy scale of the spectrum and $\eta$ is a small numerical offset. This normalization makes losses from different parameter sets more comparable and reduces the tendency to favor configurations only because the full spectrum has been rescaled.
+where $\overline{|E|}$ is the mean absolute energy scale of the spectrum and $\eta$ is a small numerical offset. $ω_{\mathrm{deg}}$ and $ω_{\mathrm{gap}}$ are weight arrays, created to favor the low-energy part of the spectrum, which are the most essential states. The degeneracy and gap contributions contain level-dependent weights that emphasize the low-energy part of the spectrum, where the Majorana signatures are most important.
+
+The normalization by $\overline{|E|}$ makes the spectral part of the loss less sensitive to the overall energy scale of a trial Hamiltonian. However, this normalization is not invariant under a uniform energy shift $H\mapsto H+\alpha\mathbb{1}$, since such a shift changes the absolute energies but leaves gaps and eigenvectors unchanged. In the parametrization used here there is no independent identity-shift parameter, so the optimizer does not explore such shifts directly.
+
+A further limitation is that the same denominator also rescales the charge and Majorana-polarization penalties. These terms are dimensionless eigenvector diagnostics rather than energy penalties, so dividing them by an energy scale can make their contribution smaller when the spectrum becomes larger, even if the local Majorana quality does not improve. This possible bias is partly mitigated by fixing the hopping scale to $t=1$ and fixing $U$ during each optimization run, but the scalar loss should still be interpreted together with the separate spectral and local diagnostics.
+
 
 \subsection{Search strategy}
-The resulting loss landscape is non-convex, especially for interacting and inhomogeneous chains. The numerical search therefore combines local gradient-based optimization with repeated restarts and basin hopping. Local optimization is performed with Adam. At each iteration, the reduced vector $\theta$ is converted into physical parameters, the Hamiltonian is built and diagonalized, the loss is evaluated within the PyTorch optimization loop and used to update the free parameters with Adam.
+The resulting loss landscape is non-convex, and in practise, we find that the interacting loss landscape is more complicated. The numerical search therefore combines local gradient-based optimization with repeated restarts and basin hopping. Local optimization is performed with Adam. At each iteration, the reduced vector $\theta$ is converted into physical parameters, the Hamiltonian is built and diagonalized, the loss is evaluated within the PyTorch optimization loop and used to update the free parameters with Adam.
 
 Because a single local run can converge to a poor local minimum, the local optimization is repeated from randomly perturbed initial vectors. The lowest-loss result among these restarts is retained as the representative of that region of parameter space. Basin hopping is then used to explore different regions: a random displacement is applied to the current parameter vector, local optimization with restarts is performed again, and the new candidate is accepted if it improves the loss. Candidates with slightly worse loss can also be accepted with a Metropolis probability, allowing the search to escape shallow local minima.
 
 For each pair $(n,U)$, the best configuration found by this procedure is stored together with its loss, parameter configuration, and reconstructed physical parameters. These stored configurations form the input to the post-optimization diagnostics described in the next section.
 
 \section{Post-Optimization Diagnostics}
-% 3.3 Post-Optimization Diagnostics
-%   - reconstruct optimized Hamiltonian
-%   - diagonalization and parity classification
-%   - parity-resolved spectra
-%   - ground-state splitting, excitation gap
-%   - charge difference, edge polarization, bulk polarization
-The optimization procedure returns a scalar loss and a set of optimized parameters, but the loss alone is not sufficient to decide whether the result has a useful Majorana interpretation. After each optimization run, the best parameter set is therefore reconstructed and analyzed with a separate diagnostic workflow. The purpose of this step is to translate the numerical minimum into physical quantities that can be compared across system sizes, interaction strengths, and later braiding calculations.
+The optimization procedure returns candidate parameter sets ranked by a scalar loss. 
+Since this loss is a soft weighted objective rather than a set of hard constraints, a low value does not by itself prove that the Hamiltonian realizes an ideal Majorana regime. Different loss contributions can trade off against each other, finite weights allow residual even--odd splittings, and the local charge and Majorana-polarization penalties may be small without giving a perfectly isolated ground-state doublet.
 
-\subsection{Reconstruction of optimized Hamiltonians}
-The saved optimization output contains the raw optimization vector, the parameter configuration, the reconstructed physical parameters, and the final loss. For a chosen system size $n$ and interaction strength $U$, the diagnostic routine selects the lowest-loss stored configuration. The raw vector is then converted back into the parameter dictionary described in Sec.~3.2, fixed values are reinserted, and the physical Hamiltonian
-\begin{equation}
-H_{\mathrm{PMM}}(\theta_{\mathrm{opt}})
-\end{equation}
-is rebuilt using the same Hamiltonian construction as in the optimization.
+For this reason, after optimizing many configurations, the lowest-loss result for each pair $(n,U)$ is selected and analyzed separately. The stored optimized parameters $\Phi_{\mathrm{opt}}(n,U)$ are used to rebuild $H_{\mathrm{PMM}}(\theta_{\mathrm{opt}})$, which is then diagonalized and evaluated using the diagnostics below. This post-optimization step resolves the single scalar loss into physical quantities such as the ground-state splitting, excitation gap, charge difference, and Majorana-polarization profile.
 
-This reconstruction step is important because the diagnostics are not evaluated directly from the optimizer state. Instead, the optimized Hamiltonian is rebuilt from the stored physical parameters and diagonalized again. This makes the diagnostic plots and tables reproducible from the saved configuration files and ensures that the reported quantities correspond to the same Hamiltonian that is later used as input for the braiding calculations.
+% The optimization procedure returns a scalar loss and a set of optimized parameters. By picking the best configuration based on the lowest loss, and the desired number of quantum dots, as well as a chosen interaction strength $U$. We can run a post optimization diagnostic routine on the selected configuration. This allows us to analyze and verify the physical properties of the optimized Hamiltonian, and to check whether it has the expected Majorana-like signatures.
+% This is a necessity, since the loss alone is one single scalar value, scoring 4 different contributions of varying depths. For example, the loss can be very low, and every contribution can be very low, but it still does not force the ground state to be perfectly degenerate. 
+% After the process of optimizing parameters for a number of different configurations, we can select the best configuration for each pair of $(n,U)$, and run the post optimization diagnostic routine on it.  
+% This is initiated by loading the stored optimization output $Φ_{\mathrm{opt}}(n,U)$, and rebuilding the physical Hamiltonian $H_{\mathrm{PMM}}(\theta_{\mathrm{opt}})$ from the optimized parameters. The reconstructed Hamiltonian is then analyzed through a series of diagnostics presented in this section.   
+
+
+ 
+% The optimization procedure returns a scalar loss and a set of optimized parameters, but the loss alone is not suﬀicient to decide whether the result has a useful Majorana
+% interpretation.After each optimization run, the best parameter set is therefore reconstructed and analyzed with a separate diagnostic workflow. The purpose of this step is to translate the numerical minimum into physical quantities that can be compared across system sizes, interaction strengths, and later braiding calculations.
+
+% \subsection{Reconstruction of optimized Hamiltonians}
+% The saved optimization output contains the raw optimization vector, the parameter configuration, the reconstructed physical parameters, and the final loss. For a chosen system size $n$ and interaction strength $U$, the diagnostic routine selects the lowest-loss stored configuration. The raw vector is then converted back into the parameter dictionary described in Sec.~3.2, fixed values are reinserted, and the physical Hamiltonian
+% \begin{equation}
+% H_{\mathrm{PMM}}(\theta_{\mathrm{opt}})
+% \end{equation}
+% is rebuilt using the same Hamiltonian construction as in the optimization.
+
+% This reconstruction step is important because the diagnostics are not evaluated directly from the optimizer state. Instead, the optimized Hamiltonian is rebuilt from the stored physical parameters and diagonalized again. This makes the diagnostic plots and tables reproducible from the saved configuration files and ensures that the reported quantities correspond to the same Hamiltonian that is later used as input for the braiding calculations.
 
 \subsection{Parity-resolved spectrum}
 The reconstructed Hamiltonian is diagonalized exactly in the many-body Fock basis. The eigenstates are classified with the total fermion parity operator,
@@ -358,7 +374,7 @@ a_r\gamma_{+,P}^{(r)}
 b_r\gamma_{-,P}^{(r)} .
 \label{eq:method_block_matched_majorana}
 \end{equation}
-The coefficients $a_r$ and $b_r$ are continuous least-squares coefficients and are allowed to differ between blocks. The fitted blocks are then reassembled into a block-matched local operator on the full selected sector. This construction tests whether the local operator can be represented by the energy-level Majorana pair after the independent degenerate blocks have been identified. The detailed construction of the label operator and the resulting block structure is presented together with the sector-resolved analysis.
+The coefficients $a_r$ and $b_r$ are continuous least-squares coefficients and are allowed to differ between blocks. The fitted blocks are then reassembled into a block-matched local operator on the full selected sector. This construction tests whether the local operator can be represented by the energy-level Majorana pair after the independent degenerate blocks have been identified. The detailed construction of the label operator and the resulting block structure is presented together with the sector-resolved analysis, and explained in the appendix \ref{app:block_label_method}.
 
 \subsection{Normalization and algebra checks}
 After projection, the Majorana operators are no longer assumed to satisfy the ideal algebra exactly. The projected operators are therefore checked numerically before being used in the braid. The diagnostics test Hermiticity, normalization,

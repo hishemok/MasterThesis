@@ -346,6 +346,114 @@
       \verb https://pubs.aip.org/aip/acp/article/783518
       \endverb
     \endentry
+    \entry{bartlettReferenceFramesSuperselection2007}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=e3a83db257511112d5a9beb937511c0b}{%
+           family={Bartlett},
+           familyi={B\bibinitperiod},
+           given={Stephen\bibnamedelima D.},
+           giveni={S\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{hash=f852534d75dba3d1f7fb5aa40200e37b}{%
+           family={Rudolph},
+           familyi={R\bibinitperiod},
+           given={Terry},
+           giveni={T\bibinitperiod}}}%
+        {{hash=ad7568d5c39cdf77d9b5b9b709764274}{%
+           family={Spekkens},
+           familyi={S\bibinitperiod},
+           given={Robert\bibnamedelima W.},
+           giveni={R\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+      }
+      \strng{namehash}{c681b1eec2f19c0041020a379a01f254}
+      \strng{fullhash}{c681b1eec2f19c0041020a379a01f254}
+      \strng{fullhashraw}{c681b1eec2f19c0041020a379a01f254}
+      \strng{bibnamehash}{c681b1eec2f19c0041020a379a01f254}
+      \strng{authorbibnamehash}{c681b1eec2f19c0041020a379a01f254}
+      \strng{authornamehash}{c681b1eec2f19c0041020a379a01f254}
+      \strng{authorfullhash}{c681b1eec2f19c0041020a379a01f254}
+      \strng{authorfullhashraw}{c681b1eec2f19c0041020a379a01f254}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{5}
+      \field{issn}{0034-6861, 1539-0756}
+      \field{journaltitle}{Reviews of Modern Physics}
+      \field{langid}{english}
+      \field{month}{4}
+      \field{number}{2}
+      \field{shortjournal}{Rev. Mod. Phys.}
+      \field{title}{Reference Frames, Superselection Rules, and Quantum Information}
+      \field{urlday}{14}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{79}
+      \field{year}{2007}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{555\bibrangedash 609}
+      \range{pages}{55}
+      \verb{doi}
+      \verb 10.1103/RevModPhys.79.555
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/M4MAME6Z/Bartlett et al. - 2007 - Reference frames, superselection rules, and quantum information.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://link.aps.org/doi/10.1103/RevModPhys.79.555
+      \endverb
+      \verb{url}
+      \verb https://link.aps.org/doi/10.1103/RevModPhys.79.555
+      \endverb
+    \endentry
+    \entry{beenakkerSearchNonAbelianMajorana2020}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=4ba9870608a5249c31c943e686acb283}{%
+           family={Beenakker},
+           familyi={B\bibinitperiod},
+           given={Carlo},
+           giveni={C\bibinitperiod}}}%
+      }
+      \strng{namehash}{4ba9870608a5249c31c943e686acb283}
+      \strng{fullhash}{4ba9870608a5249c31c943e686acb283}
+      \strng{fullhashraw}{4ba9870608a5249c31c943e686acb283}
+      \strng{bibnamehash}{4ba9870608a5249c31c943e686acb283}
+      \strng{authorbibnamehash}{4ba9870608a5249c31c943e686acb283}
+      \strng{authornamehash}{4ba9870608a5249c31c943e686acb283}
+      \strng{authorfullhash}{4ba9870608a5249c31c943e686acb283}
+      \strng{authorfullhashraw}{4ba9870608a5249c31c943e686acb283}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{This is a tutorial review of methods to braid non-Abelian anyons (Majorana zero-modes) in topological superconductors. That ``Holy Grail'' of topological quantum information processing has not yet been reached in the laboratory, but there now exists a variety of platforms in which one can search for the Majorana braiding statistics. After an introduction to the basic concepts of braiding we discuss how one might be able to braid immobile Majorana zero-modes, bound to the end points of a nanowire, by performing the exchange in parameter space, rather than in real space. We explain how Coulomb interaction can be used to both control and read out the braiding operation, even though Majorana zero-modes are charge neutral. We ask whether the fusion rule might provide for an easier pathway towards the demonstration of non-Abelian statistics. In the final part we discuss an approach to braiding in real space, rather than parameter space, using vortices injected into a chiral Majorana edge mode as ``flying qubits''.}
+      \field{day}{4}
+      \field{issn}{2590-1990}
+      \field{journaltitle}{SciPost Physics Lecture Notes}
+      \field{month}{8}
+      \field{shortjournal}{SciPost Phys. Lect. Notes}
+      \field{title}{Search for Non-{{Abelian Majorana}} Braiding Statistics in Superconductors}
+      \field{urlday}{16}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{year}{2020}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{15}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.21468/SciPostPhysLectNotes.15
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/BJTT8TTQ/Beenakker - 2020 - Search for non-Abelian Majorana braiding statistics in superconductors.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://scipost.org/10.21468/SciPostPhysLectNotes.15
+      \endverb
+      \verb{url}
+      \verb https://scipost.org/10.21468/SciPostPhysLectNotes.15
+      \endverb
+    \endentry
     \entry{brouwerEnterMajoranaFermion2012}{article}{}{}
       \name{author}{1}{}{%
         {{hash=61915b99f91280d38daf1536182bc515}{%
@@ -443,6 +551,82 @@
       \endverb
       \verb{url}
       \verb http://link.springer.com/10.1007/BF00673003
+      \endverb
+    \endentry
+    \entry{NIPS2000_44968aec}{inproceedings}{}{}
+      \name{author}{5}{}{%
+        {{hash=2c72728eac8bb97235d1f1c99ce8ebb9}{%
+           family={Dugas},
+           familyi={D\bibinitperiod},
+           given={Charles},
+           giveni={C\bibinitperiod}}}%
+        {{hash=40a8e4774982146adc2688546f54efb2}{%
+           family={Bengio},
+           familyi={B\bibinitperiod},
+           given={Yoshua},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=dc1900f84bbbf3d6ca2ccc83c1360f6c}{%
+           family={Bélisle},
+           familyi={B\bibinitperiod},
+           given={François},
+           giveni={F\bibinitperiod}}}%
+        {{hash=c9a00b068a95feb17a3881ff454de2c6}{%
+           family={Nadeau},
+           familyi={N\bibinitperiod},
+           given={Claude},
+           giveni={C\bibinitperiod}}}%
+        {{hash=29bdb9c4a0359bd8a4cac99383fde940}{%
+           family={Garcia},
+           familyi={G\bibinitperiod},
+           given={René},
+           giveni={R\bibinitperiod}}}%
+      }
+      \name{editor}{3}{}{%
+        {{hash=d0fa2183d141c3c709a512cab4fee1b2}{%
+           family={Leen},
+           familyi={L\bibinitperiod},
+           given={T.},
+           giveni={T\bibinitperiod}}}%
+        {{hash=c58e1166ec83cf487ab9ae5ffa047a29}{%
+           family={Dietterich},
+           familyi={D\bibinitperiod},
+           given={T.},
+           giveni={T\bibinitperiod}}}%
+        {{hash=6e0f2cad96aa044f459455da8a9f0712}{%
+           family={Tresp},
+           familyi={T\bibinitperiod},
+           given={V.},
+           giveni={V\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {MIT Press}%
+      }
+      \strng{namehash}{3378043fd25174e20e83d7f213313c25}
+      \strng{fullhash}{efe8164cd54f40d94d6d4fbedad1eb7f}
+      \strng{fullhashraw}{efe8164cd54f40d94d6d4fbedad1eb7f}
+      \strng{bibnamehash}{3378043fd25174e20e83d7f213313c25}
+      \strng{authorbibnamehash}{3378043fd25174e20e83d7f213313c25}
+      \strng{authornamehash}{3378043fd25174e20e83d7f213313c25}
+      \strng{authorfullhash}{efe8164cd54f40d94d6d4fbedad1eb7f}
+      \strng{authorfullhashraw}{efe8164cd54f40d94d6d4fbedad1eb7f}
+      \strng{editorbibnamehash}{1fc2d8764e83eac6419a393a8d598eea}
+      \strng{editornamehash}{1fc2d8764e83eac6419a393a8d598eea}
+      \strng{editorfullhash}{1fc2d8764e83eac6419a393a8d598eea}
+      \strng{editorfullhashraw}{1fc2d8764e83eac6419a393a8d598eea}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Advances in Neural Information Processing Systems}
+      \field{title}{Incorporating Second-Order Functional Knowledge for Better Option Pricing}
+      \field{volume}{13}
+      \field{year}{2000}
+      \field{dateera}{ce}
+      \verb{urlraw}
+      \verb https://proceedings.neurips.cc/paper_files/paper/2000/file/44968aece94f667e4095002d140b5896-Paper.pdf
+      \endverb
+      \verb{url}
+      \verb https://proceedings.neurips.cc/paper_files/paper/2000/file/44968aece94f667e4095002d140b5896-Paper.pdf
       \endverb
     \endentry
     \entry{dvirRealizationMinimalKitaev2023a}{article}{}{}
@@ -777,6 +961,56 @@
       \verb https://www.nature.com/articles/s41467-023-37725-0
       \endverb
     \endentry
+    \entry{hasslerTopologicalQuantumComputing2024}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=78f066cac3702de128dca4bb36047b57}{%
+           family={Hassler},
+           familyi={H\bibinitperiod},
+           given={Fabian},
+           giveni={F\bibinitperiod}}}%
+      }
+      \strng{namehash}{78f066cac3702de128dca4bb36047b57}
+      \strng{fullhash}{78f066cac3702de128dca4bb36047b57}
+      \strng{fullhashraw}{78f066cac3702de128dca4bb36047b57}
+      \strng{bibnamehash}{78f066cac3702de128dca4bb36047b57}
+      \strng{authorbibnamehash}{78f066cac3702de128dca4bb36047b57}
+      \strng{authornamehash}{78f066cac3702de128dca4bb36047b57}
+      \strng{authorfullhash}{78f066cac3702de128dca4bb36047b57}
+      \strng{authorfullhashraw}{78f066cac3702de128dca4bb36047b57}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{These lecture notes offer a pedagogical yet concise introduction to topological quantum computing. The material focuses on topological superconductors and Majorana qubits. It concludes with a discussion of more general braiding phenomena. In particular, the notes delve into the non-Abelian braiding statistics of Ising and Fibonacci anyons. Although not comprehensive, this set provides a solid entry point for students and researchers interested in the field.}
+      \field{day}{21}
+      \field{eprintclass}{quant-ph}
+      \field{eprinttype}{arXiv}
+      \field{month}{10}
+      \field{pubstate}{prepublished}
+      \field{title}{Topological Quantum Computing}
+      \field{urlday}{16}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{year}{2024}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{doi}
+      \verb 10.48550/arXiv.2410.13547
+      \endverb
+      \verb{eprint}
+      \verb 2410.13547
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/T9U5MB9Y/Hassler - 2024 - Topological quantum computing.pdf;/home/Hishem/Zotero/storage/8ALRYTF4/2410.html
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/2410.13547
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/2410.13547
+      \endverb
+      \keyw{Condensed Matter - Mesoscale and Nanoscale Physics,Quantum Physics}
+    \endentry
     \entry{hidalgo-sacotoTwoIdenticalOnedimensional2025}{article}{}{}
       \name{author}{3}{}{%
         {{hash=e8215695ea1bdc49c6a6ac0e664cc819}{%
@@ -931,6 +1165,66 @@
       \endverb
       \verb{url}
       \verb http://journals.jps.jp/doi/10.1143/JPSJ.5.435
+      \endverb
+    \endentry
+    \entry{kellsLocalizationEnhancedDegraded2018}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=d395e1ed70f2ba514a950926b978d876}{%
+           family={Kells},
+           familyi={K\bibinitperiod},
+           given={G.},
+           giveni={G\bibinitperiod}}}%
+        {{hash=d7e56383a9fa2874b43adba884c6fe50}{%
+           family={Moran},
+           familyi={M\bibinitperiod},
+           given={N.},
+           giveni={N\bibinitperiod}}}%
+        {{hash=5bb2b25f4e6243950bb7b4939562eb01}{%
+           family={Meidan},
+           familyi={M\bibinitperiod},
+           given={D.},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{90f6c1f53dc2f9630b26c37d82d0eea8}
+      \strng{fullhash}{90f6c1f53dc2f9630b26c37d82d0eea8}
+      \strng{fullhashraw}{90f6c1f53dc2f9630b26c37d82d0eea8}
+      \strng{bibnamehash}{90f6c1f53dc2f9630b26c37d82d0eea8}
+      \strng{authorbibnamehash}{90f6c1f53dc2f9630b26c37d82d0eea8}
+      \strng{authornamehash}{90f6c1f53dc2f9630b26c37d82d0eea8}
+      \strng{authorfullhash}{90f6c1f53dc2f9630b26c37d82d0eea8}
+      \strng{authorfullhashraw}{90f6c1f53dc2f9630b26c37d82d0eea8}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{20}
+      \field{issn}{2469-9950, 2469-9969}
+      \field{journaltitle}{Physical Review B}
+      \field{langid}{english}
+      \field{month}{2}
+      \field{number}{8}
+      \field{shortjournal}{Phys. Rev. B}
+      \field{title}{Localization Enhanced and Degraded Topological Order in Interacting p -Wave Wires}
+      \field{urlday}{16}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{97}
+      \field{year}{2018}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{085425}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1103/PhysRevB.97.085425
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/KDIMCJM4/Kells et al. - 2018 - Localization enhanced and degraded topological order in interacting p -wave wires.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://link.aps.org/doi/10.1103/PhysRevB.97.085425
+      \endverb
+      \verb{url}
+      \verb https://link.aps.org/doi/10.1103/PhysRevB.97.085425
       \endverb
     \endentry
     \entry{kitaevUnpairedMajoranaFermions2001}{article}{}{}
@@ -1100,7 +1394,7 @@
       \verb https://scipost.org/10.21468/SciPostPhys.3.3.021
       \endverb
     \endentry
-    \entry{leijnseParityQubitsPoor2012a}{article}{}{}
+    \entry{leijnseIntroductionTopologicalSuperconductivity2012}{article}{}{}
       \name{author}{2}{}{%
         {{hash=d2b85c29f3de1b35b56c5d85bb89684c}{%
            family={Leijnse},
@@ -1122,6 +1416,61 @@
       \strng{authorfullhash}{f20e726625c11d076faeb8480928be2b}
       \strng{authorfullhashraw}{f20e726625c11d076faeb8480928be2b}
       \field{extraname}{1}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{5}
+      \field{issn}{0268-1242, 1361-6641}
+      \field{journaltitle}{Semiconductor Science and Technology}
+      \field{month}{12}
+      \field{number}{12}
+      \field{shortjournal}{Semicond. Sci. Technol.}
+      \field{title}{Introduction to Topological Superconductivity and {{Majorana}} Fermions}
+      \field{urlday}{16}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{27}
+      \field{year}{2012}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{124003}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1088/0268-1242/27/12/124003
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/QLFCI2X4/Leijnse and Flensberg - 2012 - Introduction to topological superconductivity and Majorana fermions.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://iopscience.iop.org/article/10.1088/0268-1242/27/12/124003
+      \endverb
+      \verb{url}
+      \verb https://iopscience.iop.org/article/10.1088/0268-1242/27/12/124003
+      \endverb
+    \endentry
+    \entry{leijnseParityQubitsPoor2012a}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=d2b85c29f3de1b35b56c5d85bb89684c}{%
+           family={Leijnse},
+           familyi={L\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod}}}%
+        {{hash=533d63e82c5527c01b821ca32839ab68}{%
+           family={Flensberg},
+           familyi={F\bibinitperiod},
+           given={Karsten},
+           giveni={K\bibinitperiod}}}%
+      }
+      \strng{namehash}{f20e726625c11d076faeb8480928be2b}
+      \strng{fullhash}{f20e726625c11d076faeb8480928be2b}
+      \strng{fullhashraw}{f20e726625c11d076faeb8480928be2b}
+      \strng{bibnamehash}{f20e726625c11d076faeb8480928be2b}
+      \strng{authorbibnamehash}{f20e726625c11d076faeb8480928be2b}
+      \strng{authornamehash}{f20e726625c11d076faeb8480928be2b}
+      \strng{authorfullhash}{f20e726625c11d076faeb8480928be2b}
+      \strng{authorfullhashraw}{f20e726625c11d076faeb8480928be2b}
+      \field{extraname}{2}
       \field{sortinit}{L}
       \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
       \field{labelnamesource}{author}
@@ -1183,7 +1532,7 @@
       \strng{authornamehash}{f20e726625c11d076faeb8480928be2b}
       \strng{authorfullhash}{f20e726625c11d076faeb8480928be2b}
       \strng{authorfullhashraw}{f20e726625c11d076faeb8480928be2b}
-      \field{extraname}{2}
+      \field{extraname}{3}
       \field{sortinit}{L}
       \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
       \field{labelnamesource}{author}
@@ -1239,7 +1588,7 @@
       \strng{authornamehash}{f20e726625c11d076faeb8480928be2b}
       \strng{authorfullhash}{f20e726625c11d076faeb8480928be2b}
       \strng{authorfullhashraw}{f20e726625c11d076faeb8480928be2b}
-      \field{extraname}{3}
+      \field{extraname}{4}
       \field{sortinit}{L}
       \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
       \field{labelnamesource}{author}
@@ -1658,18 +2007,84 @@
       \field{pages}{75}
       \range{pages}{1}
     \endentry
-    \entry{samuelsonQuantifyingRobustnessLocality2026}{article}{}{}
+    \entry{nitschAdiabaticNonabelianBraiding2025}{article}{}{}
+      \name{author}{8}{}{%
+        {{hash=a7cb85d3fc4b54a951c5dd641a75ed0e}{%
+           family={Nitsch},
+           familyi={N\bibinitperiod},
+           given={Maximilian},
+           giveni={M\bibinitperiod}}}%
+        {{hash=f14dfde437509f61bb57c02859b2393f}{%
+           family={Svensson},
+           familyi={S\bibinitperiod},
+           given={Viktor},
+           giveni={V\bibinitperiod}}}%
+        {{hash=a98bf4c101a9cac0636603147a370e52}{%
+           family={Samuelson},
+           familyi={S\bibinitperiod},
+           given={William},
+           giveni={W\bibinitperiod}}}%
+        {{hash=a239444bc9dcad83f3edc65c27fb43be}{%
+           family={Nestmann},
+           familyi={N\bibinitperiod},
+           given={Konstantin},
+           giveni={K\bibinitperiod}}}%
+        {{hash=d21ef7ac5e2b7fe8a6f82f141d7eb489}{%
+           family={Danon},
+           familyi={D\bibinitperiod},
+           given={Jeroen},
+           giveni={J\bibinitperiod}}}%
+        {{hash=533d63e82c5527c01b821ca32839ab68}{%
+           family={Flensberg},
+           familyi={F\bibinitperiod},
+           given={Karsten},
+           giveni={K\bibinitperiod}}}%
+        {{hash=a93fd7b1779a691663ea110a5327ccad}{%
+           family={Seoane\bibnamedelima Souto},
+           familyi={S\bibinitperiod\bibinitdelim S\bibinitperiod},
+           given={Rubén},
+           giveni={R\bibinitperiod}}}%
+        {{hash=d2b85c29f3de1b35b56c5d85bb89684c}{%
+           family={Leijnse},
+           familyi={L\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{92da2e3e4908c16e79eba50be10924e5}
+      \strng{fullhash}{28f4ca171bbecb1573c07103396db962}
+      \strng{fullhashraw}{28f4ca171bbecb1573c07103396db962}
+      \strng{bibnamehash}{92da2e3e4908c16e79eba50be10924e5}
+      \strng{authorbibnamehash}{92da2e3e4908c16e79eba50be10924e5}
+      \strng{authornamehash}{92da2e3e4908c16e79eba50be10924e5}
+      \strng{authorfullhash}{28f4ca171bbecb1573c07103396db962}
+      \strng{authorfullhashraw}{28f4ca171bbecb1573c07103396db962}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{cond-mat.mes-hall}
+      \field{eprinttype}{arXiv}
+      \field{title}{Adiabatic Nonabelian Braiding of Imperfect Majoranas}
+      \field{year}{2025}
+      \verb{doi}
+      \verb 10.48550/arXiv.2507.11039
+      \endverb
+      \verb{eprint}
+      \verb 2507.11039
+      \endverb
+    \endentry
+    \entry{samuelsonQuantifyingRobustnessLocality2026a}{article}{}{}
       \name{author}{7}{}{%
         {{hash=a98bf4c101a9cac0636603147a370e52}{%
            family={Samuelson},
            familyi={S\bibinitperiod},
            given={William},
            giveni={W\bibinitperiod}}}%
-        {{hash=fd9fa247f6922b737b39ab343039ec72}{%
-           family={Luna},
-           familyi={L\bibinitperiod},
-           given={Juan\bibnamedelimb Daniel\bibnamedelima Torres},
-           giveni={J\bibinitperiod\bibinitdelim D\bibinitperiod\bibinitdelim T\bibinitperiod}}}%
+        {{hash=b9014b2adcadd526f8c3005da55f24f2}{%
+           family={Torres\bibnamedelima Luna},
+           familyi={T\bibinitperiod\bibinitdelim L\bibinitperiod},
+           given={Juan\bibnamedelima Daniel},
+           giveni={J\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
         {{hash=284b6764c0be5834213fa8a66c94d3eb}{%
            family={Miles},
            familyi={M\bibinitperiod},
@@ -1697,28 +2112,27 @@
            giveni={V\bibinitperiod}}}%
       }
       \strng{namehash}{7655f12168ceb7cc5353802106c64ade}
-      \strng{fullhash}{2416bf2e03e2feb110483a98f0ad3071}
-      \strng{fullhashraw}{2416bf2e03e2feb110483a98f0ad3071}
+      \strng{fullhash}{eccebac3e1e4e02df33b5753896a8e1e}
+      \strng{fullhashraw}{eccebac3e1e4e02df33b5753896a8e1e}
       \strng{bibnamehash}{7655f12168ceb7cc5353802106c64ade}
       \strng{authorbibnamehash}{7655f12168ceb7cc5353802106c64ade}
       \strng{authornamehash}{7655f12168ceb7cc5353802106c64ade}
-      \strng{authorfullhash}{2416bf2e03e2feb110483a98f0ad3071}
-      \strng{authorfullhashraw}{2416bf2e03e2feb110483a98f0ad3071}
+      \strng{authorfullhash}{eccebac3e1e4e02df33b5753896a8e1e}
+      \strng{authorfullhashraw}{eccebac3e1e4e02df33b5753896a8e1e}
       \field{sortinit}{S}
       \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{abstract}{Protecting qubits from perturbations is a central challenge in quantum computing. Topological superconductors with separated Majorana bound states (MBSs) provide a strong form of protection that only depends on the locality of perturbations. While the link between MBS separation, robust degeneracy, and protected braiding is well understood in non-interacting systems, recent experimental progress in short quantum-dot-based Kitaev chains highlights the need to establish these connections rigorously for interacting systems. We do this by defining MBSs from many-body ground states and show how their locality constrains their coupling to an environment. This, in turn, quantifies the protection of the energy degeneracy and the feasibility of non-abelian braiding.}
+      \field{abstract}{Protecting qubits from perturbations is a central challenge in quantum computing. Topological superconductors with separated Majorana bound states (MBSs) provide a strong form of protection that only depends on the locality of perturbations. While the link between MBS separation, robust degeneracy, and protected braiding is well understood in noninteracting systems, recent experimental progress in short quantum-dot-based Kitaev chains highlights the need to establish these connections rigorously for interacting systems. We do this by defining MBSs from many-body ground states and show how their locality constrains their coupling to an environment. This, in turn, quantifies the protection of the energy degeneracy and the feasibility of non-abelian braiding.}
       \field{day}{28}
-      \field{eprintclass}{cond-mat.mes-hall}
-      \field{eprinttype}{arXiv}
       \field{issn}{2691-3399}
       \field{journaltitle}{PRX Quantum}
+      \field{langid}{english}
       \field{month}{5}
       \field{number}{2}
       \field{shortjournal}{PRX Quantum}
-      \field{title}{Quantifying Robustness and Locality of {{Majorana}} Bound States in Interacting Systems}
-      \field{urlday}{14}
+      \field{title}{Quantifying {{Robustness}} and {{Locality}} of {{Majorana Bound States}} in {{Interacting Systems}}}
+      \field{urlday}{16}
       \field{urlmonth}{6}
       \field{urlyear}{2026}
       \field{volume}{7}
@@ -1730,19 +2144,15 @@
       \verb{doi}
       \verb 10.1103/pw51-tnsz
       \endverb
-      \verb{eprint}
-      \verb 2510.20538
-      \endverb
       \verb{file}
-      \verb /home/Hishem/Zotero/storage/P4236UQA/Samuelson et al. - 2026 - Quantifying robustness and locality of Majorana bound states in interacting systems.pdf;/home/Hishem/Zotero/storage/27KG95FX/2510.html
+      \verb /home/Hishem/Zotero/storage/4GE57NLY/Samuelson et al. - 2026 - Quantifying Robustness and Locality of Majorana Bound States in Interacting Systems.pdf
       \endverb
       \verb{urlraw}
-      \verb http://arxiv.org/abs/2510.20538
+      \verb https://link.aps.org/doi/10.1103/pw51-tnsz
       \endverb
       \verb{url}
-      \verb http://arxiv.org/abs/2510.20538
+      \verb https://link.aps.org/doi/10.1103/pw51-tnsz
       \endverb
-      \keyw{Condensed Matter - Mesoscale and Nanoscale Physics,Quantum Physics}
     \endentry
     \entry{sanchesRevisitingPoorMans2026a}{article}{}{}
       \name{author}{5}{}{%
