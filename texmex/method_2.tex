@@ -108,7 +108,7 @@ The first loss contribution penalizes energy splitting between even- and odd-par
 \begin{equation}
 \delta_k = \left|E_k^{(e)}-E_k^{(o)}\right|.
 \end{equation}
-{\color{red}  For non-interacting theories, this step shouldnt be necessary, but explain why}
+In an ideal non-interacting Kitaev chain at the sweet spot, or in the infinite-length limit, this contribution would vanish because the Majorana zero mode gives an exact even-odd degeneracy. In the finite interacting systems studied here, however, both Majorana overlap and interaction effects can split the parity partners, so this term is included explicitly in the loss function.
 These splittings are weighted more strongly at low energy, because the ground-state degeneracy is the most important Majorana signature. In the implementation, the weights decrease from a maximum value for the lowest parity pair to a smaller value for higher levels. The degeneracy contribution therefore has the schematic form
 \begin{equation}
 \mathcal{L}_{\mathrm{deg}}
@@ -465,9 +465,15 @@ The same pulse sequence is used for each braid model. To avoid confusing the bra
 \lambda_{\min}
 +
 (\lambda_{\max}-\lambda_{\min})
-\frac{1}{1+\exp[-s(t-T_p+w/2)]}
-\frac{1}{1+\exp[s(t-T_p-w/2)]},
+\frac{1}{1+\exp[-sP_+(t;T_p)]}
+\frac{1}{1+\exp[sP_-(t;T_p)]},
 \label{eq:method_lambda_pulse}
+\end{equation}
+where
+\begin{equation}
+P_+(t;T_p) = t-T_p+w/2,
+\qquad
+P_-(t;T_p) = t-T_p-w/2.
 \end{equation}
 where $T_p$ is the pulse center, $w$ is the pulse width, and $s$ controls the steepness of the rise and fall. The three braid couplings are then chosen as
 \begin{equation}

@@ -546,9 +546,9 @@ INPUT /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam5.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm5.tfm
-INPUT ./figs/PMMSetup.png
-INPUT ./figs/PMMSetup.png
-INPUT ./figs/PMMSetup.png
+INPUT ./figs/diagram-20260621.png
+INPUT ./figs/diagram-20260621.png
+INPUT ./figs/diagram-20260621.png
 INPUT ./figs/gs_symmetry.png
 INPUT ./figs/gs_symmetry.png
 INPUT ./figs/3dparametersearch.pdf

@@ -1,6 +1,6 @@
  
 \chapter{Theory}
-{\color{red}Somewhere in this section write more clearly about the difference between non-interacting and interacting theories.}
+
 \section{Majorana Zero Modes and Topological Motivation}
 Topological quantum computing is an approach to fault-tolerant quantum computation in which quantum gates are implemented by braiding non-Abelian anyons. The central idea is that information can be encoded non-locally in a degenerate subspace, so that local perturbations have limited access to the encoded quantum state. In this setting, the result of a gate depends on the topology of the braid rather than on microscopic details of the path.\\
 Anyons are quasiparticles that, so far, have only been observed in effectively two-dimensional systems. In three spatial dimensions, identical particles are classified as either bosons or fermions, corresponding to symmetric and antisymmetric exchange statistics. In two dimensions, however, the topology of particle exchange allows for a richer possibility: exchanging two particles can produce statistics that are neither bosonic nor fermionic \cite{hidalgo-sacotoTwoIdenticalOnedimensional2025}.  In particular, exchanging two identical particles twice is not necessarily topologically equivalent to doing nothing, because the exchange path cannot always be continuously shrunk to a point without crossing another particle. Particles with such exchange statistics are called anyons, and they are classified as Abelian or non-Abelian depending on how the quantum state transforms under exchange. Abelian anyons acquire only a phase factor, while non-Abelian anyons transform the state within a degenerate subspace. This latter property is what makes non-Abelian anyons especially interesting for quantum computation \cite{shtengelHomeAnyon2007}.
@@ -14,7 +14,8 @@ Anyons are quasiparticles that, so far, have only been observed in effectively t
   \label{fig:2d_v_3d_particle}
 \end{figure}
 
-A collection of non-Abelian anyons with fixed positions and fixed local quantum numbers can possess a non-trivial topological degeneracy. Quantum information can then be encoded in this degenerate subspace, while braiding the anyons implements unitary transformations within it. Since the resulting transformation depends only on the braid topology, and not on small local deformations of the path, this provides a possible route toward fault-tolerant quantum gates. In suitable schemes, braiding operations can be combined with additional ingredients to implement the gates needed for quantum computation.\cite{sarmaMajoranaZeroModes2015a}\\ \\ 
+A collection of non-Abelian anyons with fixed positions and fixed local quantum numbers can possess a non-trivial topological degeneracy. Quantum information can then be encoded in this degenerate subspace, while braiding the anyons implements unitary transformations within it. Since the resulting transformation depends only on the braid topology, and not on small local deformations of the path, this provides a possible route toward fault-tolerant quantum gates. In suitable schemes, braiding operations can be combined with additional ingredients to implement the gates needed for quantum computation\cite{sarmaMajoranaZeroModes2015a}.
+
 
 One of the most promising candidates for realizing non-Abelian exchange statistics in condensed-matter systems is the Majorana zero mode (MZM), predicted to occur in certain topological superconductors. A Majorana zero mode is a zero-energy quasiparticle described by an operator that is equal to its own Hermitian conjugate. In one-dimensional topological superconductors, such modes can appear at the ends of the system. Unlike an ordinary fermionic mode, a single MZM can be viewed as ``half'' of a Dirac fermion: two Majorana operators can be combined to form one conventional fermionic operator,
 \begin{equation}
@@ -30,7 +31,7 @@ Here $\gamma_1$ and $\gamma_2$ are Majorana operators satisfying
 \end{equation}
 The non-Abelian character of MZMs is reflected in the fact that exchanging two of them produces a non-trivial unitary transformation on the degenerate ground-state manifold \cite{sarmaMajoranaZeroModes2015}.\\ 
 The primary motivation for studying MZMs and their braiding properties is their combination of non-local encoding and spectral protection. When a fermionic state is formed from two spatially separated MZMs, local environmental noise cannot easily determine or flip the encoded state, because such an error would require coupling to both separated Majorana components. Therefore, local perturbations are strongly suppressed as a source of decoherence \cite{nayakNonAbelianAnyonsTopological2008}.\\
-MZMs also give rise to ground-state degeneracies. A system with $2n$ Majorana zero modes spans a $2^n$-dimensional fermionic Hilbert space associated with the occupations of $n$ non-local fermions. If the total fermion parity is fixed, the physical ground-state degeneracy is reduced to $2^{n-1}$. In either case, the useful low-energy manifold must be separated from excited states by a finite spectral gap, which protects the encoded information against thermal excitations\cite{kitaevUnpairedMajoranaFermions2001a}\\
+MZMs also give rise to ground-state degeneracies. A system with $2n$ Majorana zero modes spans a $2^n$-dimensional fermionic Hilbert space associated with the occupations of $n$ non-local fermions. If the total fermion parity is fixed, the physical ground-state degeneracy is reduced to $2^{n-1}$. In either case, the useful low-energy manifold must be separated from excited states by a finite spectral gap, which protects the encoded information against thermal excitations\cite{kitaevUnpairedMajoranaFermions2001a}.\\
 The remaining question is how such Majorana operators can emerge from an ordinary fermionic Hamiltonian. The Kitaev chain provides the minimal model where this mechanism can be seen explicitly, and it also gives the conceptual starting point for the Poor Man's Majorana systems studied in this thesis.
 
 
@@ -38,12 +39,12 @@ The remaining question is how such Majorana operators can emerge from an ordinar
 
 
 \section{Kitaev Chain and Poor Man's Majorana Systems}
-Before discussing the Majorana models used in this thesis, we first introduce their theoretical origin: the Kitaev chain. The Kitaev chain, or Kitaev-Majorana chain, is a simplified model for a topological superconductor. First proposed by Alexei Kitaev in 2000 \cite{kitaevUnpairedMajoranaFermions2001a}, the Kitaev chain is a one-dimensional superconducting system that can host Majorana zero modes at its ends under certain conditions, illustrated in Figure~\ref{fig:kitaev}. The model is defined on a lattice of spinless fermions with nearest-neighbor hopping and superconducting pairing. 
+Before discussing the Majorana models used in this thesis, we first introduce their theoretical origin, the Kitaev chain. The Kitaev chain, or Kitaev-Majorana chain, is a simplified model for a topological superconductor. First proposed by Alexei Kitaev in 2000 \cite{kitaevUnpairedMajoranaFermions2001a}, the Kitaev chain is a one-dimensional superconducting system that can host Majorana zero modes at its ends under certain conditions, illustrated in Figure~\ref{fig:kitaev}. The model is defined on a lattice of spinless fermions with nearest-neighbor hopping and superconducting pairing. 
 The Hamiltonian of the Kitaev chain is
 \begin{equation}
 H = -\mu \sum_{j=1}^{N} \left(c_j^\dagger c_j - \frac{1}{2}\right)
 - t \sum_{j=1}^{N-1} \left(c_j^\dagger c_{j+1} + c_{j+1}^\dagger c_j\right)
-+ \Delta \sum_{j=1}^{N-1} \left(c_j c_{j+1} + c_{j+1}^\dagger c_j^\dagger\right),
++ \Delta \sum_{j=1}^{N-1} \left(c_j c_{j+1} + c_{j+1}^\dagger c_j^\dagger\right).
 \label{eq:kitaev_ham}
 \end{equation}
 Each term in Eq.~\ref{eq:kitaev_ham} has a clear physical interpretation. The first term represents the chemical potential $\mu$, which controls the filling of the fermionic states. The second term describes the hopping of fermions between neighboring sites with amplitude $t$. The third term represents $p$-wave superconducting pairing, where pairs of fermions are created or annihilated on adjacent sites with amplitude $\Delta$.\\
@@ -72,7 +73,7 @@ In order to determine when the Kitaev chain is topological, we need to consider 
 For a translationally invariant chain, we can perform a Fourier transform to momentum space, which allows us to analyze the energy spectrum and identify the conditions for the topological phase. The Fourier transform is given by
 
 \begin{equation}
-  c_j = \frac{1}{\sqrt{N}} \sum_p e^{ipaj} c_p
+  c_j = \frac{1}{\sqrt{N}} \sum_p e^{ipaj} c_p.
 \end{equation}
 This transformation allows the Hamiltonian to be expressed in terms of momentum-space operators $c_p$ and $c_p^\dagger$. The resulting Hamiltonian in momentum space is
 \begin{equation}
@@ -83,7 +84,7 @@ with $ξ_p = -μ - 2t \cos pa$ and $a$ being the lattice spacing. In the Bogoliu
 \begin{equation}
   E_{p,\pm} = \pm \sqrt{(\mu + 2t \cos{pa})^2 + 4\Delta^2 \sin^2{pa}}.
 \end{equation}
-Even though the Bogoliubov--de Gennes formalism describes a non-interacting quasiparticle problem, it still provides the basic topological picture that the interacting models in this thesis build on. In Fig.~\ref{fig:kitaev_bands}, we can see how the spectrum changes as the chemical potential $\mu$ is tuned. The presence of a gap is crucial for the stability of the Majorana modes, and the closing and reopening of this gap signals a topological phase transition.\\ \\
+Even though the Bogoliubov--de Gennes formalism describes a non-interacting quasiparticle problem, it still provides the basic topological picture that the interacting models in this thesis build on. In Fig.~\ref{fig:kitaev_bands}, we can see how the spectrum changes as the chemical potential $\mu$ is tuned. The presence of a gap is crucial for the stability of the Majorana modes, and the closing and reopening of this gap signals a topological phase transition.
 The quasiparticle spectrum is gapped for most parameter values, but the gap closes when
 \[
 |\mu| = 2|t|.
@@ -114,9 +115,9 @@ which satisfies $\{f, f^\dagger\}=1$ and costs zero energy to occupy. This non-l
 
 
 \subsection{Poor Man's Majorana Systems\newline}
-The ideal Kitaev chain is a useful theoretical model, but it is not directly realizable in most physical systems, as it ideally prefers to be infinite, homogeneous, and non-interacting. The reason for this, is that the Majorana modes are localized at the edges of the chain, and their energy splitting decreases exponentially with the chain length $\exp(-\frac{L}{l_{0}})$\cite{kitaevUnpairedMajoranaFermions2001a}. This would make the Majorana modes robust against any local perturbation. However, in practice we have to work with finite systems, and the Majorana modes will generally have a small energy splitting due to their overlap. However, a Poor mans Majorana system is a finite system, which under the right parameter conditions, can mimic the low-energy physics of a Kitaev chain, including the presence of Majorana-like modes, in a much more compact and experimentally accessible setup.
-\\ 
-While the Kitaev chain is the minimal theoretical model, it assumes spinless fermions and intrinsic $p$-wave pairing. Real superconductors are usually spinful and dominated by conventional $s$-wave pairing. The Poor Man's Majorana (PMM) platform is a compact engineered system whose low-energy behavior can mimic a short Kitaev chain. The simplest version is a double quantum dot coupled through a superconducting segment. Each dot acts as a site, elastic cotunneling produces effective hopping, and crossed Andreev reflection produces an effective non-local pairing term.\\
+The ideal Kitaev chain is a useful theoretical model, but it is not directly realizable in most physical systems, since it is usually treated as infinite, homogeneous, and non-interacting. The reason is that the Majorana modes are localized at the edges of the chain, and their energy splitting decreases exponentially with the chain length, $\exp(-L/l_{0})$\cite{kitaevUnpairedMajoranaFermions2001a}. In the ideal limit, this makes the Majorana modes robust against local perturbations. However, in practice we have to work with finite systems, where the Majorana modes generally retain a small energy splitting due to their overlap. A Poor Man's Majorana system is also finite, but under the right parameter conditions it can mimic the low-energy physics of a Kitaev chain, including the presence of Majorana-like modes, in a much more compact and experimentally accessible setup.
+ 
+While the Kitaev chain is the minimal theoretical model, it assumes spinless fermions and intrinsic $p$-wave pairing. Real superconductors are usually spinful and dominated by conventional $s$-wave pairing. The Poor Man's Majorana (PMM) platform is a compact engineered system whose low-energy behavior can mimic a short Kitaev chain. The simplest version is a double quantum dot coupled through a superconducting segment. Each dot acts as a site, elastic cotunneling produces effective hopping, and crossed Andreev reflection produces an effective non-local pairing term.
 
 The effective two-dot Hamiltonian can be written as
 \begin{equation}
@@ -134,10 +135,10 @@ where $d_{L/R}^\dagger$ and $d_{L/R}$ are creation and annihilation operators on
 \end{itemize}
 At the ideal non-interacting sweet spot, $|\epsilon_L|=|\epsilon_R|=0$ and $|t|=|\Delta|$, the two-dot system develops Majorana-like states localized primarily on opposite dots. Since the system is finite and lacks a true bulk, these states are not topologically protected in the same sense as an infinite Kitaev chain. This is why they are referred to as Poor Man's Majoranas \cite{aguadoNewTrendsPlatforms2024}.\\
 
-For the purposes of this thesis, the PMM idea is generalized from two dots to interacting $n$-dot chains. A schematic representation is shown in Figure \ref{fig:PMM_setup}. Adding more dots introduces more tunable parameters and more possible low-energy structure, but it also makes the analytic sweet-spot problem much harder. This motivates the numerical optimization strategy discussed later in the thesis.
+For the purposes of this thesis, the PMM idea is generalized from two dots to interacting $n$-dot chains. A schematic representation is shown in Figure \ref{fig:PMM_setup}. Adding more dots introduces more tunable parameters and more possible low-energy structure, but it also makes the analytic sweet spot problem much harder. This motivates the numerical optimization strategy discussed later in the thesis.
 \begin{figure}
   \centering
-  \includegraphics[width=0.8\textwidth]{figs/PMMSetup.png}
+  \includegraphics[width=0.8\textwidth]{figs/diagram-20260621.png}
   \caption{Schematic representation of the PMM setup. The three quantum dots are represented by the blue circles, and the superconducting segments are represented by the grey rectangles. The tunable parameters of the system, such as the dot energy levels, ECT, CAR and the Coulomb interaction, are indicated by their respective labels. By tuning these parameters, we can access different regimes of the system and identify the sweet spots where Majorana-like modes emerge.}
   \label{fig:PMM_setup}
 \end{figure}
@@ -189,14 +190,14 @@ including these levels affects the projected braiding dynamics.
 \subsection{Energy Degeneracy and Spectral Gap \newline}
 Once the states have been separated into parity sectors, the next diagnostic is the energy splitting between parity partners. Majorana-like physics requires a near-degenerate pair of states, usually one even and one odd, associated with the occupation of the non-local fermionic mode. In an ideal infinite Kitaev chain, this degeneracy is exact. In a finite PMM chain, the edge modes can overlap, producing a small but nonzero splitting. The goal is therefore not only to find low-energy states, but to find parameter regimes where the even-odd splitting is small compared with all other relevant energy scales.\\
 
-The excitation gap is equally important. The gap separates the low-energy parity manifold from quasiparticle excitations and suppresses thermal or dynamical leakage out of the computational subspace. In PMM and quantum-dot-chain proposals, the useful gap is controlled by the same physical couplings that create the effective Kitaev chain, especially the elastic cotunneling and crossed-Andreev pairing amplitudes. If the gap closes, the Majorana-like signature is no longer protected, and the low-energy interpretation becomes unreliable \cite{sauRealizingRobustPractical2012}. A sizable gap is also essential for the braiding calculations in this thesis, because it justifies projecting the dynamics onto a low-energy subspace.\\
+The excitation gap is equally important. The gap separates the low-energy parity manifold from quasiparticle excitations and suppresses thermal or dynamical leakage out of the computational subspace. In PMM and quantum-dot-chain proposals, the useful gap is controlled by the same physical couplings that create the effective Kitaev chain, especially the elastic cotunneling and crossed-Andreev pairing amplitudes. If the gap closes, the Majorana-like signature is no longer protected, and the low-energy interpretation becomes unreliable \cite{sauRealizingRobustPractical2012}. A sizable gap is also essential for the braiding calculations in this thesis, as it justifies projecting the dynamics onto a low-energy subspace.\\
 
 This thesis also explores whether finite interacting chains can display approximate even-odd degeneracy across several energy levels, not only in the ground state. If such a structure survives, then some Majorana-like features may remain meaningful even when excited states are included in the projected Hilbert space. Figure~\ref{fig:gs_symmetry} illustrates the particle-hole symmetric structure expected in the idealized superconducting spectrum. In practice, the relevant diagnostic is whether the candidate parity partners are both nearly degenerate and well separated from the rest of the spectrum \cite{topocondmatKitaevChain}.
 
 \begin{figure}
   \centering
   \includegraphics[width=0.5\textwidth]{figs/gs_symmetry}%
-  \caption{Energy spectrum showing how the energy eigenvalues of the system must be symmetric around zero energy due to particle-hole symmetry. FIgure from.\cite{topocondmatKitaevChain}}
+  \caption{Energy spectrum showing how the energy eigenvalues of the system must be symmetric around zero energy due to particle-hole symmetry. Figure from\cite{topocondmatKitaevChain}.}
   \label{fig:gs_symmetry}
 \end{figure}
 
@@ -207,14 +208,14 @@ A defining feature of spatially separated Majorana modes is that the encoded inf
 
 One way to quantify this property is through the local distinguishability parameter
 \[
-\text{LD} = \frac{1}{N} \sum_{j=1}^{N} || \rho_j^o - \rho_j^e || = \frac{1}{N} \sum_{j=1}^{N} || \delta \rho_j ||.
+\text{LD} = \frac{1}{N} \sum_{j=1}^{N} || \rho_j^o - \rho_j^e || = \frac{1}{N} \sum_{j=1}^{N} || \delta \rho_j ||
 \]
 \cite{svenssonQuantumDotBased2024a}.
 Here, $\rho_j^{o/e}$ are the reduced density matrices of site $j$ for the odd and even parity ground states, respectively, and $||\cdot||$ is the trace norm. A value close to zero indicates that the two states are locally indistinguishable, while a larger value indicates that local measurements can tell the two parity states apart.\\
 
 In the spinless model considered in this thesis, the local charge occupation is the only non-trivial parity-preserving observable on a single site. Local distinguishability can therefore be evaluated directly from the charge expectation values in the even and odd states,
 \[
-\bra{e}n_{L(R)} \ket{e}, \quad \bra{o}n_{L(R)} \ket{o}.
+\bra{e}n_{L(R)} \ket{e} \quad \bra{o}n_{L(R)} \ket{o}.
 \]
 An ideal Majorana mode has no ordinary local charge identity: it is an equal particle-hole superposition rather than a conventional electron or hole. In a PMM system, this means that the local charge distribution should not reveal the parity state of the non-local fermion. At the sweet spot, the relevant charge signatures become symmetric between the two parity states, corresponding to the ``half-electron'' or charge-neutral character of the Majorana components~\cite{leijnseParityQubitsPoor2012,dvirRealizationMinimalKitaev2023}.
 
@@ -227,7 +228,7 @@ Local indistinguishability tests whether the information is hidden from local me
 
 One useful definition is
 \[
-M_\alpha = \frac{W_\alpha^2 - Z_\alpha^2}{W_\alpha^2 + Z_\alpha^2},
+M_\alpha := \frac{W_\alpha^2 - Z_\alpha^2}{W_\alpha^2 + Z_\alpha^2},
 \]
 where
 \[
@@ -258,7 +259,8 @@ the low-energy manifold and explicitly calculating the generated braid unitary.
 
 
 \subsection{From Qubit Gates to Fermionic Operators\newline}
-In quantum computation, quantum gates are unitary operations that manipulate the state of qubits. Quantum gates, or quantum logic gates, are the building blocks of quantum circuits, the same way classical logic gates are for digital circuits. Unlike many classical logic gates, quantum logic gates are reversible, meaning that they can be undone by applying the inverse operation. This reversibility is a fundamental property of quantum mechanics and is essential for quantum computation.\\ \\ 
+In quantum computation, quantum gates are unitary operations that manipulate the state of qubits. Quantum gates, or quantum logic gates, are the building blocks of quantum circuits, the same way classical logic gates are for digital circuits. Unlike many classical logic gates, quantum logic gates are reversible, meaning that they can be undone by applying the inverse operation. This reversibility is a fundamental property of quantum mechanics and is essential for quantum computation.
+
 Quantum gates are unitary operations and can be described as unitary matrices, relative to some orthonormal basis. For example, the Pauli gates $X$, $Y$, and $Z$ are represented by the following matrices:
 \begin{equation}
 X = \begin{pmatrix}
@@ -274,7 +276,8 @@ Z = \begin{pmatrix}
 0 & -1
 \end{pmatrix}.
 \end{equation}
-The Pauli gates $(X, Y, Z)$ are fundamental single-qubit gates that correspond to rotations around the $x$, $y$, and $z$ axes of the Bloch sphere, respectively. They are also examples of involutory gates, meaning that applying them twice yields the identity operation (e.g., $X^2 = Y^2 = Z^2 = I$).\\ \\ 
+The Pauli gates $(X, Y, Z)$ are fundamental single-qubit gates that correspond to rotations around the $x$, $y$, and $z$ axes of the Bloch sphere, respectively. They are also examples of involutory gates, meaning that applying them twice yields the identity operation (e.g., $X^2 = Y^2 = Z^2 = I$).
+
 In order to replicate these quantum logic gates using Majorana modes, we need to understand how to express these gates in terms of fermionic operators. This is because the Majorana modes are described by fermionic operators, and we want to find a way to translate the abstract quantum gates into operations that can be implemented in a Majorana system. By expressing the Pauli gates in terms of fermionic creation and annihilation operators, we can identify how to manipulate the Majorana modes to achieve the desired quantum gate operations. This connection is crucial for implementing quantum computation using Majorana-based qubits.\\
 Let us start by introducing two quantum states $\ket{0}$ and $\ket{1}$, which we can simply represent as column vectors:
 \begin{equation}
@@ -294,7 +297,8 @@ Z\ket{0} &= \ket{0}, \quad Z\ket{1} = -\ket{1}.
 \end{align*}
 
 
-To put these operations in the context of fermionic systems, the $X$ gate maps the two computational basis states into each other. The $Y$ gate performs the same state exchange while introducing relative phase factors of $i$ and $-i$. The $Z$ gate, on the other hand, does not exchange the states, but applies a phase of $-1$ to $\ket{1}$ while leaving $\ket{0}$ unchanged.\\ \\ 
+To put these operations in the context of fermionic systems, the $X$ gate maps the two computational basis states into each other. The $Y$ gate performs the same state exchange while introducing relative phase factors of $i$ and $-i$. The $Z$ gate, on the other hand, does not exchange the states, but applies a phase of $-1$ to $\ket{1}$ while leaving $\ket{0}$ unchanged.
+
 
 A single fermionic mode has the occupation states
 $\ket{0_f}$ and $\ket{1_f}=c^\dagger\ket{0_f}$.
@@ -304,9 +308,9 @@ therefore cannot directly serve as the computational basis of a qubit.
 Instead, a qubit can be encoded using two fermionic modes while fixing their
 total parity. In the odd-parity sector, the logical basis states are
 \[
-\ket{0_L}=\ket{1,0}=c_1^\dagger\ket{\mathrm{vac}},
+\ket{0_L}=\ket{1,0}=c_1^\dagger\ket{\mathrm{vac}} 
 \qquad
-\ket{1_L}=\ket{0,1}=c_2^\dagger\ket{\mathrm{vac}}.
+\ket{1_L}=\ket{0,1}=c_2^\dagger\ket{\mathrm{vac}}
 \]
 where $\ket{n_1,n_2}=(c_1^\dagger)^{n_1}
 (c_2^\dagger)^{n_2}\ket{\mathrm{vac}}$.
@@ -335,7 +339,7 @@ Leaving us with the correct same-site fermionic relations, but operators on diff
 \begin{align*}
   a_j^{†} &= e^{iπ∑_{k=1}^{j-1}f_k^{†}f_k } ⋅ f_j^{†} \\ 
   a_j &= e^{-iπ∑_{k=1}^{j-1}f_k^{†}f_k } ⋅ f_j, \\
-  a_j^{†}a_j = f_j^{†}f_j
+  a_j^{†}&a_j = f_j^{†}f_j
 \end{align*}
 The exponential term, can be simplified to a string of $\sigma^z$ operators, giving us
 \begin{equation}
@@ -346,7 +350,7 @@ The transformed spin operators now satisfy the correct fermionic anticommutation
 \{a_j^{†}, a_k^{†}\} &= 0, \\
 \{a_j, a_k\} &= 0.
 \end{align*}
-The Jordan-Wigner transformation is a powerful tool for analyzing spin systems using fermionic techniques, and it provides a clear example of how quantum gates can be expressed in terms of fermionic operators. By applying this transformation, we can gain insights into the behavior of spin systems and their connections to fermionic systems, which is essential for understanding the physics of Majorana modes and their applications in quantum computation.
+The Jordan-Wigner strings therefore fix the non-local sign structure needed when Majorana operators from different sites are embedded in the same Hilbert space. With this fermionic algebra in place, we can now express the encoded Pauli operators directly as Majorana bilinears.
 
 
 \subsection{Pauli Matrices in the Majorana Representation\newline}
@@ -407,7 +411,8 @@ U_0 = I.
 
 
 
-\cite{katoAdiabaticTheoremQuantum1950}. The final unitary $U_T$ is the geometric transport associated with the path in the chosen subspace. A full physical time evolution would also contain dynamical phases depending on the instantaneous energies and total protocol time. The Kato construction isolates the adiabatic geometric part, which is the component relevant for identifying the braid gate. In numerical calculations, $P(t)$ is obtained by diagonalizing the Hamiltonian at each time step and constructing the projector onto the chosen low-energy manifold.\\ \\ 
+\cite{katoAdiabaticTheoremQuantum1950}. The final unitary $U_T$ is the geometric transport associated with the path in the chosen subspace. A full physical time evolution would also contain dynamical phases depending on the instantaneous energies and total protocol time. The Kato construction isolates the adiabatic geometric part, which is the component relevant for identifying the braid gate. In numerical calculations, $P(t)$ is obtained by diagonalizing the Hamiltonian at each time step and constructing the projector onto the chosen low-energy manifold.
+
 This unitary matrix is the braid unitary generated by the parameter protocol. By comparing $U_T$ with the ideal target gate expressed in terms of Majorana bilinears, we can assess how well the parameter-tuning braid approximates the desired quantum gate operation. This comparison can be done both at the operator level, by checking how $U_T$ transforms the Majorana operators, and at the level of the projected parity blocks, by checking how $U_T$ acts on the encoded qubit states.\\
 
 \subsection{Effective Braiding Hamiltonian\newline}
@@ -439,7 +444,8 @@ In a microscopic PMM device, the tunable quantities are not abstract Majorana bi
 which is the same type of elastic cotunneling and crossed-Andreev pairing structure appearing in the PMM Hamiltonian. After such microscopic junction operators are projected into the retained low-energy subspace, they can be compared with the effective Majorana bilinears of Eq.~\ref{eq:H_eff}. This motivates comparing two related braid constructions: one built from ideal or energy-level Majorana operators, and one built from projected microscopic local operators.\\
 
 \subsection{Energy-Level Versus Local-Operator Braids\newline}
-The central comparison in the braiding analysis is between two ways of replacing the ideal energy-level operators $\gamma_2$ and $\gamma_3$ in Eq.~\ref{eq:H_eff}. The effective Hamiltonian assumes that the Majorana operators are ideal and perfectly localized, while the optimized PMM system only provides approximate Majorana-like degrees of freedom. To test how close the microscopic system comes to the ideal exchange picture, we compare an energy-level construction with a local-operator construction.\\ \\ 
+The central comparison in the braiding analysis is between two ways of replacing the ideal energy-level operators $\gamma_2$ and $\gamma_3$ in Eq.~\ref{eq:H_eff}. The effective Hamiltonian assumes that the Majorana operators are ideal and perfectly localized, while the optimized PMM system only provides approximate Majorana-like degrees of freedom. To test how close the microscopic system comes to the ideal exchange picture, we compare an energy-level construction with a local-operator construction.
+
 In Majorana algebra, the target exchange operation used in this thesis is
 \begin{equation}
   B_{\gamma_2\gamma_3} = \exp\left(-\frac{\pi}{4}\gamma_2\gamma_3\right).
@@ -462,10 +468,11 @@ with
 \end{equation}
 
 
-Here $P$ is constructed by diagonalizing the full Hamiltonian and selecting the $N$ states, corresponding to the desired low-energy subspace \cite{samuelsonQuantifyingRobustnessLocality2026a, kellsLocalizationEnhancedDegraded2018}. The local-operator braid therefore tests whether the physically projected microscopic endpoint operators access the same exchange channel as the ideal target gate.\\ \\ 
+Here $P$ is constructed by diagonalizing the full Hamiltonian and selecting the $N$ states, corresponding to the desired low-energy subspace \cite{samuelsonQuantifyingRobustnessLocality2026a, kellsLocalizationEnhancedDegraded2018}. The local-operator braid therefore tests whether the physically projected microscopic endpoint operators access the same exchange channel as the ideal target gate.
+
 The energy-level construction starts from the optimized subsystem Hamiltonian. For clarity, this is the $n$-dot extension of the effective two-dot model \ref{eq:qdsqdh},
 \begin{equation}
-  H = \sum_{i}^n \epsilon_i n_i + ∑_{j}^{n-1} t_j (c_j ^{†} c_{j+1} + c_{j+1} ^{†} c_j) + ∑_{j}^{n-1} \Delta_j (c_j ^{†} c_{j+1} ^{†} + c_{j+1} c_j) + ∑_{j}^{n-1} U n_j n_{j+1},  
+  H = \sum_{i}^n \epsilon_i n_i + ∑_{j}^{n-1} t_j (c_j ^{†} c_{j+1} + c_{j+1} ^{†} c_j) + ∑_{j}^{n-1} \Delta_j (c_j ^{†} c_{j+1} ^{†} + c_{j+1} c_j) + ∑_{j}^{n-1} U n_j n_{j+1}.  
   \label{eq:n_dot_hamiltonian}
 \end{equation}
 Diagonalizing this Hamiltonian \ref{eq:n_dot_hamiltonian}, we obtain the energy eigenstates, which can be classified by parity. By pairing even and odd states that are close in energy, we can construct effective Majorana operators as combinations of these parity partners. In its simplest form, this construction looks like:
