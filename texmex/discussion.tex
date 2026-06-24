@@ -58,3 +58,15 @@ The main limitation of the present study is that the optimization procedure does
 A second limitation is that the present braiding analysis is still highly controlled. The clean agreement found in the lowest manifold relies on projection to a small low-energy space and on an idealized, disorder-free setting. The study does not yet include disorder, quasiparticle poisoning, nonadiabatic driving errors, or explicit coupling to thermal environments. Those effects are precisely the kinds of ingredients that would determine whether the optimized configurations remain useful in a more realistic device-level setting.
 
 Within the controlled sector-resolved projected models, a potentially useful finding is that the braiding protocol can also be implemented in higher-energy sectors. For configurations with a stable exchange channel, the self-target results are relatively insensitive to the selected sector. The strongly sector-dependent $U=1.0$ result shows that this behavior is not guaranteed and may depend strongly on the optimized parameter set. Whether such higher-energy sectors can be prepared and manipulated in a realistic device remains an open question. The repeated interior detuning in the optimized parameters also motivates a controlled study of whether inhomogeneous onsite potentials can suppress bulk Majorana weight and improve edge localization.
+
+A natural extension of this work would be to explore whether the energy sectors can be made simpler by breaking the artificial permutation symmetry between the three identical subsystems. In the present calculations, the large block structures arise because subsystems \(A\), \(B\), and \(C\) have identical spectra. For example, the configurations
+\begin{equation}
+\begin{aligned}
+  (A& \text{ excited}, B \text{ ground}, C \text{ ground}),\\
+  (A& \text{ ground}, B \text{ excited}, C \text{ ground}),\\
+  (A& \text{ ground}, B \text{ ground}, C \text{ excited})
+\end{aligned}
+\end{equation}
+can have the same total energy, producing a 24-dimensional sector made from three independent 8-dimensional blocks. Similar permutation degeneracies appear in the larger sectors.
+
+If the three subsystem Hamiltonians were given controlled, unequal scale factors chosen to avoid accidental degeneracies, these sectors should split. Since each three-dot subsystem contains four parity pairs, the generic expectation would be \(4^3=64=512/8\) distinct sectors, each with dimension 8. This would remove the need for block matching within a sector and make excited-sector braiding easier to interpret. Such a study would test whether the block-dependent exchange orientations found here are mainly a consequence of the identical-subsystem degeneracies, or whether they persist in a more generic asymmetric junction.

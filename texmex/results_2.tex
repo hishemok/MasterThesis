@@ -64,13 +64,13 @@ The four-dot results show a more complex optimization landscape. Several of the 
 One recurring feature in the longer chains is that interior onsite energies are often shifted more strongly than the edge onsite energies. A possible interpretation is that this interior detuning helps separate the Majorana-like modes toward the edges. The parity-resolved spectra, charge diagnostics, and Majorana-polarization profiles below test whether the resulting configurations have the desired properties, although a controlled variation of the interior potentials would be needed to establish the mechanism.
 
 \subsection{Representative optimized spectra}
-The representative spectrums in Figs.~\ref{fig:2dot_schematicfirst}
+The representative spectra in Figs.~\ref{fig:2dot_schematicfirst}
 and~\ref{fig:2dot_schematicsecond} illustrate how interactions affect the
 optimized two-dot system. In the non-interacting case, both parity pairs are
 nearly degenerate, consistent with the expected two-dot sweet spot. When a weak
 interaction is introduced at $U=0.1$, the lowest parity pair remains close to
 degenerate, while the excited pair begins to show a visible splitting. At
-$U=2.0$, this excited-state splitting becomes much larger. Meaning that although the ground-state pair can retain a low-energy Majorana-like signature, it still does not maintain clean parity-pair degeneracy across the full finite spectrum.
+$U=2.0$, this excited-state splitting becomes much larger. This means that although the ground-state pair can retain a low-energy Majorana-like signature, the system does not maintain clean parity-pair degeneracy across the full finite spectrum.
 
 \begin{figure}[!htbp]
   \centering
@@ -96,7 +96,7 @@ profile has the expected edge-localized structure. The polarization is large
 and opposite in sign on the two outer dots, and it is strongly suppressed on
 the middle dot. This combination of spectral pairing and spatial Majorana
 character motivates using this configuration as the main candidate for the
-braiding calculations below. Comparing the three-dot configuration for $U=0.1$ with the two-dot configuration for $U=0.1$ also illustrates how the additional site can help stabilize the Majorana-like features in the presence of interactions, by noticing the excited-states retaining a better energy degeneracy in the three-dot case than in the two-dot case, even though both configurations have similar ground-state splitting and similar optimized parameters. The additional site therefore provides more freedom to optimize the excited states, which is important for maintaining a clean low-energy manifold that can support braiding.
+braiding calculations below. Comparing the three-dot and two-dot configurations at $U=0.1$ also illustrates how the additional site can help stabilize Majorana-like features in the presence of interactions. The excited-state degeneracy is better preserved in the three-dot case than in the two-dot case, even though both configurations have similar ground-state splitting and similar optimized parameters. The additional site therefore provides more freedom to optimize the excited states, which is important for maintaining a clean low-energy manifold that can support braiding.
 
 \begin{figure}[!htbp]
   \centering
@@ -123,7 +123,7 @@ Figure~\ref{fig:parity_summary} compares the parity-resolved spectra for $n=2,3,
 
 The non-interacting cases give the cleanest spectra, as expected. For the two-dot system, the parity pairing is nearly ideal at $U=0.0$, but the excited-state splitting becomes visible already at weak interaction and increases further at stronger interaction. This shows that the interacting two-dot system can retain a low-energy degeneracy while losing clean parity pairing across the full finite spectrum.
 
-The three-dot system is more stable across all interaction strengths shown, compared to both the two-dot and four-dot systems. For all three interaction strengths, $U=0.0$, $U=0.1$, and $U=2.0$, we can see that all energy levels are degenerate in pairs, up to a numerical threshold, with a decently large gap separating the energy levels into distinct energy sectors. The four-dot system shows a promising structure for weak and no interactions, while we can clearly see that for stronger interactions $U=2.0$, the energy degeneracy falls apart. Most importantly, the ground state energies are no longer degenerate, and thus there is no longer a clear low-energy manifold that can support braiding. The three-dot system therefore appears to be the most robust candidate for maintaining a clean low-energy manifold across different interaction strengths, but in order to determine if it is possible to braid using the three-dot system in a weak interaction regime, we need to also check the local diagnostics and Majorana character.
+The three-dot system is more stable across all interaction strengths shown, compared to both the two-dot and four-dot systems. For all three interaction strengths, $U=0.0$, $U=0.1$, and $U=2.0$, we can see that all energy levels are degenerate in pairs, up to a numerical threshold, with a decently large gap separating the energy levels into distinct energy sectors. The four-dot system shows a promising structure in the non-interacting and weakly interacting cases, while we can clearly see that for stronger interactions $U=2.0$, the energy degeneracy falls apart. Most importantly, the ground state energies are no longer degenerate, and thus there is no longer a clear low-energy manifold that can support braiding. The three-dot system therefore appears to be the most robust candidate for maintaining a clean low-energy manifold across different interaction strengths, but in order to determine if it is possible to braid using the three-dot system in a weak interaction regime, we need to also check the local diagnostics and Majorana character.
 
 \subsection{Local diagnostics and Majorana character}
 As discussed in the methodology chapter, Majorana-like states cannot be identified from spectral degeneracy alone. The parity-resolved spectra and low-energy gaps test whether the optimized Hamiltonian contains an isolated, nearly degenerate low-energy manifold. The present subsection examines the complementary local diagnostics: the Majorana-polarization profile and the local charge difference between the lowest even-odd parity partners.
@@ -235,25 +235,25 @@ As an additional consistency check, I also compare with a projected local-operat
 
 
 \section{Braiding in Multiple Energy Sectors}
-In order to explore if braiding is a posible operation beyond the lowest projected manifold, we had to come up with a way of identifying distinct energy sectors in the three-dot, three-subsystem system. \\
-This is done by first, combining all single system Hamiltonians into one single full system Hamiltonian:
+In order to explore whether braiding is possible beyond the lowest projected manifold, we had to identify distinct energy sectors in the three-dot, three-subsystem system. \\
+This is done by first combining the three single-subsystem Hamiltonians into one full-system Hamiltonian:
 \begin{equation}
   H = H_A ⊗ I_B ⊗ I_C + I_A ⊗ H_B ⊗ I_C + I_A ⊗ I_B ⊗ H_C,
 \end{equation}
-This Hamiltonian captures the entire $2⁹ × 2⁹$ Hilbert space of the Y-junction system. These three subsystems, $A,B$ and $C$, are at the initial time decoupled, and identical.
+This Hamiltonian captures the entire $2^9 \times 2^9$ Hilbert space of the Y-junction system. The three subsystems, $A$, $B$, and $C$, are initially decoupled and identical.
 
-This property of well defined single subsystem Hamiltonians transfers over to the full system Hamiltonian, where if we look at the complete even -- odd energy spectre of the full system, we can identify distinct energy sectors, where each sector is made up of states that are degenerate in energy, and seperated by a gap from other sectors \cref{fig:full_hamil_elevels}.
+This property of well-defined single-subsystem Hamiltonians transfers over to the full-system Hamiltonian. Looking at the complete even--odd energy spectrum of the full system, we can identify distinct energy sectors, where each sector is made up of states that are degenerate in energy and separated by a gap from other sectors, as shown in \cref{fig:full_hamil_elevels}.
 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.9\textwidth]{figs/full_system_spectrum_U_0p0.pdf}
-  \caption{Full system Hamiltonian energy spectrum. The spectrum is split into even and odd eigenenergies. The dashed lines represent the degeneracy link between the even and odd sectors. The left hand y-axis shows the energy levels, while the right hand y-axis shows how many states reside in each energy sector. This figure was created by a single non-interacting system, similar plots for the interacting model can be found in appendix \ref{app:energy_sectors}}
+  \caption{Full-system Hamiltonian energy spectrum. The spectrum is split into even and odd eigenenergies. The dashed lines represent the degeneracy link between the even and odd sectors. The left-hand y-axis shows the energy levels, while the right-hand y-axis shows how many states reside in each energy sector. This figure was created for a single non-interacting system. Similar plots for the interacting model can be found in Appendix~\ref{app:energy_sectors}.}
   \label{fig:full_hamil_elevels}
 \end{figure}
 
 In order to test whether the optimized PMM system can support braiding in multiple energy sectors, we can now perform the same braiding protocol as before, but instead of projecting onto the lowest energy subspace, we can pick any of the identified energy sectors. In order to pick out which sector to explore, we can first identify which eigenvalues and eigenvectors belong to each sector. The eigenvectors will then be used to construct the projection operator $P$ that projects onto the selected sector. This makes it possible to test, sector by sector, whether each braid construction produces its intended exchange behavior. The present self-target scans test braiding beyond the lowest projected manifold, while agreement between the local and energy-level exchange channels requires a separate common-target comparison.
 
-When exploring the different energy sectors, we can create projections of different dimensions. For example $P_0 = P_{\mathrm{GS}}$, the ground state projection, as described by the group size in \cref{fig:full_hamil_elevels} will have a dimension of $8 × 512$, we get 8 from number of states in the ground state sector, and 512 from the total number of states in the full system. If we look at the first excited sector, we can create a projection $P_1$ that has a dimension of $24 × 512$, and so on. An interesting observation occured when we projected the system down to any of the sectors in the system. After the braid couplings were activated, the projected spectrum split into a lower and an upper band of equal dimension, separated by a gap \cref{fig:level_split}. This split provides a well-defined lower band for Kato transport, but does not by itself establish that the resulting unitary performs a successful Majorana exchange. The target-overlap results below provide that separate test.
+When exploring the different energy sectors, we can create projections of different dimensions. For example, $P_0 = P_{\mathrm{GS}}$, the ground-state projection described by the group size in \cref{fig:full_hamil_elevels}, has dimension $8 \times 512$. The factor $8$ comes from the number of states in the ground-state sector, while $512$ is the total number of states in the full system. If we look at the first excited sector, we can create a projection $P_1$ that has dimension $24 \times 512$, and so on. An interesting observation occurred when we projected the system down to any of its energy sectors. After the braid couplings were activated, the projected spectrum split into a lower and an upper band of equal dimension, separated by a gap \cref{fig:level_split}. This split provides a well-defined lower band for Kato transport, but does not by itself establish that the resulting unitary performs a successful Majorana exchange. The target-overlap results below provide that separate test.
 
 For the sector-resolved scans, the transported dimension was therefore fixed to half of the sector projection dimension, $\dim T_i=\dim P_i/2$, as defined in \cref{eq:method_sector_transport_dimension}. In each sector, the Kato calculation transports the lower band and measures whether its final unitary reproduces the intended exchange.
 
@@ -305,11 +305,11 @@ With this method in mind, we ran a final scan using the block-matched local oper
 
 \Cref{fig:matched_operator_interaction_regimes} shows that the block-matched construction retains the same overall self-target error regimes as the direct projected local-operator model. The $U=0.0$ and $U=0.1$ configurations remain accurate across the tested sectors, while the deviations increase at $U=0.5$ and become larger and more sector dependent for $U=1.0$ and $U=2.0$. Resolving and independently fitting the internal blocks therefore does not by itself remove the sensitivity observed in the local-operator construction.
 
-The resulting blockwise coefficients are reported in \cref{tab:matched_operator_coefficients}. The numerical fitting errors remain between approximately $10^{-15}$ and $10^{-13}$ across all tested interaction strengths, showing that the block-matched operators reproduce the projected local operators essentially exact. The fitted operator within each block:
+The resulting blockwise coefficients are reported in \cref{tab:matched_operator_coefficients}. The numerical fitting errors remain between approximately $10^{-15}$ and $10^{-13}$ across all tested interaction strengths, showing that the block-matched operators reproduce the projected local operators essentially exactly. The fitted operator within each block:
 $$
 Γ_{r,local} = a_r \gamma_{r1} + b_r \gamma_{r2}
 $$
-finds the coefficients $a_r$ and $b_r$ that best match the projected local operator within block $r$. The first-component coefficients $a_r$ are all strongly suppressed. The local endpoint operators therefor remain aligned with the intended second Majorana component, rather than rotating into a mixture of the two components. For $U=0.0$ and $U=0.1$, these coefficients are close to $\pm 1$ across all blocks. Small departures become visible at $U=0.5$, while $U=1.0$ and $U=2.0$ show larger block-dependent variations in magnitude.
+finds the coefficients $a_r$ and $b_r$ that best match the projected local operator within block $r$. The first-component coefficients $a_r$ are all strongly suppressed. The local endpoint operators therefore remain aligned with the intended second Majorana component, rather than rotating into a mixture of the two components. For $U=0.0$ and $U=0.1$, these coefficients are close to $\pm 1$ across all blocks. Small departures become visible at $U=0.5$, while $U=1.0$ and $U=2.0$ show larger block-dependent variations in magnitude.
 
 The coefficient table also reveals that different blocks within the same sector can select different relative exchange orientations. Since the first-component coefficients vanish at the saved precision, the fitted operators in block $r$ can be written as
 \begin{equation}
@@ -342,7 +342,7 @@ where $\gamma_{B2}^{(r)}$ and $\gamma_{C2}^{(r)}$ are the corresponding energy-l
     \alpha_r=\left|b_{B,r}b_{C,r}\right|.
   \end{aligned}
 \end{equation}
-The sign $s_r$ determines the exchange orientation relative to the fixed energy-level convention, while the magnitude $\alpha_r$ determines the rotation angle generated within the block. When $\alpha_r\approx1$ and the projected operators satisfy the ideal Majorana algebra, the two orientations reduce up to a global phase and in the corresponding occupation basis, to
+The sign $s_r$ determines the exchange orientation relative to the fixed energy-level convention, while the magnitude $\alpha_r$ determines the rotation angle generated within the block. When $\alpha_r\approx1$ and the projected operators satisfy the ideal Majorana algebra, the two orientations reduce, up to a global phase and in the corresponding occupation basis, to
 \begin{equation}
   s_r=+1:
   \quad

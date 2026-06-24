@@ -82,8 +82,8 @@
 \contentsline {section}{\numberline {5.1}Parameter Optimization Scheme}{69}{section.5.1}%
 \contentsline {section}{\numberline {5.2}Braiding Analysis}{70}{section.5.2}%
 \contentsline {section}{\numberline {5.3}Limitations and Outlook}{72}{section.5.3}%
-\contentsline {chapter}{\numberline {6}Conclusion}{73}{chapter.6}%
-\contentsline {chapter}{\numberline {A}Block Labeling Method}{75}{appendix.A}%
-\contentsline {chapter}{\numberline {B}Energy Sectors}{77}{appendix.B}%
-\contentsline {chapter}{\numberline {C}Block-Matched Coefficients}{83}{appendix.C}%
+\contentsline {chapter}{\numberline {6}Conclusion}{75}{chapter.6}%
+\contentsline {chapter}{\numberline {A}Block Labeling Method}{77}{appendix.A}%
+\contentsline {chapter}{\numberline {B}Energy Sectors}{79}{appendix.B}%
+\contentsline {chapter}{\numberline {C}Block-Matched Coefficients}{85}{appendix.C}%
 \contentsfinish 
