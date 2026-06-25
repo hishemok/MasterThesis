@@ -212,6 +212,18 @@ The junction decomposition in Fig.~\ref{fig:braiding_junction_decomposition} exp
 
 As an additional consistency check, I also compare with a projected local-operator braid. In this construction, the exchanged Majorana channels are obtained by projecting local endpoint Majorana operators rather than by projecting the full microscopic junction Hamiltonian. This tests whether the same low-energy exchange channel is accessed by local microscopic operators.
 
+Here, \(\chi\) denotes the unprojected local Majorana operator on a specific microscopic site. For site \(j\) in subsystem \(S\),
+\begin{equation}
+  \chi_{Sj,x}=c_{Sj}^{\dagger}+c_{Sj},
+  \qquad
+  \chi_{Sj,y}=i(c_{Sj}^{\dagger}-c_{Sj}).
+\end{equation}
+After projection into the retained low-energy space, these operators give the projected local components used in the braid model,
+\begin{equation}
+  \Gamma_{Sj,y}^{P}=V^{\dagger}\chi_{Sj,y}V.
+\end{equation}
+Thus \(\chi\) labels the microscopic site operator, while \(\Gamma^P\) denotes its projected representation.
+
 \begin{table}[htbp]
   \centering
   \scriptsize
@@ -253,7 +265,7 @@ This property of well-defined single-subsystem Hamiltonians transfers over to th
 
 In order to test whether the optimized PMM system can support braiding in multiple energy sectors, we can now perform the same braiding protocol as before, but instead of projecting onto the lowest energy subspace, we can pick any of the identified energy sectors. In order to pick out which sector to explore, we can first identify which eigenvalues and eigenvectors belong to each sector. The eigenvectors will then be used to construct the projection operator $P$ that projects onto the selected sector. This makes it possible to test, sector by sector, whether each braid construction produces its intended exchange behavior. The present self-target scans test braiding beyond the lowest projected manifold, while agreement between the local and energy-level exchange channels requires a separate common-target comparison.
 
-When exploring the different energy sectors, we can create projections of different dimensions. For example, $P_0 = P_{\mathrm{GS}}$, the ground-state projection described by the group size in \cref{fig:full_hamil_elevels}, has dimension $8 \times 512$. The factor $8$ comes from the number of states in the ground-state sector, while $512$ is the total number of states in the full system. If we look at the first excited sector, we can create a projection $P_1$ that has dimension $24 \times 512$, and so on. An interesting observation occurred when we projected the system down to any of its energy sectors. After the braid couplings were activated, the projected spectrum split into a lower and an upper band of equal dimension, separated by a gap \cref{fig:level_split}. This split provides a well-defined lower band for Kato transport, but does not by itself establish that the resulting unitary performs a successful Majorana exchange. The target-overlap results below provide that separate test.
+When exploring the different energy sectors, we can create projections of different dimensions. For example, $P_0 = P_{\mathrm{GS}}$, the ground-state projection described by the group size in \cref{fig:full_hamil_elevels}, has dimension $8 \times 512$. The factor $8$ comes from the number of states in the ground-state sector, while $512$ is the total number of states in the full system. If we look at the first excited sector, we can create a projection $P_1$ that has dimension $24 \times 512$, and so on. An interesting observation occurred when we projected the system down to any of its energy sectors. After the braid couplings were activated, the projected spectrum split into a lower and an upper band of equal dimension, separated by a gap \cref{fig:level_split}. This split provides a well-defined lower band for Kato transport, but does not by itself establish that the resulting unitary performs a successful Majorana exchange. The target-overlap deviation \(D_{\mathcal{O}}=|1-\mathcal{O}|\), defined in \cref{eq:method_overlap_deviation}, provides that separate test.
 
 For the sector-resolved scans, the transported dimension was therefore fixed to half of the sector projection dimension, $\dim T_i=\dim P_i/2$, as defined in \cref{eq:method_sector_transport_dimension}. In each sector, the Kato calculation transports the lower band and measures whether its final unitary reproduces the intended exchange.
 
@@ -270,7 +282,7 @@ The first scan provides an energy-level Majorana baseline, starting with the gro
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.9\textwidth]{figs/ideal_operator_interaction_regimes.pdf}
-  \caption{Self-target braid errors for the energy-level Majorana baseline across different energy sectors and interaction strengths $U=0.0$, $U=0.1$, $U=0.5$, $U=1.0$, and $U=2.0$. The figure is split into three deviation regimes: a) $U=1.0$, b) $U=2.0$, and c) $U=0.0$, $U=0.1$, and $U=0.5$. The energy-level construction supports accurate braiding across all sectors for the non-interacting and weakly interacting configurations, while the $U=1.0$ configuration shows strong sector-dependent failures.}
+  \caption{Self-target braid errors for the energy-level Majorana baseline across different energy sectors and interaction strengths $U=0.0$, $U=0.1$, $U=0.5$, $U=1.0$, and $U=2.0$, plotted as the overlap deviation \(D_{\mathcal{O}}=|1-\mathcal{O}|\). The figure is split into three deviation regimes: a) $U=1.0$, b) $U=2.0$, and c) $U=0.0$, $U=0.1$, and $U=0.5$. The energy-level construction supports accurate braiding across all sectors for the non-interacting and weakly interacting configurations, while the $U=1.0$ configuration shows strong sector-dependent failures.}
   \label{fig:ideal_operator_interaction_regimes}
 \end{figure}
 \Cref{fig:ideal_operator_interaction_regimes} displays the energy-level Majorana baseline. Here the $\gamma$ operators are created directly from the paired eigenstates by the construction $\gamma=\ket{e}\bra{o}+\mathrm{h.c.}$ before being projected into each sector and placed in the braid Hamiltonian. The high-deviation panel shows that the $U=1.0$ configuration is strongly sector dependent: some sectors remain accurate, while others have errors of order $10^{-1}$. The $U=2.0$ results are much more stable across sectors and generally lie around $10^{-6}$. For $U=0.0$, $U=0.1$, and $U=0.5$, the errors remain below the $10^{-6}$ threshold across all sectors. The unusually poor and irregular $U=1.0$ result, despite the stronger $U=2.0$ configuration performing well in this baseline, shows that interaction strength alone does not necessarily  explain the ordering of the selected configurations.
@@ -282,15 +294,15 @@ Since the low-energy junction decomposition identifies $\gamma_{B2}$ and $\gamma
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.9\textwidth]{figs/projected_operator_interaction_regimes.pdf}
-  \caption{Self-target braid errors for the projected local-operator model across different energy sectors and interaction strengths $U=0.0$, $U=0.1$, $U=0.5$, $U=1.0$, and $U=2.0$. The figure is split into three deviation regimes: a) $U=1.0$ and $U=2.0$, b) $U=0.5$, and c) $U=0.0$ and $U=0.1$. The selected weak-interaction configurations have low deviations across all sectors, while the selected stronger-interaction configurations contain sectors with larger self-target errors.}
+  \caption{Self-target braid errors for the projected local-operator model across different energy sectors and interaction strengths $U=0.0$, $U=0.1$, $U=0.5$, $U=1.0$, and $U=2.0$, plotted as the overlap deviation \(D_{\mathcal{O}}=|1-\mathcal{O}|\). The figure is split into three deviation regimes: a) $U=1.0$ and $U=2.0$, b) $U=0.5$, and c) $U=0.0$ and $U=0.1$. The selected weak-interaction configurations have low deviations across all sectors, while the selected stronger-interaction configurations contain sectors with larger self-target errors.}
   \label{fig:projected_operator_interaction_regimes}
 \end{figure}
 \Cref{fig:projected_operator_interaction_regimes} shows how the self-target braid errors vary among the projected local-operator configurations. The high-deviation panel shows that the selected $U=1.0$ and $U=2.0$ configurations contain sectors with errors as large as order $10^{-1}$ and $10^{-2}$, respectively. Compared with the energy-level Majorana baseline in \cref{fig:ideal_operator_interaction_regimes}, the $U=0.5$ configuration is also more sensitive to sector choice in the projected local-operator model, with errors reaching approximately $10^{-5}$. For $U=0.0$ and $U=0.1$, the errors remain below $10^{-6}$ across all tested sectors. Because each interaction strength uses a separately optimized parameter set, this trend does not isolate interaction strength as the sole cause.
 
 
-During the scans, many higher-dimensional energy sectors, particularly for the non-interacting and weakly interacting configurations, were found to decompose into multiples of the eight-dimensional three-subsystem ground sector. For example, a $24$-dimensional sector can contain three independent $8\times8$ blocks, as illustrated in \cref{fig:24x24box,fig:24x24maj}. At stronger interaction strengths, an energy sector can instead contain only part of a labelled block. A single overall sign therefore cannot generally align the projected local operator with the energy-level Majorana across an entire higher-dimensional sector.
+During the scans, many higher-dimensional energy sectors, particularly for the non-interacting and weakly interacting configurations, were found to decompose into multiples of the eight-dimensional three-subsystem ground sector. For example, a $24$-dimensional sector can contain three independent $8\times8$ blocks, as illustrated for a projected local Majorana operator in \cref{fig:24x24maj}. At stronger interaction strengths, an energy sector can instead contain only part of a labelled block. A single overall sign therefore cannot generally align the projected local operator with the energy-level Majorana across an entire higher-dimensional sector.
 
-To account for this structure, we use the block-matching procedure described in \cref{app:block_label_method}. The procedure first identifies the independent blocks using subsystem energy-level labels. Within each block, the projected local operator is fitted independently to a continuous linear combination of the two available energy-level Majorana components. The independently fitted blocks are then reassembled into one operator on the full sector. The diagrams below provide a short visual summary of this decomposition.
+To account for this structure, we use the block-matching procedure described in \cref{app:block_label_method}. The procedure first identifies the independent blocks using subsystem energy-level labels. Within each block, the projected local operator is fitted independently to a continuous linear combination of the two available energy-level Majorana components. The independently fitted blocks are then reassembled into one operator on the full sector. The diagram below provides a short visual summary of this decomposition.
 
 \input{label_mats}
 
@@ -298,7 +310,7 @@ With this method in mind, we ran a final scan using the block-matched local oper
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.9\textwidth]{figs/matched_operator_interaction_regimes.pdf}
-  \caption{Self-target braid errors for the block-matched local-operator model. The same three deviation regimes as in \cref{fig:projected_operator_interaction_regimes} remain visible: a) $U=1.0$ and $U=2.0$, b) $U=0.5$, and c) $U=0.0$ and $U=0.1$.
+  \caption{Self-target braid errors for the block-matched local-operator model, plotted as the overlap deviation \(D_{\mathcal{O}}=|1-\mathcal{O}|\). The same three deviation regimes as in \cref{fig:projected_operator_interaction_regimes} remain visible: a) $U=1.0$ and $U=2.0$, b) $U=0.5$, and c) $U=0.0$ and $U=0.1$.
  }
   \label{fig:matched_operator_interaction_regimes}
 \end{figure}
@@ -369,7 +381,7 @@ Consequently, a sector containing both signs does not implement one uniform exch
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.9\textwidth]{figs/step_projection_mean_comparison.pdf}
-  \caption{Mean self-target braid error across the tested sectors for a) the projected local-operator model, b) the block-matched local-operator model, and c) the energy-level Majorana baseline. The ground-sector error is marked by a white diamond, and the standard deviation across sectors is shown by a black bar.
+  \caption{Mean self-target braid error across the tested sectors for a) the projected local-operator model, b) the block-matched local-operator model, and c) the energy-level Majorana baseline, using the overlap deviation \(D_{\mathcal{O}}=|1-\mathcal{O}|\). The ground-sector error is marked by a white diamond, and the standard deviation across sectors is shown by a black bar.
  }
   \label{fig:mean_braid_errors}
 \end{figure}

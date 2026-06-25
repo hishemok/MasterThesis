@@ -70,59 +70,65 @@ local_dict={
 matched_dict = local_dict.copy()
 ideal_dict = local_dict.copy()
 
-for i, filename in enumerate(files_local):
+def read_groups_and_overlap_errors(filename):
+    records = []
+    current_record = None
     with open(cwd / filename, "r") as f:
-        lines = f.readlines()
-        U_value = filename.split("U=")[-1].split(".txt")[0]
-        group = []
-        errors_local = []
-        for line in lines[1:]:
-            group.append(float(line.split()[0]))
-            errors_local.append(1 - float(line.split()[-1]))
-        local_dict[U_value] = {
-            "groups": group,
-            "errors": errors_local,
-            "mean": np.mean(errors_local),
-            "std": np.std(errors_local),
-            "ground_state_overlap": errors_local[0]
-        }
+        for line in f.readlines()[1:]:
+            stripped = line.strip()
+            if not stripped:
+                continue
 
-for i, filename in enumerate(files_ideal):
-    with open(cwd / filename, "r") as f:
-        lines = f.readlines()
-        U_value = filename.split("U=")[-1].split(".txt")[0]
-        group = []
-        errors_ideal = []
-        for line in lines[1:]:
-            group.append(float(line.split()[0]))
-            errors_ideal.append(1 - float(line.split()[-1]))
-        ideal_dict[U_value] = {
-            "groups": group,
-            "errors":  errors_ideal,
-            "mean": np.mean(errors_ideal),
-            "std": np.std(errors_ideal),
-            "ground_state_overlap":  errors_ideal[0]
-        }
+            parts = stripped.split()
+            try:
+                float(parts[0])
+                starts_new_record = True
+            except ValueError:
+                starts_new_record = False
 
-for i, filename in enumerate(files_matched):
-    with open(cwd / filename, "r") as f:
-        lines = f.readlines()
-        U_value = filename.split("U=")[-1].split(".txt")[0]
-        group = []
-        errors_matched = []
-        for line in lines[1:]:
-            group.append(float(line.split()[0]))
-            errors_matched.append(1 - float(line.split()[-1]))
-        matched_dict[U_value] = {
-            "groups": group,
-            "errors": errors_matched,
-            "mean": np.mean(errors_matched),
-            "std": np.std(errors_matched),
-            "ground_state_overlap":  errors_matched[0]
-        }
+            if starts_new_record:
+                if current_record is not None:
+                    records.append(current_record)
+                current_record = stripped
+            elif current_record is not None:
+                current_record += " " + stripped
+
+    if current_record is not None:
+        records.append(current_record)
+
+    groups = []
+    errors = []
+    for record in records:
+        parts = record.split()
+        groups.append(float(parts[0]))
+        errors.append(abs(1 - float(parts[-1])))
+    return groups, errors
+
+
+def store_overlap_results(result_dict, filename):
+    U_value = filename.split("U=")[-1].split(".txt")[0]
+    groups, errors = read_groups_and_overlap_errors(filename)
+    result_dict[U_value] = {
+        "groups": groups,
+        "errors": errors,
+        "mean": np.mean(errors),
+        "std": np.std(errors),
+        "ground_state_overlap": errors[0],
+    }
+
+
+for filename in files_local:
+    store_overlap_results(local_dict, filename)
+
+for filename in files_ideal:
+    store_overlap_results(ideal_dict, filename)
+
+for filename in files_matched:
+    store_overlap_results(matched_dict, filename)
 
 
 display_floor = 5e-11
+regime_y_limits = (display_floor, 2.0)
 
 
 def plot_sector_series(axis, values, u_index, u_label):
@@ -156,7 +162,7 @@ def plot_sector_series(axis, values, u_index, u_label):
 
 
 def plot_sector_regimes(results, title, output_name, high_u, intermediate_u, low_u):
-    fig, axes = plt.subplots(3, 1, figsize=(9, 8), sharex=True, sharey=False)
+    fig, axes = plt.subplots(3, 1, figsize=(9, 8), sharex=True, sharey=True)
     fig.suptitle(title, fontsize=20)
     fig.supylabel(r"Absolute overlap deviation $|1-\mathcal{O}|$", fontsize=16)
 
@@ -173,6 +179,7 @@ def plot_sector_regimes(results, title, output_name, high_u, intermediate_u, low
     legend_placements = ["lower left", "upper left", "upper left"]
     for axis, legend_placement in zip(axes, legend_placements):
         axis.set_yscale("log")
+        axis.set_ylim(*regime_y_limits)
         axis.grid(axis="y", which="major", alpha=0.25)
         axis.tick_params(axis="both", labelsize=11)
         axis.legend(
@@ -184,7 +191,6 @@ def plot_sector_regimes(results, title, output_name, high_u, intermediate_u, low
             ncol=3,
             fontsize=10,
         )
-    axes[2].set_ylim(1e-7, 2e-5)
     axes[2].set_xticks(
         [0, 0.5, 1],
         ["Ground-state sector", "Middle sectors", "Highest-energy sector"],
@@ -207,22 +213,22 @@ def plot_sector_regimes(results, title, output_name, high_u, intermediate_u, low
 
 names = ["0.0", "0.1", "0.5", "1.0", "2.0"]
 
-# plot_sector_regimes(
-#     ideal_dict,
-#     "Energy-Level Majorana Baseline Braid Target Deviation",
-#     "ideal_operator_interaction_regimes",
-#     high_u=["1.0"],
-#     intermediate_u=["2.0"],
-#     low_u=["0.5", "0.1", "0.0"],
-# )
-# plot_sector_regimes(
-#     local_dict,
-#     "Projected Local-Operator Braid Target Deviation",
-#     "projected_operator_interaction_regimes",
-#     high_u=["1.0", "2.0"],
-#     intermediate_u=["0.5"],
-#     low_u=["0.1", "0.0"],
-# )
+plot_sector_regimes(
+    ideal_dict,
+    "Energy-Level Majorana Baseline Braid Target Deviation",
+    "ideal_operator_interaction_regimes",
+    high_u=["1.0"],
+    intermediate_u=["2.0"],
+    low_u=["0.5", "0.1", "0.0"],
+)
+plot_sector_regimes(
+    local_dict,
+    "Projected Local-Operator Braid Target Deviation",
+    "projected_operator_interaction_regimes",
+    high_u=["1.0", "2.0"],
+    intermediate_u=["0.5"],
+    low_u=["0.1", "0.0"],
+)
 plot_sector_regimes(
     matched_dict,
     "Block-Matched Local-Operator Braid Target Deviation",
@@ -295,7 +301,7 @@ def plot_error_summary(axis, results, title):
 
 fig, axes = plt.subplots(3, 1, figsize=(8.2, 8.2), sharex=True, sharey=True)
 fig.suptitle("Braid overlap deviation by operator construction", fontsize=16)
-fig.supylabel(r"Mean overlap deviation $1-\mathcal{O}$", fontsize=13)
+fig.supylabel(r"Mean absolute overlap deviation $\langle D_{\mathcal{O}}\rangle$", fontsize=13)
 
 plot_error_summary(axes[0], local_dict, "(a) Projected local operators")
 plot_error_summary(axes[1], matched_dict, "(b) Block-matched local operators")
@@ -319,7 +325,7 @@ fig.tight_layout(rect=(0.02, 0.02, 1, 0.91), h_pad=1.1)
 output_path = cwd.parents[1] / "texmex" / "figs" / "step_projection_mean_comparison"
 fig.savefig(output_path.with_suffix(".pdf"), bbox_inches="tight", pad_inches=0.08)
 fig.savefig(output_path.with_suffix(".png"), bbox_inches="tight", pad_inches=0.08, dpi=220)
-plt.show()
+plt.close(fig)
 
 """
 plt.figure(figsize=(10, 6))

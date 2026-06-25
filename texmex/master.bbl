@@ -1212,6 +1212,57 @@
       \verb https://link.aps.org/doi/10.1103/PhysRevB.86.134528
       \endverb
     \endentry
+    \entry{leinaasTheoryIdenticalParticles1977}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=a84addcd82029b2ca8b92558c440687b}{%
+           family={Leinaas},
+           familyi={L\bibinitperiod},
+           given={J.\bibnamedelimi M.},
+           giveni={J\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=0efa5b83889727d722810f431b2cef37}{%
+           family={Myrheim},
+           familyi={M\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{282bbaba61b73dd869df216d6065f185}
+      \strng{fullhash}{282bbaba61b73dd869df216d6065f185}
+      \strng{fullhashraw}{282bbaba61b73dd869df216d6065f185}
+      \strng{bibnamehash}{282bbaba61b73dd869df216d6065f185}
+      \strng{authorbibnamehash}{282bbaba61b73dd869df216d6065f185}
+      \strng{authornamehash}{282bbaba61b73dd869df216d6065f185}
+      \strng{authorfullhash}{282bbaba61b73dd869df216d6065f185}
+      \strng{authorfullhashraw}{282bbaba61b73dd869df216d6065f185}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1826-9877}
+      \field{journaltitle}{Il Nuovo Cimento B Series 11}
+      \field{langid}{english}
+      \field{month}{1}
+      \field{number}{1}
+      \field{shortjournal}{Nuovo Cim B}
+      \field{title}{On the Theory of Identical Particles}
+      \field{urlday}{25}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{37}
+      \field{year}{1977}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{1\bibrangedash 23}
+      \range{pages}{23}
+      \verb{doi}
+      \verb 10.1007/BF02727953
+      \endverb
+      \verb{urlraw}
+      \verb http://link.springer.com/10.1007/BF02727953
+      \endverb
+      \verb{url}
+      \verb http://link.springer.com/10.1007/BF02727953
+      \endverb
+    \endentry
     \entry{lianTopologicalQuantumComputation2018}{article}{}{}
       \name{author}{5}{}{%
         {{hash=229bb8528e15f5219d283bfc062c5c23}{%
@@ -1443,6 +1494,70 @@
       \endverb
       \verb{url}
       \verb https://www.quantamagazine.org/milestone-evidence-for-anyons-a-third-kingdom-of-particles-20200512/
+      \endverb
+    \endentry
+    \entry{nakamuraDirectObservationAnyonic2020}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=b1d16e126198e7d2458730f6bb642306}{%
+           family={Nakamura},
+           familyi={N\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=9e88c3b9030e111ccf240901adb62186}{%
+           family={Liang},
+           familyi={L\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+        {{hash=b8cb719fc76ca05fe577113d3ef456dc}{%
+           family={Gardner},
+           familyi={G\bibinitperiod},
+           given={G.\bibnamedelimi C.},
+           giveni={G\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+        {{hash=fd71815c5d09e5fe1878513a224323a3}{%
+           family={Manfra},
+           familyi={M\bibinitperiod},
+           given={M.\bibnamedelimi J.},
+           giveni={M\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \strng{namehash}{c94d09d74cb5d3b7bdac7cc3308638a0}
+      \strng{fullhash}{eeccd9e8e7a9a57a9206a5b6454d844a}
+      \strng{fullhashraw}{eeccd9e8e7a9a57a9206a5b6454d844a}
+      \strng{bibnamehash}{c94d09d74cb5d3b7bdac7cc3308638a0}
+      \strng{authorbibnamehash}{c94d09d74cb5d3b7bdac7cc3308638a0}
+      \strng{authornamehash}{c94d09d74cb5d3b7bdac7cc3308638a0}
+      \strng{authorfullhash}{eeccd9e8e7a9a57a9206a5b6454d844a}
+      \strng{authorfullhashraw}{eeccd9e8e7a9a57a9206a5b6454d844a}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1745-2473, 1745-2481}
+      \field{journaltitle}{Nature Physics}
+      \field{langid}{english}
+      \field{month}{9}
+      \field{number}{9}
+      \field{shortjournal}{Nat. Phys.}
+      \field{title}{Direct Observation of Anyonic Braiding Statistics}
+      \field{urlday}{25}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{16}
+      \field{year}{2020}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{931\bibrangedash 936}
+      \range{pages}{6}
+      \verb{doi}
+      \verb 10.1038/s41567-020-1019-1
+      \endverb
+      \verb{file}
+      \verb /home/Hishem/Zotero/storage/I9JH5KU2/Nakamura et al. - 2020 - Direct observation of anyonic braiding statistics.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.nature.com/articles/s41567-020-1019-1
+      \endverb
+      \verb{url}
+      \verb https://www.nature.com/articles/s41567-020-1019-1
       \endverb
     \endentry
     \entry{narozhnyMajoranaFermionsNonuniform2017}{article}{}{}

@@ -5,8 +5,8 @@ subspaces associated with different combinations of subsystem energy levels.
 This is especially clear in the non-interacting and weakly interacting
 configurations, where a \(24\)-dimensional sector commonly decomposes into
 three \(8\)-dimensional blocks and a \(72\)-dimensional sector into nine such
-blocks. The \(24\)-dimensional example is illustrated in
-\cref{fig:24x24box,fig:24x24maj}. At stronger interaction strengths, an energy
+blocks. The \(24\)-dimensional projected-operator example is illustrated in
+\cref{fig:24x24maj}. At stronger interaction strengths, an energy
 sector may intersect only part of one of these blocks, so neither the sector
 dimension nor every labelled block is necessarily a multiple of eight.
 
@@ -95,14 +95,14 @@ The figures below are displaying the full system energy spectrum and the ground 
     \centering
     \includegraphics[width=0.5\textwidth]{figs/full_system_spectrum_U_0p0.pdf}
     \includegraphics[width=0.5\textwidth]{figs/projected_ground_group_spectrum_U_0p0.pdf}
-    \caption{Energy spectra and ground state splitting after Hamiltonian initiation. System configuration and optimization results are reported in \cref{tab:best_optimized_configs}. These figures are for mode $U=0.0$, for the three identical three dot systems. }
+    \caption{Energy spectrum and ground state splitting after Hamiltonian initiation. System configuration and optimization results are reported in \cref{tab:best_optimized_configs}. These figures are for the $U=0.0$ configurations, for the three identical three dot systems. }
     \label{fig:energy_sectors_U0}
 \end{figure}
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.5\textwidth]{figs/full_system_spectrum_U_0p1.pdf}
     \includegraphics[width=0.5\textwidth]{figs/projected_ground_group_spectrum_U_0p1.pdf}
-    \caption{Energy spectra and ground state splitting after Hamiltonian initiation. System configuration and optimization results are reported in \cref{tab:best_optimized_configs}. These figures are for mode $U=0.1$, for the three identical three dot systems. }
+    \caption{Energy spectrum and ground state splitting after Hamiltonian initiation. System configuration and optimization results are reported in \cref{tab:best_optimized_configs}. These figures are for the $U=0.1$ configurations, for the three identical three dot systems. }
     \label{fig:energy_sectors_U01}
 \end{figure}
 
@@ -110,7 +110,7 @@ The figures below are displaying the full system energy spectrum and the ground 
     \centering
     \includegraphics[width=0.5\textwidth]{figs/full_system_spectrum_U_0p5.pdf}
     \includegraphics[width=0.5\textwidth]{figs/projected_ground_group_spectrum_U_0p5.pdf}
-    \caption{Energy spectra and ground state splitting after Hamiltonian initiation. System configuration and optimization results are reported in \cref{tab:best_optimized_configs}. These figures are for mode $U=0.5$, for the three identical three dot systems. }
+    \caption{Energy spectrum and ground state splitting after Hamiltonian initiation. System configuration and optimization results are reported in \cref{tab:best_optimized_configs}. These figures are for the $U=0.5$ configurations, for the three identical three dot systems. }
     \label{fig:energy_sectors_U05}
 \end{figure}
 
@@ -118,14 +118,14 @@ The figures below are displaying the full system energy spectrum and the ground 
     \centering
     \includegraphics[width=0.5\textwidth]{figs/full_system_spectrum_U_1p0.pdf}
     \includegraphics[width=0.5\textwidth]{figs/projected_ground_group_spectrum_U_1p0.pdf}
-    \caption{Energy spectra and ground state splitting after Hamiltonian initiation. System configuration and optimization results are reported in \cref{tab:best_optimized_configs}. These figures are for mode $U=1.0$, for the three identical three dot systems. This plot also reflects the braiding results of $U=1.0$, as both the braiding and these energy sectors are chaotically unstable. }
+    \caption{Energy spectrum and ground state splitting after Hamiltonian initiation. System configuration and optimization results are reported in \cref{tab:best_optimized_configs}. These figures are for the $U=1.0$ configurations, for the three identical three dot systems. This plot also reflects the braiding results of $U=1.0$, as both the braiding and these energy sectors are chaotically unstable. }
     \label{fig:energy_sectors_U1}
 \end{figure}
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.5\textwidth]{figs/full_system_spectrum_U_2p0.pdf}
     \includegraphics[width=0.5\textwidth]{figs/projected_ground_group_spectrum_U_2p0.pdf}
-    \caption{Energy spectra and ground state splitting after Hamiltonian initiation. System configuration and optimization results are reported in \cref{tab:best_optimized_configs}. These figures are for mode $U=2.0$, for the three identical three dot systems. }
+    \caption{Energy spectrum and ground state splitting after Hamiltonian initialization. System configuration and optimization results are reported in \cref{tab:best_optimized_configs}. These figures are for the $U=2.0$ configurations, for the three identical three dot systems. }
     \label{fig:energy_sectors_U2}
 \end{figure}
 
@@ -139,4 +139,49 @@ vanish at the saved precision, while the second-component coefficients are
 close to either \(+1\) or \(-1\) in most blocks. The blockwise coefficients and
 their relative signs are reported in \cref{tab:matched_operator_coefficients}.
 
+For each labelled block \(r\), the projected local endpoint operator of
+subsystem \(S=B,C\) is restricted to the block and fitted to the two
+energy-level Majorana components,
+\begin{equation}
+  \Gamma_{S,\mathrm{loc}}^{(r)}
+  \approx
+  a_{S,r}\gamma_{S1}^{(r)}
+  +
+  b_{S,r}\gamma_{S2}^{(r)} .
+\end{equation}
+The table reports the coefficients \(b_{S,r}\), since the fitted
+first-component coefficients \(a_{S,r}\) vanish at the saved precision.
+
+The ideal expectation is therefore \(a_{S,r}\approx0\) and
+\(b_{S,r}\approx\pm1\). The sign is not by itself an error, but fixes the
+orientation of the fitted local operator relative to the chosen energy-level
+Majorana convention. The magnitude tests whether the fitted operator is still a
+properly normalized Majorana within the block. If the two energy-level
+components satisfy
+\((\gamma_{S1}^{(r)})^2=(\gamma_{S2}^{(r)})^2=P_r\) and
+\(\{\gamma_{S1}^{(r)},\gamma_{S2}^{(r)}\}=0\), then
+\begin{equation}
+  \left(\Gamma_{S,\mathrm{fit}}^{(r)}\right)^2
+  \approx
+  \left(a_{S,r}^2+b_{S,r}^2\right)P_r .
+\end{equation}
+Thus, in the present case where \(a_{S,r}\approx0\), deviations of
+\(|b_{S,r}|\) from one measure how far the projected local operator is from
+squaring to the block projector.
+
+For the braid, the two fitted endpoint operators enter through the product
+\begin{equation}
+  b_{B,r}b_{C,r}
+  =
+  s_r\alpha_r,
+  \qquad
+  s_r=\operatorname{sgn}(b_{B,r}b_{C,r}),
+  \qquad
+  \alpha_r=|b_{B,r}b_{C,r}|.
+\end{equation}
+Here \(s_r\) gives the exchange orientation in block \(r\), while
+\(\alpha_r\) controls the effective rotation strength. Mixed signs therefore
+mean that different blocks follow opposite exchange orientations, while
+magnitudes different from one indicate a non-ideal Majorana normalization or
+rotation angle.
 \input{generated/matched_operator_coefficients}

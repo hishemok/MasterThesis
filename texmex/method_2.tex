@@ -120,7 +120,7 @@ w_0>w_1>\cdots .
 This term encourages the optimizer to produce an approximately parity-paired spectrum, with particular emphasis on the lowest-energy states.
 
 \subsection{Excitation-Gap Term}
-Degeneracy alone is not sufficient: the parity-paired states must also be separated from nearby levels. The second loss contribution penalizes small gaps within the parity-resolved spectra. For adjacent levels, the relevant gap is taken as the smaller of the even-sector and odd-sector spacings,
+Degeneracy alone is not sufficient: the parity-paired states must also be separated from nearby levels. The second loss contribution penalizes small gaps within the parity-resolved spectrum. For adjacent levels, the relevant gap is taken as the smaller of the even-sector and odd-sector spacings,
 \begin{equation}
 \Delta_k
 =
@@ -195,7 +195,7 @@ Since this loss is a soft weighted objective rather than a set of hard constrain
 For this reason, after optimizing many configurations, the lowest-loss result for each pair $(n,U)$ is selected and analyzed separately. The stored optimized parameters $\Phi_{\mathrm{opt}}(n,U)$ are used to rebuild $H_{\mathrm{PMM}}(\theta_{\mathrm{opt}})$, which is then diagonalized and evaluated using the diagnostics below. This post-optimization step resolves the single scalar loss into physical quantities such as the ground-state splitting, excitation gap, charge difference, and Majorana-polarization profile.
 
 \subsection{Parity-Resolved Spectrum}
-Using the parity classification introduced in Sec.~\ref{sec:theory-parity-resolved-spectrum}, the reconstructed Hamiltonian is diagonalized and separated into ordered even- and odd-parity spectra using the total fermion parity operator
+Using the parity classification introduced in Sec.~\ref{sec:theory-parity-resolved-spectrum}, the reconstructed Hamiltonian is diagonalized and separated into ordered even- and odd-parity spectrum using the total fermion parity operator
 \begin{equation}
 P_{\mathrm{tot}}=\prod_{i=1}^{n}(1-2n_i).
 \end{equation}
@@ -565,6 +565,20 @@ This convention corresponds to the exchange action
 \gamma_3\mapsto \gamma_2,
 \end{equation}
 up to the overall sign convention chosen for the Majorana operators. Since a global phase of the transported unitary is physically irrelevant, comparisons with the target gate are made after aligning the overall phase. In practice, the reported gate error is a Frobenius-norm distance between the transported unitary and the phase-aligned target unitary, restricted to the initial transported basis.
+
+For the sector-resolved scans, the agreement with the target is also summarized by the normalized overlap
+\begin{equation}
+\mathcal{O}
+=
+\frac{1}{d_T}
+\left|
+\operatorname{Tr}\left(U_{\mathrm{target}}^{\dagger}U_K\right)
+\right|,
+\qquad
+D_{\mathcal{O}}=|1-\mathcal{O}|,
+\label{eq:method_overlap_deviation}
+\end{equation}
+where \(d_T\) is the dimension of the transported subspace. A perfect match up to a global phase gives \(\mathcal{O}=1\), so the plotted quantity \(D_{\mathcal{O}}\) vanishes for an ideal braid and increases as the transported unitary deviates from the target.
 
 \subsection{Operator-Action Checks}
 The first validation step checks the induced action on the Majorana operators directly. For each model, the transported unitary is applied as
