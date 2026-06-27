@@ -30,7 +30,8 @@ Here $\gamma_1$ and $\gamma_2$ are Majorana operators satisfying
     \gamma_i = \gamma_i^\dagger, \quad \{\gamma_i, \gamma_j\} = 2\delta_{ij}
 \end{equation}
 The non-Abelian character of MZMs is reflected in the fact that exchanging two of them produces a non-trivial unitary transformation on the degenerate ground-state manifold \cite{sarmaMajoranaZeroModes2015}.\\ 
-The primary motivation for studying MZMs and their braiding properties is their combination of non-local encoding and spectral protection. When a fermionic state is formed from two spatially separated MZMs, local environmental noise cannot easily determine or flip the encoded state, because such an error would require coupling to both separated Majorana components. Therefore, local perturbations are strongly suppressed as a source of decoherence \cite{nayakNonAbelianAnyonsTopological2008}.\\
+The primary motivation for studying MZMs and their braiding properties is their combination of non-local encoding and spectral protection. When the total fermion parity is conserved, a fermionic state formed from two spatially separated MZMs cannot easily be determined or flipped by a local perturbation, because such an error would require access to both separated Majorana components \cite{nayakNonAbelianAnyonsTopological2008}. This protection is not absolute, however. In superconducting Majorana platforms, stray quasiparticles or electrons from the environment can tunnel into the system near a Majorana mode and change the fermion parity, a process known as quasiparticle poisoning. Such parity-changing events are not removed by non-local encoding and constitute an important practical decoherence mechanism \cite{sarmaMajoranaZeroModes2015,beenakkerSearchNonAbelianMajorana2020}. Therefore, Majorana encodings suppress parity-preserving local noise, but still require control of parity-changing processes.
+
 MZMs also give rise to ground-state degeneracies. A system with $2n$ Majorana zero modes spans a $2^n$-dimensional fermionic Hilbert space associated with the occupations of $n$ non-local fermions. If the total fermion parity is fixed, the physical ground-state degeneracy is reduced to $2^{n-1}$. In either case, the useful low-energy manifold must be separated from excited states by a finite spectral gap, which protects the encoded information against thermal excitations\cite{kitaevUnpairedMajoranaFermions2001}.\\
 The remaining question is how such Majorana operators can emerge from an ordinary fermionic Hamiltonian. The Kitaev chain provides the minimal model where this mechanism can be seen explicitly, and it also gives the conceptual starting point for the Poor Man's Majorana systems studied in this thesis.
 
@@ -114,7 +115,12 @@ where $\gamma_j^{A,B}$ satisfy $\{\gamma_j^\alpha, \gamma_k^\beta\} = 2\delta_{j
 which satisfies $\{f, f^\dagger\}=1$ and costs zero energy to occupy. This non-local fermionic mode creates the basis for the exploration of Majorana physics in this thesis, and it is the key to understanding how Majorana modes can be used for quantum computation. The occupation of this non-local mode corresponds to a twofold degeneracy in the ground state, which is protected as long as local perturbations do not close the bulk gap or directly hybridize the two edge modes. This non-local encoding of information is what gives Majorana modes their potential for fault-tolerant quantum computation, as local errors cannot easily access or change the encoded state\cite{aguadoNewTrendsPlatforms2024}.
 
 
-\subsection{Poor Man's Majorana Systems\newline}
+\subsection{From Nanowire Platforms to Poor Man's Majorana Systems\newline}
+A common experimental route toward Majorana zero modes is to engineer an effective Kitaev chain in a semiconductor-superconductor hybrid \cite{aguadoNewTrendsPlatforms2024,aliceaNewDirectionsPursuit2012,sarmaMajoranaZeroModes2015}. In such nanowire platforms, superconducting proximity effect supplies pairing, spin-orbit coupling and a magnetic field can produce an effectively spinless low-energy band, and gate voltages tune the chemical potential. Early nanowire experiments observed zero-bias features consistent with Majorana bound states, but their interpretation is complicated by finite-size effects, disorder, and other mechanisms that can create near-zero-energy states in non-topological regimes \cite{mourikSignaturesMajoranaFermions2012,sarmaMajoranaZeroModes2015}.
+
+Poor Man's Majorana systems take a complementary route. Instead of relying on a long continuous wire, they use a small number of gate-defined quantum dots coupled through a superconductor. This gives direct control over the effective hopping, pairing, and onsite energies, and thereby sidesteps some disorder problems associated with extended nanowires. The tradeoff is that the resulting Majorana-like states require tuning and do not have the full topological protection of a long Kitaev chain \cite{leijnseParityQubitsPoor2012,dvirRealizationMinimalKitaev2023,svenssonQuantumDotBased2024,aguadoNewTrendsPlatforms2024}.
+
+
 The ideal Kitaev chain is a useful theoretical model, but it is not directly realizable in most physical systems, since it is usually treated as infinite, homogeneous, and non-interacting. The reason is that the Majorana modes are localized at the edges of the chain, and their energy splitting decreases exponentially with the chain length, $\exp(-L/l_{0})$\cite{kitaevUnpairedMajoranaFermions2001}. In the ideal limit, this makes the Majorana modes robust against local perturbations. However, in practice we have to work with finite systems, where the Majorana modes generally retain a small energy splitting due to their overlap. A Poor Man's Majorana system is also finite, but under the right parameter conditions it can mimic the low-energy physics of a Kitaev chain, including the presence of Majorana-like modes, in a much more compact and experimentally accessible setup.
  
 While the Kitaev chain is the minimal theoretical model, it assumes spinless fermions and intrinsic $p$-wave pairing. Real superconductors are usually spinful and dominated by conventional $s$-wave pairing. The Poor Man's Majorana (PMM) platform is a compact engineered system whose low-energy behavior can mimic a short Kitaev chain. The simplest version is a double quantum dot coupled through a superconducting segment. Each dot acts as a site, elastic cotunneling produces effective hopping, and crossed Andreev reflection produces an effective non-local pairing term.
@@ -149,7 +155,7 @@ Much of the standard Majorana theory starts from non-interacting, or quadratic, 
 
 The models studied in this thesis are spinless, but with a focus on interactions. The nearest-neighbor term $U_i n_i n_{i+1}$ makes the Hamiltonian interacting and genuinely many-body. As a result, the Majorana-like structure cannot be identified only from a single-particle zero mode. Instead, it must be diagnosed from many-body eigenstates, parity-sector degeneracies, excitation gaps, local charge differences, and Majorana-polarization matrix elements\cite{samuelsonQuantifyingRobustnessLocality2026,kellsLocalizationEnhancedDegraded2018,svenssonQuantumDotBased2024}.
 
-The spinless approximation is used to isolate the effect of interactions while keeping the numerical problem tractable. Physically, an effectively spinless description can arise when the relevant low-energy states are spin polarized, for example by magnetic fields or engineered dot configurations. Including both spin and interactions would enlarge the local Hilbert space and make the exact diagonalization problem grow much faster with the number of dots. The goal here is therefore not to model all microscopic spin physics, but to test how interaction terms modify the Majorana-like signatures and projected braiding behavior in a controlled finite chain\cite{leijnseParityQubitsPoor2012,dvirRealizationMinimalKitaev2023}.
+The spinless approximation is used to isolate the effect of interactions while keeping the numerical problem tractable. Physically, an effectively spinless description can arise when the relevant low-energy states are spin polarized, for example by magnetic fields or engineered dot configurations. Including both spin and interactions would enlarge the local Hilbert space and make the exact diagonalization problem grow much faster with the number of dots. The goal here is therefore not to model all microscopic spin physics, but to test how interaction terms modify the Majorana-like signatures and braiding behavior in a controlled finite chain\cite{leijnseParityQubitsPoor2012,dvirRealizationMinimalKitaev2023}.
 
 
 \section{Diagnostics of Majorana-like States}
@@ -158,14 +164,14 @@ In a finite PMM system, the presence of low-energy or near-zero-energy states is
 For this reason, the identification of Majorana-like states must rely on several complementary diagnostics rather than a single spectral feature. The diagnostics used here can be divided into two broad groups. Spectral diagnostics test whether the low-energy manifold has the expected parity degeneracy and excitation gap. Local diagnostics test whether the corresponding states are non-local, locally indistinguishable, and Majorana-like in their particle-hole structure. Together, these quantities define what is meant in this thesis by a promising Majorana-like configuration.\\
 
 
-\subsection{Parity-Resolved Spectrum}
-\label{sec:theory-parity-resolved-spectrum}
 
+\subsection{Spectral Diagnostics: Parity, Degeneracy, and Gap}
+\label{sec:theory-parity-resolved-spectrum}
 An essential first step in identifying Majorana-like states is resolving the
 energy spectrum by fermion parity. The mean-field Hamiltonian of a
 superconductor does not conserve particle number because superconducting
 pairing terms connect states whose particle numbers differ by two. It does,
-however, conserve the parity of the total particle number. The parity operator
+however, conserve the parity of the total particle number, as required by fermion-parity superselection. The parity operator
 can be written as
 \[
 P = (-1)^{N} = \prod_n (1 - 2c_n^\dagger c_n),
@@ -178,63 +184,69 @@ or emptying this mode changes the total fermion parity, connecting states in
 the even- and odd-parity sectors. At the ideal two-dot sweet spot, where the
 dot energies vanish and $|t|=|\Delta|$, the ground states in these two sectors
 become degenerate
-\cite{dvirRealizationMinimalKitaev2023,topocondmatKitaevChain, leijnseParityQubitsPoor2012}.
+\cite{dvirRealizationMinimalKitaev2023,topocondmatKitaevChain,leijnseParityQubitsPoor2012}.
 
-Parity resolution does not by itself identify Majorana-like states. Instead,
-it makes it possible to search for degeneracies between opposite-parity
-states, as expected when a zero-energy fermionic mode connects the two
-sectors. In this thesis, parity resolution is additionally used to examine
-whether analogous even-odd pairing persists at higher energy levels and how
-including these levels affects the projected braiding dynamics.
+Parity resolution makes it possible to search for degeneracies between opposite-parity states, as expected when a zero-energy fermionic mode connects the two sectors. In this thesis, parity resolution is additionally used to examine whether analogous even-odd pairing persists at higher energy levels and how including these levels affects the braiding dynamics.\\ 
 
-\subsection{Energy Degeneracy and Spectral Gap \newline}
-Once the states have been separated into parity sectors, the next diagnostic is the energy splitting between parity partners. Majorana-like physics requires a near-degenerate pair of states, usually one even and one odd, associated with the occupation of the non-local fermionic mode. In an ideal infinite Kitaev chain, this degeneracy is exact. In a finite PMM chain, the edge modes can overlap, producing a small but nonzero splitting. The goal is therefore not only to find low-energy states, but to find parameter regimes where the even-odd splitting is small compared with all other relevant energy scales.\\
+Once the states have been separated into parity sectors, the next diagnostic is the energy splitting between parity partners. Majorana-like physics requires a near-degenerate pair of states, one even and one odd. In an ideal infinite Kitaev chain, this degeneracy is exact. In a finite PMM chain, the edge modes can overlap, producing a small but nonzero splitting. The goal is therefore not only to find low-energy states, but to find parameter regimes where the even-odd splitting is small compared with all other relevant energy scales.\\
 
-The excitation gap is equally important. The gap separates the low-energy parity manifold from quasiparticle excitations and suppresses thermal or dynamical leakage out of the computational subspace. In PMM and quantum-dot-chain proposals, the useful gap is controlled by the same physical couplings that create the effective Kitaev chain, especially the elastic cotunneling and crossed-Andreev pairing amplitudes. If the gap closes, the Majorana-like signature is no longer protected, and the low-energy interpretation becomes unreliable \cite{sauRealizingRobustPractical2012}. A sizable gap is also essential for the braiding calculations in this thesis, as it justifies projecting the dynamics onto a low-energy subspace.\\
+The excitation gap is equally important. The gap separates the low-energy parity manifold from quasiparticle excitations and suppresses thermal or dynamical leakage out of the computational subspace. In PMM and quantum-dot-chain proposals, the useful gap is controlled by the tunneling amplitude $t$ and the crossed-Andreev pairing amplitude $\Delta$. If the gap closes, the Majorana-like signature is no longer protected, and the low-energy interpretation becomes unreliable \cite{sauRealizingRobustPractical2012}. A sizable gap is not only essential for braiding in the ground state, but also in excited energy sectors, as it justifies projecting the dynamics onto an isolated energy subspace.\\
 
-This thesis also explores whether finite interacting chains can display approximate even-odd degeneracy across several energy levels, not only in the ground state. If such a structure survives, then some Majorana-like features may remain meaningful even when excited states are included in the projected Hilbert space. Figure~\ref{fig:gs_symmetry} illustrates the particle-hole symmetric structure expected in the idealized superconducting spectrum. In practice, the relevant diagnostic is whether the candidate parity partners are both nearly degenerate and well separated from the rest of the spectrum \cite{topocondmatKitaevChain}.
+This thesis also explores whether finite interacting chains can display approximate even-odd degeneracy across several energy levels, not only in the ground state. The even-odd degeneracy occurs automatically in the non-interacting case, but is generically not the case for interacting theories. If such a structure survives, then some Majorana-like features may remain meaningful even when excited states are included in the projected Hilbert space. Figure~\ref{fig:gs_symmetry} illustrates the particle-hole symmetric structure expected in the idealized superconducting spectrum. In practice, the relevant diagnostic is whether the candidate parity partners are both nearly degenerate and well separated from the rest of the spectrum \cite{topocondmatKitaevChain}.
 
 \begin{figure}
   \centering
   \includegraphics[width=0.5\textwidth]{figs/gs_symmetry}%
-  \caption{Energy spectrum showing how the energy eigenvalues of the system must be symmetric around zero energy due to particle-hole symmetry. Figure from\cite{topocondmatKitaevChain}.}
+  \caption{Single particle BdG energy spectrum showing how the energy eigenvalues of the system must be symmetric around zero energy due to particle-hole symmetry. For an interacting system, the symmetry is no longer confined to be around $E=0$, but can be shifted by an energy offset.  Figure from\cite{topocondmatKitaevChain}.}
   \label{fig:gs_symmetry}
 \end{figure}
+\newpage
 
 
 \subsection{Local Distinguishability and Charge Expectation\newline}
 \label{sec:theory-local-distinguishability}
-A defining feature of spatially separated Majorana modes is that the encoded information is non-local. Local measurements should therefore not reveal whether the system is in the even or odd ground state. This principle is central to the topological motivation for Majorana qubits: the qubit state is stored globally, while local perturbations should have only limited access to it \cite{nayakNonAbelianAnyonsTopological2008}. In the PMM setting, the same idea appears in a finite-system form: the parity qubit can only be fully read out by probing both Majorana components, rather than a single dot alone \cite{leijnseParityQubitsPoor2012}.\\
+In non-interacting theories, one can often identify Majorana modes from single-particle Majorana operators and inspect their spatial separation directly. In the interacting systems studied here, this is no longer enough: the relevant objects are many-body eigenstates, so the quality measures should also be defined from many-body states.
 
-One way to quantify this property is through the local distinguishability parameter
+A defining feature of spatially separated Majorana modes is that the encoded information is non-local. Local measurements should therefore not reveal whether the system is in the even or odd ground state. This principle is central to the topological motivation for Majorana qubits, as the qubit state is stored globally, while local perturbations should have only limited access to it \cite{nayakNonAbelianAnyonsTopological2008}. In the PMM setting, the same idea appears in a finite-system form since the parity qubit can only be fully read out by probing both Majorana components, rather than a single dot alone \cite{leijnseParityQubitsPoor2012}.\\
+
+One way to quantify this property is to compare the local reduced density matrices of the even and odd parity states. Let $\rho_j^e$ and $\rho_j^o$ denote the reduced density matrices on site $j$. The trace norm is defined as
 \[
-\text{LD} = \frac{1}{N} \sum_{j=1}^{N} || \rho_j^o - \rho_j^e || = \frac{1}{N} \sum_{j=1}^{N} || \delta \rho_j ||
+\|A\|_1 = \mathrm{Tr}\sqrt{A^\dagger A},
 \]
-\cite{svenssonQuantumDotBased2024}.
-Here, $\rho_j^{o/e}$ are the reduced density matrices of site $j$ for the odd and even parity ground states, respectively, and $||\cdot||$ is the trace norm. A value close to zero indicates that the two states are locally indistinguishable, while a larger value indicates that local measurements can tell the two parity states apart.\\
-
-In the spinless model considered in this thesis, the local charge occupation is the only non-trivial parity-preserving observable on a single site. Local distinguishability can therefore be evaluated directly from the charge expectation values in the even and odd states,
+and the corresponding local trace distance is
 \[
-\bra{e}n_{L(R)} \ket{e} \quad \bra{o}n_{L(R)} \ket{o}.
+D_j = \frac{1}{2}\|\rho_j^o-\rho_j^e\|_1 .
 \]
-An ideal Majorana mode has no ordinary local charge identity: it is an equal particle-hole superposition rather than a conventional electron or hole. In a PMM system, this means that the local charge distribution should not reveal the parity state of the non-local fermion. At the sweet spot, the relevant charge signatures become symmetric between the two parity states, corresponding to the ``half-electron'' or charge-neutral character of the Majorana components~\cite{leijnseParityQubitsPoor2012,dvirRealizationMinimalKitaev2023}.
+The local distinguishability can then be summarized by an average over sites,
+\[
+\text{LD} = \frac{1}{N}\sum_{j=1}^{N}D_j .
+\]
+A value close to zero means that local measurements cannot distinguish the two parity states, while a larger value means that some information about the parity state is visible locally \cite{svenssonQuantumDotBased2024}.\\
 
-For the diagnostics used here, the important quantity is not the absolute charge on a dot, but the difference between the even- and odd-parity partners. For a spinless site, this charge difference contains the same information as the difference between the corresponding local reduced density matrices. A small charge difference therefore means that the two states are locally indistinguishable and that the parity information is stored non-locally rather than being visible on a single dot. In a spinful system, additional local observables could distinguish the states even when their local charge expectation values agree.\\
+In the spinless model used in this thesis, this reduced-density-matrix comparison has a simple charge interpretation. A single site has only the two local states $|0\rangle$ and $|1\rangle$, and for parity eigenstates the local reduced density matrix is fully determined by the occupation expectation value $\langle n_j\rangle$. The local trace distance therefore reduces to
+\[
+D_j =
+\left|
+\langle n_j\rangle_o-\langle n_j\rangle_e
+\right|
+\equiv q_j .
+\]
+This is the precise relation between local distinguishability and the charge-difference diagnostic used later in the thesis. The optimal value is $q_j=0$, which means that the even and odd states have the same local charge on site $j$. It does not mean that the local charge itself is zero. At an ideal spinless PMM sweet spot, for example, the two parity states can have the same half-occupied local charge expectation, $\langle n_j\rangle_e=\langle n_j\rangle_o=1/2$, giving $q_j=0$ \cite{leijnseParityQubitsPoor2012,dvirRealizationMinimalKitaev2023}. In a spinful model this reduction would no longer be complete, since local spin observables could distinguish states even when the charge expectation values agree.\\
 
 \subsection{Majorana Polarization\newline}
 \label{sec:theory-majorana-polarization}
-Local indistinguishability tests whether the information is hidden from local measurements, but it does not by itself say whether the operator connecting the two parity states has the particle-hole structure expected of a Majorana mode. For this, we use the Majorana polarization (MP). The MP is a local measure of how Majorana-like a state is: an ideal Majorana mode should be self-conjugate, with balanced particle and hole character, and should be localized near the ends of the chain. In an ideal PMM configuration, the polarization should therefore be concentrated at the edge dots, with opposite signs on the two ends and little or no weight in the bulk\cite{svenssonQuantumDotBased2024}.
+To identify a useful Majorana-like configuration, we also want to know where the Majorana components are located and how well they are separated. The Majorana polarization (MP) is a local diagnostic for this purpose. It measures how strongly the parity-changing matrix elements have the particle-hole structure expected of a Majorana mode at each site. In an ideal PMM configuration, the polarization should therefore be concentrated at the edge dots, with opposite signs on the two ends and little or no weight in the bulk\cite{svenssonQuantumDotBased2024}.
 \\
 
-One useful definition is
+For the spinless models considered here, all parameters are real. In this case a convenient definition of the site-resolved MP is
 \[
 M_\alpha := \frac{W_\alpha^2 - Z_\alpha^2}{W_\alpha^2 + Z_\alpha^2},
 \]
 where
 \[
-W_\alpha = ∑_{\sigma} \bra{o} c_{\alpha\sigma} + c_{\alpha\sigma}^{†} \ket{e}, \quad Z_\alpha = i ∑_{\sigma} \bra{o} c_{\alpha\sigma} - c_{\alpha\sigma}^{†} \ket{e}.
+W_\alpha = \bra{o} c_{\alpha} + c_{\alpha}^{†} \ket{e}, \quad Z_\alpha = i \bra{o} c_{\alpha} - c_{\alpha}^{†} \ket{e}.
 \]
-Here, $\alpha$ denotes the site index, $\sigma$ is the spin index, and $\ket{o}$ and $\ket{e}$ are the odd- and even-parity ground states. In an ideal sweet spot with two perfectly localized Majoranas, the edge values would satisfy $M_L=-M_R=\pm 1$ \cite{aguadoNewTrendsPlatforms2024}. In the spinless model used later in this thesis, the same idea is applied without the spin sum: the diagnostic checks whether the parity-changing Majorana matrix elements are localized at the chain ends with the expected relative sign.\\
+Here, $\alpha$ denotes the site index, and $\ket{o}$ and $\ket{e}$ are the odd- and even-parity ground states. This real-Hamiltonian form is the one relevant for the models studied in this thesis; more general complex Hamiltonians require a modified MP expression \cite{samuelsonMinimalQuantumDot2023}. In an ideal sweet spot with two perfectly localized Majoranas, the edge values would satisfy $M_L=-M_R=\pm 1$ \cite{aguadoNewTrendsPlatforms2024}. The diagnostic therefore checks whether the parity-changing Majorana matrix elements are localized at the chain ends with the expected relative sign.\\
 
 \subsection{Optimization Motivation\newline}
 Together, these diagnostics provide the physical ingredients used later to build the optimization loss function. For a simple two-dot system, the relevant tunable parameters are the dot energies, elastic cotunneling, crossed Andreev reflection, and interaction strength. For longer chains, the number of tunable parameters grows quickly, visualized in Figure \ref{fig:paramVisualization}. Since interactions and inhomogeneous parameters make it difficult to identify sweet spots analytically, the diagnostics above can be combined into a loss function and used to search numerically for promising Majorana-like regimes. The resulting loss landscape may contain many local minima, which motivates the repeated-restart and basin-hopping strategy described in the methods chapter.

@@ -182,7 +182,19 @@ A further limitation is that the same denominator also rescales the charge and M
 
 
 \subsection{Search Strategy}
-The resulting loss landscape is non-convex, and in practise, we find that the interacting loss landscape is more complicated. The numerical search therefore combines local gradient-based optimization with repeated restarts and basin hopping. Local optimization is performed with Adam. At each iteration, the reduced vector $\theta$ is converted into physical parameters, the Hamiltonian is built and diagonalized, the loss is evaluated within the PyTorch optimization loop and used to update the free parameters with Adam.
+The resulting loss landscape is non-convex, and in practise, we find that the interacting loss landscape is more complicated. The numerical search therefore combines local gradient-based optimization with repeated restarts and basin hopping. Local optimization is performed with Adam. At each iteration, the reduced vector $\theta$ is converted into physical parameters, the Hamiltonian is built and diagonalized, the loss is evaluated within the PyTorch \cite{paszke2017automatic} optimization loop and used to update the free parameters with Adam.
+The Adam update can be written schematically as
+\begin{equation}
+\theta_k
+=
+\theta_{k-1}
+-
+\eta_{\mathrm{Adam}}
+\frac{\hat{m}_k}{\sqrt{\hat{v}_k}+\varepsilon_{\mathrm{Adam}}},
+\end{equation}
+where \(\eta_{\mathrm{Adam}}
+\) is the learning rate, and  \(\hat{m}_k\) and \(\hat{v}_k\) are the bias-corrected exponential moving
+averages of the gradient and squared gradient, respectively \cite{kingma2014adam}.
 
 Because a single local run can converge to a poor local minimum, the local optimization is repeated from randomly perturbed initial vectors. The lowest-loss result among these restarts is retained as the representative of that region of parameter space. Basin hopping is then used to explore different regions: a random displacement is applied to the current parameter vector, local optimization with restarts is performed again, and the new candidate is accepted if it improves the loss. Candidates with slightly worse loss can also be accepted with a Metropolis probability, allowing the search to escape shallow local minima.
 
@@ -192,7 +204,7 @@ For each pair $(n,U)$, the best configuration found by this procedure is stored 
 The optimization procedure returns candidate parameter sets ranked by a scalar loss. 
 Since this loss is a soft weighted objective rather than a set of hard constraints, a low value does not by itself prove that the Hamiltonian realizes an ideal Majorana regime. Different loss contributions can trade off against each other, finite weights allow residual even--odd splittings, and the local charge and Majorana-polarization penalties may be small without giving a perfectly isolated ground-state doublet.
 
-For this reason, after optimizing many configurations, the lowest-loss result for each pair $(n,U)$ is selected and analyzed separately. The stored optimized parameters $\Phi_{\mathrm{opt}}(n,U)$ are used to rebuild $H_{\mathrm{PMM}}(\theta_{\mathrm{opt}})$, which is then diagonalized and evaluated using the diagnostics below. This post-optimization step resolves the single scalar loss into physical quantities such as the ground-state splitting, excitation gap, charge difference, and Majorana-polarization profile.
+For this reason, after optimizing many configurations, the lowest-loss result for each pair $(n,U)$ is selected and analyzed separately. The stored optimized parameters $\phi_{\mathrm{opt}}(n,U)$ are used to rebuild $H_{\mathrm{PMM}}(\theta_{\mathrm{opt}})$, which is then diagonalized and evaluated using the diagnostics below. This post-optimization step resolves the single scalar loss into physical quantities such as the ground-state splitting, excitation gap, charge difference, and Majorana-polarization profile.
 
 \subsection{Parity-Resolved Spectrum}
 Using the parity classification introduced in Sec.~\ref{sec:theory-parity-resolved-spectrum}, the reconstructed Hamiltonian is diagonalized and separated into ordered even- and odd-parity spectrum using the total fermion parity operator
