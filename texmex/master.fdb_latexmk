@@ -1,17 +1,17 @@
 # Fdb version 4
-["biber master"] 1782583245.49185 "master.bcf" "master.bbl" "master" 1782583246.07834 0
-  "master.bcf" 1782583233.46292 116940 4cea8389b277233b27a2a922d8a97bdd "xelatex"
+["biber master"] 0 "master.bcf" "master.bbl" "master" 1782676625.28028 -1
+  "master.bcf" 1782676624.40479 116912 ca0a587e0ad0c85ef2b24663dd4673f9 "xelatex"
   "refs.bib" 1782583245.30891 47011 60881849b98bf29ddcefeb92a2e7a4a8 ""
   (generated)
   "master.bbl"
   "master.blg"
   (rewritten before read)
-["xdvipdfmx"] 1782583233.53133 "master.xdv" "master.pdf" "master" 1782583246.08118 0
-  "master.xdv" 1782583233.46443 2169676 18542b799770cbcb177ea2b283ec4adc "xelatex"
+["xdvipdfmx"] 1782676624.47391 "master.xdv" "master.pdf" "master" 1782676625.28215 0
+  "master.xdv" 1782676624.40633 2109524 128e0f0cb6068272afd56fad2b469b3c "xelatex"
   (generated)
   "master.pdf"
   (rewritten before read)
-["xelatex"] 1782583231.0974 "/home/Hishem/repos/MastersThesis/texmex/master.tex" "master.xdv" "master" 1782583246.07841 0
+["xelatex"] 1782676622.14781 "/home/Hishem/repos/MastersThesis/texmex/master.tex" "master.xdv" "master" 1782676625.28035 0
   "/home/Hishem/repos/MastersThesis/texmex/master.tex" 1782385203.45159 6856 5655a948352b4b0db8f83bbd018d6d6b ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1775415801 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texmf-dist/fonts/tfm/adobe/helvetic/phvb8t.tfm" 1775415801 6628 34c39492c0adc454c1c199922bba8363 ""
@@ -262,11 +262,11 @@
   "/usr/share/texmf-dist/tex/latex/xifthen/xifthen.sty" 1775415801 5689 1bfa68243e89a54479e7d0580773c57e ""
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1775415801 43569 fd570f2fa160877d211e859f687312ba ""
   "/var/lib/texmf/web2c/xetex/xelatex.fmt" 1776414271 5594822 231bf4c7215c2e1f5d7e8cc8bad41890 ""
-  "appendix.aux" 1782583233.22893 11201 49839aa37b3a2d9d779a799c6fb1edf8 "xelatex"
+  "appendix.aux" 1782676624.18835 11201 ffe5d0c6c3430f616f016aef83b837e2 "xelatex"
   "appendix.tex" 1782397985.82628 9427 c5303038d3c80a53cfed907cad0d73ba ""
-  "conclusion.aux" 1782583233.11337 4544 25e744ac9f6147536b64c3f5c261829f "xelatex"
+  "conclusion.aux" 1782676624.07351 4544 4cd61f667d6fe93779e39c9b01bb92d6 "xelatex"
   "conclusion.tex" 1782223393.15261 3699 24e8c4199917e8501286ed8a05ae473c ""
-  "discussion.aux" 1782583233.1007 4919 d904f14a11ac4e73f255a38a29007548 "xelatex"
+  "discussion.aux" 1782676624.06255 4919 898b88e798ab5cb82e8d3532c10f25e7 "xelatex"
   "discussion.tex" 1782310382.72719 15132 45c04e4f2a6e7859931c9424a1004996 ""
   "figs/2DotU0.pdf" 1779564568.19298 16786 530d6f710903b69abd201cb3f8eaee1f ""
   "figs/2DotU01.pdf" 1779564568.45698 17199 8aa7c870b866f894fef791a412c3b536 ""
@@ -304,21 +304,21 @@
   "generated/braiding_local_projection.tex" 1775834036.87472 472 6e6d07bb3a3a68e85bfde7dd400506d7 ""
   "generated/majorana_character_summary.tex" 1779802488.88772 385 46fc09fd80c4df7a60180b2a0d0feba4 ""
   "generated/matched_operator_coefficients.tex" 1781167896.86812 20877 e294e61d290d24ccd6c652cdf7059fe4 ""
-  "introduction.aux" 1782583232.31049 4902 c2a3ffc41c9f2dc27be92f2e3f88bc1e "xelatex"
+  "introduction.aux" 1782676623.35745 4902 c2a3ffc41c9f2dc27be92f2e3f88bc1e "xelatex"
   "introduction.tex" 1782386210.15756 16681 04427aa58e7fa45d10694cb89c533dea ""
   "label_mats.tex" 1782396705.11419 1579 31062cd1a773d6e6976fdc3374317150 ""
-  "master.aux" 1782583233.44785 14386 e38fca346d6b701fe32ea73def0db9b7 "xelatex"
-  "master.bbl" 1782583246.05593 115633 2f742ff8593d9253d5f648b85b07953a "biber master"
-  "master.out" 1782583233.46192 18401 6b5a32ab913d4ca00dc4b849cfea8d3d "xelatex"
-  "master.run.xml" 1782583233.46443 2453 72b0396c68f596268d4f43130a89bf1a "xelatex"
+  "master.aux" 1782676624.39121 14330 ed6f9591fede5a272ebf1bc0fa6fd038 "xelatex"
+  "master.bbl" 1782663386.14039 115633 2f742ff8593d9253d5f648b85b07953a "biber master"
+  "master.out" 1782676624.40404 16823 dde507a42c31f38a74330348820d2902 "xelatex"
+  "master.run.xml" 1782676624.40618 2453 72b0396c68f596268d4f43130a89bf1a "xelatex"
   "master.tex" 1782385203.45159 6856 5655a948352b4b0db8f83bbd018d6d6b ""
-  "master.toc" 1782583233.46443 8472 2e54ea01cd5d1aa9966abb057c07759d "xelatex"
-  "method_2.aux" 1782583232.85482 14160 f609e5d2960229dd1e887dfec06df306 "xelatex"
-  "method_2.tex" 1782473368.91401 43299 8d6e5c49cd8c056cf8065a1412d9828a ""
-  "results_2.aux" 1782583233.06503 24581 632136b8dd37e6bebb4bd1ab241c3e26 "xelatex"
-  "results_2.tex" 1782471525.90913 47574 5b7e9deb6c852107922d7528a2fab817 ""
-  "theory_2.aux" 1782583232.71808 16490 0ccfc125375ce258ddd6ed3c79edd374 "xelatex"
-  "theory_2.tex" 1782583204.30992 55517 595bce007b71efd417f43f0bc6c3f417 ""
+  "master.toc" 1782676624.40618 7696 e9629bf1417a6d677dc8c916bdbd7105 "xelatex"
+  "method_2.aux" 1782676623.84653 13350 dbb116c608ccb1489aa08a7ad4f3162b "xelatex"
+  "method_2.tex" 1782676316.74737 41007 c7af79f2111b4db768380770a5863711 ""
+  "results_2.aux" 1782676624.03135 24581 b9acc69456e1829c03f32857232ede84 "xelatex"
+  "results_2.tex" 1782676621.98829 47459 ce56451dac4128dc9f2f9641320dfe2b ""
+  "theory_2.aux" 1782676623.7246 16920 e7535dadc350c0c8b428716ff18a8a15 "xelatex"
+  "theory_2.tex" 1782672234.31505 55217 f5e4dcc58c021ffe73b4d8da0ab42a08 ""
   "uio-fp-navn-eng.pdf" 1643568007 9896 3790f54969705c4284148bf62f780187 ""
   "uio-fp-segl.pdf" 1643566874 64936 89441810db60f45a672971bad5b14ed1 ""
   "uiomasterfp.sty" 1714652269 9757 718551184de633f2e38b062e60657e3d ""
