@@ -10,6 +10,8 @@ blocks. The \(24\)-dimensional projected-operator example is illustrated in
 sector may intersect only part of one of these blocks, so neither the sector
 dimension nor every labelled block is necessarily a multiple of eight.
 
+\input{label_mats}
+
 The blocks are identified from the energy levels of the three individual
 subsystems. For a single three-dot subsystem, the four even-parity
 eigenstates are paired with the four odd-parity eigenstates by nearest energy.
@@ -90,19 +92,19 @@ In well defined cases, the block-matched operator is simply a signed version of 
 
 \chapter{Energy Sectors}
 \label{app:energy_sectors}
-The figures below are displaying the full system energy spectrum and the ground state energy splitting after Hamiltonian initiation for the three identical three dot systems at each of the tested interaction strengths. The system configuration and optimization results are reported in \cref{tab:best_optimized_configs}. The leftmost Y-axis of the figures are a measure of the energy of the system. The rightmost Y-axis of the figures show the count of states within each energy sector. The figures are split into even and odd subspaces, with a dashed line in between to indicate the degeneracy of the systems.
+The figures below show the full-system energy spectrum and the ground-state splitting after the braid Hamiltonian is initialized for the three identical three-dot subsystems at each tested interaction strength. The system configuration and optimization results are reported in \cref{tab:best_optimized_configs}. The left y-axis gives the energy, while the right y-axis gives the number of states in each energy sector. The spectra are split into even and odd subspaces, with dashed connectors indicating near-degenerate parity pairs.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.5\textwidth]{figs/full_system_spectrum_U_0p0.pdf}
     \includegraphics[width=0.5\textwidth]{figs/projected_ground_group_spectrum_U_0p0.pdf}
-    \caption{Energy spectrum and ground state splitting after Hamiltonian initiation. System configuration and optimization results are reported in \cref{tab:best_optimized_configs}. These figures are for the $U=0.0$ configurations, for the three identical three dot systems. }
+    \caption{Energy spectrum and ground-state splitting after Hamiltonian initialization. System configuration and optimization results are reported in \cref{tab:best_optimized_configs}. These figures are for the $U=0.0$ configuration of the three identical three-dot subsystems.}
     \label{fig:energy_sectors_U0}
 \end{figure}
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.5\textwidth]{figs/full_system_spectrum_U_0p1.pdf}
     \includegraphics[width=0.5\textwidth]{figs/projected_ground_group_spectrum_U_0p1.pdf}
-    \caption{Energy spectrum and ground state splitting after Hamiltonian initiation. System configuration and optimization results are reported in \cref{tab:best_optimized_configs}. These figures are for the $U=0.1$ configurations, for the three identical three dot systems. }
+    \caption{Energy spectrum and ground-state splitting after Hamiltonian initialization. System configuration and optimization results are reported in \cref{tab:best_optimized_configs}. These figures are for the $U=0.1$ configuration of the three identical three-dot subsystems.}
     \label{fig:energy_sectors_U01}
 \end{figure}
 
@@ -110,7 +112,7 @@ The figures below are displaying the full system energy spectrum and the ground 
     \centering
     \includegraphics[width=0.5\textwidth]{figs/full_system_spectrum_U_0p5.pdf}
     \includegraphics[width=0.5\textwidth]{figs/projected_ground_group_spectrum_U_0p5.pdf}
-    \caption{Energy spectrum and ground state splitting after Hamiltonian initiation. System configuration and optimization results are reported in \cref{tab:best_optimized_configs}. These figures are for the $U=0.5$ configurations, for the three identical three dot systems. }
+    \caption{Energy spectrum and ground-state splitting after Hamiltonian initialization. System configuration and optimization results are reported in \cref{tab:best_optimized_configs}. These figures are for the $U=0.5$ configuration of the three identical three-dot subsystems.}
     \label{fig:energy_sectors_U05}
 \end{figure}
 
@@ -118,14 +120,14 @@ The figures below are displaying the full system energy spectrum and the ground 
     \centering
     \includegraphics[width=0.5\textwidth]{figs/full_system_spectrum_U_1p0.pdf}
     \includegraphics[width=0.5\textwidth]{figs/projected_ground_group_spectrum_U_1p0.pdf}
-    \caption{Energy spectrum and ground state splitting after Hamiltonian initiation. System configuration and optimization results are reported in \cref{tab:best_optimized_configs}. These figures are for the $U=1.0$ configurations, for the three identical three dot systems. This plot also reflects the braiding results of $U=1.0$, as both the braiding and these energy sectors are chaotically unstable. }
+    \caption{Energy spectrum and ground-state splitting after Hamiltonian initialization. System configuration and optimization results are reported in \cref{tab:best_optimized_configs}. These figures are for the $U=1.0$ configuration of the three identical three-dot subsystems. The irregular sector structure is consistent with the stronger sector dependence observed in the corresponding braiding results.}
     \label{fig:energy_sectors_U1}
 \end{figure}
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.5\textwidth]{figs/full_system_spectrum_U_2p0.pdf}
     \includegraphics[width=0.5\textwidth]{figs/projected_ground_group_spectrum_U_2p0.pdf}
-    \caption{Energy spectrum and ground state splitting after Hamiltonian initialization. System configuration and optimization results are reported in \cref{tab:best_optimized_configs}. These figures are for the $U=2.0$ configurations, for the three identical three dot systems. }
+    \caption{Energy spectrum and ground-state splitting after Hamiltonian initialization. System configuration and optimization results are reported in \cref{tab:best_optimized_configs}. These figures are for the $U=2.0$ configuration of the three identical three-dot subsystems.}
     \label{fig:energy_sectors_U2}
 \end{figure}
 
@@ -184,4 +186,57 @@ Here \(s_r\) gives the exchange orientation in block \(r\), while
 mean that different blocks follow opposite exchange orientations, while
 magnitudes different from one indicate a non-ideal Majorana normalization or
 rotation angle.
+
+Since the first-component coefficients vanish at the saved precision, the
+fitted operators in block \(r\) can be written as
+\begin{equation}
+  \Gamma_{B,\mathrm{fit}}^{(r)}
+  =
+  b_{B,r}\gamma_{B2}^{(r)},
+  \qquad
+  \Gamma_{C,\mathrm{fit}}^{(r)}
+  =
+  b_{C,r}\gamma_{C2}^{(r)} .
+\end{equation}
+The fitted target unitary within this block is then
+\begin{equation}
+  \begin{aligned}
+    U_r
+    &=
+    \exp\left[
+      -\frac{\pi}{4}
+      b_{B,r}b_{C,r}
+      \gamma_{B2}^{(r)}\gamma_{C2}^{(r)}
+    \right] \\
+    &=
+    \exp\left[
+      -s_r\alpha_r\frac{\pi}{4}
+      \gamma_{B2}^{(r)}\gamma_{C2}^{(r)}
+    \right].
+  \end{aligned}
+\end{equation}
+When \(\alpha_r\approx1\) and the projected operators satisfy the ideal
+Majorana algebra, the two orientations reduce, up to a global phase and in the
+corresponding occupation basis, to
+\begin{equation}
+  s_r=+1:
+  \quad
+  U_r\sim
+  \begin{pmatrix}
+    1 & 0\\
+    0 & i
+  \end{pmatrix}
+  =
+  \sqrt{Z},
+  \qquad
+  s_r=-1:
+  \quad
+  U_r\sim
+  \begin{pmatrix}
+    1 & 0\\
+    0 & -i
+  \end{pmatrix}
+  =
+  \sqrt{Z}^{\dagger}.
+\end{equation}
 \input{generated/matched_operator_coefficients}

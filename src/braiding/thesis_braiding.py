@@ -522,7 +522,7 @@ def run_ideal_reference(reference_data, t_total, delta_max, delta_min, width, st
     ground_data = get_ground_manifold_data(hamiltonian_fn, t_total=t_total)
 
     return make_protocol_summary(
-        "Ideal effective model",
+        "Energy-level Majorana reference model",
         ["gammaA1", "gammaA2", "gammaB1", "gammaC1"],
         times,
         energies,
@@ -626,14 +626,14 @@ def run_local_projection_model(reference_data, t_total, delta_max, delta_min, wi
     cdag_c2, c_c2 = creators[8], annihilators[8]
 
     local_majoranas = {
-        "chi_B1x": cdag_b1 + c_b1,
-        "chi_B1y": 1j * (cdag_b1 - c_b1),
-        "chi_B2x": cdag_b2 + c_b2,
-        "chi_B2y": 1j * (cdag_b2 - c_b2),
-        "chi_C1x": cdag_c1 + c_c1,
-        "chi_C1y": 1j * (cdag_c1 - c_c1),
-        "chi_C2x": cdag_c2 + c_c2,
-        "chi_C2y": 1j * (cdag_c2 - c_c2),
+        "chi_B1_plus": cdag_b1 + c_b1,
+        "chi_B1_minus": 1j * (cdag_b1 - c_b1),
+        "chi_B2_plus": cdag_b2 + c_b2,
+        "chi_B2_minus": 1j * (cdag_b2 - c_b2),
+        "chi_C1_plus": cdag_c1 + c_c1,
+        "chi_C1_minus": 1j * (cdag_c1 - c_c1),
+        "chi_C2_plus": cdag_c2 + c_c2,
+        "chi_C2_minus": 1j * (cdag_c2 - c_c2),
     }
     projected_local = {label: project_and_normalize(op, basis_ref) for label, op in local_majoranas.items()}
 
@@ -642,10 +642,10 @@ def run_local_projection_model(reference_data, t_total, delta_max, delta_min, wi
         for label in projected_local
     }
     local_relations = {
-        "chi_B1x_vs_chi_B2x": relation_error(projected_local["chi_B1x"], projected_local["chi_B2x"]),
-        "chi_B1y_vs_chi_B2y": relation_error(projected_local["chi_B1y"], projected_local["chi_B2y"]),
-        "chi_C1x_vs_chi_C2x": relation_error(projected_local["chi_C1x"], projected_local["chi_C2x"]),
-        "chi_C1y_vs_chi_C2y": relation_error(projected_local["chi_C1y"], projected_local["chi_C2y"]),
+        "chi_B1_plus_vs_chi_B2_plus": relation_error(projected_local["chi_B1_plus"], projected_local["chi_B2_plus"]),
+        "chi_B1_minus_vs_chi_B2_minus": relation_error(projected_local["chi_B1_minus"], projected_local["chi_B2_minus"]),
+        "chi_C1_plus_vs_chi_C2_plus": relation_error(projected_local["chi_C1_plus"], projected_local["chi_C2_plus"]),
+        "chi_C1_minus_vs_chi_C2_minus": relation_error(projected_local["chi_C1_minus"], projected_local["chi_C2_minus"]),
     }
 
     gamma0 = reference_data["gamma_sub"]["gammaA1"]
@@ -653,8 +653,8 @@ def run_local_projection_model(reference_data, t_total, delta_max, delta_min, wi
     gamma2 = reference_data["gamma_sub"]["gammaB2"]
     gamma3 = reference_data["gamma_sub"]["gammaC2"]
     t_a = 1j * gamma0 @ gamma1
-    t_b = hermitian_part(project_operator(1j * reference_data["gamma_full"]["gammaA1"] @ local_majoranas["chi_B1y"], basis_ref))
-    t_c = hermitian_part(project_operator(1j * reference_data["gamma_full"]["gammaA1"] @ local_majoranas["chi_C1y"], basis_ref))
+    t_b = hermitian_part(project_operator(1j * reference_data["gamma_full"]["gammaA1"] @ local_majoranas["chi_B1_minus"], basis_ref))
+    t_c = hermitian_part(project_operator(1j * reference_data["gamma_full"]["gammaA1"] @ local_majoranas["chi_C1_minus"], basis_ref))
 
     hamiltonian_fn = lambda time_value: build_projected_hamiltonian(
         time_value,
@@ -691,17 +691,22 @@ def run_local_projection_model(reference_data, t_total, delta_max, delta_min, wi
 
 
 def write_checks_table_tex(output_path, summaries):
+    display_model_names = {
+        "Energy-level Majorana reference model": "Energy-level",
+        "Projected microscopic junction model": "Projected junction",
+        "Projected local-operator model": "Projected local",
+    }
     lines = [
         r"\begin{tabular}{lcccccc}",
         r"\hline",
-        r"Model & $\max(E_3-E_0)$ & $\min(E_4-E_3)$ & Max 1x err. & Leakage & Odd err. & Even err. \\",
+        r"Model & Split & Gap & 1x err. & Leakage & Odd err. & Even err. \\",
         r"\hline",
     ]
     for summary in summaries:
         lines.append(
             " & ".join(
                 [
-                    summary["model_name"],
+                    display_model_names.get(summary["model_name"], summary["model_name"]),
                     format_metric(summary["path"]["max_ground_splitting"]),
                     format_metric(summary["path"]["min_gap"]),
                     format_metric(summary["exchange"]["max_single_exchange_error"]),
@@ -736,20 +741,20 @@ def write_decomposition_table_tex(output_path, microscopic_summary):
 
 
 def write_local_projection_table_tex(output_path, local_summary):
-    interesting_labels = ["chi_B1y", "chi_B2y", "chi_C1y", "chi_C2y"]
+    interesting_labels = ["chi_B1_minus", "chi_B2_minus", "chi_C1_minus", "chi_C2_minus"]
     components = local_summary["local_projection"]["components"]
     relations = local_summary["local_projection"]["relations"]
     pretty_operator_labels = {
-        "chi_B1y": r"$\chi_{B1,y}$",
-        "chi_B2y": r"$\chi_{B2,y}$",
-        "chi_C1y": r"$\chi_{C1,y}$",
-        "chi_C2y": r"$\chi_{C2,y}$",
+        "chi_B1_minus": r"$\Gamma_{B,\mathrm{L},-}^{P}$",
+        "chi_B2_minus": r"$\Gamma_{B,\mathrm{R},-}^{P}$",
+        "chi_C1_minus": r"$\Gamma_{C,\mathrm{L},-}^{P}$",
+        "chi_C2_minus": r"$\Gamma_{C,\mathrm{R},-}^{P}$",
     }
 
     lines = [
         r"\begin{tabular}{lcc}",
         r"\hline",
-        r"Projected operator & Dominant Majorana & Coefficient \\",
+        r"Projected local operator & Dominant energy-level Majorana & Coefficient \\",
         r"\hline",
     ]
     for label in interesting_labels:
@@ -758,16 +763,16 @@ def write_local_projection_table_tex(output_path, local_summary):
             rf"{pretty_operator_labels[label]} & ${latex_gamma(dominant['label'])}$ & {format_metric(dominant['coeff'])} \\"
         )
     lines.append(r"\hline")
-    lines.append(r"\multicolumn{3}{l}{Pairwise relation errors} \\")
+    lines.append(r"\multicolumn{3}{l}{Endpoint consistency checks} \\")
     lines.append(r"\hline")
     relation_labels = {
-        "chi_B1y_vs_chi_B2y": r"$\chi_{B1,y} \approx -\chi_{B2,y}$",
-        "chi_C1y_vs_chi_C2y": r"$\chi_{C1,y} \approx -\chi_{C2,y}$",
+        "chi_B1_minus_vs_chi_B2_minus": r"$B$ endpoints, $\chi_-$ component",
+        "chi_C1_minus_vs_chi_C2_minus": r"$C$ endpoints, $\chi_-$ component",
     }
     for key, pretty_label in relation_labels.items():
         relation = relations[key]["relation"]
         error = relations[key]["error"]
-        relation_text = "same sign" if relation == "+" else "opposite sign"
+        relation_text = "same orientation" if relation == "+" else "opposite orientation"
         lines.append(rf"{pretty_label} & {relation_text} & {format_metric(error)} \\")
     lines.extend([r"\hline", r"\end{tabular}"])
     output_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -827,7 +832,7 @@ def main():
         np.array(ideal_summary["spectrum"]["times"]),
         np.array(ideal_summary["spectrum"]["energies"]),
         np.array(ideal_summary["spectrum"]["couplings"]),
-        "Ideal four-Majorana braid",
+        "Energy-level Majorana braid",
         args.fig_dir / "braiding_ideal_protocol.pdf",
     )
     plot_protocol_summary(
@@ -836,6 +841,13 @@ def main():
         np.array(projected_summary["spectrum"]["couplings"]),
         "Projected microscopic braid",
         args.fig_dir / "braiding_projected_protocol.pdf",
+    )
+    plot_protocol_summary(
+        np.array(local_summary["spectrum"]["times"]),
+        np.array(local_summary["spectrum"]["energies"]),
+        np.array(local_summary["spectrum"]["couplings"]),
+        "Projected local-operator braid",
+        args.fig_dir / "braiding_local_operator_protocol.pdf",
     )
     plot_decomposition_summary(
         projected_summary["decomposition"]["ab"],
@@ -867,6 +879,7 @@ def main():
     print("Saved figures:")
     print(f"  {args.fig_dir / 'braiding_ideal_protocol.pdf'}")
     print(f"  {args.fig_dir / 'braiding_projected_protocol.pdf'}")
+    print(f"  {args.fig_dir / 'braiding_local_operator_protocol.pdf'}")
     print(f"  {args.fig_dir / 'braiding_junction_decomposition.pdf'}")
     print("Saved tables and summary:")
     print(f"  {args.generated_dir / 'braiding_checks_comparison.tex'}")

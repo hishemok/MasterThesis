@@ -60,7 +60,7 @@
       \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
       \field{labelnamesource}{editor}
       \field{labeltitlesource}{title}
-      \field{isbn}{978-3-031-55656-2 978-3-031-55657-9}
+      \field{isbn}{978-3-031-55657-9}
       \field{langid}{english}
       \field{series}{Lecture {{Notes}} in {{Physics}}}
       \field{title}{New {{Trends}} and {{Platforms}} for {{Quantum Technologies}}}
@@ -774,6 +774,38 @@
       \verb http://arxiv.org/abs/2410.13547
       \endverb
       \keyw{Condensed Matter - Mesoscale and Nanoscale Physics,Quantum Physics}
+    \endentry
+    \entry{hazewinkelEncyclopaediaMathematics2002}{book}{}{}
+      \name{editor}{1}{}{%
+        {{hash=5e7dc05085895c5fb4ee6f9a5a9bfab5}{%
+           family={Hazewinkel},
+           familyi={H\bibinitperiod},
+           given={Michiel},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Berlin}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{5e7dc05085895c5fb4ee6f9a5a9bfab5}
+      \strng{fullhash}{5e7dc05085895c5fb4ee6f9a5a9bfab5}
+      \strng{fullhashraw}{5e7dc05085895c5fb4ee6f9a5a9bfab5}
+      \strng{bibnamehash}{5e7dc05085895c5fb4ee6f9a5a9bfab5}
+      \strng{editorbibnamehash}{5e7dc05085895c5fb4ee6f9a5a9bfab5}
+      \strng{editornamehash}{5e7dc05085895c5fb4ee6f9a5a9bfab5}
+      \strng{editorfullhash}{5e7dc05085895c5fb4ee6f9a5a9bfab5}
+      \strng{editorfullhashraw}{5e7dc05085895c5fb4ee6f9a5a9bfab5}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{labelnamesource}{editor}
+      \field{labeltitlesource}{title}
+      \field{isbn}{978-1-4020-0609-8}
+      \field{langid}{english}
+      \field{title}{Encyclopaedia of Mathematics}
+      \field{year}{2002}
+      \field{dateera}{ce}
     \endentry
     \entry{hidalgo-sacotoTwoIdenticalOnedimensional2025}{article}{}{}
       \name{author}{3}{}{%

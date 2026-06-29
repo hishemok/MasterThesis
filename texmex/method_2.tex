@@ -34,13 +34,7 @@ For braiding calculations, several optimized chains are combined into a larger H
 
 \subsection{Jordan-Wigner Construction of Fermionic Operators}
 \label{sec:method-jordan-wigner-construction}
-The fermionic creation and annihilation operators must satisfy the canonical anticommutation relations
-\begin{equation}
-\{c_i,c_j^\dagger\}=\delta_{ij},
-\qquad
-\{c_i,c_j\}=\{c_i^\dagger,c_j^\dagger\}=0.
-\end{equation}
-In the code, these operators are constructed with Jordan-Wigner strings. Starting from local spin raising and lowering operators on site $j$, the fermionic operators are represented schematically as
+Using the Jordan-Wigner construction introduced in Sec.~\ref{sec:theory-jordan-wigner}, the code builds fermionic creation and annihilation operators from local spin raising and lowering operators. For site $j$, the operators are represented schematically as
 \begin{equation}
 c_j^\dagger =
 \left[\prod_{k<j}(-\sigma_k^z)\right]\sigma_j^+,
@@ -49,7 +43,7 @@ c_j =
 \left[\prod_{k<j}(-\sigma_k^z)\right]\sigma_j^-.
 \label{eq:method_jw_operators}
 \end{equation}
-The string of $\sigma^z$ operators keeps track of the fermionic sign picked up when operators on different sites are exchanged. This same construction is used for single-chain calculations and for the enlarged three-subsystem Hilbert space. In the latter case, the site ordering fixes the Jordan-Wigner strings across subsystems, ensuring that operators belonging to different PMM chains still anticommute correctly.
+The same construction is used for single-chain calculations and for the enlarged three-subsystem Hilbert space.
 
 Once the creation and annihilation operators have been constructed, the code precomputes the basic operator products needed repeatedly:
 \begin{equation}
@@ -59,7 +53,7 @@ p_{ij}=c_i^\dagger c_j^\dagger+c_j c_i,\qquad
 d_{ij}=n_i n_j .
 \end{equation}
 These building blocks are then combined with the parameter values in Eq.~\ref{eq:method_pmm_hamiltonian} to assemble the Hamiltonian matrix. 
-The same Jordan-Wigner ordering is also used when several PMM chains are embedded into the combined braiding Hilbert space, so that the fermionic operators of different subsystems anticommute correctly. For the three-subsystem geometry, sites are ordered as
+For the three-subsystem geometry, the Jordan-Wigner ordering is
 $$
 A_1, A_2, \ldots, A_n, B_1, B_2, \ldots, B_n, C_1, C_2, \ldots, C_n.
 $$
@@ -103,12 +97,11 @@ This gives two ordered energy lists, one in the even sector and one in the odd s
 \end{equation}
 The loss function compares these parity partners level by level. For the parity-conserving Hamiltonians considered here, the even and odd sectors have equal dimension. The implementation nevertheless checks this explicitly, so that numerical or construction errors in the parity classification do not enter the loss evaluation.
 
-The first loss contribution penalizes energy splitting between even- and odd-parity partners,
+The first loss contribution penalizes the energy splitting between even- and odd-parity partners,
 \begin{equation}
 \delta_k = \left|E_k^{(e)}-E_k^{(o)}\right|.
 \end{equation}
-In an ideal non-interacting Kitaev chain at the sweet spot, or in the infinite-length limit, this contribution would vanish because the Majorana zero mode gives an exact even-odd degeneracy. In the finite interacting systems studied here, however, both Majorana overlap and interaction effects can split the parity partners, so this term is included explicitly in the loss function.
-These splittings are weighted more strongly at low energy, because the ground-state degeneracy is the most important Majorana signature. If $N_p$ parity pairs are used, the implementation defines a decreasing weight array
+As discussed in Sec.~\ref{sec:theory-parity-resolved-spectrum}, small even--odd splittings are one of the main spectral signatures of Majorana-like states. In the loss, these splittings are weighted more strongly at low energy. If $N_p$ parity pairs are used, the implementation defines a decreasing weight array
 \begin{equation}
 w_{\ell}
 =
@@ -156,7 +149,7 @@ where $\Delta_{\mathrm{target}}$ is the desired minimum gap scale, and the softp
 
 
 \subsection{Charge and Majorana-Polarization Terms}
-The loss also includes local diagnostics that test whether the parity partners resemble Majorana states rather than accidental degeneracies. The charge penalty measures how differently the even and odd partners occupy each site,
+The local part of the loss turns the charge and Majorana-polarization diagnostics from Secs.~\ref{sec:theory-local-distinguishability} and \ref{sec:theory-majorana-polarization} into numerical penalties. The charge penalty measures how differently the even and odd partners occupy each site,
 \begin{equation}
 \mathcal{L}_{Q}
 =
@@ -167,11 +160,11 @@ The loss also includes local diagnostics that test whether the parity partners r
 \bra{o_k}n_j\ket{o_k}
 \right|.
 \end{equation}
-A small value means that the parity partners have similar local charge distributions, consistent with non-local encoding.
+This is the implementation form of the site-resolved charge-difference diagnostic.
 
-The Majorana-polarization penalty compares the site-resolved Majorana-polarization profile with the expected edge-localized pattern. Numerically, the polarization for parity pair $k$ and site $j$ is evaluated from the parity-changing matrix elements of the two local Majorana components $\gamma_{j,1}=c_j^\dagger+c_j$ and $\gamma_{j,2}=i(c_j^\dagger-c_j)$,
+The Majorana-polarization diagnostic itself was defined in Sec.~\ref{sec:theory-majorana-polarization}. In the optimizer, the corresponding penalty is implemented directly from the parity-changing matrix elements of the two local Majorana components $\gamma_{j,1}=c_j^\dagger+c_j$ and $\gamma_{j,2}=i(c_j^\dagger-c_j)$. For parity pair $k$ and site $j$, the code forms
 \begin{equation}
-M_{k,j}
+\widetilde{M}_{k,j}
 =
 \left(
 \bra{o_k}\gamma_{j,1}\ket{e_k}
@@ -183,11 +176,11 @@ M_{k,j}
 \end{equation}
 The target profile is concentrated on the two ends of the chain with opposite sign,
 \begin{equation}
-M^{\mathrm{tar}}_{k,1}=1,
+\widetilde{M}^{\mathrm{tar}}_{k,1}=1,
 \qquad
-M^{\mathrm{tar}}_{k,n}=-1,
+\widetilde{M}^{\mathrm{tar}}_{k,n}=-1,
 \qquad
-M^{\mathrm{tar}}_{k,j}=0
+\widetilde{M}^{\mathrm{tar}}_{k,j}=0
 \quad
 (1<j<n).
 \end{equation}
@@ -199,22 +192,22 @@ The sign of this target pattern is allowed to flip, since exchanging the labels 
 \left|
 \sum_{k,j}
 \left(
-M_{k,j}
+\widetilde{M}_{k,j}
 -
-\sigma M^{\mathrm{tar}}_{k,j}
+\sigma \widetilde{M}^{\mathrm{tar}}_{k,j}
 \right)^2
 \right|.
 \end{equation}
 
 \subsection{Total Normalized Loss}
-The full loss is a weighted sum of the spectral and local contributions. The implemented total loss is
+The full loss is a sum of the spectral and local contributions. The implemented total loss is
 \begin{equation}
 \mathcal{L}
 =
 \frac{
-ω_{\mathrm{deg}}\mathcal{L}_{\mathrm{deg}}
+\mathcal{L}_{\mathrm{deg}}
 +
-ω_{\mathrm{gap}}\mathcal{L}_{\mathrm{gap}}
+\mathcal{L}_{\mathrm{gap}}
 +
 \mathcal{L}_{Q}
 +
@@ -223,7 +216,7 @@ The full loss is a weighted sum of the spectral and local contributions. The imp
 \overline{|E|}+\eta
 },
 \end{equation}
-where $\overline{|E|}$ is the mean absolute energy scale of the spectrum and $\eta$ is a small numerical offset.
+where $\overline{|E|}$ is the mean absolute energy scale of the spectrum and $\eta$ is a small numerical offset. The spectral weights are already included in $\mathcal{L}_{\mathrm{deg}}$ and $\mathcal{L}_{\mathrm{gap}}$.
 
 The normalization by $\overline{|E|}$ makes the spectral part of the loss less sensitive to the overall energy scale of a trial Hamiltonian. However, this normalization is not invariant under a uniform energy shift $H\mapsto H+\alpha\mathbb{1}$, since such a shift changes the absolute energies but leaves gaps and eigenvectors unchanged. In the parametrization used here there is no independent identity-shift parameter, so the optimizer does not explore such shifts directly.
 
@@ -342,24 +335,7 @@ The post-optimization diagnostics determine which optimized chains are used in t
 The braiding calculations require explicit matrix representations of the Majorana operators associated with the optimized PMM chains. The theory chapter described why these operators should connect even and odd parity states. Here the focus is narrower: how the operators are constructed from the optimized eigenstates, embedded into the three-subsystem Hilbert space, projected to a chosen low-energy space, and checked before they are used in the braid.
 
 \subsection{Energy-Level Majoranas from Parity Pairs}
-For each optimized subsystem, the Hamiltonian is diagonalized and the eigenstates are separated into even and odd parity sectors. The states are then paired by their order in energy. From the $j$th even-odd pair, two parity-changing operators are formed,
-\begin{equation}
-\gamma_{+,j}
-=
-\ket{e_j}\bra{o_j}
-+
-\ket{o_j}\bra{e_j},
-\qquad
-\gamma_{-,j}
-=
-i\left(
-\ket{e_j}\bra{o_j}
--
-\ket{o_j}\bra{e_j}
-\right).
-\label{eq:method_energy_level_majorana_components}
-\end{equation}
-The effective Majorana operators used in the projected calculations are built by summing these contributions over a selected number of parity pairs,
+For each optimized subsystem, the Hamiltonian is diagonalized and the eigenstates are separated into even and odd parity sectors. The states are then paired by their order in energy and inserted into the energy-level construction of Eq.~\ref{eq:majorana_construction}. In the implementation, the selected number of parity pairs is denoted by $m$, so the effective Majorana operators are built as
 \begin{equation}
 \gamma_{+}^{(m)}
 =
@@ -370,7 +346,7 @@ The effective Majorana operators used in the projected calculations are built by
 \sum_{j=0}^{m-1}\gamma_{-,j}.
 \label{eq:method_energy_level_majoranas}
 \end{equation}
-Here $m$ is the number of even-odd pairs included in the operator construction. In the code this is controlled separately from the total projection dimension: the projection dimension determines how much of the full three-subsystem Hilbert space is retained, while $m$ determines how many subsystem parity pairs are used to build the Majorana operator itself.
+Here $\gamma_{\pm,j}$ denotes the contribution from the $j$th even--odd pair. In the code, $m$ is controlled separately from the total projection dimension: the projection dimension determines how much of the full three-subsystem Hilbert space is retained, while $m$ determines how many subsystem parity pairs are used to build the Majorana operator itself.
 
 \subsection{Embedding Into the Three-Subsystem Hilbert Space}
 Using the Jordan--Wigner ordering specified in Sec.~\ref{sec:method-jordan-wigner-construction}, subsystem operators are embedded into the full three-subsystem Hilbert space as
@@ -395,7 +371,7 @@ O_P = V^\dagger O V .
 This projection is applied to the embedded Majorana operators before they are used in the projected braid models. The same projection basis is also used for all other operators in a given calculation, so that the energy-level Majoranas, local operators, static Hamiltonian, and driven braid terms act in the same retained space.
 
 \subsection{Projected Local Components}
-In addition to the energy-level construction in Eq.~\ref{eq:method_energy_level_majoranas}, the code also constructs projected local Majorana components from the microscopic fermion operators on the relevant subsystem sites,
+In addition to the energy-level construction above, the code constructs projected local Majorana components from the microscopic endpoint operators introduced in Eq.~\ref{eq:local_gamma_ops}. For a chosen projection basis $V$, the generic projected components are
 \begin{equation}
 \Gamma_{+,P}=V^\dagger(c^\dagger+c)V,
 \qquad
@@ -456,10 +432,10 @@ V^\dagger\left(H_B+H_C\right)V.
 \end{equation}
 This term keeps the internal optimized-chain structure of subsystems $B$ and $C$ while the time-dependent junction couplings are varied. Since it is included in the same way for the model comparisons, the differences between the braid results come from the choice of driven coupling operators rather than from a different static background.
 
-\subsection{Ideal Four-Majorana Model}
-The simplest braid model uses only four Majorana operators and hand-chosen bilinear couplings. In the projected space, the time-dependent Hamiltonian is
+\subsection{Energy-Level Reference Model}
+The reference braid model uses four energy-level Majorana operators and hand-chosen bilinear couplings. In the projected space, the time-dependent Hamiltonian is
 \begin{equation}
-H_{\mathrm{ideal}}(t)
+H_{\mathrm{ref}}(t)
 =
 \lambda_1(t)\, i\gamma_0\gamma_1
 +
@@ -483,6 +459,15 @@ T_{AC}=V^\dagger H^{\mathrm{junc}}_{AC}V .
 \label{eq:method_projected_junctions}
 \end{equation}
 
+These two terms can help identify which low-energy Majorana channel is selected by the physical endpoint coupling. We can decompose the projected junction operators $T_{AB}$ and $T_{AC}$, into the basis of Majorana bilinears,
+\begin{equation}
+  c_{\alpha}^{AB} = \frac{1}{d} \Tr\left[(i\gamma_{A1}\gamma_{B\alpha})^{\dagger} T_{AB}\right],
+    \qquad
+    c_{\beta}^{AC} = \frac{1}{d} \Tr\left[(i\gamma_{A1}\gamma_{C\beta})^{\dagger} T_{AC}\right],
+\end{equation}
+testing for both $\alpha,\beta \in \{1,2\}$, where $d$ is the dimension of the projected space. The normalized trace is the Hilbert--Schmidt overlap between the projected junction operator and a Majorana bilinear\cite{hazewinkelEncyclopaediaMathematics2002}. The $\gamma_{S,i}$ operators are the projected energy-level Majoranas from the subsystems $S=A,B,C$, constructed from the parity-pair operators of Eq.~\ref{eq:majorana_construction} as summarized in Eq.~\ref{eq:method_energy_level_majoranas}. The maximum absolute value of the coefficients $c_{\alpha}^{AB}$ and $c_{\beta}^{AC}$ identifies which low-energy Majorana channel is selected by the physical endpoint coupling.
+
+
 The projected microscopic braid Hamiltonian is then
 \begin{equation}
 H_{\mathrm{junc}}(t)
@@ -498,48 +483,28 @@ where $T_A=i\gamma_0\gamma_1$ is the initial coupling inside subsystem $A$.
 This model keeps the full projected hopping-and-pairing structure of the
 microscopic junctions.
 
-The projected junction operators are also decomposed in the energy-level
-Majorana-bilinear basis. This identifies which low-energy Majorana channel is
-selected by the physical endpoint coupling. In the low-energy benchmark, this
-decomposition is used to choose which Majorana component from subsystems $B$
-and $C$ enters the local-operator model below.
 \subsection{Projected Local-Operator Model}
 The projected local-operator model uses the channel identified by the projected
 microscopic junction decomposition, but constructs the exchanged operators from
 local endpoint Majorana components instead of from the full junction
-Hamiltonian. For an endpoint dot in subsystem $S=B,C$, the two microscopic
-components are
-\begin{equation}
-\chi_{S,+}=c_S^\dagger+c_S,
-\qquad
-\chi_{S,-}=i(c_S^\dagger-c_S).
-\end{equation}
-After projection and normalization, the component selected by the junction
-analysis defines the local Majorana operator used in the braid,
-\begin{equation}
-\gamma_{S,\mathrm{loc}}
-=
-\mathcal{N}_S V^\dagger \chi_{S,\pm} V .
-\end{equation}
+Hamiltonian. The endpoint components are those defined in
+Eq.~\ref{eq:local_gamma_ops}. After projection and normalization, the component
+selected by the junction analysis defines the local Majorana operator
+$\Gamma_S^P$ used in the braid.
 
-The corresponding local-operator braid Hamiltonian is
-\begin{equation}
-H_{\mathrm{loc}}(t)
-=
-\lambda_1(t)\, i\gamma_0\gamma_1
-+
-\lambda_2(t)\, i\gamma_0\gamma_{B,\mathrm{loc}}
-+
-\lambda_3(t)\, i\gamma_0\gamma_{C,\mathrm{loc}} .
-\label{eq:method_local_operator_braid}
-\end{equation}
+The corresponding local-operator braid uses the same bilinear form as
+Eq.~\ref{eq:local_braid_ham}. In the method notation, this corresponds to the
+identifications $\gamma_{A1}\rightarrow\gamma_0$,
+$\gamma_{A2}\rightarrow\gamma_1$, $\lambda_A\rightarrow\lambda_1$,
+$\lambda_{AB}\rightarrow\lambda_2$, and
+$\lambda_{AC}\rightarrow\lambda_3$.
 This construction tests whether the same exchange channel selected by the full
 projected junction is also obtained from projected local endpoint Majorana
 operators.
 
 
 \subsection{Block-Matched Local-Operator Model}
-The sector-resolved scans also use a block-matched local-operator model. It has the same bilinear form as Eq.~\ref{eq:method_local_operator_braid}, but replaces the direct projected local operators by the block-matched operators defined in Eq.~\ref{eq:method_block_matched_majorana}. The labelled blocks are fitted independently and then reassembled before the braid Hamiltonian is constructed. This model tests whether resolving the internal degeneracy structure of a sector improves the braid generated from the local channel.
+The sector-resolved scans also use a block-matched local-operator model. It has the same bilinear form as Eq.~\ref{eq:local_braid_ham}, but replaces the direct projected local operators by the block-matched operators defined in Eq.~\ref{eq:method_block_matched_majorana}. The labelled blocks are fitted independently and then reassembled before the braid Hamiltonian is constructed. This model tests whether resolving the internal degeneracy structure of a sector improves the braid generated from the local channel.
 
 \subsection{Pulse Sequence}
 The same pulse sequence is used for each braid model. To avoid confusing the braid amplitudes with the superconducting pairing parameters $\Delta_i$, the time-dependent braid couplings are denoted by $\lambda_i(t)$. The coupling envelope is a smooth pulse constructed from two sigmoid functions,
@@ -559,7 +524,7 @@ P_+(t;T_p) = t-T_p+w/2,
 \qquad
 P_-(t;T_p) = t-T_p-w/2.
 \end{equation}
-where $T_p$ is the pulse center, $w$ is the pulse width, and $s$ controls the steepness of the rise and fall. The three braid couplings are then chosen as
+Here $T_p$ is the pulse center, $w$ is the pulse width, and $s$ controls the steepness of the rise and fall. The three braid couplings are then chosen as
 \begin{equation}
 \lambda_1(t)
 =
@@ -639,7 +604,7 @@ This convention corresponds to the exchange action
 \qquad
 \gamma_3\mapsto \gamma_2,
 \end{equation}
-up to the overall sign convention chosen for the Majorana operators. Since a global phase of the transported unitary is physically irrelevant, comparisons with the target gate are made after aligning the overall phase. In practice, the reported gate error is a Frobenius-norm distance between the transported unitary and the phase-aligned target unitary, restricted to the initial transported basis.
+up to the overall sign convention chosen for the Majorana operators. This is the Heisenberg action $U_K^\dagger\gamma_i U_K$ used in the numerical checks, which is the inverse conjugation convention to the one written in Sec.~\ref{sec:theory-majorana-exchange-gates}. Since a global phase of the transported unitary is physically irrelevant, comparisons with the target gate are made after aligning the overall phase. In practice, the reported gate error is a Frobenius-norm distance between the transported unitary and the phase-aligned target unitary, restricted to the initial transported basis.
 
 For the sector-resolved scans, the agreement with the target is also summarized by the normalized overlap
 \begin{equation}
@@ -653,7 +618,7 @@ For the sector-resolved scans, the agreement with the target is also summarized 
 D_{\mathcal{O}}=|1-\mathcal{O}|,
 \label{eq:method_overlap_deviation}
 \end{equation}
-where \(d_T\) is the dimension of the transported subspace. A perfect match up to a global phase gives \(\mathcal{O}=1\), so the plotted quantity \(D_{\mathcal{O}}\) vanishes for an ideal braid and increases as the transported unitary deviates from the target.
+where \(d_T\) is the dimension of the transported subspace. A perfect match up to a global phase gives \(\mathcal{O}=1\), so the plotted quantity \(D_{\mathcal{O}}\) vanishes for a perfect target match and increases as the transported unitary deviates from the target.
 
 \subsection{Operator-Action Checks}
 The first validation step checks the induced action on the Majorana operators directly. For each model, the transported unitary is applied as
@@ -702,7 +667,7 @@ The spectator Majoranas are checked in the same way,
 \end{equation}
 Here $d$ is the matrix dimension in the comparison space.
 These quantities report the braid error directly in the Majorana-operator language used to define the target exchange.
-In the projected calculations, the same operator-action check is evaluated with the target Majoranas appropriate to the construction being tested. For the energy-level construction, $γ_2$ and $γ_3$ are the Majorana operators constructed from even--odd parity pairs, as described in Sec.~\ref{sec:method-effective-majorana-construction}. For the projected-local and block-matched constructions, the corresponding target operators are instead built from the projected local endpoint Majorana components.
+In the projected calculations, the same operator-action check is evaluated with the target Majoranas appropriate to the construction being tested. For the energy-level construction, $\gamma_2$ and $\gamma_3$ are the Majorana operators constructed from even--odd parity pairs, as described in Sec.~\ref{sec:method-effective-majorana-construction}. For the projected-local and block-matched constructions, the corresponding target operators are instead built from the projected local endpoint Majorana components.
 
 The mismatch between the energy-level target and the projected-local target is also recorded. A small mismatch indicates that the two constructions define the same effective exchange channel in the retained subspace, while a larger mismatch means that the target definition itself contributes to the reported braid error.
 
@@ -715,7 +680,6 @@ The transported unitary is also analyzed in a parity basis. The total parity ope
 +
 \|U_{eo}\|.
 \end{equation}
-A small value indicates that the braid approximately preserves fermion parity inside the transported manifold, which always has to be the case and serves as a check on the numerics.
+A small value indicates that the braid approximately preserves fermion parity inside the transported manifold. This is required by fermion-parity conservation and therefore serves as a numerical check.
 
 After the parity blocks have been separated, each block is compared with the corresponding block of the target exchange gate in Eq.~\ref{eq:method_target_exchange_gate}. This produces separate odd- and even-sector target-gate errors. Reporting the parity blocks separately is useful because the same Majorana exchange can appear with different matrix representations in the two parity sectors, while still describing the same physical braid.
-
