@@ -1,6 +1,6 @@
 \chapter{Method}
 
-This chapter describes the methods used to optimize the Majorana modes in the junction setup and to analyze their properties. We first discuss the parameter optimization process, including the model parameterization, loss function design based on Majorana criteria, and the optimization strategy. Next, we detail the post-optimization analysis of the setup, covering Hamiltonian reconstruction, parity classification, and various diagnostics. Finally, we describe the braiding protocol implemented in an effective Majorana model and how we validate the results using gate-validation checks.
+This chapter describes the methods used to optimize the PMM chains and analyze their properties. We first discuss the parameter optimization process, including the model parameterization, loss function design based on Majorana criteria, and the optimization strategy. Next, we detail the post-optimization analysis of the setup, covering Hamiltonian reconstruction, parity classification, and various diagnostics. Finally, we describe the braiding protocol implemented in the projected models and how we validate the results using gate-validation checks.
 
 \section{Numerical PMM Hamiltonian and Basis}
 The numerical calculations are built from the spinless $n$-dot PMM Hamiltonian introduced in the theory chapter. This section specifies how that model is represented in the code: which Hamiltonian is diagonalized, which basis is used, how the fermionic operators are constructed, and how the model parameters are organized before optimization and braiding calculations.
@@ -66,7 +66,7 @@ The purpose of the optimization is to find parameter regimes where the finite PM
 
 \subsection{Optimization Vector and Parameter Reconstruction}
 \label{sec:method-optimization-vector}
-The Hamiltonian in Eq.~\ref{eq:method_pmm_hamiltonian} is specified by the physical parameters $\{t_i,U_i,\epsilon_i,\Delta_i\}$. In the numerical implementation, each group of parameters can be fixed, homogeneous, or inhomogeneous. A fixed parameter is held at a prescribed value and is not included in the optimization vector. A homogeneous parameter has the same value on every site or bond, while an inhomogeneous parameter is allowed to vary independently from site to site or bond to bond. This makes it possible to compare restricted ansatz with more flexible parameter searches using the same Hamiltonian-building routine.
+The Hamiltonian in Eq.~\ref{eq:method_pmm_hamiltonian} is specified by the physical parameters $\{t_i,U_i,\epsilon_i,\Delta_i\}$. In the numerical implementation, each group of parameters can be fixed, homogeneous, or inhomogeneous. A fixed parameter is held at a prescribed value and is not included in the optimization vector. A homogeneous parameter has the same value on every site or bond, while an inhomogeneous parameter is allowed to vary independently from site to site or bond to bond. This makes it possible to compare restricted ansatz choices with more flexible parameter searches using the same Hamiltonian-building routine.
 
 The optimizer therefore does not act directly on a full dictionary of physical parameters. Instead, it acts on a reduced real vector $\theta$ containing only the entries that are free in the chosen parameter configuration. For example, if $t_i$ is fixed and $U_i$ is fixed to a selected interaction strength, then those entries are excluded from $\theta$. If a parameter is homogeneous, only one number is included, or if it is inhomogeneous, one number is included for each site or bond.
 
@@ -145,7 +145,7 @@ Small gaps are penalized using a smooth threshold function,
 \Delta_{\mathrm{target}}-\Delta_k
 \right),
 \end{equation}
-where $\Delta_{\mathrm{target}}$ is the desired minimum gap scale, and the softplus function is defined as $\mathrm{softplus}(x) = \log(1 + e^x)$\cite{NIPS2000_44968aec}.
+where $\Delta_{\mathrm{target}}$ is the desired minimum gap scale, and the softplus function is defined as $\mathrm{softplus}(x) = \log(1 + e^x)$ \cite{NIPS2000_44968aec}.
 
 
 \subsection{Charge and Majorana-Polarization Terms}
@@ -174,6 +174,7 @@ The Majorana-polarization diagnostic itself was defined in Sec.~\ref{sec:theory-
 \bra{o_k}\gamma_{j,2}\ket{e_k}
 \right)^2 .
 \end{equation}
+The squares here are ordinary complex squares of the matrix elements, not absolute-value squares. This keeps the sign information associated with the local Majorana component.
 The target profile is concentrated on the two ends of the chain with opposite sign,
 \begin{equation}
 \widetilde{M}^{\mathrm{tar}}_{k,1}=1,
@@ -397,7 +398,7 @@ a_r\gamma_{+,P}^{(r)}
 b_r\gamma_{-,P}^{(r)} .
 \label{eq:method_block_matched_majorana}
 \end{equation}
-The coefficients $a_r$ and $b_r$ are continuous least-squares coefficients and are allowed to differ between blocks. The fitted blocks are then reassembled into a block-matched local operator on the full selected sector. This construction tests whether the local operator can be represented by the energy-level Majorana pair after the independent degenerate blocks have been identified. The detailed construction of the label operator and the resulting block structure is presented and explained in the appendix \ref{app:block_label_method}.
+The coefficients $a_r$ and $b_r$ are continuous least-squares coefficients and are allowed to differ between blocks. The fitted blocks are then reassembled into a block-matched local operator on the full selected sector. This construction tests whether the local operator can be represented by the energy-level Majorana pair after the independent degenerate blocks have been identified. The detailed construction of the label operator and the resulting block structure is presented in Appendix~\ref{app:block_label_method}.
 
 \subsection{Normalization and Algebra Checks}
 After projection into the retained subspace, the Majorana operators used in the braid are checked numerically. This includes the projected energy-level Majoranas and, when used, the projected local or block-matched operators. The diagnostics test Hermiticity, normalization,
@@ -459,13 +460,13 @@ T_{AC}=V^\dagger H^{\mathrm{junc}}_{AC}V .
 \label{eq:method_projected_junctions}
 \end{equation}
 
-These two terms can help identify which low-energy Majorana channel is selected by the physical endpoint coupling. We can decompose the projected junction operators $T_{AB}$ and $T_{AC}$, into the basis of Majorana bilinears,
+These two terms can help identify which low-energy Majorana channel is selected by the physical endpoint coupling. We can decompose the projected junction operators $T_{AB}$ and $T_{AC}$ into the basis of Majorana bilinears,
 \begin{equation}
   c_{\alpha}^{AB} = \frac{1}{d} \Tr\left[(i\gamma_{A1}\gamma_{B\alpha})^{\dagger} T_{AB}\right],
     \qquad
     c_{\beta}^{AC} = \frac{1}{d} \Tr\left[(i\gamma_{A1}\gamma_{C\beta})^{\dagger} T_{AC}\right],
 \end{equation}
-testing for both $\alpha,\beta \in \{1,2\}$, where $d$ is the dimension of the projected space. The normalized trace is the Hilbert--Schmidt overlap between the projected junction operator and a Majorana bilinear\cite{hazewinkelEncyclopaediaMathematics2002}. The $\gamma_{S,i}$ operators are the projected energy-level Majoranas from the subsystems $S=A,B,C$, constructed from the parity-pair operators of Eq.~\ref{eq:majorana_construction} as summarized in Eq.~\ref{eq:method_energy_level_majoranas}. The maximum absolute value of the coefficients $c_{\alpha}^{AB}$ and $c_{\beta}^{AC}$ identifies which low-energy Majorana channel is selected by the physical endpoint coupling.
+testing for both $\alpha,\beta \in \{1,2\}$, where $d$ is the dimension of the projected space. The normalized trace is the Hilbert--Schmidt overlap between the projected junction operator and a Majorana bilinear \cite{hazewinkelEncyclopaediaMathematics2002}. The $\gamma_{S,i}$ operators are the projected energy-level Majoranas from the subsystems $S=A,B,C$, constructed from the parity-pair operators of Eq.~\ref{eq:majorana_construction} as summarized in Eq.~\ref{eq:method_energy_level_majoranas}. The maximum absolute value of the coefficients $c_{\alpha}^{AB}$ and $c_{\beta}^{AC}$ identifies which low-energy Majorana channel is selected by the physical endpoint coupling.
 
 
 The projected microscopic braid Hamiltonian is then

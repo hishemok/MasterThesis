@@ -807,6 +807,63 @@
       \field{year}{2002}
       \field{dateera}{ce}
     \endentry
+    \entry{vanHeckCoulombAssistedBraiding2012}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=c5e5222d9cc65f77f36793497dcc79af}{%
+           family={Heck},
+           familyi={H\bibinitperiod},
+           given={B.},
+           giveni={B\bibinitperiod},
+           prefix={van},
+           prefixi={v\bibinitperiod}}}%
+        {{hash=40f470a3b55966ad3a0eb8a6709230dd}{%
+           family={Akhmerov},
+           familyi={A\bibinitperiod},
+           given={A.\bibnamedelimi R.},
+           giveni={A\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=85eb5b2425df0ca38fc8c7651dbc0108}{%
+           family={Hassler},
+           familyi={H\bibinitperiod},
+           given={F.},
+           giveni={F\bibinitperiod}}}%
+        {{hash=6e35a06a1932dde5047beecb6d5777e4}{%
+           family={Burrello},
+           familyi={B\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+        {{hash=46cbed27ebd2a2972ca82a8c5217c944}{%
+           family={Beenakker},
+           familyi={B\bibinitperiod},
+           given={C.\bibnamedelimi W.\bibnamedelimi J.},
+           giveni={C\bibinitperiod\bibinitdelim W\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \strng{namehash}{ed90bc3612305de9952aaa05ead48dad}
+      \strng{fullhash}{e2220a78a10ec2e8d2c780305b7d07af}
+      \strng{fullhashraw}{e2220a78a10ec2e8d2c780305b7d07af}
+      \strng{bibnamehash}{ed90bc3612305de9952aaa05ead48dad}
+      \strng{authorbibnamehash}{ed90bc3612305de9952aaa05ead48dad}
+      \strng{authornamehash}{ed90bc3612305de9952aaa05ead48dad}
+      \strng{authorfullhash}{e2220a78a10ec2e8d2c780305b7d07af}
+      \strng{authorfullhashraw}{e2220a78a10ec2e8d2c780305b7d07af}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprinttype}{arxiv}
+      \field{journaltitle}{New Journal of Physics}
+      \field{title}{Coulomb-assisted braiding of Majorana fermions in a Josephson junction array}
+      \field{volume}{14}
+      \field{year}{2012}
+      \field{dateera}{ce}
+      \field{pages}{035019}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1088/1367-2630/14/3/035019
+      \endverb
+      \verb{eprint}
+      \verb 1111.6001
+      \endverb
+    \endentry
     \entry{hidalgo-sacotoTwoIdenticalOnedimensional2025}{article}{}{}
       \name{author}{3}{}{%
         {{hash=e8215695ea1bdc49c6a6ac0e664cc819}{%

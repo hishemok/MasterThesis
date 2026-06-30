@@ -15,7 +15,7 @@ For the four-dot system, the optimizer struggled more to find low-loss configura
 One of the more interesting findings for chains longer than two dots was the emergence of large-magnitude onsite potentials in the middle of the chain. This was not expected from the simple sweet-spot picture. The resulting interior detuning is correlated with favorable edge-localization diagnostics and is consistent with suppressing bulk Majorana weight. A controlled scan of the interior potentials would be needed to establish whether this is the mechanism responsible. Subject to that qualification, the result motivates studying controlled inhomogeneity as a possible design parameter rather than treating it only as an imperfection.
 
 \section{Braiding Analysis}
-The braiding results are mainly split into two parts. The low-energy benchmark compares the energy-level Majorana reference model with projected microscopic junction and local-operator models. The sector-resolved analysis then compares an energy-level Majorana baseline with direct and block-matched projected local-operator constructions.
+The braiding results are divided into two main parts. The low-energy benchmark compares the energy-level Majorana reference model with projected microscopic junction and local-operator models. The sector-resolved analysis then compares an energy-level Majorana baseline with direct and block-matched projected local-operator constructions.
 
 The main difference between the energy-level and local-operator constructions is what they test. The energy-level construction tests whether Majorana operators built from paired eigenstates define an internally consistent effective exchange channel. The local-operator constructions instead test whether braids built from projected endpoint operators accurately execute targets defined from those local operators. In the sector-resolved results, each construction is compared with its own target. The reported self-target errors can therefore reveal sector dependence within a construction, but they do not by themselves determine whether the local constructions reproduce the energy-level exchange channel. Establishing that stronger comparison requires evaluating all constructions against a common target.
 
@@ -29,7 +29,7 @@ The energy-level Majorana baseline is stable for most tested interaction strengt
 
 The direct and block-matched local-operator constructions show a stronger dependence of their self-target errors on both interaction strength and sector. The $U=0.5$ case, which remains in the low-deviation regime for the energy-level Majorana baseline, moves into the intermediate-deviation regime for both local constructions. The ground-state sector is nevertheless among the lower-error sectors in most cases. Within the self-target comparison used here, the block-matched local-operator braid gives almost the same deviations as the direct local-operator braid. Resolving the internal block structure therefore does not by itself remove the observed self-target sensitivity, although this comparison does not establish how either local construction agrees with the energy-level target.
 
-The block-dependent exchange orientations also have consequences for quantum computation. In the successful low-interaction cases, where the fitted coefficient products have magnitude close to one, opposite exchange orientations correspond to $\sqrt{Z}$ and $\sqrt{Z}^{\dagger}$. These gates differ by a relative phase rather than an irrelevant global phase:
+The block-dependent exchange orientations also have consequences for quantum computation. In the successful low-interaction cases, where the fitted coefficient products have magnitude close to one, opposite exchange orientations correspond to $\sqrt{Z}$ and $\sqrt{Z}^{\dagger}$. These gates differ by a relative phase rather than by an irrelevant global phase:
 \begin{equation}
   \sqrt{Z}:
   \phi \mapsto \phi + \frac{\pi}{2},
@@ -37,7 +37,7 @@ The block-dependent exchange orientations also have consequences for quantum com
   \sqrt{Z}^{\dagger}:
   \phi \mapsto \phi - \frac{\pi}{2}.
 \end{equation}
-They therefore rotate a logical qubit in opposite directions around the Bloch sphere $z$-axis and can produce distinguishable outcomes in later interference measurements. If computation is restricted to one known block, its exchange orientation can be tracked and incorporated into the logical gate convention. However, a coherent state occupying blocks with different orientations experiences a block-dependent logical operation:
+They therefore rotate a logical qubit in opposite directions around the Bloch-sphere $z$ axis and can produce distinguishable outcomes in later interference measurements. If computation is restricted to one known block, its exchange orientation can be tracked and incorporated into the logical gate convention. However, a coherent state occupying blocks with different orientations experiences a block-dependent logical operation:
 \begin{equation}
   \begin{aligned}
     U_{\mathrm{braid}} &= U_1 \oplus U_2 \oplus U_3, \\
